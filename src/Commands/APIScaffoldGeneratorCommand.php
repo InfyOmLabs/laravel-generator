@@ -2,7 +2,6 @@
 
 namespace InfyOm\Generator\Commands;
 
-use Illuminate\Foundation\Composer;
 use InfyOm\Generator\Commands\Scaffold\ScaffoldBaseCommand;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\API\APIControllerGenerator;
@@ -37,13 +36,11 @@ class APIScaffoldGeneratorCommand extends ScaffoldBaseCommand
 
     /**
      * Create a new command instance.
-     * @param Composer $composer
      */
-    public function __construct(Composer $composer)
+    public function __construct()
     {
         parent::__construct();
 
-        $this->composer = $composer;
         $this->commandData = new CommandData($this, CommandData::$COMMAND_TYPE_SCAFFOLD_API);
     }
 

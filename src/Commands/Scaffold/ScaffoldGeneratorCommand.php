@@ -2,7 +2,6 @@
 
 namespace InfyOm\Generator\Commands\Scaffold;
 
-use Illuminate\Foundation\Composer;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\MigrationGenerator;
 use InfyOm\Generator\Generators\ModelGenerator;
@@ -30,13 +29,11 @@ class ScaffoldGeneratorCommand extends ScaffoldBaseCommand
 
     /**
      * Create a new command instance.
-     * @param Composer $composer
      */
-    public function __construct(Composer $composer)
+    public function __construct()
     {
         parent::__construct();
 
-        $this->composer = $composer;
         $this->commandData = new CommandData($this, CommandData::$COMMAND_TYPE_SCAFFOLD);
     }
 

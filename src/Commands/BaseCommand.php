@@ -3,7 +3,6 @@
 namespace InfyOm\Generator\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Foundation\Composer;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Utils\FileUtil;
 use Symfony\Component\Console\Input\InputArgument;
@@ -17,11 +16,6 @@ class BaseCommand extends Command
      * @var CommandData
      */
     public $commandData;
-
-    /**
-     * @var Composer
-     */
-    public $composer;
 
     public function handle()
     {
@@ -42,9 +36,6 @@ class BaseCommand extends Command
                 $this->call('migrate');
             }
         }
-
-        $this->info("Generating autoload files");
-        $this->composer->dumpOptimized();
     }
 
     public function performPostActionsWithMigration()

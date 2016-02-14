@@ -19,7 +19,7 @@ class TemplateUtil
             return file_get_contents($path);
         }
 
-        $path = base_path('vendor/infyom/' . $templateType . "/templates/" . $templateName . '.stub');
+        $path = base_path('vendor/infyomlabs/' . $templateType . "/templates/" . $templateName . '.stub');
 
         return file_get_contents($path);
     }

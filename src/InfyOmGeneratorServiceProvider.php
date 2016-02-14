@@ -48,11 +48,11 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton('infyom.api', function ($app) {
-            return new APIGeneratorCommand($app['composer']);
+            return new APIGeneratorCommand();
         });
 
         $this->app->singleton('infyom.scaffold', function ($app) {
-            return new ScaffoldGeneratorCommand($app['composer']);
+            return new ScaffoldGeneratorCommand();
         });
 
         $this->app->singleton('infyom.publish.auth', function ($app) {
@@ -64,47 +64,47 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton('infyom.api_scaffold', function ($app) {
-            return new APIScaffoldGeneratorCommand($app['composer']);
+            return new APIScaffoldGeneratorCommand();
         });
 
         $this->app->singleton('infyom.migration', function ($app) {
-            return new MigrationGeneratorCommand($app['composer']);
+            return new MigrationGeneratorCommand();
         });
 
         $this->app->singleton('infyom.model', function ($app) {
-            return new ModelGeneratorCommand($app['composer']);
+            return new ModelGeneratorCommand();
         });
 
         $this->app->singleton('infyom.repository', function ($app) {
-            return new RepositoryGeneratorCommand($app['composer']);
+            return new RepositoryGeneratorCommand();
         });
 
         $this->app->singleton('infyom.api.controller', function ($app) {
-            return new APIControllerGeneratorCommand($app['composer']);
+            return new APIControllerGeneratorCommand();
         });
 
         $this->app->singleton('infyom.api.requests', function ($app) {
-            return new APIRequestsGeneratorCommand($app['composer']);
+            return new APIRequestsGeneratorCommand();
         });
 
         $this->app->singleton('infyom.api.tests', function ($app) {
-            return new TestsGeneratorCommand($app['composer']);
+            return new TestsGeneratorCommand();
         });
 
         $this->app->singleton('infyom.publish.tests', function ($app) {
-            return new TestCasesPublisherCommand($app['composer']);
+            return new TestCasesPublisherCommand();
         });
 
         $this->app->singleton('infyom.scaffold.controller', function ($app) {
-            return new ControllerGeneratorCommand($app['composer']);
+            return new ControllerGeneratorCommand();
         });
 
         $this->app->singleton('infyom.scaffold.requests', function ($app) {
-            return new RequestsGeneratorCommand($app['composer']);
+            return new RequestsGeneratorCommand();
         });
 
         $this->app->singleton('infyom.scaffold.views', function ($app) {
-            return new ViewsGeneratorCommand($app['composer']);
+            return new ViewsGeneratorCommand();
         });
 
         $this->commands([

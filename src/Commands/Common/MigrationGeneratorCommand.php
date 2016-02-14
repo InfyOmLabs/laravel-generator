@@ -2,7 +2,6 @@
 
 namespace InfyOm\Generator\Commands\Common;
 
-use Illuminate\Foundation\Composer;
 use InfyOm\Generator\Commands\BaseCommand;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\MigrationGenerator;
@@ -25,13 +24,11 @@ class MigrationGeneratorCommand extends BaseCommand
 
     /**
      * Create a new command instance.
-     * @param Composer $composer
      */
-    public function __construct(Composer $composer)
+    public function __construct()
     {
         parent::__construct();
 
-        $this->composer = $composer;
         $this->commandData = new CommandData($this, CommandData::$COMMAND_TYPE_API);
     }
 
