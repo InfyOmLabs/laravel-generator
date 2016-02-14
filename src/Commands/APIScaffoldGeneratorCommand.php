@@ -2,7 +2,7 @@
 
 namespace InfyOm\Generator\Commands;
 
-use Illuminate\Foundation\Composer;
+use Illuminate\Support\Composer;
 use InfyOm\Generator\Commands\Scaffold\ScaffoldBaseCommand;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\API\APIControllerGenerator;
