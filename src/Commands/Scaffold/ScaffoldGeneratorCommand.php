@@ -2,7 +2,7 @@
 
 namespace InfyOm\Generator\Commands\Scaffold;
 
-use Illuminate\Foundation\Composer;
+use Illuminate\Support\Composer;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\MigrationGenerator;
 use InfyOm\Generator\Generators\ModelGenerator;

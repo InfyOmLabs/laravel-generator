@@ -3,7 +3,7 @@
 namespace InfyOm\Generator\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Foundation\Composer;
+use Illuminate\Support\Composer;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Utils\FileUtil;
 use Symfony\Component\Console\Input\InputArgument;
