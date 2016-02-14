@@ -1,0 +1,1 @@
+Route::resource("$MODEL_NAME_PLURAL_CAMEL$", "$MODEL_NAME$APIController");

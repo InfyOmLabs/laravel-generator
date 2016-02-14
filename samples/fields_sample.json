@@ -1,0 +1,51 @@
+[
+  {
+    "fieldInput": "title:string,20",
+    "htmlType": "text",
+    "validations": "required",
+    "searchable": true
+  },
+  {
+    "fieldInput": "email_test:string",
+    "htmlType": "email",
+    "searchable": true
+  },
+  {
+    "fieldInput": "date_test:datetime",
+    "htmlType": "date"
+  },
+  {
+    "fieldInput": "number_test:integer",
+    "htmlType": "number"
+  },
+  {
+    "fieldInput": "file_test:string",
+    "htmlType": "file"
+  },
+  {
+    "fieldInput": "password_test:string",
+    "htmlType": "password"
+  },
+  {
+    "fieldInput": "select_test:string",
+    "htmlType": "select:Option1,Option2,Option3,Option4,Option5",
+    "searchable": true
+  },
+  {
+    "fieldInput": "enum_test:enum",
+    "htmlType": "enum:Mon,Tue,Wed,Thu,Fri,Sat,Sun",
+    "searchable": true
+  },
+  {
+    "fieldInput": "radio_test:string",
+    "htmlType": "radio:Male,Female"
+  },
+  {
+    "fieldInput": "checkbox_test:string",
+    "htmlType": "checkbox:Check1,Check2"
+  },
+  {
+    "fieldInput": "body:text",
+    "htmlType": "textarea"
+  }
+]

@@ -1,0 +1,48 @@
+<?php
+
+use Faker\Factory as Faker;
+use $NAMESPACE_MODEL$\$MODEL_NAME$;
+use $NAMESPACE_REPOSITORY$\$MODEL_NAME$Repository;
+
+trait Make$MODEL_NAME$Trait
+{
+    /**
+     * Create fake instance of $MODEL_NAME$ and save it in database
+     *
+     * @param array $$MODEL_NAME_CAMEL$Fields
+     * @return $MODEL_NAME$
+     */
+    public function make$MODEL_NAME$($$MODEL_NAME_CAMEL$Fields = [])
+    {
+        /** @var $MODEL_NAME$Repository $$MODEL_NAME_CAMEL$Repo */
+        $$MODEL_NAME_CAMEL$Repo = App::make($MODEL_NAME$Repository::class);
+        $theme = $this->fake$MODEL_NAME$Data($$MODEL_NAME_CAMEL$Fields);
+        return $$MODEL_NAME_CAMEL$Repo->create($theme);
+    }
+
+    /**
+     * Get fake instance of $MODEL_NAME$
+     *
+     * @param array $$MODEL_NAME_CAMEL$Fields
+     * @return $MODEL_NAME$
+     */
+    public function fake$MODEL_NAME$($$MODEL_NAME_CAMEL$Fields = [])
+    {
+        return new $MODEL_NAME$($this->fake$MODEL_NAME$Data($$MODEL_NAME_CAMEL$Fields));
+    }
+
+    /**
+     * Get fake data of $MODEL_NAME$
+     *
+     * @param array $postFields
+     * @return array
+     */
+    public function fake$MODEL_NAME$Data($$MODEL_NAME_CAMEL$Fields = [])
+    {
+        $fake = Faker::create();
+
+        return array_merge([
+            $FIELDS$
+        ], $$MODEL_NAME_CAMEL$Fields);
+    }
+}
