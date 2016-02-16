@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Generators\Scaffold;
 
+use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
@@ -41,6 +42,8 @@ class ViewGenerator
         $this->generateFields();
         $this->generateCreate();
         $this->generateUpdate();
+        $this->generateShowFields();
+        $this->generateShow();
         $this->commandData->commandComment("Views created: ");
     }
 
@@ -207,4 +210,37 @@ class ViewGenerator
         FileUtil::createFile($this->path, 'edit.blade.php', $templateData);
         $this->commandData->commandInfo('edit.blade.php created');
     }
+
+    private function generateShow()
+    {
+        $templateData = TemplateUtil::getTemplate('scaffold.views.show', $this->templateType);
+
+        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+
+        $fileName = 'show.blade.php';
+
+        FileUtil::createFile($this->path, $fileName, $templateData);
+        $this->commandData->commandInfo('show.blade.php created');
+    }
+
+    private function generateShowFields()
+    {
+        $fieldTemplate = TemplateUtil::getTemplate('scaffold.views.show_field', $this->templateType);
+
+        $fieldsStr = '';
+
+        foreach ($this->commandData->inputFields as $field) {
+            $singleFieldStr = str_replace('$FIELD_NAME_TITLE$', Str::title(str_replace('_', ' ', $field['fieldName'])), $fieldTemplate);
+            $singleFieldStr = str_replace('$FIELD_NAME$', $field['fieldName'], $singleFieldStr);
+            $singleFieldStr = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $singleFieldStr);
+
+            $fieldsStr .= $singleFieldStr."\n\n";
+        }
+
+        $fileName = 'show_fields.blade.php';
+
+        FileUtil::createFile($this->path, $fileName, $fieldsStr);
+        $this->commandData->commandInfo('show-field.blade.php created');
+    }
+
 }
