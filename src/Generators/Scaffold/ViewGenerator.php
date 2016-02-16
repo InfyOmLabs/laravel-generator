@@ -240,7 +240,7 @@ class ViewGenerator
         $fileName = 'show_fields.blade.php';
 
         FileUtil::createFile($this->path, $fileName, $fieldsStr);
-        $this->commandData->commandInfo('show-field.blade.php created');
+        $this->commandData->commandInfo('show_fields.blade.php created');
     }
 
 }
