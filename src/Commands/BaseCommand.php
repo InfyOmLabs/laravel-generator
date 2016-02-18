@@ -17,6 +17,21 @@ class BaseCommand extends Command
      */
     public $commandData;
 
+    /**
+     * @var Composer
+     */
+    public $composer;
+
+    /**
+     * Create a new command instance.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->composer = app()['composer'];
+    }
+
     public function handle()
     {
         $this->commandData->modelName = $this->argument('model');
@@ -36,6 +51,9 @@ class BaseCommand extends Command
                 $this->call('migrate');
             }
         }
+
+        $this->info("Generating autoload files");
+        $this->composer->dumpOptimized();
     }
 
     public function performPostActionsWithMigration()
