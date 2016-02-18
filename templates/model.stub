@@ -8,11 +8,11 @@ $DOCS$
 class $MODEL_NAME$ extends Model
 {
     $SOFT_DELETE$
-	public $table = "$TABLE_NAME$";
-	$SOFT_DELETE_DATES$
-	public $fillable = [
-	    $FIELDS$
-	];
+    public $table = "$TABLE_NAME$";
+    $SOFT_DELETE_DATES$
+    public $fillable = [
+        $FIELDS$
+    ];
 
     /**
      * The attributes that should be casted to native types.
@@ -28,7 +28,7 @@ class $MODEL_NAME$ extends Model
      *
      * @var array
      */
-	public static $rules = [
-	    $RULES$
-	];
+    public static $rules = [
+        $RULES$
+    ];
 }
