@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class $MODEL_NAME$ApiTest extends TestCase
 {
-    use Make$MODEL_NAME$Trait, ApiTestTrait, WithoutMiddleware;
+    use Make$MODEL_NAME$Trait, ApiTestTrait, WithoutMiddleware, DatabaseTransactions;
 
     /**
      * @test
