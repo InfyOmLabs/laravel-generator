@@ -4,7 +4,7 @@ namespace InfyOm\Generator\Commands\API;
 
 use InfyOm\Generator\Commands\BaseCommand;
 use InfyOm\Generator\Common\CommandData;
-use InfyOm\Generator\Generators\API\ApiTestGenerator;
+use InfyOm\Generator\Generators\API\APITestGenerator;
 use InfyOm\Generator\Generators\RepositoryTestGenerator;
 use InfyOm\Generator\Generators\TestTraitGenerator;
 
@@ -49,7 +49,7 @@ class TestsGeneratorCommand extends BaseCommand
         $testTraitGenerator = new TestTraitGenerator($this->commandData);
         $testTraitGenerator->generate();
 
-        $apiTestGenerator = new ApiTestGenerator($this->commandData);
+        $apiTestGenerator = new APITestGenerator($this->commandData);
         $apiTestGenerator->generate();
 
         $this->performPostActions();
