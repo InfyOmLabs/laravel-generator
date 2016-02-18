@@ -15,19 +15,19 @@ class TestTraitGenerator
     /** @var string */
     private $path;
 
-    function __construct($commandData)
+    public function __construct($commandData)
     {
         $this->commandData = $commandData;
         $this->path = config('infyom.laravel_generator.path.test_trait', base_path('tests/traits/'));
     }
 
-    function generate()
+    public function generate()
     {
-        $templateData = TemplateUtil::getTemplate("test.trait", "laravel-generator");
+        $templateData = TemplateUtil::getTemplate('test.trait', 'laravel-generator');
 
         $templateData = $this->fillTemplate($templateData);
 
-        $fileName = "Make" . $this->commandData->modelName . "Trait.php";
+        $fileName = 'Make'.$this->commandData->modelName.'Trait.php';
 
         FileUtil::createFile($this->path, $fileName, $templateData);
 
@@ -49,27 +49,27 @@ class TestTraitGenerator
         $fields = [];
 
         foreach ($this->commandData->inputFields as $field) {
-            $fieldData = "'" . $field['fieldName'] . "' => " . '$fake->';
+            $fieldData = "'".$field['fieldName']."' => ".'$fake->';
 
             switch ($field['fieldType']) {
                 case 'integer':
                 case 'float':
-                    $fakerData = "randomDigitNotNull";
+                    $fakerData = 'randomDigitNotNull';
                     break;
                 case 'string':
-                    $fakerData = "word";
+                    $fakerData = 'word';
                     break;
                 case 'text':
-                    $fakerData = "text";
+                    $fakerData = 'text';
                     break;
                 case 'datetime':
                     $fakerData = "date('Y-m-d H:i:s')";
                     break;
                 case 'enum':
-                    $fakerData = "randomElement(". GeneratorFieldsInputUtil::prepareValuesArrayStr(explode(",", $field['htmlTypeInputs'])) .")";
+                    $fakerData = 'randomElement('.GeneratorFieldsInputUtil::prepareValuesArrayStr(explode(',', $field['htmlTypeInputs'])).')';
                     break;
                 default:
-                    $fakerData = "word";
+                    $fakerData = 'word';
             }
 
             $fieldData .= $fakerData;

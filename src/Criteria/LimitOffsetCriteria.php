@@ -18,10 +18,11 @@ class LimitOffsetCriteria implements CriteriaInterface
     }
 
     /**
-     * Apply criteria in query repository
+     * Apply criteria in query repository.
      *
      * @param $model
      * @param \Prettus\Repository\Contracts\RepositoryInterface $repository
+     *
      * @return mixed
      */
     public function apply($model, \Prettus\Repository\Contracts\RepositoryInterface $repository)

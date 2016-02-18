@@ -26,7 +26,7 @@ class ViewGenerator
     {
         $this->commandData = $commandData;
         $this->path = config('infyom.laravel_generator.path.views', base_path('resources/views/'));
-        $this->path = $this->path . "/" . $this->commandData->modelNames['camelPlural'] . "/";
+        $this->path = $this->path.'/'.$this->commandData->modelNames['camelPlural'].'/';
         $this->templateType = config('infyom.laravel_generator.path.templates', 'core-templates');
     }
 
@@ -44,7 +44,7 @@ class ViewGenerator
         $this->generateUpdate();
         $this->generateShowFields();
         $this->generateShow();
-        $this->commandData->commandComment("Views created: ");
+        $this->commandData->commandComment('Views created: ');
     }
 
     private function generateTable()
@@ -58,7 +58,7 @@ class ViewGenerator
         $headerFields = [];
 
         foreach ($this->commandData->inputFields as $field) {
-            $headerFields[] = '<th>' . $field['fieldTitle'] . "</th>";
+            $headerFields[] = '<th>'.$field['fieldTitle'].'</th>';
         }
 
         $headerFields = implode("\n\t\t\t", $headerFields);
@@ -68,8 +68,8 @@ class ViewGenerator
         $tableBodyFields = [];
 
         foreach ($this->commandData->inputFields as $field) {
-            $tableBodyFields[] = '<td>{!! $' . $this->commandData->modelNames['camel'] . '->' .
-                $field['fieldName'] . " !!}</td>";
+            $tableBodyFields[] = '<td>{!! $'.$this->commandData->modelNames['camel'].'->'.
+                $field['fieldName'].' !!}</td>';
         }
 
         $tableBodyFields = implode("\n\t\t\t", $tableBodyFields);
@@ -119,13 +119,13 @@ class ViewGenerator
                 case 'email':
                 case 'password':
                 case 'number':
-                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.' . $field['htmlType'], $this->templateType);
+                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.'.$field['htmlType'], $this->templateType);
                     break;
 
                 case 'select':
                 case 'enum':
                     $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.select', $this->templateType);
-                    $inputsArr = explode(",", $field['htmlTypeInputs']);
+                    $inputsArr = explode(',', $field['htmlTypeInputs']);
 
                     $fieldTemplate = str_replace(
                         '$INPUT_ARR$',
@@ -137,7 +137,7 @@ class ViewGenerator
                 case 'radio':
                     $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.radio_group', $this->templateType);
                     $radioTemplate = TemplateUtil::getTemplate('scaffold.fields.radio', $this->templateType);
-                    $inputsArr = explode(",", $field['htmlTypeInputs']);
+                    $inputsArr = explode(',', $field['htmlTypeInputs']);
                     $radioButtons = [];
                     foreach ($inputsArr as $item) {
                         $radioButtonsTemplate = TemplateUtil::fillFieldTemplate(
@@ -153,7 +153,7 @@ class ViewGenerator
                 case 'checkbox':
                     $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.checkbox_group', $this->templateType);
                     $radioTemplate = TemplateUtil::getTemplate('scaffold.fields.checkbox', $this->templateType);
-                    $inputsArr = explode(",", $field['htmlTypeInputs']);
+                    $inputsArr = explode(',', $field['htmlTypeInputs']);
                     $radioButtons = [];
                     foreach ($inputsArr as $item) {
                         $radioButtonsTemplate = TemplateUtil::fillFieldTemplate(
@@ -242,5 +242,4 @@ class ViewGenerator
         FileUtil::createFile($this->path, $fileName, $fieldsStr);
         $this->commandData->commandInfo('show_fields.blade.php created');
     }
-
 }

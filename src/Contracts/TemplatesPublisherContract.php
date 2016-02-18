@@ -4,5 +4,5 @@ namespace InfyOm\Generator\Contracts;
 
 interface TemplatesPublisherContract
 {
-    function publish();
+    public function publish();
 }

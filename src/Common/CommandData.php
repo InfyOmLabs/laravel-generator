@@ -2,7 +2,6 @@
 
 namespace InfyOm\Generator\Common;
 
-use DB;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
@@ -29,7 +28,8 @@ class CommandData
 
     /**
      * @param Command $commandObj
-     * @param string $commandType
+     * @param string  $commandType
+     *
      * @return CommandData
      */
     public function __construct(Command $commandObj, $commandType)
@@ -39,7 +39,7 @@ class CommandData
 
         $this->fieldNamesMapping = [
             '$FIELD_NAME_TITLE$' => 'fieldTitle',
-            '$FIELD_NAME$' => 'fieldName'
+            '$FIELD_NAME$'       => 'fieldName',
         ];
     }
 
@@ -105,7 +105,7 @@ class CommandData
             return $this->options[$option];
         }
 
-        return null;
+        return;
     }
 
     public function setOption($option, $value)
@@ -125,7 +125,7 @@ class CommandData
             return $this->addOns[$addOn];
         }
 
-        return null;
+        return;
     }
 
     private function initDynamicVariables()
@@ -141,15 +141,15 @@ class CommandData
         $this->dynamicVars = array_merge(
             $this->dynamicVars,
             [
-                '$MODEL_NAME$' => $this->modelName,
-                '$MODEL_NAME_CAMEL$' => $this->modelNames['camel'],
-                '$MODEL_NAME_PLURAL$' => $this->modelNames['plural'],
+                '$MODEL_NAME$'              => $this->modelName,
+                '$MODEL_NAME_CAMEL$'        => $this->modelNames['camel'],
+                '$MODEL_NAME_PLURAL$'       => $this->modelNames['plural'],
                 '$MODEL_NAME_PLURAL_CAMEL$' => $this->modelNames['camelPlural'],
-                '$MODEL_NAME_SNAKE$' => $this->modelNames['snake'],
+                '$MODEL_NAME_SNAKE$'        => $this->modelNames['snake'],
                 '$MODEL_NAME_PLURAL_SNAKE$' => $this->modelNames['snakePlural'],
-                '$TABLE_NAME$' => $tableName,
-                '$API_PREFIX$' => config('infyom.laravel_generator.api_prefix', 'api'),
-                '$API_VERSION$' => config('infyom.laravel_generator.api_version', 'v1')
+                '$TABLE_NAME$'              => $tableName,
+                '$API_PREFIX$'              => config('infyom.laravel_generator.api_prefix', 'api'),
+                '$API_VERSION$'             => config('infyom.laravel_generator.api_version', 'v1'),
             ]
         );
     }
@@ -157,15 +157,15 @@ class CommandData
     private function getConfigDynamicVariables()
     {
         return [
-            '$NAMESPACE_REPOSITORY$' => config('infyom.laravel_generator.namespace.repository', 'App\Repositories'),
-            '$NAMESPACE_MODEL$' => config('infyom.laravel_generator.namespace.model', 'App\Models'),
+            '$NAMESPACE_REPOSITORY$'   => config('infyom.laravel_generator.namespace.repository', 'App\Repositories'),
+            '$NAMESPACE_MODEL$'        => config('infyom.laravel_generator.namespace.model', 'App\Models'),
             '$NAMESPACE_MODEL_EXTEND$' => config(
                 'infyom.laravel_generator.model_extend_class',
                 'Illuminate\Database\Eloquent\Model'
             ),
-            '$SOFT_DELETE_DATES$' => "\n\tprotected \$dates = ['deleted_at'];\n",
-            '$SOFT_DELETE$' => "use SoftDeletes;\n",
-            '$SOFT_DELETE_IMPORT$' => "use Illuminate\\Database\\Eloquent\\SoftDeletes;\n"
+            '$SOFT_DELETE_DATES$'  => "\n\tprotected \$dates = ['deleted_at'];\n",
+            '$SOFT_DELETE$'        => "use SoftDeletes;\n",
+            '$SOFT_DELETE_IMPORT$' => "use Illuminate\\Database\\Eloquent\\SoftDeletes;\n",
         ];
     }
 
@@ -192,7 +192,7 @@ class CommandData
         $this->commandInfo('Specify fields for the model (skip id & timestamp fields, we will add it automatically)');
         $this->commandInfo('Enter "exit" to finish');
 
-        $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput("id:integer", "", "", false, false);
+        $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput('id:integer', '', '', false, false);
 
         while (true) {
             $fieldInputStr = $this->commandObj->ask('Field: (field_name:field_database_type)', '');
@@ -206,8 +206,8 @@ class CommandData
                 continue;
             }
 
-            if ($this->commandType == CommandData::$COMMAND_TYPE_SCAFFOLD or
-                $this->commandType == CommandData::$COMMAND_TYPE_SCAFFOLD_API
+            if ($this->commandType == self::$COMMAND_TYPE_SCAFFOLD or
+                $this->commandType == self::$COMMAND_TYPE_SCAFFOLD_API
             ) {
                 $htmlType = $this->commandObj->ask('Enter field html input type (text): ', 'text');
             } else {

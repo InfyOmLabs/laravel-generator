@@ -117,5 +117,5 @@ return [
         'swagger'   => true,
 
         'tests'     => true,
-    ]
+    ],
 ];

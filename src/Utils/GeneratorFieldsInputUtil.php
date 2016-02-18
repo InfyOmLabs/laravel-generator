@@ -13,7 +13,7 @@ class GeneratorFieldsInputUtil
 
         foreach ($fields as $field) {
             if (!self::validateFieldInput($field['fieldInput'])) {
-                throw new RuntimeException('Invalid Input ' . $field['fieldInput']);
+                throw new RuntimeException('Invalid Input '.$field['fieldInput']);
             }
 
             if (isset($field['htmlType'])) {
@@ -25,7 +25,7 @@ class GeneratorFieldsInputUtil
             if (isset($field['validations'])) {
                 $validations = $field['validations'];
             } else {
-                $validations = "";
+                $validations = '';
             }
 
             if (isset($field['searchable'])) {
@@ -56,8 +56,8 @@ class GeneratorFieldsInputUtil
         $fieldInputs = explode(':', $fieldInput);
 
         $fieldName = array_shift($fieldInputs);
-        $databaseInputs = implode(":", $fieldInputs);
-        $fieldType = explode(",", $fieldInputs[0])[0];
+        $databaseInputs = implode(':', $fieldInputs);
+        $fieldType = explode(',', $fieldInputs[0])[0];
 
         $htmlTypeInputs = explode(':', $htmlType);
         $htmlType = array_shift($htmlTypeInputs);
@@ -67,16 +67,16 @@ class GeneratorFieldsInputUtil
         }
 
         return [
-            'fieldInput' => $fieldInput,
-            'fieldTitle' => Str::title(str_replace('_', ' ', $fieldName)),
-            'fieldType' => $fieldType,
-            'fieldName' => $fieldName,
+            'fieldInput'     => $fieldInput,
+            'fieldTitle'     => Str::title(str_replace('_', ' ', $fieldName)),
+            'fieldType'      => $fieldType,
+            'fieldName'      => $fieldName,
             'databaseInputs' => $databaseInputs,
-            'htmlType' => $htmlType,
+            'htmlType'       => $htmlType,
             'htmlTypeInputs' => $htmlTypeInputs,
-            'validations' => $validations,
-            'searchable' => $searchable,
-            'fillable' => $fillable,
+            'validations'    => $validations,
+            'searchable'     => $searchable,
+            'fillable'       => $fillable,
         ];
     }
 

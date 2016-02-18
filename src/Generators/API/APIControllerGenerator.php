@@ -28,7 +28,7 @@ class APIControllerGenerator
         $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
         $templateData = $this->fillDocs($templateData);
 
-        $fileName = $this->commandData->modelName . 'APIController.php';
+        $fileName = $this->commandData->modelName.'APIController.php';
 
         FileUtil::createFile($this->path, $fileName, $templateData);
 
@@ -49,8 +49,8 @@ class APIControllerGenerator
         }
 
         foreach ($methods as $method) {
-            $key = '$DOC_' . strtoupper($method) . '$';
-            $docTemplate = TemplateUtil::getTemplate($templatePrefix . '.' . $method, $templateType);
+            $key = '$DOC_'.strtoupper($method).'$';
+            $docTemplate = TemplateUtil::getTemplate($templatePrefix.'.'.$method, $templateType);
             $docTemplate = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $docTemplate);
             $templateData = str_replace($key, $docTemplate, $templateData);
         }
