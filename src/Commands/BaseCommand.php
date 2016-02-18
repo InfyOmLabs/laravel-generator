@@ -52,7 +52,7 @@ class BaseCommand extends Command
             }
         }
 
-        $this->info("Generating autoload files");
+        $this->info('Generating autoload files');
         $this->composer->dumpOptimized();
     }
 
@@ -67,19 +67,19 @@ class BaseCommand extends Command
 
         foreach ($this->commandData->inputFields as $field) {
             $fileFields[] = [
-                'fieldInput' => $field['fieldInput'],
-                'htmlType' => $field['htmlType'],
+                'fieldInput'  => $field['fieldInput'],
+                'htmlType'    => $field['htmlType'],
                 'validations' => $field['validations'],
-                'searchable' => $field['searchable']
+                'searchable'  => $field['searchable'],
             ];
         }
 
         $path = config('infyom.laravel_generator.path.schema_files', base_path('resources/model_schemas/'));
 
-        $fileName = $this->commandData->modelName . ".json";
+        $fileName = $this->commandData->modelName.'.json';
 
-        if (file_exists($path . $fileName)) {
-            if (!$this->confirm("model file " . $fileName . " already exist. Do you want to overwrite it? [y|N]",
+        if (file_exists($path.$fileName)) {
+            if (!$this->confirm('model file '.$fileName.' already exist. Do you want to overwrite it? [y|N]',
                 false)
             ) {
                 return;

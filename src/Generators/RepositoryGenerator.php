@@ -30,13 +30,13 @@ class RepositoryGenerator
 
         foreach ($this->commandData->inputFields as $field) {
             if ($field['searchable']) {
-                $fillables[] = '"' . $field['fieldName'] . '"';
+                $fillables[] = '"'.$field['fieldName'].'"';
             }
         }
 
         $templateData = str_replace('$FIELDS$', implode(",\n\t\t", $fillables), $templateData);
 
-        $fileName = $this->commandData->modelName . 'Repository.php';
+        $fileName = $this->commandData->modelName.'Repository.php';
 
         FileUtil::createFile($this->path, $fileName, $templateData);
 

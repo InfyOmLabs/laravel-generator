@@ -2,7 +2,6 @@
 
 namespace InfyOm\Generator\Commands\Scaffold;
 
-use File;
 use InfyOm\Generator\Commands\PublishBaseCommand;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\TemplateUtil;
@@ -32,12 +31,12 @@ class AuthPublishCommand extends PublishBaseCommand
     {
         $version = $this->getApplication()->getVersion();
 
-        if(str_contains($version, "5.1")) {
+        if (str_contains($version, '5.1')) {
             $this->copyView();
             $this->updateRoutes();
         } else {
-            $this->error("Publish Auth is only available for Laravel version 5.1");
-            $this->comment("If you are running Laravel version 5.2.*, then try php artisan make:auth");
+            $this->error('Publish Auth is only available for Laravel version 5.1');
+            $this->comment('If you are running Laravel version 5.2.*, then try php artisan make:auth');
         }
     }
 
@@ -46,23 +45,23 @@ class AuthPublishCommand extends PublishBaseCommand
         $viewsPath = config('infyom.laravel_generator.path.views', base_path('resources/views/'));
         $templateType = config('infyom.laravel_generator.path.templates', 'core-templates');
 
-        FileUtil::createDirectoryIfNotExist($viewsPath . 'layouts');
-        FileUtil::createDirectoryIfNotExist($viewsPath . 'auth');
-        FileUtil::createDirectoryIfNotExist($viewsPath . 'auth/passwords');
-        FileUtil::createDirectoryIfNotExist($viewsPath . 'emails');
+        FileUtil::createDirectoryIfNotExist($viewsPath.'layouts');
+        FileUtil::createDirectoryIfNotExist($viewsPath.'auth');
+        FileUtil::createDirectoryIfNotExist($viewsPath.'auth/passwords');
+        FileUtil::createDirectoryIfNotExist($viewsPath.'emails');
 
         $files = [
-            'layouts/app.stub' => "layouts/app.blade.php",
-            'auth/login.stub' => "auth/login.blade.php",
-            'auth/register.stub' => "auth/register.blade.php",
-            'auth/password.stub' => "auth/password.blade.php",
-            'auth/reset.stub' => "auth/reset.blade.php",
-            'emails/password.stub' => "emails/password.blade.php",
+            'layouts/app.stub'     => 'layouts/app.blade.php',
+            'auth/login.stub'      => 'auth/login.blade.php',
+            'auth/register.stub'   => 'auth/register.blade.php',
+            'auth/password.stub'   => 'auth/password.blade.php',
+            'auth/reset.stub'      => 'auth/reset.blade.php',
+            'emails/password.stub' => 'emails/password.blade.php',
         ];
 
         foreach ($files as $stub => $blade) {
-            $sourceFile = base_path('vendor/infyom/' . $templateType . "/templates/scaffold/" . $stub);
-            $destinationFile = $viewsPath . $blade;
+            $sourceFile = base_path('vendor/infyom/'.$templateType.'/templates/scaffold/'.$stub);
+            $destinationFile = $viewsPath.$blade;
             $this->publishFile($sourceFile, $destinationFile, $blade);
         }
     }
@@ -73,7 +72,7 @@ class AuthPublishCommand extends PublishBaseCommand
         $routeContents = file_get_contents($path);
 
         $routesTemplate = TemplateUtil::getTemplate('routes.auth', 'laravel-generator');
-        $routeContents .= "\n\n" . $routesTemplate;
+        $routeContents .= "\n\n".$routesTemplate;
 
         file_put_contents($path, $routeContents);
         $this->comment("\nRoutes added");

@@ -11,9 +11,8 @@ use InfyOm\Generator\Utils\TemplateUtil;
  * Author: Mitul Golakiya
  * Email: me@mitul.me
  * Date: 29.06.2015
- * Time: 19:25
+ * Time: 19:25.
  */
-
 class RepositoryTestGenerator
 {
     /** @var  CommandData */
@@ -22,19 +21,19 @@ class RepositoryTestGenerator
     /** @var string */
     private $path;
 
-    function __construct($commandData)
+    public function __construct($commandData)
     {
         $this->commandData = $commandData;
         $this->path = config('infyom.laravel_generator.path.repository_test', base_path('tests/'));
     }
 
-    function generate()
+    public function generate()
     {
-        $templateData = TemplateUtil::getTemplate("test.repository_test", "laravel-generator");
+        $templateData = TemplateUtil::getTemplate('test.repository_test', 'laravel-generator');
 
         $templateData = $this->fillTemplate($templateData);
 
-        $fileName = $this->commandData->modelName . "RepositoryTest.php";
+        $fileName = $this->commandData->modelName.'RepositoryTest.php';
 
         FileUtil::createFile($this->path, $fileName, $templateData);
 

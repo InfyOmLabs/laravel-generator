@@ -6,20 +6,20 @@ class TemplateUtil
 {
     public static function getTemplate($templateName, $templateType)
     {
-        $templateName = str_replace(".", "/", $templateName);
+        $templateName = str_replace('.', '/', $templateName);
 
         $templatesPath = config(
             'infyom.laravel_generator.path.templates_dir',
             base_path('resources/infyom/infyom-generator-templates/')
         );
 
-        $path = $templatesPath . $templateName . '.stub';
+        $path = $templatesPath.$templateName.'.stub';
 
         if (file_exists($path)) {
             return file_get_contents($path);
         }
 
-        $path = base_path('vendor/infyomlabs/' . $templateType . "/templates/" . $templateName . '.stub');
+        $path = base_path('vendor/infyomlabs/'.$templateType.'/templates/'.$templateName.'.stub');
 
         return file_get_contents($path);
     }

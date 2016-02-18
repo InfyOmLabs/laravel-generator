@@ -29,12 +29,12 @@ class ControllerGenerator
         $paginate = $this->commandData->getOption('paginate');
 
         if ($paginate) {
-            $templateData = str_replace('$RENDER_TYPE$', 'paginate(' . $paginate . ')', $templateData);
+            $templateData = str_replace('$RENDER_TYPE$', 'paginate('.$paginate.')', $templateData);
         } else {
             $templateData = str_replace('$RENDER_TYPE$', 'all()', $templateData);
         }
 
-        $fileName = $this->commandData->modelName . 'Controller.php';
+        $fileName = $this->commandData->modelName.'Controller.php';
 
         FileUtil::createFile($this->path, $fileName, $templateData);
 

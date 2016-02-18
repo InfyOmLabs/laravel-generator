@@ -37,7 +37,7 @@ class APIGeneratorPublisherCommand extends PublishBaseCommand
      */
     public function publishAPIRoutes()
     {
-        $routesPath = __DIR__ . '/../../../templates/api/routes/api_routes.stub';
+        $routesPath = __DIR__.'/../../../templates/api/routes/api_routes.stub';
 
         $apiRoutesPath = config('infyom.laravel_generator.path.api_routes', app_path('Http/api_routes.php'));
 
@@ -59,7 +59,7 @@ class APIGeneratorPublisherCommand extends PublishBaseCommand
 
         $templateData = $this->fillTemplate($templateData);
 
-        file_put_contents($path, $routeContents . "\n\n" . $templateData);
+        file_put_contents($path, $routeContents."\n\n".$templateData);
         $this->comment("\nAPI group added to routes.php");
     }
 

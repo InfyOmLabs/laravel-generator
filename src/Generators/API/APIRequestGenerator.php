@@ -32,7 +32,7 @@ class APIRequestGenerator
 
         $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
 
-        $fileName = 'Create' . $this->commandData->modelName . 'APIRequest.php';
+        $fileName = 'Create'.$this->commandData->modelName.'APIRequest.php';
 
         FileUtil::createFile($this->path, $fileName, $templateData);
 
@@ -46,7 +46,7 @@ class APIRequestGenerator
 
         $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
 
-        $fileName = 'Update' . $this->commandData->modelName . 'APIRequest.php';
+        $fileName = 'Update'.$this->commandData->modelName.'APIRequest.php';
 
         FileUtil::createFile($this->path, $fileName, $templateData);
 

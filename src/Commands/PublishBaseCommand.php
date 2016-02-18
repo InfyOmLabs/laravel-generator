@@ -14,7 +14,7 @@ class PublishBaseCommand extends Command
     public function publishFile($sourceFile, $destinationFile, $fileName)
     {
         if (file_exists($destinationFile)) {
-            $answer = $this->ask('Do you want to overwrite ' . $fileName . '? (y|N) :', false);
+            $answer = $this->ask('Do you want to overwrite '.$fileName.'? (y|N) :', false);
 
             if (strtolower($answer) != 'y' and strtolower($answer) != 'yes') {
                 return;
@@ -23,7 +23,7 @@ class PublishBaseCommand extends Command
 
         copy($sourceFile, $destinationFile);
 
-        $this->comment($fileName . ' published');
+        $this->comment($fileName.' published');
         $this->info($destinationFile);
     }
 
@@ -31,7 +31,7 @@ class PublishBaseCommand extends Command
     {
         if (file_exists($destinationDir)) {
             if (!$force) {
-                $answer = $this->ask('Do you want to overwrite ' . $dirName . '? (y|N) :', false);
+                $answer = $this->ask('Do you want to overwrite '.$dirName.'? (y|N) :', false);
 
                 if (strtolower($answer) != 'y' and strtolower($answer) != 'yes') {
                     return false;
@@ -43,7 +43,7 @@ class PublishBaseCommand extends Command
 
         File::copyDirectory($sourceDir, $destinationDir);
 
-        $this->comment($dirName . ' published');
+        $this->comment($dirName.' published');
         $this->info($destinationDir);
 
         return true;

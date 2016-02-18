@@ -32,7 +32,7 @@ class RequestGenerator
 
         $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
 
-        $fileName = 'Create' . $this->commandData->modelName . 'Request.php';
+        $fileName = 'Create'.$this->commandData->modelName.'Request.php';
 
         FileUtil::createFile($this->path, $fileName, $templateData);
 
@@ -46,7 +46,7 @@ class RequestGenerator
 
         $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
 
-        $fileName = 'Update' . $this->commandData->modelName . 'Request.php';
+        $fileName = 'Update'.$this->commandData->modelName.'Request.php';
 
         FileUtil::createFile($this->path, $fileName, $templateData);
 

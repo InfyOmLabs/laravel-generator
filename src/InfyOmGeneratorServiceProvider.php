@@ -14,10 +14,10 @@ use InfyOm\Generator\Commands\Common\MigrationGeneratorCommand;
 use InfyOm\Generator\Commands\Common\ModelGeneratorCommand;
 use InfyOm\Generator\Commands\Common\RepositoryGeneratorCommand;
 use InfyOm\Generator\Commands\PublishTemplateCommand;
+use InfyOm\Generator\Commands\Scaffold\AuthPublishCommand;
 use InfyOm\Generator\Commands\Scaffold\ControllerGeneratorCommand;
 use InfyOm\Generator\Commands\Scaffold\RequestsGeneratorCommand;
 use InfyOm\Generator\Commands\Scaffold\ScaffoldGeneratorCommand;
-use InfyOm\Generator\Commands\Scaffold\AuthPublishCommand;
 use InfyOm\Generator\Commands\Scaffold\ViewsGeneratorCommand;
 
 class InfyOmGeneratorServiceProvider extends ServiceProvider
@@ -29,7 +29,7 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $configPath = __DIR__ . '/../config/laravel_generator.php';
+        $configPath = __DIR__.'/../config/laravel_generator.php';
 
         $this->publishes([
             $configPath => config_path('infyom/laravel_generator.php'),

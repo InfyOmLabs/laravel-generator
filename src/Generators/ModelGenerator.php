@@ -26,7 +26,7 @@ class ModelGenerator
 
         $templateData = $this->fillTemplate($templateData);
 
-        $fileName = $this->commandData->modelName . '.php';
+        $fileName = $this->commandData->modelName.'.php';
 
         FileUtil::createFile($this->path, $fileName, $templateData);
 
@@ -43,8 +43,8 @@ class ModelGenerator
         $fillables = [];
 
         foreach ($this->commandData->inputFields as $field) {
-            if($field['fillable']) {
-                $fillables[] = '"' . $field['fieldName'] . '"';
+            if ($field['fillable']) {
+                $fillables[] = '"'.$field['fieldName'].'"';
             }
         }
 
@@ -93,13 +93,13 @@ class ModelGenerator
     {
         $fieldTypes = SwaggerGenerator::generateTypes($this->commandData->inputFields);
 
-        $template = TemplateUtil::getTemplate("model.model", 'swagger-generator');
+        $template = TemplateUtil::getTemplate('model.model', 'swagger-generator');
 
         $template = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $template);
 
-        $template = str_replace('$REQUIRED_FIELDS$', implode(", ", $this->generateRequiredFields()), $template);
+        $template = str_replace('$REQUIRED_FIELDS$', implode(', ', $this->generateRequiredFields()), $template);
 
-        $propertyTemplate = TemplateUtil::getTemplate("model.property", 'swagger-generator');
+        $propertyTemplate = TemplateUtil::getTemplate('model.property', 'swagger-generator');
 
         $properties = SwaggerGenerator::preparePropertyFields($propertyTemplate, $fieldTypes);
 
@@ -116,7 +116,7 @@ class ModelGenerator
 
         foreach ($this->commandData->inputFields as $field) {
             if (!empty($field['validations'])) {
-                if(str_contains($field['validations'], "required")) {
+                if (str_contains($field['validations'], 'required')) {
                     $requiredFields[] = $field['fieldName'];
                 }
             }
@@ -131,7 +131,7 @@ class ModelGenerator
 
         foreach ($this->commandData->inputFields as $field) {
             if (!empty($field['validations'])) {
-                $rule = '"' . $field['fieldName'] . '" => "' . $field['validations'] . '"';
+                $rule = '"'.$field['fieldName'].'" => "'.$field['validations'].'"';
                 $rules[] = $rule;
             }
         }
@@ -146,22 +146,22 @@ class ModelGenerator
         foreach ($this->commandData->inputFields as $field) {
             switch ($field['fieldType']) {
                 case 'integer':
-                    $rule = '"' . $field['fieldName'] . '" => "integer"';
+                    $rule = '"'.$field['fieldName'].'" => "integer"';
                     break;
                 case 'double':
-                    $rule = '"' . $field['fieldName'] . '" => "double"';
+                    $rule = '"'.$field['fieldName'].'" => "double"';
                     break;
                 case 'float':
-                    $rule = '"' . $field['fieldName'] . '" => "float"';
+                    $rule = '"'.$field['fieldName'].'" => "float"';
                     break;
                 case 'boolean':
-                    $rule = '"' . $field['fieldName'] . '" => "boolean"';
+                    $rule = '"'.$field['fieldName'].'" => "boolean"';
                     break;
                 case 'enum':
                 case 'string':
                 case 'char':
                 case 'text':
-                    $rule = '"' . $field['fieldName'] . '" => "string"';
+                    $rule = '"'.$field['fieldName'].'" => "string"';
                     break;
                 default:
                     $rule = '';

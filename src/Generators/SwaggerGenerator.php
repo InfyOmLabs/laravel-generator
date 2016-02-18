@@ -17,52 +17,52 @@ class SwaggerGenerator
         $fieldTypes = [];
 
         foreach ($inputFields as $field) {
-            $fieldFormat = "";
+            $fieldFormat = '';
             switch (strtolower($field['fieldType'])) {
                 case 'integer':
                 case 'smallinteger':
                 case 'long':
                 case 'bigint':
-                    $fieldType = "integer";
-                    $fieldFormat = "int32";
+                    $fieldType = 'integer';
+                    $fieldFormat = 'int32';
                     break;
                 case 'double':
-                    $fieldType = "number";
-                    $fieldFormat = "double";
+                    $fieldType = 'number';
+                    $fieldFormat = 'double';
                     break;
                 case 'float':
                 case 'decimal':
-                    $fieldType = "number";
-                    $fieldFormat = "float";
+                    $fieldType = 'number';
+                    $fieldFormat = 'float';
                     break;
                 case 'boolean':
-                    $fieldType = "boolean";
+                    $fieldType = 'boolean';
                     break;
                 case 'string':
                 case 'char':
                 case 'text':
                 case 'enum':
-                    $fieldType = "string";
+                    $fieldType = 'string';
                     break;
                 case 'byte':
-                    $fieldType = "string";
-                    $fieldFormat = "byte";
+                    $fieldType = 'string';
+                    $fieldFormat = 'byte';
                     break;
                 case 'binary':
-                    $fieldType = "string";
-                    $fieldFormat = "binary";
+                    $fieldType = 'string';
+                    $fieldFormat = 'binary';
                     break;
                 case 'password':
-                    $fieldType = "string";
-                    $fieldFormat = "password";
+                    $fieldType = 'string';
+                    $fieldFormat = 'password';
                     break;
                 case 'date':
-                    $fieldType = "string";
-                    $fieldFormat = "date";
+                    $fieldType = 'string';
+                    $fieldFormat = 'date';
                     break;
                 case 'dateTime':
-                    $fieldType = "string";
-                    $fieldFormat = "date-time";
+                    $fieldType = 'string';
+                    $fieldFormat = 'date-time';
                     break;
                 default:
                     $fieldType = null;
@@ -72,9 +72,9 @@ class SwaggerGenerator
 
             if (!empty($fieldType)) {
                 $fieldType = [
-                    'name' => $field['fieldName'],
-                    'type' => $fieldType,
-                    'format' => $fieldFormat
+                    'name'   => $field['fieldName'],
+                    'type'   => $fieldType,
+                    'format' => $fieldFormat,
                 ];
 
                 if (isset($field['description'])) {
@@ -94,13 +94,13 @@ class SwaggerGenerator
 
     public static function generateSwagger($fields, $fillables, $variables)
     {
-        $template = TemplateUtil::getTemplate("model.model", 'swagger-generator');
+        $template = TemplateUtil::getTemplate('model.model', 'swagger-generator');
 
         $templateData = TemplateUtil::fillTemplate($variables, $template);
 
-        $templateData = str_replace('$REQUIRED_FIELDS$', implode(", ", $fillables), $templateData);
+        $templateData = str_replace('$REQUIRED_FIELDS$', implode(', ', $fillables), $templateData);
 
-        $propertyTemplate = TemplateUtil::getTemplate("model.property", 'swagger-generator');
+        $propertyTemplate = TemplateUtil::getTemplate('model.property', 'swagger-generator');
 
         $properties = self::preparePropertyFields($propertyTemplate, $fields);
 
@@ -115,17 +115,17 @@ class SwaggerGenerator
 
         $fields = array_merge($fields, [
             [
-                'name' => 'created_at',
-                'type' => 'string',
-                'format' => 'date-time',
-                'description' => 'created_at'
+                'name'        => 'created_at',
+                'type'        => 'string',
+                'format'      => 'date-time',
+                'description' => 'created_at',
             ],
             [
-                'name' => 'updated_at',
-                'type' => 'string',
-                'format' => 'date-time',
-                'description' => 'updated_at'
-            ]
+                'name'        => 'updated_at',
+                'type'        => 'string',
+                'format'      => 'date-time',
+                'description' => 'updated_at',
+            ],
         ]);
 
         foreach ($fields as $field) {
@@ -140,7 +140,7 @@ class SwaggerGenerator
             $propertyTemplate = str_replace('$DESCRIPTION$', $description, $propertyTemplate);
             $propertyTemplate = str_replace('$FIELD_TYPE$', $type, $propertyTemplate);
             if (!empty($format)) {
-                $format = ",\n *          format=\"" . $format . "\"";
+                $format = ",\n *          format=\"".$format.'"';
             }
             $propertyTemplate = str_replace('$FIELD_FORMAT$', $format, $propertyTemplate);
             $templates[] = $propertyTemplate;

@@ -6,28 +6,30 @@ class ResponseUtil
 {
     /**
      * @param string $message
-     * @param mixed $data
+     * @param mixed  $data
+     *
      * @return array
      */
     public static function makeResponse($message, $data)
     {
         return [
             'success' => true,
-            'data' => $data,
-            'message' => $message
+            'data'    => $data,
+            'message' => $message,
         ];
     }
 
     /**
      * @param string $message
-     * @param array $data
+     * @param array  $data
+     *
      * @return array
      */
     public static function makeError($message, array $data = [])
     {
         $res = [
             'success' => false,
-            'message' => $message
+            'message' => $message,
         ];
 
         if (!empty($data)) {
