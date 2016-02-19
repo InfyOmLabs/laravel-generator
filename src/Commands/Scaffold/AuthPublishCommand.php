@@ -60,7 +60,7 @@ class AuthPublishCommand extends PublishBaseCommand
         ];
 
         foreach ($files as $stub => $blade) {
-            $sourceFile = base_path('vendor/infyom/'.$templateType.'/templates/scaffold/'.$stub);
+            $sourceFile = base_path('vendor/infyomlabs/'.$templateType.'/templates/scaffold/'.$stub);
             $destinationFile = $viewsPath.$blade;
             $this->publishFile($sourceFile, $destinationFile, $blade);
         }
