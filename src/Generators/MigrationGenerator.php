@@ -41,12 +41,10 @@ class MigrationGenerator
 
     private function generateFields()
     {
-        $fields = [
-            "\$table->increments('id');",
-        ];
+        $fields = [];
 
         foreach ($this->commandData->inputFields as $field) {
-            if ($field['fieldName'] == 'id') {
+            if ($field['fieldName'] == "created_at" or $field['fieldName'] == "updated_at") {
                 continue;
             }
             $fields[] = SchemaUtil::createField($field);

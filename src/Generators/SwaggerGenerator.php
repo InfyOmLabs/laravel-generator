@@ -20,6 +20,7 @@ class SwaggerGenerator
             $fieldFormat = '';
             switch (strtolower($field['fieldType'])) {
                 case 'integer':
+                case 'increments':
                 case 'smallinteger':
                 case 'long':
                 case 'bigint':
@@ -61,6 +62,7 @@ class SwaggerGenerator
                     $fieldFormat = 'date';
                     break;
                 case 'dateTime':
+                case 'timestamp':
                     $fieldType = 'string';
                     $fieldFormat = 'date-time';
                     break;
@@ -112,21 +114,6 @@ class SwaggerGenerator
     public static function preparePropertyFields($template, $fields)
     {
         $templates = [];
-
-        $fields = array_merge($fields, [
-            [
-                'name'        => 'created_at',
-                'type'        => 'string',
-                'format'      => 'date-time',
-                'description' => 'created_at',
-            ],
-            [
-                'name'        => 'updated_at',
-                'type'        => 'string',
-                'format'      => 'date-time',
-                'description' => 'updated_at',
-            ],
-        ]);
 
         foreach ($fields as $field) {
             $fieldName = $field['name'];

@@ -83,7 +83,7 @@ class CommandData
 
     private function prepareOptions()
     {
-        $options = ['fieldsFile', 'tableName', 'fromTable', 'save'];
+        $options = ['fieldsFile', 'tableName', 'fromTable', 'save', 'primary'];
 
         foreach ($options as $option) {
             $this->options[$option] = $this->commandObj->option($option);
@@ -105,7 +105,7 @@ class CommandData
             return $this->options[$option];
         }
 
-        return;
+        return false;
     }
 
     public function setOption($option, $value)
@@ -125,7 +125,7 @@ class CommandData
             return $this->addOns[$addOn];
         }
 
-        return;
+        return false;
     }
 
     private function initDynamicVariables()
@@ -192,7 +192,7 @@ class CommandData
         $this->commandInfo('Specify fields for the model (skip id & timestamp fields, we will add it automatically)');
         $this->commandInfo('Enter "exit" to finish');
 
-        $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput('id:integer', '', '', false, false);
+        $this->addPrimaryKey();
 
         while (true) {
             $fieldInputStr = $this->commandObj->ask('Field: (field_name:field_database_type)', '');
@@ -226,6 +226,24 @@ class CommandData
             $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput($fieldInputStr, $htmlType, $validations,
                 $searchable);
         }
+
+        $this->addTimestamps();
+    }
+
+    private function addPrimaryKey()
+    {
+        if ($this->options['primary']) {
+            $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput($this->options['primary'].':increments', '', '', false, false, true);
+
+        } else {
+            $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput('id:increments', '', '', false, false, true);
+        }
+    }
+
+    private function addTimestamps()
+    {
+        $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput("created_at:timestamp", '', '', false, false);
+        $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput("updated_at:timestamp", '', '', false, false);
     }
 
     private function getInputFromFile()
@@ -246,9 +264,20 @@ class CommandData
             $fields = json_decode($fileContents, true);
 
             $this->inputFields = array_merge($this->inputFields, GeneratorFieldsInputUtil::validateFieldsFile($fields));
+            $this->checkForDiffPrimaryKey();
         } catch (Exception $e) {
             $this->commandError($e->getMessage());
             exit;
+        }
+    }
+
+    private function checkForDiffPrimaryKey()
+    {
+        foreach($this->inputFields as $field) {
+            if (isset($field['primary']) && $field['primary'] && $field['fieldName'] != "id") {
+                $this->options['primary'] = $field['fieldName'];
+                break;
+            }
         }
     }
 

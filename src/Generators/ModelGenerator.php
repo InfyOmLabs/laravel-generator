@@ -50,6 +50,14 @@ class ModelGenerator
 
         $templateData = $this->fillDocs($templateData);
 
+        if ($this->commandData->getOption('primary')) {
+            $primary = "protected \$primaryKey = '".$this->commandData->getOption('primary')."';\n";
+        } else {
+            $primary = "";
+        }
+
+        $templateData = str_replace('$PRIMARY$', $primary, $templateData);
+
         $templateData = str_replace('$FIELDS$', implode(",\n\t\t", $fillables), $templateData);
 
         $templateData = str_replace('$RULES$', implode(",\n\t\t", $this->generateRules()), $templateData);

@@ -71,6 +71,8 @@ class BaseCommand extends Command
                 'htmlType'    => $field['htmlType'],
                 'validations' => $field['validations'],
                 'searchable'  => $field['searchable'],
+                'fillable'    => $field['fillable'],
+                'primary'     => $field['primary'],
             ];
         }
 
@@ -130,6 +132,7 @@ class BaseCommand extends Command
             ['tableName', null, InputOption::VALUE_REQUIRED, 'Table Name'],
             ['fromTable', null, InputOption::VALUE_NONE, 'Generate from existing table'],
             ['save', null, InputOption::VALUE_NONE, 'Save model schema to file'],
+            ['primary', null, InputOption::VALUE_REQUIRED, 'Save model schema to file'],
         ];
     }
 

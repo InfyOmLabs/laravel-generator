@@ -34,7 +34,19 @@ class GeneratorFieldsInputUtil
                 $searchable = false;
             }
 
-            $fieldsArr[] = self::processFieldInput($field['fieldInput'], $htmlType, $validations, $searchable);
+            if (isset($field['searchable'])) {
+                $fillable = $field['fillable'];
+            } else {
+                $fillable = false;
+            }
+
+            if (isset($field['primary'])) {
+                $primary = $field['primary'];
+            } else {
+                $primary = false;
+            }
+
+            $fieldsArr[] = self::processFieldInput($field['fieldInput'], $htmlType, $validations, $searchable, $fillable, $primary);
         }
 
         return $fieldsArr;
@@ -51,7 +63,7 @@ class GeneratorFieldsInputUtil
         return true;
     }
 
-    public static function processFieldInput($fieldInput, $htmlType, $validations, $searchable = false, $fillable = true)
+    public static function processFieldInput($fieldInput, $htmlType, $validations, $searchable = false, $fillable = true, $primary = false)
     {
         $fieldInputs = explode(':', $fieldInput);
 
@@ -77,6 +89,7 @@ class GeneratorFieldsInputUtil
             'validations'    => $validations,
             'searchable'     => $searchable,
             'fillable'       => $fillable,
+            'primary'        => $primary,
         ];
     }
 

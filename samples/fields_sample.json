@@ -1,5 +1,13 @@
 [
   {
+    "fieldInput": "id:increments",
+    "htmlType": "",
+    "validations": "",
+    "searchable": false,
+    "fillable": false,
+    "primary": true
+  },
+  {
     "fieldInput": "title:string,20",
     "htmlType": "text",
     "validations": "required",

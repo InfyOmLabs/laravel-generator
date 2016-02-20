@@ -26,15 +26,15 @@ class RepositoryGenerator
 
         $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
 
-        $fillables = [];
+        $searchables = [];
 
         foreach ($this->commandData->inputFields as $field) {
             if ($field['searchable']) {
-                $fillables[] = '"'.$field['fieldName'].'"';
+                $searchables[] = '"'.$field['fieldName'].'"';
             }
         }
 
-        $templateData = str_replace('$FIELDS$', implode(",\n\t\t", $fillables), $templateData);
+        $templateData = str_replace('$FIELDS$', implode(",\n\t\t", $searchables), $templateData);
 
         $fileName = $this->commandData->modelName.'Repository.php';
 
