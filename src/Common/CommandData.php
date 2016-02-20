@@ -234,7 +234,6 @@ class CommandData
     {
         if ($this->options['primary']) {
             $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput($this->options['primary'].':increments', '', '', false, false, true);
-
         } else {
             $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput('id:increments', '', '', false, false, true);
         }
@@ -242,8 +241,8 @@ class CommandData
 
     private function addTimestamps()
     {
-        $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput("created_at:timestamp", '', '', false, false);
-        $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput("updated_at:timestamp", '', '', false, false);
+        $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput('created_at:timestamp', '', '', false, false);
+        $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput('updated_at:timestamp', '', '', false, false);
     }
 
     private function getInputFromFile()
@@ -273,8 +272,8 @@ class CommandData
 
     private function checkForDiffPrimaryKey()
     {
-        foreach($this->inputFields as $field) {
-            if (isset($field['primary']) && $field['primary'] && $field['fieldName'] != "id") {
+        foreach ($this->inputFields as $field) {
+            if (isset($field['primary']) && $field['primary'] && $field['fieldName'] != 'id') {
                 $this->options['primary'] = $field['fieldName'];
                 break;
             }

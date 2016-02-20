@@ -53,7 +53,7 @@ class ModelGenerator
         if ($this->commandData->getOption('primary')) {
             $primary = "protected \$primaryKey = '".$this->commandData->getOption('primary')."';\n";
         } else {
-            $primary = "";
+            $primary = '';
         }
 
         $templateData = str_replace('$PRIMARY$', $primary, $templateData);

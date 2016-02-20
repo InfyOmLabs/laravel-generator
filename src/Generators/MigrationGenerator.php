@@ -44,7 +44,7 @@ class MigrationGenerator
         $fields = [];
 
         foreach ($this->commandData->inputFields as $field) {
-            if ($field['fieldName'] == "created_at" or $field['fieldName'] == "updated_at") {
+            if ($field['fieldName'] == 'created_at' or $field['fieldName'] == 'updated_at') {
                 continue;
             }
             $fields[] = SchemaUtil::createField($field);
