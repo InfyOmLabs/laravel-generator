@@ -81,9 +81,7 @@ class BaseCommand extends Command
         $fileName = $this->commandData->modelName.'.json';
 
         if (file_exists($path.$fileName)) {
-            if (!$this->confirm('model file '.$fileName.' already exist. Do you want to overwrite it? [y|N]',
-                false)
-            ) {
+            if (!$this->confirm('model file '.$fileName.' already exist. Do you want to overwrite it? [y|N]', false)) {
                 return;
             }
         }

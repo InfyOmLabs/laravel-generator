@@ -15,16 +15,23 @@ class CommandData
     public static $COMMAND_TYPE_SCAFFOLD_API = 'scaffold_api';
 
     /** @var string */
-    public $modelName, $commandType;
+    public $modelName;
+
+    public $commandType;
 
     /** @var array */
-    public $modelNames, $commandOptions, $inputFields;
+    public $modelNames;
+    public $commandOptions;
+    public $inputFields;
 
     /** @var Command */
     public $commandObj;
 
     /** @var array */
-    public $dynamicVars = [], $fieldNamesMapping = [], $options = [], $addOns = [];
+    public $dynamicVars = [];
+    public $fieldNamesMapping = [];
+    public $options = [];
+    public $addOns = [];
 
     /**
      * @param Command $commandObj
@@ -223,8 +230,12 @@ class CommandData
                 $searchable = (strtolower($searchable) == 'y') ? true : false;
             }
 
-            $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput($fieldInputStr, $htmlType, $validations,
-                $searchable);
+            $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput(
+                $fieldInputStr,
+                $htmlType,
+                $validations,
+                $searchable
+            );
         }
 
         $this->addTimestamps();
@@ -233,16 +244,42 @@ class CommandData
     private function addPrimaryKey()
     {
         if ($this->options['primary']) {
-            $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput($this->options['primary'].':increments', '', '', false, false, true);
+            $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput(
+                $this->options['primary'].':increments',
+                '',
+                '',
+                false,
+                false,
+                true
+            );
         } else {
-            $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput('id:increments', '', '', false, false, true);
+            $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput(
+                'id:increments',
+                '',
+                '',
+                false,
+                false,
+                true
+            );
         }
     }
 
     private function addTimestamps()
     {
-        $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput('created_at:timestamp', '', '', false, false);
-        $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput('updated_at:timestamp', '', '', false, false);
+        $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput(
+            'created_at:timestamp',
+            '',
+            '',
+            false,
+            false
+        );
+        $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput(
+            'updated_at:timestamp',
+            '',
+            '',
+            false,
+            false
+        );
     }
 
     private function getInputFromFile()
