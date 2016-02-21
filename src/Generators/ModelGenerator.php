@@ -44,7 +44,7 @@ class ModelGenerator
 
         foreach ($this->commandData->inputFields as $field) {
             if ($field['fillable']) {
-                $fillables[] = '''.$field['fieldName'].''';
+                $fillables[] = '"'.$field['fieldName'].'"';
             }
         }
 
