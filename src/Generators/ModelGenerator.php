@@ -30,7 +30,7 @@ class ModelGenerator
 
         FileUtil::createFile($this->path, $fileName, $templateData);
 
-        $this->commandData->commandComment("\nModel created: ");
+        $this->commandData->commandComment('\nModel created: ');
         $this->commandData->commandInfo($fileName);
     }
 
@@ -44,25 +44,25 @@ class ModelGenerator
 
         foreach ($this->commandData->inputFields as $field) {
             if ($field['fillable']) {
-                $fillables[] = '"'.$field['fieldName'].'"';
+                $fillables[] = '''.$field['fieldName'].''';
             }
         }
 
         $templateData = $this->fillDocs($templateData);
 
         if ($this->commandData->getOption('primary')) {
-            $primary = "protected \$primaryKey = '".$this->commandData->getOption('primary')."';\n";
+            $primary = 'protected \$primaryKey = ''.$this->commandData->getOption('primary').'';\n';
         } else {
             $primary = '';
         }
 
         $templateData = str_replace('$PRIMARY$', $primary, $templateData);
 
-        $templateData = str_replace('$FIELDS$', implode(",\n\t\t", $fillables), $templateData);
+        $templateData = str_replace('$FIELDS$', implode(',\n\t\t', $fillables), $templateData);
 
-        $templateData = str_replace('$RULES$', implode(",\n\t\t", $this->generateRules()), $templateData);
+        $templateData = str_replace('$RULES$', implode(',\n\t\t', $this->generateRules()), $templateData);
 
-        $templateData = str_replace('$CAST$', implode(",\n\t\t", $this->generateCasts()), $templateData);
+        $templateData = str_replace('$CAST$', implode(',\n\t\t', $this->generateCasts()), $templateData);
 
         return $templateData;
     }
@@ -74,11 +74,21 @@ class ModelGenerator
             $templateData = str_replace('$SOFT_DELETE$', '', $templateData);
             $templateData = str_replace('$SOFT_DELETE_DATES$', '', $templateData);
         } else {
-            $templateData = str_replace('$SOFT_DELETE_IMPORT$', "use Illuminate\\Database\\Eloquent\\SoftDeletes;\n",
-                $templateData);
-            $templateData = str_replace('$SOFT_DELETE$', "use SoftDeletes;\n", $templateData);
-            $templateData = str_replace('$SOFT_DELETE_DATES$', "\n\tprotected \$dates = ['deleted_at'];\n",
-                $templateData);
+            $templateData = str_replace(
+                '$SOFT_DELETE_IMPORT$',
+                'use Illuminate\\Database\\Eloquent\\SoftDeletes;\n',
+                $templateData
+            );
+            $templateData = str_replace(
+                '$SOFT_DELETE$',
+                'use SoftDeletes;\n',
+                $templateData
+            );
+            $templateData = str_replace(
+                '$SOFT_DELETE_DATES$',
+                '\n\tprotected \$dates = [\'deleted_at\'];\n',
+                $templateData
+            );
         }
 
         return $templateData;
@@ -111,7 +121,7 @@ class ModelGenerator
 
         $properties = SwaggerGenerator::preparePropertyFields($propertyTemplate, $fieldTypes);
 
-        $template = str_replace('$PROPERTIES$', implode(",\n", $properties), $template);
+        $template = str_replace('$PROPERTIES$', implode(',\n', $properties), $template);
 
         $templateData = str_replace('$DOCS$', $template, $templateData);
 
@@ -139,7 +149,7 @@ class ModelGenerator
 
         foreach ($this->commandData->inputFields as $field) {
             if (!empty($field['validations'])) {
-                $rule = '"'.$field['fieldName'].'" => "'.$field['validations'].'"';
+                $rule = '''.$field['fieldName'].'' => ''.$field['validations'].''';
                 $rules[] = $rule;
             }
         }
@@ -154,22 +164,22 @@ class ModelGenerator
         foreach ($this->commandData->inputFields as $field) {
             switch ($field['fieldType']) {
                 case 'integer':
-                    $rule = '"'.$field['fieldName'].'" => "integer"';
+                    $rule = '''.$field['fieldName'].'' => 'integer'';
                     break;
                 case 'double':
-                    $rule = '"'.$field['fieldName'].'" => "double"';
+                    $rule = '''.$field['fieldName'].'' => 'double'';
                     break;
                 case 'float':
-                    $rule = '"'.$field['fieldName'].'" => "float"';
+                    $rule = '''.$field['fieldName'].'' => 'float'';
                     break;
                 case 'boolean':
-                    $rule = '"'.$field['fieldName'].'" => "boolean"';
+                    $rule = '''.$field['fieldName'].'' => 'boolean'';
                     break;
                 case 'enum':
                 case 'string':
                 case 'char':
                 case 'text':
-                    $rule = '"'.$field['fieldName'].'" => "string"';
+                    $rule = '''.$field['fieldName'].'' => 'string'';
                     break;
                 default:
                     $rule = '';
