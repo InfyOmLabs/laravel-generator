@@ -119,7 +119,10 @@ class ViewGenerator
                 case 'email':
                 case 'password':
                 case 'number':
-                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.'.$field['htmlType'], $this->templateType);
+                    $fieldTemplate = TemplateUtil::getTemplate(
+                        'scaffold.fields.'.$field['htmlType'],
+                        $this->templateType
+                    );
                     break;
 
                 case 'select':
@@ -142,7 +145,8 @@ class ViewGenerator
                     foreach ($inputsArr as $item) {
                         $radioButtonsTemplate = TemplateUtil::fillFieldTemplate(
                             $this->commandData->fieldNamesMapping,
-                            $radioTemplate, $field
+                            $radioTemplate,
+                            $field
                         );
                         $radioButtonsTemplate = str_replace('$VALUE$', $item, $radioButtonsTemplate);
                         $radioButtons[] = $radioButtonsTemplate;
@@ -230,7 +234,11 @@ class ViewGenerator
         $fieldsStr = '';
 
         foreach ($this->commandData->inputFields as $field) {
-            $singleFieldStr = str_replace('$FIELD_NAME_TITLE$', Str::title(str_replace('_', ' ', $field['fieldName'])), $fieldTemplate);
+            $singleFieldStr = str_replace(
+                '$FIELD_NAME_TITLE$',
+                Str::title(str_replace('_', ' ', $field['fieldName'])),
+                $fieldTemplate
+            );
             $singleFieldStr = str_replace('$FIELD_NAME$', $field['fieldName'], $singleFieldStr);
             $singleFieldStr = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $singleFieldStr);
 
