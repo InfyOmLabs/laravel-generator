@@ -4,6 +4,7 @@ namespace InfyOm\Generator\Generators;
 
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Utils\FileUtil;
+use InfyOm\Generator\Utils\TableFieldsGenerator;
 use InfyOm\Generator\Utils\TemplateUtil;
 
 class ModelGenerator
@@ -49,6 +50,8 @@ class ModelGenerator
         }
 
         $templateData = $this->fillDocs($templateData);
+        
+        $templateData = $this->fillTimestamps($templateData);
 
         if ($this->commandData->getOption('primary')) {
             $primary = "protected \$primaryKey = '".$this->commandData->getOption('primary')."';\n";
@@ -95,6 +98,28 @@ class ModelGenerator
         }
 
         return $templateData;
+    }
+    
+    private function fillTimestamps($templateData)
+    {
+        $timestamps = TableFieldsGenerator::getTimestampFieldNames();
+
+        $replace = '';
+
+        if ($this->commandData->getOption('fromTable')) {
+            if (empty($timestamps)) {
+                $replace = "\n\tpublic \$timestamps = false;\n";
+            } else {
+                list($created_at, $updated_at) = collect($timestamps)->map(function ($field) {
+                    return !empty($field) ? "'$field'" : 'null';
+                });
+    
+                $replace .= "\n\tconst CREATED_AT = $created_at;";
+                $replace .= "\n\tconst UPDATED_AT = $updated_at;\n";
+            }
+        }
+        
+        return str_replace('$TIMESTAMPS$', $replace, $templateData);
     }
 
     public function generateSwagger($templateData)
