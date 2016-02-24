@@ -16,6 +16,7 @@ class TableFieldsGenerator
 
         $primaryKey = static::getPrimaryKeyFromTable($tableName);
         $timestamps = static::getTimestampFieldNames();
+        $defaultSearchable = config('infyom.laravel_generator.options.tables_searchable_default', false);
 
         $fields = [];
 
@@ -81,15 +82,17 @@ class TableFieldsGenerator
             }
 
             if (!empty($fieldInput)) {
-                $field = GeneratorFieldsInputUtil::processFieldInput($fieldInput, $type, '', false);
+                $field = GeneratorFieldsInputUtil::processFieldInput($fieldInput, $type, '', $defaultSearchable);
 
                 $columnName = $column->getName();
 
                 if ($columnName === $primaryKey) {
                     $field['primary'] = true;
                     $field['fillable'] = false;
+                    $field['searchable'] = false;
                 } elseif (in_array($columnName, $timestamps)) {
                     $field['fillable'] = false;
+                    $field['searchable'] = false;
                 }
 
                 $fields[] = $field;
