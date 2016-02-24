@@ -14,6 +14,8 @@ class TableFieldsGenerator
 
         $columns = $schema->listTableColumns($tableName);
 
+        $primaryKey = static::getPrimaryKeyFromTable($tableName);
+
         $fields = [];
 
         foreach ($columns as $column) {
@@ -78,11 +80,35 @@ class TableFieldsGenerator
             }
 
             if (!empty($fieldInput)) {
-                $fields [] = GeneratorFieldsInputUtil::processFieldInput($fieldInput, $type, '', false);
+                $field = GeneratorFieldsInputUtil::processFieldInput($fieldInput, $type, '', false);
+
+                if ($column->getName() === $primaryKey) {
+                    $field['primary'] = true;
+                    $field['fillable'] = false;
+                }
+
+                $fields[] = $field;
             }
         }
 
         return $fields;
+    }
+
+    /**
+     * @param string $tableName
+     *
+     * @return string|null The column name of the (simple) primary key 
+     */
+    public static function getPrimaryKeyFromTable($tableName)
+    {
+        $schema = DB::getDoctrineSchemaManager();
+        $indexes = collect($schema->listTableIndexes($tableName));
+
+        $primaryKey = $indexes->first(function ($i, $index) {
+            return $index->isPrimary() && 1 === count($index->getColumns());
+        });
+
+        return !empty($primaryKey) ? $primaryKey->getColumns()[0] : null;
     }
 
     /**

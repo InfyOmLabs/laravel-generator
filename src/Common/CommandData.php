@@ -285,5 +285,6 @@ class CommandData
         $tableName = $this->dynamicVars['$TABLE_NAME$'];
 
         $this->inputFields = TableFieldsGenerator::generateFieldsFromTable($tableName);
+        $this->checkForDiffPrimaryKey();
     }
 }
