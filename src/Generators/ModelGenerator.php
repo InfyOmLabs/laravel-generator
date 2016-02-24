@@ -175,8 +175,14 @@ class ModelGenerator
     public function generateCasts()
     {
         $casts = [];
+        
+        $timestamps = TableFieldsGenerator::getTimestampFieldNames();
 
         foreach ($this->commandData->inputFields as $field) {
+            if (in_array($field['fieldName'], $timestamps)) {
+                continue;
+            }
+            
             switch ($field['fieldType']) {
                 case 'integer':
                     $rule = '"'.$field['fieldName'].'" => "integer"';
@@ -189,6 +195,13 @@ class ModelGenerator
                     break;
                 case 'boolean':
                     $rule = '"'.$field['fieldName'].'" => "boolean"';
+                    break;
+                case 'dateTime':
+                case 'dateTimeTz':                
+                    $rule = '"'.$field['fieldName'].'" => "datetime"';
+                    break;
+                case 'date':                
+                    $rule = '"'.$field['fieldName'].'" => "date"';
                     break;
                 case 'enum':
                 case 'string':
