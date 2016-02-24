@@ -118,7 +118,7 @@ return [
 
         'tests'     => true,
     ],
-    
+
     /*
     |--------------------------------------------------------------------------
     | Timestamp Fields
@@ -129,7 +129,7 @@ return [
     'timestamps' => [
 
         'enabled'       => true,
-        
+
         'created_at'    => 'created_at',
 
         'updated_at'    => 'updated_at',

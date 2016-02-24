@@ -82,13 +82,13 @@ class TableFieldsGenerator
 
             if (!empty($fieldInput)) {
                 $field = GeneratorFieldsInputUtil::processFieldInput($fieldInput, $type, '', false);
-                
+
                 $columnName = $column->getName();
 
                 if ($columnName === $primaryKey) {
                     $field['primary'] = true;
                     $field['fillable'] = false;
-                } else if (in_array($columnName, $timestamps)) {
+                } elseif (in_array($columnName, $timestamps)) {
                     $field['fillable'] = false;
                 }
 
@@ -115,7 +115,7 @@ class TableFieldsGenerator
 
         return !empty($primaryKey) ? $primaryKey->getColumns()[0] : null;
     }
-    
+
     /*
      * @return array the set of [created_at column name, updated_at column name]
      */

@@ -50,7 +50,7 @@ class ModelGenerator
         }
 
         $templateData = $this->fillDocs($templateData);
-        
+
         $templateData = $this->fillTimestamps($templateData);
 
         if ($this->commandData->getOption('primary')) {
@@ -99,7 +99,7 @@ class ModelGenerator
 
         return $templateData;
     }
-    
+
     private function fillTimestamps($templateData)
     {
         $timestamps = TableFieldsGenerator::getTimestampFieldNames();
@@ -113,12 +113,12 @@ class ModelGenerator
                 list($created_at, $updated_at) = collect($timestamps)->map(function ($field) {
                     return !empty($field) ? "'$field'" : 'null';
                 });
-    
+
                 $replace .= "\n\tconst CREATED_AT = $created_at;";
                 $replace .= "\n\tconst UPDATED_AT = $updated_at;\n";
             }
         }
-        
+
         return str_replace('$TIMESTAMPS$', $replace, $templateData);
     }
 
@@ -175,14 +175,14 @@ class ModelGenerator
     public function generateCasts()
     {
         $casts = [];
-        
+
         $timestamps = TableFieldsGenerator::getTimestampFieldNames();
 
         foreach ($this->commandData->inputFields as $field) {
             if (in_array($field['fieldName'], $timestamps)) {
                 continue;
             }
-            
+
             switch ($field['fieldType']) {
                 case 'integer':
                     $rule = '"'.$field['fieldName'].'" => "integer"';
@@ -197,10 +197,10 @@ class ModelGenerator
                     $rule = '"'.$field['fieldName'].'" => "boolean"';
                     break;
                 case 'dateTime':
-                case 'dateTimeTz':                
+                case 'dateTimeTz':
                     $rule = '"'.$field['fieldName'].'" => "datetime"';
                     break;
-                case 'date':                
+                case 'date':
                     $rule = '"'.$field['fieldName'].'" => "date"';
                     break;
                 case 'enum':
