@@ -15,6 +15,7 @@ class TableFieldsGenerator
         $columns = $schema->listTableColumns($tableName);
 
         $primaryKey = static::getPrimaryKeyFromTable($tableName);
+        $timestamps = static::getTimestampFieldNames();
 
         $fields = [];
 
@@ -81,9 +82,13 @@ class TableFieldsGenerator
 
             if (!empty($fieldInput)) {
                 $field = GeneratorFieldsInputUtil::processFieldInput($fieldInput, $type, '', false);
+                
+                $columnName = $column->getName();
 
-                if ($column->getName() === $primaryKey) {
+                if ($columnName === $primaryKey) {
                     $field['primary'] = true;
+                    $field['fillable'] = false;
+                } else if (in_array($columnName, $timestamps)) {
                     $field['fillable'] = false;
                 }
 
@@ -109,6 +114,21 @@ class TableFieldsGenerator
         });
 
         return !empty($primaryKey) ? $primaryKey->getColumns()[0] : null;
+    }
+    
+    /*
+     * @return array the set of [created_at column name, updated_at column name]
+     */
+    public static function getTimestampFieldNames()
+    {
+        if (!config('infyom.laravel_generator.timestamps.enabled', true)) {
+            return [];
+        }
+
+        $createdAtName = config('infyom.laravel_generator.timestamps.created_at', 'created_at');
+        $updatedAtName = config('infyom.laravel_generator.timestamps.updated_at', 'updated_at');
+
+        return [$createdAtName, $updatedAtName];
     }
 
     /**
