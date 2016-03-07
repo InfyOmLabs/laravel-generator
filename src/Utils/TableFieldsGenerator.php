@@ -15,6 +15,8 @@ class TableFieldsGenerator
         $columns = $schema->listTableColumns($tableName);
 
         $primaryKey = static::getPrimaryKeyFromTable($tableName);
+        $timestamps = static::getTimestampFieldNames();
+        $defaultSearchable = config('infyom.laravel_generator.options.tables_searchable_default', false);
 
         $fields = [];
 
@@ -80,11 +82,17 @@ class TableFieldsGenerator
             }
 
             if (!empty($fieldInput)) {
-                $field = GeneratorFieldsInputUtil::processFieldInput($fieldInput, $type, '', false);
+                $field = GeneratorFieldsInputUtil::processFieldInput($fieldInput, $type, '', $defaultSearchable);
 
-                if ($column->getName() === $primaryKey) {
+                $columnName = $column->getName();
+
+                if ($columnName === $primaryKey) {
                     $field['primary'] = true;
                     $field['fillable'] = false;
+                    $field['searchable'] = false;
+                } elseif (in_array($columnName, $timestamps)) {
+                    $field['fillable'] = false;
+                    $field['searchable'] = false;
                 }
 
                 $fields[] = $field;
@@ -109,6 +117,21 @@ class TableFieldsGenerator
         });
 
         return !empty($primaryKey) ? $primaryKey->getColumns()[0] : null;
+    }
+
+    /*
+     * @return array the set of [created_at column name, updated_at column name]
+     */
+    public static function getTimestampFieldNames()
+    {
+        if (!config('infyom.laravel_generator.timestamps.enabled', true)) {
+            return [];
+        }
+
+        $createdAtName = config('infyom.laravel_generator.timestamps.created_at', 'created_at');
+        $updatedAtName = config('infyom.laravel_generator.timestamps.updated_at', 'updated_at');
+
+        return [$createdAtName, $updatedAtName];
     }
 
     /**

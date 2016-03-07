@@ -103,6 +103,8 @@ return [
     'options' => [
 
         'softDelete' => true,
+
+        'tables_searchable_default' => false,
     ],
 
     /*
@@ -118,4 +120,21 @@ return [
 
         'tests'     => true,
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Timestamp Fields
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    'timestamps' => [
+
+        'enabled'       => true,
+
+        'created_at'    => 'created_at',
+
+        'updated_at'    => 'updated_at',
+    ],
+
 ];
