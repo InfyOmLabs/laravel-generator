@@ -56,6 +56,6 @@ class MigrationGenerator
             $fields[] = '$table->softDeletes();';
         }
 
-        return implode(PHP_EOL . str_repeat('&nbsp;', 12), $fields);
+        return implode(PHP_EOL . str_repeat(' ', 12), $fields);
     }
 }
