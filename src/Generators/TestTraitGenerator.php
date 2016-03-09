@@ -39,7 +39,7 @@ class TestTraitGenerator
     {
         $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
 
-        $templateData = str_replace('$FIELDS$', implode("," . PHP_EOL . str_repeat(' ', 12), $this->generateFields()), $templateData);
+        $templateData = str_replace('$FIELDS$', implode(','.PHP_EOL.str_repeat(' ', 12), $this->generateFields()), $templateData);
 
         return $templateData;
     }
