@@ -105,7 +105,7 @@ class TableFieldsGenerator
     /**
      * @param string $tableName
      *
-     * @return string|null The column name of the (simple) primary key 
+     * @return string|null The column name of the (simple) primary key
      */
     public static function getPrimaryKeyFromTable($tableName)
     {

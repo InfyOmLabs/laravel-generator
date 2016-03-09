@@ -34,9 +34,9 @@ class RepositoryGenerator
             }
         }
 
-        $templateData = str_replace('$FIELDS$', implode("," . PHP_EOL . str_repeat(' ', 8), $searchables), $templateData);
+        $templateData = str_replace('$FIELDS$', implode(','.PHP_EOL.str_repeat(' ', 8), $searchables), $templateData);
 
-        $fileName = $this->commandData->modelName . 'Repository.php';
+        $fileName = $this->commandData->modelName.'Repository.php';
 
         FileUtil::createFile($this->path, $fileName, $templateData);
 
