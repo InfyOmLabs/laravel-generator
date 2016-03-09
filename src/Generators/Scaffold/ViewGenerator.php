@@ -61,7 +61,7 @@ class ViewGenerator
             $headerFields[] = '<th>'.$field['fieldTitle'].'</th>';
         }
 
-        $headerFields = implode("\n\t\t\t", $headerFields);
+        $headerFields = implode(PHP_EOL . str_repeat(' ', 8), $headerFields);
 
         $templateData = str_replace('$FIELD_HEADERS$', $headerFields, $templateData);
 
@@ -72,7 +72,7 @@ class ViewGenerator
                 $field['fieldName'].' !!}</td>';
         }
 
-        $tableBodyFields = implode("\n\t\t\t", $tableBodyFields);
+        $tableBodyFields = implode(PHP_EOL . str_repeat(' ', 12), $tableBodyFields);
 
         $templateData = str_replace('$FIELD_BODY$', $tableBodyFields, $templateData);
 

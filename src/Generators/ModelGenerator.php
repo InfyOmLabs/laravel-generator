@@ -54,18 +54,18 @@ class ModelGenerator
         $templateData = $this->fillTimestamps($templateData);
 
         if ($this->commandData->getOption('primary')) {
-            $primary = "protected \$primaryKey = '".$this->commandData->getOption('primary')."';\n";
+            $primary = str_repeat(' ', 4) . "protected \$primaryKey = '" . $this->commandData->getOption('primary') . "';\n";
         } else {
             $primary = '';
         }
 
         $templateData = str_replace('$PRIMARY$', $primary, $templateData);
 
-        $templateData = str_replace('$FIELDS$', implode(",\n\t\t", $fillables), $templateData);
+        $templateData = str_replace('$FIELDS$', implode(PHP_EOL . str_repeat(' ', 8), $fillables), $templateData);
 
-        $templateData = str_replace('$RULES$', implode(",\n\t\t", $this->generateRules()), $templateData);
+        $templateData = str_replace('$RULES$', implode(PHP_EOL . str_repeat(' ', 8), $this->generateRules()), $templateData);
 
-        $templateData = str_replace('$CAST$', implode(",\n\t\t", $this->generateCasts()), $templateData);
+        $templateData = str_replace('$CAST$', implode(PHP_EOL . str_repeat(' ', 8), $this->generateCasts()), $templateData);
 
         return $templateData;
     }
@@ -79,8 +79,8 @@ class ModelGenerator
         } else {
             $templateData = str_replace('$SOFT_DELETE_IMPORT$', "use Illuminate\\Database\\Eloquent\\SoftDeletes;\n",
                 $templateData);
-            $templateData = str_replace('$SOFT_DELETE$', "use SoftDeletes;\n", $templateData);
-            $templateData = str_replace('$SOFT_DELETE_DATES$', "\n\tprotected \$dates = ['deleted_at'];\n",
+            $templateData = str_replace('$SOFT_DELETE$', str_repeat(' ', 4) . "use SoftDeletes;\n", $templateData);
+            $templateData = str_replace('$SOFT_DELETE_DATES$', PHP_EOL . str_repeat(' ', 4) . "protected \$dates = ['deleted_at'];\n",
                 $templateData);
         }
 
