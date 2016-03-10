@@ -61,11 +61,11 @@ class ModelGenerator
 
         $templateData = str_replace('$PRIMARY$', $primary, $templateData);
 
-        $templateData = str_replace('$FIELDS$', implode(PHP_EOL.str_repeat(' ', 8), $fillables), $templateData);
+        $templateData = str_replace('$FIELDS$', implode(','.PHP_EOL.str_repeat(' ', 8), $fillables), $templateData);
 
-        $templateData = str_replace('$RULES$', implode(PHP_EOL.str_repeat(' ', 8), $this->generateRules()), $templateData);
+        $templateData = str_replace('$RULES$', implode(','.PHP_EOL.str_repeat(' ', 8), $this->generateRules()), $templateData);
 
-        $templateData = str_replace('$CAST$', implode(PHP_EOL.str_repeat(' ', 8), $this->generateCasts()), $templateData);
+        $templateData = str_replace('$CAST$', implode(','.PHP_EOL.str_repeat(' ', 8), $this->generateCasts()), $templateData);
 
         return $templateData;
     }
