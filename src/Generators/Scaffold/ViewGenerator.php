@@ -58,6 +58,9 @@ class ViewGenerator
         $headerFields = [];
 
         foreach ($this->commandData->inputFields as $field) {
+            if ($field['primary']) {
+                continue;
+            }
             $headerFields[] = '<th>'.$field['fieldTitle'].'</th>';
         }
 
@@ -68,6 +71,9 @@ class ViewGenerator
         $tableBodyFields = [];
 
         foreach ($this->commandData->inputFields as $field) {
+            if ($field['primary']) {
+                continue;
+            }
             $tableBodyFields[] = '<td>{!! $'.$this->commandData->modelNames['camel'].'->'.
                 $field['fieldName'].' !!}</td>';
         }
