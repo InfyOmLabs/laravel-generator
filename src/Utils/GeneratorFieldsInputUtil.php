@@ -37,7 +37,7 @@ class GeneratorFieldsInputUtil
             if (isset($field['fillable'])) {
                 $fillable = $field['fillable'];
             } else {
-                $fillable = false;
+                $fillable = true;
             }
 
             if (isset($field['primary'])) {
