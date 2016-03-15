@@ -10,7 +10,7 @@ use InfyOm\Generator\Utils\TemplateUtil;
 
 class ViewGenerator
 {
-    /** @var  CommandData */
+    /** @var CommandData */
     private $commandData;
 
     /** @var string */
