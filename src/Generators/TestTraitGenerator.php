@@ -49,6 +49,10 @@ class TestTraitGenerator
         $fields = [];
 
         foreach ($this->commandData->inputFields as $field) {
+            if ($field['primary']) {
+                continue;
+            }
+
             $fieldData = "'".$field['fieldName']."' => ".'$fake->';
 
             switch ($field['fieldType']) {
