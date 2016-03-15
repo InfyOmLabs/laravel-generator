@@ -22,7 +22,7 @@ class $MODEL_NAME$RepositoryTest extends TestCase
     /**
      * @test create
      */
-    function it_creates_$MODEL_NAME_SNAKE$()
+    public function testCreate$MODEL_NAME$()
     {
         $$MODEL_NAME_CAMEL$ = $this->fake$MODEL_NAME$Data();
         $created$MODEL_NAME$ = $this->$MODEL_NAME_CAMEL$Repo->create($$MODEL_NAME_CAMEL$);
@@ -36,7 +36,7 @@ class $MODEL_NAME$RepositoryTest extends TestCase
     /**
      * @test read
      */
-    function it_reads_$MODEL_NAME_PLURAL_SNAKE$()
+    public function testRead$MODEL_NAME$()
     {
         $$MODEL_NAME_CAMEL$ = $this->make$MODEL_NAME$();
         $db$MODEL_NAME$ = $this->$MODEL_NAME_CAMEL$Repo->find($$MODEL_NAME_CAMEL$->id);
@@ -47,7 +47,7 @@ class $MODEL_NAME$RepositoryTest extends TestCase
     /**
      * @test update
      */
-    function it_updates_$MODEL_NAME_SNAKE$()
+    public function testUpdate$MODEL_NAME$()
     {
         $$MODEL_NAME_CAMEL$ = $this->make$MODEL_NAME$();
         $fake$MODEL_NAME$ = $this->fake$MODEL_NAME$Data();
@@ -60,7 +60,7 @@ class $MODEL_NAME$RepositoryTest extends TestCase
     /**
      * @test delete
      */
-    function it_deletes_$MODEL_NAME_SNAKE$()
+    public function testDelete$MODEL_NAME$()
     {
         $$MODEL_NAME_CAMEL$ = $this->make$MODEL_NAME$();
         $resp = $this->$MODEL_NAME_CAMEL$Repo->delete($$MODEL_NAME_CAMEL$->id);

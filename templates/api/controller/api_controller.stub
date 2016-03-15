@@ -19,7 +19,7 @@ class $MODEL_NAME$APIController extends AppBaseController
     /** @var  $MODEL_NAME$Repository */
     private $$MODEL_NAME_CAMEL$Repository;
 
-    function __construct($MODEL_NAME$Repository $$MODEL_NAME_CAMEL$Repo)
+    public function __construct($MODEL_NAME$Repository $$MODEL_NAME_CAMEL$Repo)
     {
         $this->$MODEL_NAME_CAMEL$Repository = $$MODEL_NAME_CAMEL$Repo;
     }
@@ -31,7 +31,7 @@ class $MODEL_NAME$APIController extends AppBaseController
         $this->$MODEL_NAME_CAMEL$Repository->pushCriteria(new LimitOffsetCriteria($request));
         $$MODEL_NAME_PLURAL_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->all();
 
-        return $this->sendResponse($$MODEL_NAME_PLURAL_CAMEL$->toArray(), "$MODEL_NAME_PLURAL$ retrieved successfully");
+        return $this->sendResponse($$MODEL_NAME_PLURAL_CAMEL$->toArray(), '$MODEL_NAME_PLURAL$ retrieved successfully');
     }
 
     $DOC_STORE$
@@ -41,7 +41,7 @@ class $MODEL_NAME$APIController extends AppBaseController
 
         $$MODEL_NAME_PLURAL_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->create($input);
 
-        return $this->sendResponse($$MODEL_NAME_PLURAL_CAMEL$->toArray(), "$MODEL_NAME$ saved successfully");
+        return $this->sendResponse($$MODEL_NAME_PLURAL_CAMEL$->toArray(), '$MODEL_NAME$ saved successfully');
     }
 
     $DOC_SHOW$
@@ -50,11 +50,11 @@ class $MODEL_NAME$APIController extends AppBaseController
         /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
 
-        if(empty($$MODEL_NAME_CAMEL$)) {
-            return Response::json(ResponseUtil::makeError("$MODEL_NAME$ not found"), 400);
+        if (empty($$MODEL_NAME_CAMEL$)) {
+            return Response::json(ResponseUtil::makeError('$MODEL_NAME$ not found'), 400);
         }
 
-        return $this->sendResponse($$MODEL_NAME_CAMEL$->toArray(), "$MODEL_NAME$ retrieved successfully");
+        return $this->sendResponse($$MODEL_NAME_CAMEL$->toArray(), '$MODEL_NAME$ retrieved successfully');
     }
 
     $DOC_UPDATE$
@@ -66,12 +66,12 @@ class $MODEL_NAME$APIController extends AppBaseController
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
-            return Response::json(ResponseUtil::makeError("$MODEL_NAME$ not found"), 400);
+            return Response::json(ResponseUtil::makeError('$MODEL_NAME$ not found'), 400);
         }
 
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->update($input, $id);
 
-        return $this->sendResponse($$MODEL_NAME_CAMEL$->toArray(), "$MODEL_NAME$ updated successfully");
+        return $this->sendResponse($$MODEL_NAME_CAMEL$->toArray(), '$MODEL_NAME$ updated successfully');
     }
 
     $DOC_DESTROY$
@@ -80,12 +80,12 @@ class $MODEL_NAME$APIController extends AppBaseController
         /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
 
-        if(empty($$MODEL_NAME_CAMEL$)) {
-            return Response::json(ResponseUtil::makeError("$MODEL_NAME$ not found"), 400);
+        if (empty($$MODEL_NAME_CAMEL$)) {
+            return Response::json(ResponseUtil::makeError('$MODEL_NAME$ not found'), 400);
         }
 
         $$MODEL_NAME_CAMEL$->delete();
 
-        return $this->sendResponse($id, "$MODEL_NAME$ deleted successfully");
+        return $this->sendResponse($id, '$MODEL_NAME$ deleted successfully');
     }
 }

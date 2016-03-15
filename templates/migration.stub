@@ -13,7 +13,7 @@ class Create$MODEL_NAME_PLURAL$Table extends Migration
      */
     public function up()
     {
-        Schema::create('$TABLE_NAME$', function(Blueprint $table) {
+        Schema::create('$TABLE_NAME$', function (Blueprint $table) {
             $FIELDS$
         });
     }

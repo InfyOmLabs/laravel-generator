@@ -30,7 +30,7 @@ class RepositoryGenerator
 
         foreach ($this->commandData->inputFields as $field) {
             if ($field['searchable']) {
-                $searchables[] = '"'.$field['fieldName'].'"';
+                $searchables[] = "'".$field['fieldName']."'";
             }
         }
 

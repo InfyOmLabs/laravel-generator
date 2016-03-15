@@ -108,14 +108,14 @@ class ModelGenerator
 
         if ($this->commandData->getOption('fromTable')) {
             if (empty($timestamps)) {
-                $replace = "\n\tpublic \$timestamps = false;\n";
+                $replace = infy_nl_tab()."public \$timestamps = false;\n";
             } else {
                 list($created_at, $updated_at) = collect($timestamps)->map(function ($field) {
                     return !empty($field) ? "'$field'" : 'null';
                 });
 
-                $replace .= "\n\tconst CREATED_AT = $created_at;";
-                $replace .= "\n\tconst UPDATED_AT = $updated_at;\n";
+                $replace .= infy_nl_tab()."const CREATED_AT = $created_at;";
+                $replace .= infy_nl_tab()."const UPDATED_AT = $updated_at;\n";
             }
         }
 

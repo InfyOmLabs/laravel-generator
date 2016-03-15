@@ -5,7 +5,8 @@ namespace $NAMESPACE_REQUEST$;
 use $NAMESPACE_REQUEST$\Request;
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
 
-class Create$MODEL_NAME$Request extends Request {
+class Create$MODEL_NAME$Request extends Request
+{
 
     /**
      * Determine if the user is authorized to make this request.

@@ -30,6 +30,6 @@ class APIRoutesGenerator
         $routeContents .= "\n\n".$routesTemplate;
 
         file_put_contents($this->path, $routeContents);
-        $this->commandData->commandComment("\n".$this->commandData->modelNames['camelPlural'].' routes added.');
+        $this->commandData->commandComment("\n".$this->commandData->modelNames['camelPlural'].' api routes added.');
     }
 }
