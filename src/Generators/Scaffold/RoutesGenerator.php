@@ -7,7 +7,7 @@ use InfyOm\Generator\Utils\TemplateUtil;
 
 class RoutesGenerator
 {
-    /** @var  CommandData */
+    /** @var CommandData */
     private $commandData;
 
     /** @var string */

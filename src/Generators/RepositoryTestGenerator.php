@@ -15,7 +15,7 @@ use InfyOm\Generator\Utils\TemplateUtil;
  */
 class RepositoryTestGenerator
 {
-    /** @var  CommandData */
+    /** @var CommandData */
     private $commandData;
 
     /** @var string */

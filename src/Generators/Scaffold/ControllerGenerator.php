@@ -8,7 +8,7 @@ use InfyOm\Generator\Utils\TemplateUtil;
 
 class ControllerGenerator
 {
-    /** @var  CommandData */
+    /** @var CommandData */
     private $commandData;
 
     /** @var string */

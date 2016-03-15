@@ -7,7 +7,7 @@ use InfyOm\Generator\Utils\TemplateUtil;
 
 class APIRoutesGenerator
 {
-    /** @var  CommandData */
+    /** @var CommandData */
     private $commandData;
 
     /** @var string */
