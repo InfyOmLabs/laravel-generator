@@ -50,7 +50,7 @@
   },
   {
     "fieldInput": "checkbox_test:string",
-    "htmlType": "checkbox:yes"  
+    "htmlType": "checkbox:true"  
   },
     {
     "fieldInput": "checkbox-group_test:string",
