@@ -14,10 +14,10 @@ class RequestGenerator
     /** @var string */
     private $path;
 
-    public function __construct($commandData)
+    public function __construct(CommandData $commandData)
     {
         $this->commandData = $commandData;
-        $this->path = config('infyom.laravel_generator.path.request', app_path('Http/Requests/'));
+        $this->path = $commandData->config->pathRequest;
     }
 
     public function generate()

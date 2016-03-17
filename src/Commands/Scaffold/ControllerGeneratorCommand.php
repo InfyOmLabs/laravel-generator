@@ -40,8 +40,6 @@ class ControllerGeneratorCommand extends ScaffoldBaseCommand
     {
         parent::handle();
 
-        $this->initScaffoldGeneratorCommandData();
-
         $controllerGenerator = new ControllerGenerator($this->commandData);
         $controllerGenerator->generate();
 

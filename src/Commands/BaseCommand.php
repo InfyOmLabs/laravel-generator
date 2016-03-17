@@ -42,7 +42,7 @@ class BaseCommand extends Command
 
     public function performPostActions($runMigration = false)
     {
-        if ($this->commandData->options['save']) {
+        if ($this->commandData->getOption('save')) {
             $this->saveSchemaFile();
         }
 
@@ -92,34 +92,6 @@ class BaseCommand extends Command
         $this->commandData->commandInfo($fileName);
     }
 
-    public function initAPIGeneratorCommandData()
-    {
-        $this->commandData->addDynamicVariable(
-            '$NAMESPACE_API_CONTROLLER$',
-            config('infyom.laravel_generator.namespace.api_controller', 'App\Http\Controllers\API')
-        );
-
-        $this->commandData->addDynamicVariable(
-            '$NAMESPACE_API_REQUEST$',
-            config('infyom.laravel_generator.namespace.api_request', 'App\Http\Requests\API')
-        );
-    }
-
-    public function initScaffoldGeneratorCommandData()
-    {
-        $this->commandData->addDynamicVariable(
-            '$NAMESPACE_CONTROLLER$',
-            config('infyom.laravel_generator.namespace.controller', 'App\Http\Controllers')
-        );
-
-        $this->commandData->addDynamicVariable(
-            '$NAMESPACE_REQUEST$',
-            config('infyom.laravel_generator.namespace.request', 'App\Http\Requests')
-        );
-
-        $this->commandData->setOption('paginate', $this->option('paginate'));
-    }
-
     /**
      * Get the console command options.
      *
@@ -133,6 +105,7 @@ class BaseCommand extends Command
             ['fromTable', null, InputOption::VALUE_NONE, 'Generate from existing table'],
             ['save', null, InputOption::VALUE_NONE, 'Save model schema to file'],
             ['primary', null, InputOption::VALUE_REQUIRED, 'Save model schema to file'],
+            ['prefix', null, InputOption::VALUE_REQUIRED, 'Prefix for all files'],
         ];
     }
 

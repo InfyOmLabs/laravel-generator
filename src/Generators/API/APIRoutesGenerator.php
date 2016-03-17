@@ -13,10 +13,10 @@ class APIRoutesGenerator
     /** @var string */
     private $path;
 
-    public function __construct($commandData)
+    public function __construct(CommandData $commandData)
     {
         $this->commandData = $commandData;
-        $this->path = config('infyom.laravel_generator.path.api_routes', app_path('Http/api_routes.php'));
+        $this->path = $commandData->config->pathApiRoutes;
     }
 
     public function generate()
@@ -30,6 +30,6 @@ class APIRoutesGenerator
         $routeContents .= "\n\n".$routesTemplate;
 
         file_put_contents($this->path, $routeContents);
-        $this->commandData->commandComment("\n".$this->commandData->modelNames['camelPlural'].' api routes added.');
+        $this->commandData->commandComment("\n".$this->commandData->config->mCamelPlural.' api routes added.');
     }
 }

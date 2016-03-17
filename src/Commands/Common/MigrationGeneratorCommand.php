@@ -41,7 +41,7 @@ class MigrationGeneratorCommand extends BaseCommand
     {
         parent::handle();
 
-        if ($this->commandData->options['fromTable']) {
+        if ($this->commandData->getOption('fromTable')) {
             $this->error('fromTable option is now allowed to use with migration generator');
 
             return;

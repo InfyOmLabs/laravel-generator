@@ -22,11 +22,10 @@ class ViewGenerator
     /** @var array */
     private $htmlFields;
 
-    public function __construct($commandData)
+    public function __construct(CommandData $commandData)
     {
         $this->commandData = $commandData;
-        $this->path = config('infyom.laravel_generator.path.views', base_path('resources/views/'));
-        $this->path = $this->path.'/'.$this->commandData->modelNames['camelPlural'].'/';
+        $this->path = $commandData->config->pathViews;
         $this->templateType = config('infyom.laravel_generator.path.templates', 'core-templates');
     }
 
@@ -74,7 +73,7 @@ class ViewGenerator
             if ($field['primary']) {
                 continue;
             }
-            $tableBodyFields[] = '<td>{!! $'.$this->commandData->modelNames['camel'].'->'.
+            $tableBodyFields[] = '<td>{!! $'.$this->commandData->config->mCamel.'->'.
                 $field['fieldName'].' !!}</td>';
         }
 

@@ -1,6 +1,6 @@
-Route::resource('$MODEL_NAME_PLURAL_CAMEL$', '$MODEL_NAME$Controller');
+Route::resource('$ROUTES_PREFIX$$MODEL_NAME_PLURAL_CAMEL$', '$NS_PREFIX$$MODEL_NAME$Controller');
 
-Route::get('$MODEL_NAME_PLURAL_CAMEL$/delete/{id}', [
-    'as' => '$MODEL_NAME_PLURAL_CAMEL$.delete',
-    'uses' => '$MODEL_NAME$Controller@destroy',
+Route::get('$ROUTES_PREFIX$$MODEL_NAME_PLURAL_CAMEL$/delete/{id}', [
+    'as' => '$ROUTES_AS_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.delete',
+    'uses' => '$NS_PREFIX$$MODEL_NAME$Controller@destroy',
 ]);

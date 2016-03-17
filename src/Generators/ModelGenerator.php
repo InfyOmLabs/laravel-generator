@@ -15,10 +15,10 @@ class ModelGenerator
     /** @var string */
     private $path;
 
-    public function __construct($commandData)
+    public function __construct(CommandData $commandData)
     {
         $this->commandData = $commandData;
-        $this->path = config('infyom.laravel_generator.path.model', app_path('Models/'));
+        $this->path = $commandData->config->pathModel;
     }
 
     public function generate()

@@ -40,8 +40,6 @@ class RequestsGeneratorCommand extends ScaffoldBaseCommand
     {
         parent::handle();
 
-        $this->initScaffoldGeneratorCommandData();
-
         $requestGenerator = new RequestGenerator($this->commandData);
         $requestGenerator->generate();
 

@@ -17,14 +17,17 @@ class CommandData
     /** @var string */
     public $modelName, $commandType;
 
+    /** @var  GeneratorConfig */
+    public $config;
+
     /** @var array */
-    public $modelNames, $commandOptions, $inputFields;
+    public $commandOptions, $inputFields;
 
     /** @var Command */
     public $commandObj;
 
     /** @var array */
-    public $dynamicVars = [], $fieldNamesMapping = [], $options = [], $addOns = [];
+    public $dynamicVars = [], $fieldNamesMapping = [];
 
     /**
      * @param Command $commandObj
@@ -41,6 +44,8 @@ class CommandData
             '$FIELD_NAME_TITLE$' => 'fieldTitle',
             '$FIELD_NAME$'       => 'fieldName',
         ];
+
+        $this->config = new GeneratorConfig();
     }
 
     public function commandError($error)
@@ -65,105 +70,22 @@ class CommandData
 
     public function initCommandData()
     {
-        $this->prepareModelNames();
-        $this->prepareOptions();
-        $this->prepareAddOns();
-        $this->initDynamicVariables();
-        $this->addDynamicVariable('$NAMESPACE_APP$', $this->commandObj->getLaravel()->getNamespace());
-    }
-
-    private function prepareModelNames()
-    {
-        $this->modelNames['plural'] = Str::plural($this->modelName);
-        $this->modelNames['camel'] = Str::camel($this->modelName);
-        $this->modelNames['camelPlural'] = Str::camel($this->modelNames['plural']);
-        $this->modelNames['snake'] = Str::snake($this->modelName);
-        $this->modelNames['snakePlural'] = Str::snake($this->modelNames['plural']);
-    }
-
-    private function prepareOptions()
-    {
-        $options = ['fieldsFile', 'tableName', 'fromTable', 'save', 'primary'];
-
-        foreach ($options as $option) {
-            $this->options[$option] = $this->commandObj->option($option);
-        }
-
-        if ($this->options['fromTable']) {
-            if (!$this->options['tableName']) {
-                $this->commandError('tableName required with fromTable option.');
-                exit;
-            }
-        }
-
-        $this->options['softDelete'] = config('infyom.laravel_generator.options.softDelete', false);
+        $this->config->init($this);
     }
 
     public function getOption($option)
     {
-        if (isset($this->options[$option])) {
-            return $this->options[$option];
-        }
+        return $this->config->getOption($option);
+    }
 
-        return false;
+    public function getAddOn($option)
+    {
+        return $this->config->getAddOn($option);
     }
 
     public function setOption($option, $value)
     {
-        $this->options[$option] = $value;
-    }
-
-    private function prepareAddOns()
-    {
-        $this->addOns['swagger'] = config('infyom.laravel_generator.add_on.swagger', false);
-        $this->addOns['tests'] = config('infyom.laravel_generator.add_on.tests', false);
-    }
-
-    public function getAddOn($addOn)
-    {
-        if (isset($this->addOns[$addOn])) {
-            return $this->addOns[$addOn];
-        }
-
-        return false;
-    }
-
-    private function initDynamicVariables()
-    {
-        $this->dynamicVars = $this->getConfigDynamicVariables();
-
-        if ($this->options['tableName']) {
-            $tableName = $this->options['tableName'];
-        } else {
-            $tableName = $this->modelNames['snakePlural'];
-        }
-
-        $this->dynamicVars = array_merge(
-            $this->dynamicVars,
-            [
-                '$MODEL_NAME$'              => $this->modelName,
-                '$MODEL_NAME_CAMEL$'        => $this->modelNames['camel'],
-                '$MODEL_NAME_PLURAL$'       => $this->modelNames['plural'],
-                '$MODEL_NAME_PLURAL_CAMEL$' => $this->modelNames['camelPlural'],
-                '$MODEL_NAME_SNAKE$'        => $this->modelNames['snake'],
-                '$MODEL_NAME_PLURAL_SNAKE$' => $this->modelNames['snakePlural'],
-                '$TABLE_NAME$'              => $tableName,
-                '$API_PREFIX$'              => config('infyom.laravel_generator.api_prefix', 'api'),
-                '$API_VERSION$'             => config('infyom.laravel_generator.api_version', 'v1'),
-            ]
-        );
-    }
-
-    private function getConfigDynamicVariables()
-    {
-        return [
-            '$NAMESPACE_REPOSITORY$'   => config('infyom.laravel_generator.namespace.repository', 'App\Repositories'),
-            '$NAMESPACE_MODEL$'        => config('infyom.laravel_generator.namespace.model', 'App\Models'),
-            '$NAMESPACE_MODEL_EXTEND$' => config(
-                'infyom.laravel_generator.model_extend_class',
-                'Illuminate\Database\Eloquent\Model'
-            ),
-        ];
+        $this->config->setOption($option, $value);
     }
 
     public function addDynamicVariable($name, $val)
@@ -175,9 +97,9 @@ class CommandData
     {
         $this->inputFields = [];
 
-        if ($this->options['fieldsFile']) {
+        if ($this->getOption('fieldsFile')) {
             $this->getInputFromFile();
-        } elseif ($this->options['fromTable']) {
+        } elseif ($this->getOption('fromTable')) {
             $this->getInputFromTable();
         } else {
             $this->getInputFromConsole();
@@ -220,8 +142,12 @@ class CommandData
                 $searchable = (strtolower($searchable) == 'y') ? true : false;
             }
 
-            $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput($fieldInputStr, $htmlType, $validations,
-                $searchable);
+            $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput(
+                $fieldInputStr,
+                $htmlType,
+                $validations,
+                $searchable
+            );
         }
 
         $this->addTimestamps();
@@ -229,8 +155,8 @@ class CommandData
 
     private function addPrimaryKey()
     {
-        if ($this->options['primary']) {
-            $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput($this->options['primary'].':increments', '', '', false, false, true);
+        if ($this->getOption('primary')) {
+            $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput($this->getOption('primary').':increments', '', '', false, false, true);
         } else {
             $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput('id:increments', '', '', false, false, true);
         }
@@ -245,10 +171,10 @@ class CommandData
     private function getInputFromFile()
     {
         try {
-            if (file_exists($this->options['fieldsFile'])) {
-                $filePath = $this->options['fieldsFile'];
+            if (file_exists($this->getOption('fieldsFile'))) {
+                $filePath = $this->getOption('fieldsFile');
             } else {
-                $filePath = base_path($this->options['fieldsFile']);
+                $filePath = base_path($this->getOption('fieldsFile'));
             }
 
             if (!file_exists($filePath)) {
@@ -271,7 +197,7 @@ class CommandData
     {
         foreach ($this->inputFields as $field) {
             if (isset($field['primary']) && $field['primary'] && $field['fieldName'] != 'id') {
-                $this->options['primary'] = $field['fieldName'];
+                $this->setOption('primary', $field['fieldName']);
                 break;
             }
         }

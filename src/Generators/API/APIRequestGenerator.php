@@ -14,10 +14,10 @@ class APIRequestGenerator
     /** @var string */
     private $path;
 
-    public function __construct($commandData)
+    public function __construct(CommandData $commandData)
     {
         $this->commandData = $commandData;
-        $this->path = config('infyom.laravel_generator.path.api_request', app_path('Http/Requests/API/'));
+        $this->path = $commandData->config->pathApiRequest;
     }
 
     public function generate()
