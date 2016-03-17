@@ -19,7 +19,6 @@ class GeneratorConfig
     public $nsRequestBase;
     public $nsController;
 
-
     /* Path variables */
     public $pathRepository;
     public $pathModel;
@@ -35,7 +34,6 @@ class GeneratorConfig
     public $pathRoutes;
     public $pathViews;
 
-
     /* Model Names */
     public $mName;
     public $mPlural;
@@ -44,14 +42,11 @@ class GeneratorConfig
     public $mSnake;
     public $mSnakePlural;
 
-
     /* Generator Options */
     public $options;
 
-
     /* Generator AddOns */
     public $addOns;
-
 
     public function init(CommandData &$commandData)
     {
@@ -70,7 +65,7 @@ class GeneratorConfig
         $prefix = $this->getOption('prefix');
 
         if (!empty($prefix)) {
-            $prefix = "\\".Str::title($prefix);
+            $prefix = '\\'.Str::title($prefix);
         }
 
         $this->nsApp = $commandData->commandObj->getLaravel()->getNamespace();
@@ -97,9 +92,9 @@ class GeneratorConfig
         $prefix = $this->getOption('prefix');
 
         if (!empty($prefix)) {
-            $prefixTitle = Str::title($prefix)."/";
+            $prefixTitle = Str::title($prefix).'/';
         } else {
-            $prefixTitle = "";
+            $prefixTitle = '';
         }
 
         $this->pathRepository = config(
@@ -137,7 +132,7 @@ class GeneratorConfig
         $this->pathViews = config(
             'infyom.laravel_generator.path.views',
             base_path('resources/views/')
-        ).$prefix."/".$this->mCamelPlural."/";
+        ).$prefix.'/'.$this->mCamelPlural.'/';
     }
 
     public function loadDynamicVariables(CommandData &$commandData)
@@ -170,13 +165,13 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$MODEL_NAME_PLURAL_SNAKE$', $this->mSnakePlural);
 
         if ($this->getOption('prefix')) {
-            $prefixRoutes = $this->getOption('prefix')."/";
-            $prefixTitle = Str::title($this->getOption('prefix'))."\\";
-            $prefixAs = $this->getOption('prefix').".";
+            $prefixRoutes = $this->getOption('prefix').'/';
+            $prefixTitle = Str::title($this->getOption('prefix')).'\\';
+            $prefixAs = $this->getOption('prefix').'.';
         } else {
-            $prefixRoutes = "";
-            $prefixTitle = "";
-            $prefixAs = "";
+            $prefixRoutes = '';
+            $prefixTitle = '';
+            $prefixAs = '';
         }
 
         $commandData->addDynamicVariable('$ROUTES_PREFIX$', $prefixRoutes);
