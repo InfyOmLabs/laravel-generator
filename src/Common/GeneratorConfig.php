@@ -1,14 +1,6 @@
 <?php
-/**
- * Company: Neon Mobile, Copyright 2015, All Rights Reserved.
- * Author: Mitul Golakiya
- * Email: me@mitul.me
- * Date: 17/03/16
- * Time: 10:35 AM
- */
 
 namespace InfyOm\Generator\Common;
-
 
 use Illuminate\Support\Str;
 
