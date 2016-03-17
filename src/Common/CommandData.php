@@ -21,7 +21,7 @@ class CommandData
     public $config;
 
     /** @var array */
-    public $commandOptions, $inputFields;
+    public $inputFields;
 
     /** @var Command */
     public $commandObj;
