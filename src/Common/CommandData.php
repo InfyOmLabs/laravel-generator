@@ -4,7 +4,6 @@ namespace InfyOm\Generator\Common;
 
 use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
 use InfyOm\Generator\Utils\TableFieldsGenerator;
 
@@ -17,7 +16,7 @@ class CommandData
     /** @var string */
     public $modelName, $commandType;
 
-    /** @var  GeneratorConfig */
+    /** @var GeneratorConfig */
     public $config;
 
     /** @var array */
