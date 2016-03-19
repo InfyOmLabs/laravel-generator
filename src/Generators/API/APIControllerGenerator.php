@@ -38,7 +38,7 @@ class APIControllerGenerator
 
     private function fillDocs($templateData)
     {
-        $methods = ['controller', 'index', 'store', 'show', 'update', 'destroy'];
+        $methods = ['controller', 'index', 'store', 'store', 'show', 'update', 'destroy'];
 
         if ($this->commandData->getAddOn('swagger')) {
             $templatePrefix = 'controller';
