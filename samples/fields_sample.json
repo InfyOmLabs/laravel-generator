@@ -53,6 +53,10 @@
         "htmlType": "checkbox:Yes"
     },
     {
+        "fieldInput": "checkbox-group_test:string",
+        "htmlType": "checkbox-group:Check1,Check2"
+    },
+    {
         "fieldInput": "body:text",
         "htmlType": "textarea"
     }
