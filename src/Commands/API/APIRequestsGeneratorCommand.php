@@ -41,8 +41,6 @@ class APIRequestsGeneratorCommand extends BaseCommand
     {
         parent::handle();
 
-        $this->initAPIGeneratorCommandData();
-
         $controllerGenerator = new APIRequestGenerator($this->commandData);
         $controllerGenerator->generate();
 

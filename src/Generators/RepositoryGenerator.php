@@ -14,10 +14,10 @@ class RepositoryGenerator
     /** @var string */
     private $path;
 
-    public function __construct($commandData)
+    public function __construct(CommandData $commandData)
     {
         $this->commandData = $commandData;
-        $this->path = config('infyom.laravel_generator.path.repository', app_path('Repositories/'));
+        $this->path = $commandData->config->pathRepository;
     }
 
     public function generate()

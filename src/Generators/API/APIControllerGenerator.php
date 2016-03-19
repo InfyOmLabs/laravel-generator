@@ -14,11 +14,10 @@ class APIControllerGenerator
     /** @var string */
     private $path;
 
-    public function __construct($commandData)
+    public function __construct(CommandData $commandData)
     {
         $this->commandData = $commandData;
-        $this->path = config('infyom.laravel_generator.path.api_controller', app_path('Http/Controllers/API/')
-        );
+        $this->path = $commandData->config->pathApiController;
     }
 
     public function generate()

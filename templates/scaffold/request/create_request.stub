@@ -2,7 +2,7 @@
 
 namespace $NAMESPACE_REQUEST$;
 
-use $NAMESPACE_REQUEST$\Request;
+use $NAMESPACE_REQUEST_BASE$\Request;
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
 
 class Create$MODEL_NAME$Request extends Request

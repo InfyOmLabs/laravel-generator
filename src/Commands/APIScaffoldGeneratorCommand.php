@@ -53,10 +53,7 @@ class APIScaffoldGeneratorCommand extends ScaffoldBaseCommand
     {
         parent::handle();
 
-        $this->initAPIGeneratorCommandData();
-        $this->initScaffoldGeneratorCommandData();
-
-        if (!$this->commandData->options['fromTable']) {
+        if (!$this->commandData->getOption('fromTable')) {
             $migrationGenerator = new MigrationGenerator($this->commandData);
             $migrationGenerator->generate();
         }
