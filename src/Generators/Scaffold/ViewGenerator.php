@@ -156,6 +156,23 @@ class ViewGenerator
                     $fieldTemplate = str_replace('$RADIO_BUTTONS$', implode("\n", $radioButtons), $fieldTemplate);
                     break;
 
+                case 'checkbox-group':
+                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.checkbox_group', $this->templateType);
+                      $radioTemplate = TemplateUtil::getTemplate('scaffold.fields.checks', $this->templateType);
+                      $inputsArr = explode(',', $field['htmlTypeInputs']);
+                      $radioButtons = [];
+                      foreach ($inputsArr as $item) {
+                          $radioButtonsTemplate = TemplateUtil::fillFieldTemplate(
+                              $this->commandData->fieldNamesMapping,
+                              $radioTemplate,
+                              $field
+                          );
+                          $radioButtonsTemplate = str_replace('$VALUE$', $item, $radioButtonsTemplate);
+                          $radioButtons[] = $radioButtonsTemplate;
+                      }
+                    $fieldTemplate = str_replace('$CHECKBOXES$', implode("\n", $radioButtons), $fieldTemplate);
+                    break;
+
                 case 'checkbox':
                     $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.checkbox', $this->templateType);
                     $value = $field['htmlTypeInputs'];
