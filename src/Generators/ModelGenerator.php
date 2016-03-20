@@ -45,7 +45,7 @@ class ModelGenerator
 
         foreach ($this->commandData->inputFields as $field) {
             if ($field['fillable']) {
-                $fillables[] = '"'.$field['fieldName'].'"';
+                $fillables[] = "'".$field['fieldName']."'";
             }
         }
 
@@ -164,7 +164,7 @@ class ModelGenerator
 
         foreach ($this->commandData->inputFields as $field) {
             if (!empty($field['validations'])) {
-                $rule = '"'.$field['fieldName'].'" => "'.$field['validations'].'"';
+                $rule = "'".$field['fieldName']."' => '".$field['validations']."'";
                 $rules[] = $rule;
             }
         }
@@ -185,29 +185,29 @@ class ModelGenerator
 
             switch ($field['fieldType']) {
                 case 'integer':
-                    $rule = '"'.$field['fieldName'].'" => "integer"';
+                    $rule = "'".$field['fieldName']."' => 'integer'";
                     break;
                 case 'double':
-                    $rule = '"'.$field['fieldName'].'" => "double"';
+                    $rule = "'".$field['fieldName']."' => 'double'";
                     break;
                 case 'float':
-                    $rule = '"'.$field['fieldName'].'" => "float"';
+                    $rule = "'".$field['fieldName']."' => 'float'";
                     break;
                 case 'boolean':
-                    $rule = '"'.$field['fieldName'].'" => "boolean"';
+                    $rule = "'".$field['fieldName']."' => 'boolean'";
                     break;
                 case 'dateTime':
                 case 'dateTimeTz':
-                    $rule = '"'.$field['fieldName'].'" => "datetime"';
+                    $rule = "'".$field['fieldName']."' => 'datetime'";
                     break;
                 case 'date':
-                    $rule = '"'.$field['fieldName'].'" => "date"';
+                    $rule = "'".$field['fieldName']."' => 'date'";
                     break;
                 case 'enum':
                 case 'string':
                 case 'char':
                 case 'text':
-                    $rule = '"'.$field['fieldName'].'" => "string"';
+                    $rule = "'".$field['fieldName']."' => 'string'";
                     break;
                 default:
                     $rule = '';
