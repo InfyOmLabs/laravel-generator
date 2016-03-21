@@ -2,10 +2,11 @@
 
 namespace InfyOm\Generator\Commands\Scaffold;
 
+use InfyOm\Generator\Commands\BaseCommand;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
 
-class RequestsGeneratorCommand extends ScaffoldBaseCommand
+class RequestsGeneratorCommand extends BaseCommand
 {
     /**
      * The console command name.

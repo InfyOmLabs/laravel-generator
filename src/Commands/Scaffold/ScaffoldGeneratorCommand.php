@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Commands\Scaffold;
 
+use InfyOm\Generator\Commands\BaseCommand;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\MigrationGenerator;
 use InfyOm\Generator\Generators\ModelGenerator;
@@ -11,7 +12,7 @@ use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
 use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
 use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
 
-class ScaffoldGeneratorCommand extends ScaffoldBaseCommand
+class ScaffoldGeneratorCommand extends BaseCommand
 {
     /**
      * The console command name.
