@@ -46,7 +46,31 @@ class GeneratorFieldsInputUtil
                 $primary = false;
             }
 
-            $fieldsArr[] = self::processFieldInput($field['fieldInput'], $htmlType, $validations, $searchable, $fillable, $primary);
+            if (isset($field['inForm'])) {
+                $inForm = $field['inForm'];
+            } else if($primary) {
+                $inForm = false;
+            } else {
+                $inForm = true;
+            }
+
+            if (isset($field['inIndex'])) {
+                $inIndex = $field['inIndex'];
+            } else if($primary) {
+                $inIndex = false;
+            } else {
+                $inIndex = true;
+            }
+
+            $fieldSettings = [
+                'searchable' => $searchable,
+                'fillable' => $fillable,
+                'primary' => $primary,
+                'inForm' => $inForm,
+                'inIndex' => $inIndex,
+            ];
+
+            $fieldsArr[] = self::processFieldInput($field['fieldInput'], $htmlType, $validations, $fieldSettings);
         }
 
         return $fieldsArr;
@@ -63,7 +87,7 @@ class GeneratorFieldsInputUtil
         return true;
     }
 
-    public static function processFieldInput($fieldInput, $htmlType, $validations, $searchable = false, $fillable = true, $primary = false)
+    public static function processFieldInput($fieldInput, $htmlType, $validations, $fieldSettings = [])
     {
         $fieldInputs = explode(':', $fieldInput);
 
@@ -87,9 +111,11 @@ class GeneratorFieldsInputUtil
             'htmlType'       => $htmlType,
             'htmlTypeInputs' => $htmlTypeInputs,
             'validations'    => $validations,
-            'searchable'     => $searchable,
-            'fillable'       => $fillable,
-            'primary'        => $primary,
+            'searchable'     => isset($fieldSettings['searchable']) ? $fieldSettings['searchable'] : false,
+            'fillable'       => isset($fieldSettings['fillable']) ? $fieldSettings['fillable'] : true,
+            'primary'        => isset($fieldSettings['primary']) ? $fieldSettings['primary'] : false,
+            'inForm'         => isset($fieldSettings['inForm']) ? $fieldSettings['inForm'] : true,
+            'inIndex'        => isset($fieldSettings['inIndex']) ? $fieldSettings['inIndex'] : true,
         ];
     }
 

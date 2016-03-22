@@ -57,7 +57,7 @@ class ViewGenerator
         $headerFields = [];
 
         foreach ($this->commandData->inputFields as $field) {
-            if ($field['primary']) {
+            if (!$field['inIndex']) {
                 continue;
             }
             $headerFields[] = '<th>'.$field['fieldTitle'].'</th>';
@@ -70,7 +70,7 @@ class ViewGenerator
         $tableBodyFields = [];
 
         foreach ($this->commandData->inputFields as $field) {
-            if ($field['primary']) {
+            if (!$field['inIndex']) {
                 continue;
             }
             $tableBodyFields[] = '<td>{!! $'.$this->commandData->config->mCamel.'->'.
@@ -116,6 +116,9 @@ class ViewGenerator
         $this->htmlFields = [];
 
         foreach ($this->commandData->inputFields as $field) {
+            if (!$field['inForm']) {
+                continue;
+            }
             switch ($field['htmlType']) {
                 case 'text':
                 case 'textarea':
