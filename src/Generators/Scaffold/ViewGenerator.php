@@ -49,6 +49,8 @@ class ViewGenerator
     private function generateTable()
     {
         $templateData = TemplateUtil::getTemplate('scaffold.views.table', $this->templateType);
+        $headerFieldTemplate = TemplateUtil::getTemplate('scaffold.views.table_header', $this->templateType);
+        $cellFieldTemplate = TemplateUtil::getTemplate('scaffold.views.table_cell', $this->templateType);
 
         $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
 
@@ -60,7 +62,12 @@ class ViewGenerator
             if ($field['primary']) {
                 continue;
             }
-            $headerFields[] = '<th>'.$field['fieldTitle'].'</th>';
+            $headerFields[] = $fieldTemplate = TemplateUtil::fillTemplateWithFieldData(
+                $this->commandData->dynamicVars,
+                $this->commandData->fieldNamesMapping,
+                $headerFieldTemplate,
+                $field
+            );
         }
 
         $headerFields = implode(PHP_EOL.str_repeat(' ', 8), $headerFields);
@@ -73,8 +80,13 @@ class ViewGenerator
             if ($field['primary']) {
                 continue;
             }
-            $tableBodyFields[] = '<td>{!! $'.$this->commandData->config->mCamel.'->'.
-                $field['fieldName'].' !!}</td>';
+
+            $tableBodyFields[] = TemplateUtil::fillTemplateWithFieldData(
+                $this->commandData->dynamicVars,
+                $this->commandData->fieldNamesMapping,
+                $cellFieldTemplate,
+                $field
+            );
         }
 
         $tableBodyFields = implode(PHP_EOL.str_repeat(' ', 12), $tableBodyFields);
