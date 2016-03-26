@@ -55,5 +55,13 @@
     {
         "fieldInput": "body:text",
         "htmlType": "textarea"
-    }
+    },
+    {
+        "fieldInput": "is_active:boolean",
+        "htmlType": "checkbox:1",
+        "validations": "",
+        "searchable": false,
+        "fillable": true,
+        "primary": false
+    },
 ]
