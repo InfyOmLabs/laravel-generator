@@ -144,8 +144,8 @@ class TableFieldsGenerator
     }
 
     /**
-     * @param string $name
-     * @param string $type
+     * @param string                       $name
+     * @param string                       $type
      * @param \Doctrine\DBAL\Schema\Column $column
      *
      * @return string
@@ -179,7 +179,7 @@ class TableFieldsGenerator
      */
     private static function generateDecimalInput($column)
     {
-        $fieldInput = $column->getName() . ':decimal,' . $column->getPrecision() . ',' . $column->getScale();
+        $fieldInput = $column->getName().':decimal,'.$column->getPrecision().','.$column->getScale();
 
         return $fieldInput;
     }
@@ -191,20 +191,20 @@ class TableFieldsGenerator
      */
     private static function generateFloatInput($column)
     {
-        $fieldInput = $column->getName() . ':float,' . $column->getPrecision() . ',' . $column->getScale();
+        $fieldInput = $column->getName().':float,'.$column->getPrecision().','.$column->getScale();
 
         return $fieldInput;
     }
 
     /**
      * @param \Doctrine\DBAL\Schema\Column $column
-     * @param int $length
+     * @param int                          $length
      *
      * @return string
      */
     private static function generateStringInput($column, $length = 255)
     {
-        $fieldInput = $column->getName() . ':string,' . $length;
+        $fieldInput = $column->getName().':string,'.$length;
 
         return $fieldInput;
     }
@@ -216,7 +216,7 @@ class TableFieldsGenerator
      */
     private static function generateTextInput($column)
     {
-        $fieldInput = $column->getName() . ':text';
+        $fieldInput = $column->getName().':text';
 
         return $fieldInput;
     }

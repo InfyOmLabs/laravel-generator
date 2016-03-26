@@ -41,10 +41,11 @@ class TemplateUtil
 
         return $template;
     }
-    
+
     public static function fillTemplateWithFieldData($variables, $fieldVariables, $template, $field)
     {
         $template = self::fillTemplate($variables, $template);
+
         return self::fillFieldTemplate($fieldVariables, $template, $field);
     }
 }
