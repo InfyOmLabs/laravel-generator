@@ -30,7 +30,7 @@ class CommandData
 
     /**
      * @param Command $commandObj
-     * @param string $commandType
+     * @param string  $commandType
      *
      * @return CommandData
      */
@@ -41,7 +41,7 @@ class CommandData
 
         $this->fieldNamesMapping = [
             '$FIELD_NAME_TITLE$' => 'fieldTitle',
-            '$FIELD_NAME$' => 'fieldName',
+            '$FIELD_NAME$'       => 'fieldName',
         ];
 
         $this->config = new GeneratorConfig();
@@ -156,15 +156,15 @@ class CommandData
     {
         if ($this->getOption('primary')) {
             $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput(
-                $this->getOption('primary') . ':increments',
+                $this->getOption('primary').':increments',
                 '',
                 '',
                 [
                     'searchable' => false,
-                    'fillable' => false,
-                    'primary' => true,
-                    'inForm' => false,
-                    'inIndex' => false
+                    'fillable'   => false,
+                    'primary'    => true,
+                    'inForm'     => false,
+                    'inIndex'    => false,
                 ]
             );
         } else {
@@ -174,10 +174,10 @@ class CommandData
                 '',
                 [
                     'searchable' => false,
-                    'fillable' => false,
-                    'primary' => true,
-                    'inForm' => false,
-                    'inIndex' => false
+                    'fillable'   => false,
+                    'primary'    => true,
+                    'inForm'     => false,
+                    'inIndex'    => false,
                 ]
             );
         }
@@ -191,9 +191,9 @@ class CommandData
             '',
             [
                 'searchable' => false,
-                'fillable' => false,
-                'inForm' => false,
-                'inIndex' => false
+                'fillable'   => false,
+                'inForm'     => false,
+                'inIndex'    => false,
             ]
         );
 
@@ -203,9 +203,9 @@ class CommandData
             '',
             [
                 'searchable' => false,
-                'fillable' => false,
-                'inForm' => false,
-                'inIndex' => false
+                'fillable'   => false,
+                'inForm'     => false,
+                'inIndex'    => false,
             ]
         );
     }

@@ -48,7 +48,7 @@ class GeneratorFieldsInputUtil
 
             if (isset($field['inForm'])) {
                 $inForm = $field['inForm'];
-            } else if($primary) {
+            } elseif ($primary) {
                 $inForm = false;
             } else {
                 $inForm = true;
@@ -56,7 +56,7 @@ class GeneratorFieldsInputUtil
 
             if (isset($field['inIndex'])) {
                 $inIndex = $field['inIndex'];
-            } else if($primary) {
+            } elseif ($primary) {
                 $inIndex = false;
             } else {
                 $inIndex = true;
@@ -64,10 +64,10 @@ class GeneratorFieldsInputUtil
 
             $fieldSettings = [
                 'searchable' => $searchable,
-                'fillable' => $fillable,
-                'primary' => $primary,
-                'inForm' => $inForm,
-                'inIndex' => $inIndex,
+                'fillable'   => $fillable,
+                'primary'    => $primary,
+                'inForm'     => $inForm,
+                'inIndex'    => $inIndex,
             ];
 
             $fieldsArr[] = self::processFieldInput($field['fieldInput'], $htmlType, $validations, $fieldSettings);
