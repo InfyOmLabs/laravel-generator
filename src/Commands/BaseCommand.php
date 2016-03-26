@@ -73,6 +73,8 @@ class BaseCommand extends Command
                 'searchable'  => $field['searchable'],
                 'fillable'    => $field['fillable'],
                 'primary'     => $field['primary'],
+                'inForm'      => $field['inForm'],
+                'inIndex'     => $field['inIndex']
             ];
         }
 

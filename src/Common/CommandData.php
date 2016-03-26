@@ -30,7 +30,7 @@ class CommandData
 
     /**
      * @param Command $commandObj
-     * @param string  $commandType
+     * @param string $commandType
      *
      * @return CommandData
      */
@@ -41,7 +41,7 @@ class CommandData
 
         $this->fieldNamesMapping = [
             '$FIELD_NAME_TITLE$' => 'fieldTitle',
-            '$FIELD_NAME$'       => 'fieldName',
+            '$FIELD_NAME$' => 'fieldName',
         ];
 
         $this->config = new GeneratorConfig();
@@ -145,7 +145,7 @@ class CommandData
                 $fieldInputStr,
                 $htmlType,
                 $validations,
-                $searchable
+                ['searchable' => $searchable]
             );
         }
 
@@ -155,16 +155,59 @@ class CommandData
     private function addPrimaryKey()
     {
         if ($this->getOption('primary')) {
-            $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput($this->getOption('primary').':increments', '', '', false, false, true);
+            $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput(
+                $this->getOption('primary') . ':increments',
+                '',
+                '',
+                [
+                    'searchable' => false,
+                    'fillable' => false,
+                    'primary' => true,
+                    'inForm' => false,
+                    'inIndex' => false
+                ]
+            );
         } else {
-            $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput('id:increments', '', '', false, false, true);
+            $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput(
+                'id:increments',
+                '',
+                '',
+                [
+                    'searchable' => false,
+                    'fillable' => false,
+                    'primary' => true,
+                    'inForm' => false,
+                    'inIndex' => false
+                ]
+            );
         }
     }
 
     private function addTimestamps()
     {
-        $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput('created_at:timestamp', '', '', false, false);
-        $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput('updated_at:timestamp', '', '', false, false);
+        $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput(
+            'created_at:timestamp',
+            '',
+            '',
+            [
+                'searchable' => false,
+                'fillable' => false,
+                'inForm' => false,
+                'inIndex' => false
+            ]
+        );
+
+        $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput(
+            'updated_at:timestamp',
+            '',
+            '',
+            [
+                'searchable' => false,
+                'fillable' => false,
+                'inForm' => false,
+                'inIndex' => false
+            ]
+        );
     }
 
     private function getInputFromFile()

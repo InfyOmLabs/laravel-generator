@@ -59,7 +59,7 @@ class ViewGenerator
         $headerFields = [];
 
         foreach ($this->commandData->inputFields as $field) {
-            if ($field['primary']) {
+            if (!$field['inIndex']) {
                 continue;
             }
             $headerFields[] = $fieldTemplate = TemplateUtil::fillTemplateWithFieldData(
@@ -77,7 +77,7 @@ class ViewGenerator
         $tableBodyFields = [];
 
         foreach ($this->commandData->inputFields as $field) {
-            if ($field['primary']) {
+            if (!$field['inIndex']) {
                 continue;
             }
 
@@ -128,6 +128,9 @@ class ViewGenerator
         $this->htmlFields = [];
 
         foreach ($this->commandData->inputFields as $field) {
+            if (!$field['inForm']) {
+                continue;
+            }
             switch ($field['htmlType']) {
                 case 'text':
                 case 'textarea':

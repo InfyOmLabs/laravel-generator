@@ -5,13 +5,17 @@
         "validations": "",
         "searchable": false,
         "fillable": false,
-        "primary": true
+        "primary": true,
+        "inForm": false,
+        "inIndex": false
     },
     {
         "fieldInput": "title:string,20",
         "htmlType": "text",
         "validations": "required",
-        "searchable": true
+        "searchable": true,
+        "inForm": true,
+        "inIndex": true
     },
     {
         "fieldInput": "email:string",
@@ -32,7 +36,8 @@
     },
     {
         "fieldInput": "password:string",
-        "htmlType": "password"
+        "htmlType": "password",
+        "inIndex": false
     },
     {
         "fieldInput": "post_type:string",
