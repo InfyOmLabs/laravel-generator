@@ -68,5 +68,5 @@
         "searchable": false,
         "fillable": true,
         "primary": false
-    },
+    }
 ]
