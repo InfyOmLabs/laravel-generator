@@ -175,7 +175,7 @@ class ViewGenerator
                 case 'checkbox':
                     $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.checkbox', $this->templateType);
                     $checkboxValue = $value = $field['htmlTypeInputs'];
-                    if ($field['fieldType'] != "boolean") {
+                    if ($field['fieldType'] != 'boolean') {
                         $checkboxValue = "'".$value."'";
                     }
                     $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
