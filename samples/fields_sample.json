@@ -19,7 +19,7 @@
         "searchable": true
     },
     {
-        "fieldInput": "post_date:datetime",
+        "fieldInput": "post_date:dateTime",
         "htmlType": "date"
     },
     {
