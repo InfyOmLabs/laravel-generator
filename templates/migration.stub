@@ -25,6 +25,9 @@ class Create$MODEL_NAME_PLURAL$Table extends Migration
      */
     public function down()
     {
-        Schema::drop('$TABLE_NAME$');
+          
+            $table = '$TABLE_NAME$';
+            Storage::disk('local')->put($table.'_'.date('Y-m-d_H-i-s').'.bak', json_encode(DB::table($table)->get()));
+            Schema::drop('$TABLE_NAME$');
     }
 }
