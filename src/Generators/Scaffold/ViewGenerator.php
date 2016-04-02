@@ -48,13 +48,22 @@ class ViewGenerator
 
     private function generateTable()
     {
-        $templateData = TemplateUtil::getTemplate('scaffold.views.table', $this->templateType);
-        $headerFieldTemplate = TemplateUtil::getTemplate('scaffold.views.table_header', $this->templateType);
-        $cellFieldTemplate = TemplateUtil::getTemplate('scaffold.views.table_cell', $this->templateType);
-
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
-
         $fileName = 'table.blade.php';
+
+        if ($this->commandData->getAddOn('datatables')) {
+            $templateData = $this->generateDataTableBody();
+        } else {
+            $templateData = $this->generateBladeTableBody();
+        }
+
+        FileUtil::createFile($this->path, $fileName, $templateData);
+
+        $this->commandData->commandInfo('table.blade.php created');
+    }
+
+    private function generateTableHeaderFields()
+    {
+        $headerFieldTemplate = TemplateUtil::getTemplate('scaffold.views.table_header', $this->templateType);
 
         $headerFields = [];
 
@@ -70,9 +79,18 @@ class ViewGenerator
             );
         }
 
-        $headerFields = implode(PHP_EOL.str_repeat(' ', 8), $headerFields);
+        return implode(PHP_EOL.str_repeat(' ', 8), $headerFields);
+    }
 
-        $templateData = str_replace('$FIELD_HEADERS$', $headerFields, $templateData);
+    private function generateBladeTableBody()
+    {
+        $templateData = TemplateUtil::getTemplate('scaffold.views.blade_table_body', $this->templateType);
+
+        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+
+        $templateData = str_replace('$FIELD_HEADERS$', $this->generateTableHeaderFields(), $templateData);
+
+        $cellFieldTemplate = TemplateUtil::getTemplate('scaffold.views.table_cell', $this->templateType);
 
         $tableBodyFields = [];
 
@@ -91,11 +109,37 @@ class ViewGenerator
 
         $tableBodyFields = implode(PHP_EOL.str_repeat(' ', 12), $tableBodyFields);
 
-        $templateData = str_replace('$FIELD_BODY$', $tableBodyFields, $templateData);
+        return str_replace('$FIELD_BODY$', $tableBodyFields, $templateData);
+    }
 
-        FileUtil::createFile($this->path, $fileName, $templateData);
+    private function generateDataTableBody()
+    {
+        $templateData = TemplateUtil::getTemplate('scaffold.views.datatable_body', $this->templateType);
 
-        $this->commandData->commandInfo('table.blade.php created');
+        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+
+        $templateData = str_replace('$FIELD_HEADERS$', $this->generateTableHeaderFields(), $templateData);
+
+        $cellFieldTemplate = TemplateUtil::getTemplate('scaffold.views.table_cell', $this->templateType);
+
+        $tableBodyFields = [];
+
+        foreach ($this->commandData->inputFields as $field) {
+            if (!$field['inIndex']) {
+                continue;
+            }
+
+            $tableBodyFields[] = TemplateUtil::fillTemplateWithFieldData(
+                $this->commandData->dynamicVars,
+                $this->commandData->fieldNamesMapping,
+                $cellFieldTemplate,
+                $field
+            );
+        }
+
+        $tableBodyFields = implode(PHP_EOL.str_repeat(' ', 12), $tableBodyFields);
+
+        return str_replace('$FIELD_BODY$', $tableBodyFields, $templateData);
     }
 
     private function generateIndex()
@@ -104,16 +148,20 @@ class ViewGenerator
 
         $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
 
-        $paginate = $this->commandData->getOption('paginate');
-
-        if ($paginate) {
-            $paginateTemplate = TemplateUtil::getTemplate('scaffold.views.paginate', $this->templateType);
-
-            $paginateTemplate = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $paginateTemplate);
-
-            $templateData = str_replace('$PAGINATE$', $paginateTemplate, $templateData);
-        } else {
+        if ($this->commandData->getOption('datatables')) {
             $templateData = str_replace('$PAGINATE$', '', $templateData);
+        } else {
+            $paginate = $this->commandData->getOption('paginate');
+
+            if ($paginate) {
+                $paginateTemplate = TemplateUtil::getTemplate('scaffold.views.paginate', $this->templateType);
+
+                $paginateTemplate = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $paginateTemplate);
+
+                $templateData = str_replace('$PAGINATE$', $paginateTemplate, $templateData);
+            } else {
+                $templateData = str_replace('$PAGINATE$', '', $templateData);
+            }
         }
 
         $fileName = 'index.blade.php';
