@@ -50,7 +50,7 @@ class ControllerGenerator
 
     private function generateDataTable()
     {
-        $templateData = TemplateUtil::getTemplate('scaffold.data_table', 'laravel-generator');
+        $templateData = TemplateUtil::getTemplate('scaffold.datatable', 'laravel-generator');
 
         $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
 
