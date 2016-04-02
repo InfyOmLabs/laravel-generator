@@ -79,7 +79,7 @@ class ViewGenerator
             );
         }
 
-        return implode(PHP_EOL.str_repeat(' ', 8), $headerFields);
+        return implode(infy_nl_tab(1, 2), $headerFields);
     }
 
     private function generateBladeTableBody()
@@ -107,7 +107,7 @@ class ViewGenerator
             );
         }
 
-        $tableBodyFields = implode(PHP_EOL.str_repeat(' ', 12), $tableBodyFields);
+        $tableBodyFields = implode(infy_nl_tab(1, 3), $tableBodyFields);
 
         return str_replace('$FIELD_BODY$', $tableBodyFields, $templateData);
     }
@@ -120,7 +120,7 @@ class ViewGenerator
 
         $templateData = str_replace('$FIELD_HEADERS$', $this->generateTableHeaderFields(), $templateData);
 
-        $cellFieldTemplate = TemplateUtil::getTemplate('scaffold.views.table_cell', $this->templateType);
+        $cellFieldTemplate = TemplateUtil::getTemplate('scaffold.views.datatable_column', $this->templateType);
 
         $tableBodyFields = [];
 
@@ -137,9 +137,9 @@ class ViewGenerator
             );
         }
 
-        $tableBodyFields = implode(PHP_EOL.str_repeat(' ', 12), $tableBodyFields);
+        $tableBodyFields = implode(",".infy_nl_tab(1, 5), $tableBodyFields);
 
-        return str_replace('$FIELD_BODY$', $tableBodyFields, $templateData);
+        return str_replace('$DATATABLE_COLUMNS$', $tableBodyFields, $templateData);
     }
 
     private function generateIndex()

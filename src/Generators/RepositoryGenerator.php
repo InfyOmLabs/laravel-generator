@@ -34,7 +34,7 @@ class RepositoryGenerator
             }
         }
 
-        $templateData = str_replace('$FIELDS$', implode(','.PHP_EOL.str_repeat(' ', 8), $searchables), $templateData);
+        $templateData = str_replace('$FIELDS$', implode(','.infy_nl_tab(1, 2), $searchables), $templateData);
 
         $fileName = $this->commandData->modelName.'Repository.php';
 
