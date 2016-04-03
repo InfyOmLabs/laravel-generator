@@ -26,9 +26,9 @@ class $MODEL_NAME$DataTable extends DataTable
      */
     public function query()
     {
-        $users = $MODEL_NAME$::query();
+        $$MODEL_NAME_PLURAL_CAMEL$ = $MODEL_NAME$::query();
 
-        return $this->applyScopes($users);
+        return $this->applyScopes($$MODEL_NAME_PLURAL_CAMEL$);
     }
 
     /**
@@ -67,6 +67,6 @@ class $MODEL_NAME$DataTable extends DataTable
      */
     protected function filename()
     {
-        return 'users';
+        return '$$MODEL_NAME_PLURAL_CAMEL$';
     }
 }
