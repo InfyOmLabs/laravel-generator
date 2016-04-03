@@ -5,16 +5,15 @@ namespace InfyOm\Generator;
 use Illuminate\Support\ServiceProvider;
 use InfyOm\Generator\Commands\API\APIControllerGeneratorCommand;
 use InfyOm\Generator\Commands\API\APIGeneratorCommand;
-use InfyOm\Generator\Commands\API\APIGeneratorPublisherCommand;
 use InfyOm\Generator\Commands\API\APIRequestsGeneratorCommand;
-use InfyOm\Generator\Commands\API\TestCasesPublisherCommand;
 use InfyOm\Generator\Commands\API\TestsGeneratorCommand;
 use InfyOm\Generator\Commands\APIScaffoldGeneratorCommand;
 use InfyOm\Generator\Commands\Common\MigrationGeneratorCommand;
 use InfyOm\Generator\Commands\Common\ModelGeneratorCommand;
 use InfyOm\Generator\Commands\Common\RepositoryGeneratorCommand;
-use InfyOm\Generator\Commands\PublishTemplateCommand;
-use InfyOm\Generator\Commands\Scaffold\AuthPublishCommand;
+use InfyOm\Generator\Commands\Publish\AuthPublishCommand;
+use InfyOm\Generator\Commands\Publish\GeneratorPublishCommand;
+use InfyOm\Generator\Commands\Publish\PublishTemplateCommand;
 use InfyOm\Generator\Commands\Scaffold\ControllerGeneratorCommand;
 use InfyOm\Generator\Commands\Scaffold\RequestsGeneratorCommand;
 use InfyOm\Generator\Commands\Scaffold\ScaffoldGeneratorCommand;
@@ -43,8 +42,8 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('infyom.publish.api', function ($app) {
-            return new APIGeneratorPublisherCommand();
+        $this->app->singleton('infyom.publish', function ($app) {
+            return new GeneratorPublishCommand();
         });
 
         $this->app->singleton('infyom.api', function ($app) {
@@ -91,10 +90,6 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
             return new TestsGeneratorCommand();
         });
 
-        $this->app->singleton('infyom.publish.tests', function ($app) {
-            return new TestCasesPublisherCommand();
-        });
-
         $this->app->singleton('infyom.scaffold.controller', function ($app) {
             return new ControllerGeneratorCommand();
         });
@@ -108,7 +103,7 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
         });
 
         $this->commands([
-            'infyom.publish.api',
+            'infyom.publish',
             'infyom.api',
             'infyom.scaffold',
             'infyom.api_scaffold',
@@ -120,7 +115,6 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
             'infyom.api.controller',
             'infyom.api.requests',
             'infyom.api.tests',
-            'infyom.publish.tests',
             'infyom.scaffold.controller',
             'infyom.scaffold.requests',
             'infyom.scaffold.views',

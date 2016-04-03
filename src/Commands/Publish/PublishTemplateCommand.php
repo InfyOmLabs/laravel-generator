@@ -1,6 +1,6 @@
 <?php
 
-namespace InfyOm\Generator\Commands;
+namespace InfyOm\Generator\Commands\Publish;
 
 class PublishTemplateCommand extends PublishBaseCommand
 {

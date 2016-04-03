@@ -1,8 +1,7 @@
 <?php
 
-namespace InfyOm\Generator\Commands\Scaffold;
+namespace InfyOm\Generator\Commands\Publish;
 
-use InfyOm\Generator\Commands\PublishBaseCommand;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\TemplateUtil;
 

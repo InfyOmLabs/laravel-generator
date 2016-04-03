@@ -1,6 +1,6 @@
 <?php
 
-namespace InfyOm\Generator\Commands;
+namespace InfyOm\Generator\Commands\Publish;
 
 use File;
 use Illuminate\Console\Command;
