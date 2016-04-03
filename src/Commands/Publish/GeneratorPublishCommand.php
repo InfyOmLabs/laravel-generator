@@ -87,7 +87,17 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
         $controllerPath = config('infyom.laravel_generator.path.controller', app_path('Http/Controllers/'));
 
-        FileUtil::createFile($controllerPath, "AppBaseController.php", $templateData);
+        $fileName = "AppBaseController.php";
+
+        if (file_exists($controllerPath.$fileName)) {
+            $answer = $this->ask('Do you want to overwrite '.$fileName.'? (y|N) :', false);
+
+            if (strtolower($answer) != 'y' and strtolower($answer) != 'yes') {
+                return;
+            }
+        }
+
+        FileUtil::createFile($controllerPath, $fileName, $templateData);
 
         $this->info('AppBaseController created');
     }
