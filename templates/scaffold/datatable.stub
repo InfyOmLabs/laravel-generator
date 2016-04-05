@@ -2,7 +2,7 @@
 
 namespace $NAMESPACE_DATATABLES$;
 
-use App\Models\$MODEL_NAME$;
+use $NAMESPACE_MODEL$\$MODEL_NAME$;
 use Yajra\Datatables\Services\DataTable;
 
 class $MODEL_NAME$DataTable extends DataTable
@@ -15,7 +15,21 @@ class $MODEL_NAME$DataTable extends DataTable
     {
         return $this->datatables
             ->eloquent($this->query())
-            ->addColumn('action', 'path.to.action.view')
+            ->addColumn('actions', function ($data) {
+                            return '
+                            ' . Form::open(['route' => ['$MODEL_NAME_PLURAL_CAMEL$.destroy', $data->id], 'method' => 'delete']) . '
+                            <div class=\'btn-group\'>
+                                <a href="' . route('$MODEL_NAME_PLURAL_CAMEL$.show', [$data->id]) . '" class=\'btn btn-default btn-xs\'><i class="glyphicon glyphicon-eye-open"></i></a>
+                                <a href="' . route('$MODEL_NAME_PLURAL_CAMEL$.edit', [$data->id]) . '" class=\'btn btn-default btn-xs\'><i class="glyphicon glyphicon-edit"></i></a>
+                                ' . Form::button('<i class="glyphicon glyphicon-trash"></i>', [
+                                'type' => 'submit',
+                                'class' => 'btn btn-danger btn-xs',
+                                'onclick' => "return confirm('Are you sure?')"
+                            ]) . '
+                            </div>
+                            ' . Form::close() . '
+                            ';
+                        })
             ->make(true);
     }
 
@@ -39,10 +53,30 @@ class $MODEL_NAME$DataTable extends DataTable
     public function html()
     {
         return $this->builder()
-            ->columns($this->getColumns())
-            ->ajax('')
-            ->addAction(['width' => '80px'])
-            ->parameters($this->getBuilderParameters());
+            ->columns(array_merge(
+                $this->getColumns(),
+                [
+                    'actions' => [
+                        'orderable' => false,
+                        'searchable' => false,
+                        'printable' => false,
+                        'exportable' => false
+                    ]
+                ]
+            ))
+            ->parameters([
+                'dom' => 'Bfrtip',
+                'scrollX' => true,
+                'buttons' => [
+                    'create',
+                    'csv',
+                    'excel',
+                    'pdf',
+                    'print',
+                    'reset',
+                    'reload'
+                ],
+            ]);
     }
 
     /**
@@ -53,10 +87,7 @@ class $MODEL_NAME$DataTable extends DataTable
     private function getColumns()
     {
         return [
-            'id',
-            // add your columns
-            'created_at',
-            'updated_at',
+            $DATATABLE_COLUMNS$
         ];
     }
 
@@ -67,6 +98,6 @@ class $MODEL_NAME$DataTable extends DataTable
      */
     protected function filename()
     {
-        return '$$MODEL_NAME_PLURAL_CAMEL$';
+        return '$MODEL_NAME_PLURAL_CAMEL$';
     }
 }

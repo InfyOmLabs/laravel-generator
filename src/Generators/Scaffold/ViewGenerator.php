@@ -116,30 +116,7 @@ class ViewGenerator
     {
         $templateData = TemplateUtil::getTemplate('scaffold.views.datatable_body', $this->templateType);
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
-
-        $templateData = str_replace('$FIELD_HEADERS$', $this->generateTableHeaderFields(), $templateData);
-
-        $cellFieldTemplate = TemplateUtil::getTemplate('scaffold.views.datatable_column', $this->templateType);
-
-        $tableBodyFields = [];
-
-        foreach ($this->commandData->inputFields as $field) {
-            if (!$field['inIndex']) {
-                continue;
-            }
-
-            $tableBodyFields[] = TemplateUtil::fillTemplateWithFieldData(
-                $this->commandData->dynamicVars,
-                $this->commandData->fieldNamesMapping,
-                $cellFieldTemplate,
-                $field
-            );
-        }
-
-        $tableBodyFields = implode(",".infy_nl_tab(1, 5), $tableBodyFields);
-
-        return str_replace('$DATATABLE_COLUMNS$', $tableBodyFields, $templateData);
+        return TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
     }
 
     private function generateIndex()
