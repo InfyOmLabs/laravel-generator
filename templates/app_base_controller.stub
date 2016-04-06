@@ -9,12 +9,12 @@ use Response;
  * @SWG\Swagger(
  *   basePath="$API_PREFIX$/$API_VERSION$",
  *   @SWG\Info(
- *     title="Laravel Generator API",
+ *     title="Laravel Generator APIs",
  *     version="1.0.0",
  *   )
  * )
  * This class should be parent class for other API controllers
- * Class ApiController
+ * Class AppBaseController
  */
 class AppBaseController extends Controller
 {
