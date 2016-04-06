@@ -3,6 +3,7 @@
 namespace $NAMESPACE_DATATABLES$;
 
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
+use Form;
 use Yajra\Datatables\Services\DataTable;
 
 class $MODEL_NAME$DataTable extends DataTable
