@@ -5,6 +5,17 @@ namespace $NAMESPACE_CONTROLLER$;
 use InfyOm\Generator\Utils\ResponseUtil;
 use Response;
 
+/**
+ * @SWG\Swagger(
+ *   basePath="$API_PREFIX$/$API_VERSION$",
+ *   @SWG\Info(
+ *     title="Laravel Generator API",
+ *     version="1.0.0",
+ *   )
+ * )
+ * This class should be parent class for other API controllers
+ * Class ApiController
+ */
 class AppBaseController extends Controller
 {
     public function sendResponse($result, $message)

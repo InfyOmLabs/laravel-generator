@@ -179,7 +179,7 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$ROUTES_AS_PREFIX$', $prefixAs);
 
         $commandData->addDynamicVariable(
-            '$MODEL_NAME_PLURAL_SNAKE$',
+            '$API_PREFIX$',
             config('infyom.laravel_generator.api_prefix', 'api')
         );
 
