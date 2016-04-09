@@ -106,7 +106,7 @@ class BaseCommand extends Command
             ['tableName', null, InputOption::VALUE_REQUIRED, 'Table Name'],
             ['fromTable', null, InputOption::VALUE_NONE, 'Generate from existing table'],
             ['save', null, InputOption::VALUE_NONE, 'Save model schema to file'],
-            ['primary', null, InputOption::VALUE_REQUIRED, 'Save model schema to file'],
+            ['primary', null, InputOption::VALUE_REQUIRED, 'Custom primary key'],
             ['prefix', null, InputOption::VALUE_REQUIRED, 'Prefix for all files'],
             ['paginate', null, InputOption::VALUE_REQUIRED, 'Pagination for index.blade.php'],
         ];
