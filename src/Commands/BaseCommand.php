@@ -47,7 +47,9 @@ class BaseCommand extends Command
         }
 
         if ($runMigration) {
-            if ($this->confirm("\nDo you want to migrate database? [y|N]", false)) {
+            if ($this->commandData->config->forceMigrate) {
+                $this->call('migrate');
+            } else if($this->confirm("\nDo you want to migrate database? [y|N]", false)) {
                 $this->call('migrate');
             }
         }
@@ -103,6 +105,7 @@ class BaseCommand extends Command
     {
         return [
             ['fieldsFile', null, InputOption::VALUE_REQUIRED, 'Fields input as json file'],
+            ['jsonFromGUI', null, InputOption::VALUE_REQUIRED, 'Direct Json string while using GUI interface'],
             ['tableName', null, InputOption::VALUE_REQUIRED, 'Table Name'],
             ['fromTable', null, InputOption::VALUE_NONE, 'Generate from existing table'],
             ['save', null, InputOption::VALUE_NONE, 'Save model schema to file'],

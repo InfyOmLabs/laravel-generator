@@ -44,8 +44,13 @@ class GeneratorConfig
     public $mSnake;
     public $mSnakePlural;
 
+    public $forceMigrate;
+
     /* Generator Options */
     public $options;
+
+    /* Command Options */
+    public static $availableOptions = ['fieldsFile', 'jsonFromGUI', 'tableName', 'fromTable', 'save', 'primary', 'prefix', 'paginate'];
 
     /* Generator AddOns */
     public $addOns;
@@ -209,7 +214,7 @@ class GeneratorConfig
 
     public function prepareOptions(CommandData &$commandData)
     {
-        $options = ['fieldsFile', 'tableName', 'fromTable', 'save', 'primary', 'prefix', 'paginate'];
+        $options = self::$availableOptions;
 
         foreach ($options as $option) {
             $this->options[$option] = $commandData->commandObj->option($option);
@@ -223,6 +228,25 @@ class GeneratorConfig
         }
 
         $this->options['softDelete'] = config('infyom.laravel_generator.options.softDelete', false);
+    }
+
+    public function overrideOptionsFromJsonFile($jsonData)
+    {
+        $options = GeneratorConfig::$availableOptions;
+
+        foreach ($options as $option) {
+            if (isset($jsonData[$option])) {
+                $this->setOption($option, $jsonData["options"][$option]);
+            }
+        }
+
+        $addOns = ["swagger", "tests", "datatables"];
+
+        foreach ($addOns as $addOn) {
+            if (isset($jsonData[$addOn])) {
+                $this->addOns[$addOn] = $jsonData["addOns"][$addOn];
+            }
+        }
     }
 
     public function getOption($option)
