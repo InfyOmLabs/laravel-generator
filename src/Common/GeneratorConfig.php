@@ -235,7 +235,7 @@ class GeneratorConfig
         $options = GeneratorConfig::$availableOptions;
 
         foreach ($options as $option) {
-            if (isset($jsonData[$option])) {
+            if (isset($jsonData["options"][$option])) {
                 $this->setOption($option, $jsonData["options"][$option]);
             }
         }
@@ -243,7 +243,7 @@ class GeneratorConfig
         $addOns = ["swagger", "tests", "datatables"];
 
         foreach ($addOns as $addOn) {
-            if (isset($jsonData[$addOn])) {
+            if (isset($jsonData["addOns"][$addOn])) {
                 $this->addOns[$addOn] = $jsonData["addOns"][$addOn];
             }
         }
