@@ -10,6 +10,7 @@ class GeneratorConfig
     public $nsApp;
     public $nsRepository;
     public $nsModel;
+    public $nsDataTables;
     public $nsModelExtend;
 
     public $nsApiController;
@@ -22,6 +23,7 @@ class GeneratorConfig
     /* Path variables */
     public $pathRepository;
     public $pathModel;
+    public $pathDataTables;
 
     public $pathApiController;
     public $pathApiRequest;
@@ -71,6 +73,7 @@ class GeneratorConfig
         $this->nsApp = $commandData->commandObj->getLaravel()->getNamespace();
         $this->nsRepository = config('infyom.laravel_generator.namespace.repository', 'App\Repositories').$prefix;
         $this->nsModel = config('infyom.laravel_generator.namespace.model', 'App\Models').$prefix;
+        $this->nsDataTables = config('infyom.laravel_generator.namespace.datatables', 'App\DataTables').$prefix;
         $this->nsModelExtend = config(
             'infyom.laravel_generator.model_extend_class',
             'Illuminate\Database\Eloquent\Model'
@@ -103,6 +106,8 @@ class GeneratorConfig
         ).$prefixTitle;
 
         $this->pathModel = config('infyom.laravel_generator.path.model', app_path('Models/')).$prefixTitle;
+
+        $this->pathDataTables = config('infyom.laravel_generator.path.datatables', app_path('DataTables/')).$prefixTitle;
 
         $this->pathApiController = config(
             'infyom.laravel_generator.path.api_controller',
@@ -140,6 +145,8 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$NAMESPACE_APP$', $this->nsApp);
         $commandData->addDynamicVariable('$NAMESPACE_REPOSITORY$', $this->nsRepository);
         $commandData->addDynamicVariable('$NAMESPACE_MODEL$', $this->nsModel);
+        $commandData->addDynamicVariable('$NAMESPACE_MODEL$', $this->nsModel);
+        $commandData->addDynamicVariable('$NAMESPACE_DATATABLES$', $this->nsDataTables);
         $commandData->addDynamicVariable('$NAMESPACE_MODEL_EXTEND$', $this->nsModelExtend);
 
         $commandData->addDynamicVariable('$NAMESPACE_API_CONTROLLER$', $this->nsApiController);
@@ -245,5 +252,6 @@ class GeneratorConfig
     {
         $this->addOns['swagger'] = config('infyom.laravel_generator.add_on.swagger', false);
         $this->addOns['tests'] = config('infyom.laravel_generator.add_on.tests', false);
+        $this->addOns['datatables'] = config('infyom.laravel_generator.add_on.datatables', false);
     }
 }
