@@ -51,9 +51,11 @@ class BaseCommand extends Command
                 $this->call('migrate');
             }
         }
-
-        $this->info('Generating autoload files');
-        $this->composer->dumpOptimized();
+        if ($this->commandData->getOption('dumpOptimized'))
+        {
+            $this->info('Generating autoload files');
+            $this->composer->dumpOptimized();
+        }
     }
 
     public function performPostActionsWithMigration()
@@ -109,6 +111,7 @@ class BaseCommand extends Command
             ['primary', null, InputOption::VALUE_REQUIRED, 'Save model schema to file'],
             ['prefix', null, InputOption::VALUE_REQUIRED, 'Prefix for all files'],
             ['paginate', null, InputOption::VALUE_REQUIRED, 'Pagination for index.blade.php'],
+            ['dumpOptimized', null, InputOption::VALUE_OPTIONAL, 'Generate dumpOptimized', true],
         ];
     }
 
