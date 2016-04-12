@@ -51,7 +51,7 @@ class BaseCommand extends Command
                 $this->call('migrate');
             }
         }
-        if ($this->commandData->getOption('dumpOptimized')){
+        if ($this->commandData->getOption('dumpOptimized')) {
             $this->info('Generating autoload files');
             $this->composer->dumpOptimized();
         }
