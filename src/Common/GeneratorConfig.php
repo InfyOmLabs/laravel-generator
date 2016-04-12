@@ -202,7 +202,7 @@ class GeneratorConfig
 
     public function prepareOptions(CommandData &$commandData)
     {
-        $options = ['fieldsFile', 'tableName', 'fromTable', 'save', 'primary', 'prefix', 'paginate', 'dumpOptimized'];
+        $options = ['fieldsFile', 'tableName', 'fromTable', 'save', 'primary', 'prefix', 'paginate', 'skipDumpOptimized'];
 
         foreach ($options as $option) {
             $this->options[$option] = $commandData->commandObj->option($option);
