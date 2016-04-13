@@ -228,16 +228,17 @@ class CommandData
 
                 $fileContents = file_get_contents($filePath);
                 $jsonData = json_decode($fileContents, true);
+                $this->inputFields = array_merge($this->inputFields, GeneratorFieldsInputUtil::validateFieldsFile($jsonData));
             } else {
                 $fileContents = $this->getOption('jsonFromGUI');
                 $jsonData = json_decode($fileContents, true);
+                $this->inputFields = array_merge($this->inputFields, GeneratorFieldsInputUtil::validateFieldsFile($jsonData['fields']));
+                $this->config->overrideOptionsFromJsonFile($jsonData);
+                if (isset($jsonData['migrate'])) {
+                    $this->config->forceMigrate = $jsonData['migrate'];
+                }
             }
 
-            $this->inputFields = array_merge($this->inputFields, GeneratorFieldsInputUtil::validateFieldsFile($jsonData['fields']));
-            $this->config->overrideOptionsFromJsonFile($jsonData);
-            if (isset($jsonData['migrate'])) {
-                $this->config->forceMigrate = $jsonData['migrate'];
-            }
             $this->checkForDiffPrimaryKey();
         } catch (Exception $e) {
             $this->commandError($e->getMessage());
