@@ -51,7 +51,7 @@ class BaseCommand extends Command
                 $this->call('migrate');
             }
         }
-        if ($this->commandData->getOption('dumpOptimized')) {
+        if (!$this->commandData->getOption('skipDumpOptimized')) {
             $this->info('Generating autoload files');
             $this->composer->dumpOptimized();
         }
@@ -110,7 +110,7 @@ class BaseCommand extends Command
             ['primary', null, InputOption::VALUE_REQUIRED, 'Save model schema to file'],
             ['prefix', null, InputOption::VALUE_REQUIRED, 'Prefix for all files'],
             ['paginate', null, InputOption::VALUE_REQUIRED, 'Pagination for index.blade.php'],
-            ['dumpOptimized', null, InputOption::VALUE_OPTIONAL, 'Generate dumpOptimized', true],
+            ['skipDumpOptimized', null, InputOption::VALUE_NONE, 'Skip Composer dump autoload optimized'],
         ];
     }
 
