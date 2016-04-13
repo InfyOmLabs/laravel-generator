@@ -125,6 +125,13 @@ return [
         'tests'         => true,
 
         'datatables'    => false,
+
+        'menu'          => [
+
+            'enabled'       => false,
+
+            'menu_file'     => 'layouts.menu',
+        ]
     ],
 
     /*

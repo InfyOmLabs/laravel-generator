@@ -12,6 +12,7 @@ use InfyOm\Generator\Generators\ModelGenerator;
 use InfyOm\Generator\Generators\RepositoryGenerator;
 use InfyOm\Generator\Generators\RepositoryTestGenerator;
 use InfyOm\Generator\Generators\Scaffold\ControllerGenerator;
+use InfyOm\Generator\Generators\Scaffold\MenuGenerator;
 use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
 use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
 use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
@@ -93,6 +94,11 @@ class APIScaffoldGeneratorCommand extends BaseCommand
 
             $apiTestGenerator = new APITestGenerator($this->commandData);
             $apiTestGenerator->generate();
+        }
+
+        if ($this->commandData->config->getAddOn('menu.enabled')) {
+            $menuGenerator = new MenuGenerator($this->commandData);
+            $menuGenerator->generate();
         }
 
         $this->performPostActionsWithMigration();

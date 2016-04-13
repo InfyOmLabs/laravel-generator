@@ -5,14 +5,14 @@ namespace InfyOm\Generator\Commands\Publish;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\TemplateUtil;
 
-class AuthPublishCommand extends PublishBaseCommand
+class LayoutPublishCommand extends PublishBaseCommand
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'infyom.publish:auth';
+    protected $name = 'infyom.publish:layout';
 
     /**
      * The console command description.
@@ -28,15 +28,8 @@ class AuthPublishCommand extends PublishBaseCommand
      */
     public function handle()
     {
-        $version = $this->getApplication()->getVersion();
-
-        if (str_contains($version, '5.1')) {
-            $this->copyView();
-            $this->updateRoutes();
-        } else {
-            $this->error('Publish Auth is only available for Laravel version 5.1');
-            $this->comment('If you are running Laravel version 5.2.*, then try php artisan make:auth');
-        }
+        $this->copyView();
+        $this->updateRoutes();
     }
 
     private function copyView()
@@ -51,6 +44,8 @@ class AuthPublishCommand extends PublishBaseCommand
 
         $files = [
             'layouts/app.stub'     => 'layouts/app.blade.php',
+            'layouts/sidebar.stub' => 'layouts/sidebar.blade.php',
+            'layouts/menu.stub'    => 'layouts/menu.blade.php',
             'auth/login.stub'      => 'auth/login.blade.php',
             'auth/register.stub'   => 'auth/register.blade.php',
             'auth/password.stub'   => 'auth/password.blade.php',

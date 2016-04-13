@@ -11,7 +11,7 @@ use InfyOm\Generator\Commands\APIScaffoldGeneratorCommand;
 use InfyOm\Generator\Commands\Common\MigrationGeneratorCommand;
 use InfyOm\Generator\Commands\Common\ModelGeneratorCommand;
 use InfyOm\Generator\Commands\Common\RepositoryGeneratorCommand;
-use InfyOm\Generator\Commands\Publish\AuthPublishCommand;
+use InfyOm\Generator\Commands\Publish\LayoutPublishCommand;
 use InfyOm\Generator\Commands\Publish\GeneratorPublishCommand;
 use InfyOm\Generator\Commands\Publish\PublishTemplateCommand;
 use InfyOm\Generator\Commands\Scaffold\ControllerGeneratorCommand;
@@ -54,8 +54,8 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
             return new ScaffoldGeneratorCommand();
         });
 
-        $this->app->singleton('infyom.publish.auth', function ($app) {
-            return new AuthPublishCommand();
+        $this->app->singleton('infyom.publish.layout', function ($app) {
+            return new LayoutPublishCommand();
         });
 
         $this->app->singleton('infyom.publish.templates', function ($app) {
@@ -107,7 +107,7 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
             'infyom.api',
             'infyom.scaffold',
             'infyom.api_scaffold',
-            'infyom.publish.auth',
+            'infyom.publish.layout',
             'infyom.publish.templates',
             'infyom.migration',
             'infyom.model',
