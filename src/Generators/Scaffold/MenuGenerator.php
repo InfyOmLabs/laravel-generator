@@ -24,7 +24,7 @@ class MenuGenerator
             base_path('resources/views/'
             )
         ). $commandData->getAddOn('menu.menu_file');
-        $this->templateType = config('infyom.laravel_generator.path.templates', 'core-templates');
+        $this->templateType = config('infyom.laravel_generator.templates', 'core-templates');
     }
 
     public function generate()
