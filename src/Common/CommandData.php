@@ -104,7 +104,10 @@ class CommandData
             $this->getInputFromConsole();
         }
     }
-
+    public function getForeignKeys()
+    {
+        $this->getForeignKeysFromTable(); 
+    }
     private function getInputFromConsole()
     {
         $this->commandInfo('Specify fields for the model (skip id & timestamp fields, we will add it automatically)');
@@ -251,5 +254,11 @@ class CommandData
 
         $this->inputFields = TableFieldsGenerator::generateFieldsFromTable($tableName);
         $this->checkForDiffPrimaryKey();
+    }
+    private function getForeignKeysFromTable()
+    {
+        $tableName = $this->dynamicVars['$TABLE_NAME$'];
+
+        $this->inputFields = TableFieldsGenerator::generateForeignKeysFromTable($tableName);
     }
 }

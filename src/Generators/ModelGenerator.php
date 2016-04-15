@@ -15,6 +15,10 @@ class ModelGenerator
     /** @var string */
     private $path;
 
+    /**
+     * ModelGenerator constructor.
+     * @param \InfyOm\Generator\Common\CommandData $commandData
+     */
     public function __construct(CommandData $commandData)
     {
         $this->commandData = $commandData;
@@ -66,6 +70,8 @@ class ModelGenerator
         $templateData = str_replace('$RULES$', implode(','.PHP_EOL.str_repeat(' ', 8), $this->generateRules()), $templateData);
 
         $templateData = str_replace('$CAST$', implode(','.PHP_EOL.str_repeat(' ', 8), $this->generateCasts()), $templateData);
+        
+        $templateData = str_replace('$FUNCTIONS$', implode(','.PHP_EOL.str_repeat(' ', 8), $this->generateCasts()), $templateData);
 
         return $templateData;
     }
@@ -225,5 +231,10 @@ class ModelGenerator
         }
 
         return $casts;
+    }
+    
+    public function generateEloquentFunctions()
+    {
+        $x = 1;
     }
 }

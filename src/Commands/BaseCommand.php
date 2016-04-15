@@ -38,6 +38,7 @@ class BaseCommand extends Command
 
         $this->commandData->initCommandData();
         $this->commandData->getInputFields();
+        $this->commandData->getForeignKeys();
     }
 
     public function performPostActions($runMigration = false)

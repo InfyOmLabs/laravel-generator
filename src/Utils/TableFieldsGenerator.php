@@ -6,6 +6,17 @@ use DB;
 
 class TableFieldsGenerator
 {
+    public static function generateForeignKeysFromTable($tableName)
+    {
+        
+        $schema = DB::getDoctrineSchemaManager();
+        $platform = $schema->getDatabasePlatform();
+        $platform->registerDoctrineTypeMapping('enum', 'string');
+
+        $foreign_keys = $schema->listTableForeignKeys($tableName);
+
+        return $foreign_keys;
+    }
     public static function generateFieldsFromTable($tableName)
     {
         $schema = DB::getDoctrineSchemaManager();
@@ -13,6 +24,7 @@ class TableFieldsGenerator
         $platform->registerDoctrineTypeMapping('enum', 'string');
 
         $columns = $schema->listTableColumns($tableName);
+
 
         $primaryKey = static::getPrimaryKeyFromTable($tableName);
         $timestamps = static::getTimestampFieldNames();
