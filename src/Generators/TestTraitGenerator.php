@@ -7,7 +7,7 @@ use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
 use InfyOm\Generator\Utils\TemplateUtil;
 
-class TestTraitGenerator
+class TestTraitGenerator extends BaseGenerator
 {
     /** @var CommandData */
     private $commandData;
@@ -15,10 +15,14 @@ class TestTraitGenerator
     /** @var string */
     private $path;
 
+    /** @var string */
+    private $fileName;
+
     public function __construct(CommandData $commandData)
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathApiTestTraits;
+        $this->fileName = 'Make'.$this->commandData->modelName.'Trait.php';
     }
 
     public function generate()
@@ -27,12 +31,10 @@ class TestTraitGenerator
 
         $templateData = $this->fillTemplate($templateData);
 
-        $fileName = 'Make'.$this->commandData->modelName.'Trait.php';
-
-        FileUtil::createFile($this->path, $fileName, $templateData);
+        FileUtil::createFile($this->path, $this->fileName, $templateData);
 
         $this->commandData->commandObj->comment("\nTestTrait created: ");
-        $this->commandData->commandObj->info($fileName);
+        $this->commandData->commandObj->info($this->fileName);
     }
 
     private function fillTemplate($templateData)
@@ -82,5 +84,12 @@ class TestTraitGenerator
         }
 
         return $fields;
+    }
+
+    public function rollback()
+    {
+        if ($this->rollbackFile($this->path, $this->fileName)) {
+            $this->commandData->commandComment("Test trait file found: ". $this->fileName);
+        }
     }
 }

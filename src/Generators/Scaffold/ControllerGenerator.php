@@ -3,10 +3,11 @@
 namespace InfyOm\Generator\Generators\Scaffold;
 
 use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\TemplateUtil;
 
-class ControllerGenerator
+class ControllerGenerator extends BaseGenerator
 {
     /** @var CommandData */
     private $commandData;
@@ -17,11 +18,15 @@ class ControllerGenerator
     /** @var string */
     private $templateType;
 
+    /** @var string */
+    private $fileName;
+
     public function __construct(CommandData $commandData)
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathController;
         $this->templateType = config('infyom.laravel_generator.templates', 'core-templates');
+        $this->fileName = $this->commandData->modelName.'Controller.php';
     }
 
     public function generate()
@@ -44,12 +49,10 @@ class ControllerGenerator
 
         $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
 
-        $fileName = $this->commandData->modelName.'Controller.php';
-
-        FileUtil::createFile($this->path, $fileName, $templateData);
+        FileUtil::createFile($this->path, $this->fileName, $templateData);
 
         $this->commandData->commandComment("\nController created: ");
-        $this->commandData->commandInfo($fileName);
+        $this->commandData->commandInfo($this->fileName);
     }
 
     private function generateDataTable()
@@ -86,5 +89,12 @@ class ControllerGenerator
 
         $this->commandData->commandComment("\n$fileName created: ");
         $this->commandData->commandInfo($fileName);
+    }
+
+    public function rollback()
+    {
+        if ($this->rollbackFile($this->path, $this->fileName)) {
+            $this->commandData->commandComment("Controller file found: ". $this->fileName);
+        }
     }
 }

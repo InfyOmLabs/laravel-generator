@@ -4,11 +4,12 @@ namespace InfyOm\Generator\Generators\Scaffold;
 
 use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
 use InfyOm\Generator\Utils\TemplateUtil;
 
-class ViewGenerator
+class ViewGenerator extends BaseGenerator
 {
     /** @var CommandData */
     private $commandData;
@@ -48,15 +49,13 @@ class ViewGenerator
 
     private function generateTable()
     {
-        $fileName = 'table.blade.php';
-
         if ($this->commandData->getAddOn('datatables')) {
             $templateData = $this->generateDataTableBody();
         } else {
             $templateData = $this->generateBladeTableBody();
         }
 
-        FileUtil::createFile($this->path, $fileName, $templateData);
+        FileUtil::createFile($this->path, 'table.blade.php', $templateData);
 
         $this->commandData->commandInfo('table.blade.php created');
     }
@@ -141,9 +140,7 @@ class ViewGenerator
             }
         }
 
-        $fileName = 'index.blade.php';
-
-        FileUtil::createFile($this->path, $fileName, $templateData);
+        FileUtil::createFile($this->path, 'index.blade.php', $templateData);
 
         $this->commandData->commandInfo('index.blade.php created');
     }
@@ -272,9 +269,7 @@ class ViewGenerator
 
         $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
 
-        $fileName = 'show.blade.php';
-
-        FileUtil::createFile($this->path, $fileName, $templateData);
+        FileUtil::createFile($this->path, 'show.blade.php', $templateData);
         $this->commandData->commandInfo('show.blade.php created');
     }
 
@@ -292,9 +287,26 @@ class ViewGenerator
             $fieldsStr .= $singleFieldStr."\n\n";
         }
 
-        $fileName = 'show_fields.blade.php';
-
-        FileUtil::createFile($this->path, $fileName, $fieldsStr);
+        FileUtil::createFile($this->path, 'show_fields.blade.php', $fieldsStr);
         $this->commandData->commandInfo('show_fields.blade.php created');
+    }
+
+    public function rollback()
+    {
+        $files = [
+            'table.blade.php',
+            'index.blade.php',
+            'fields.blade.php',
+            'create.blade.php',
+            'edit.blade.php',
+            'show.blade.php',
+            'show_fields.blade.php',
+        ];
+
+        foreach ($files as $file) {
+            if ($this->rollbackFile($this->path, $file)) {
+                $this->commandData->commandComment($file." file found");
+            }
+        }
     }
 }

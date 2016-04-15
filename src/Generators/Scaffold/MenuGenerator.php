@@ -2,10 +2,12 @@
 
 namespace InfyOm\Generator\Generators\Scaffold;
 
+use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\TemplateUtil;
 
-class MenuGenerator
+class MenuGenerator extends BaseGenerator
 {
     /** @var CommandData */
     private $commandData;
@@ -16,6 +18,12 @@ class MenuGenerator
     /** @var string */
     private $templateType;
 
+    /** @var string */
+    private $menuContents;
+
+    /** @var string */
+    private $menuTemplate;
+
     public function __construct(CommandData $commandData)
     {
         $this->commandData = $commandData;
@@ -25,19 +33,26 @@ class MenuGenerator
             )
         ). $commandData->getAddOn('menu.menu_file');
         $this->templateType = config('infyom.laravel_generator.templates', 'core-templates');
+
+        $this->menuContents = file_get_contents($this->path);
+
+        $this->menuTemplate = TemplateUtil::getTemplate('scaffold.layouts.menu_template', $this->templateType);
+
+        $this->menuTemplate = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $this->menuTemplate);
     }
 
     public function generate()
     {
-        $menuContents = file_get_contents($this->path);
+        $this->menuContents .= $this->menuTemplate.infy_nl();
 
-        $menuTemplate = TemplateUtil::getTemplate('scaffold.layouts.menu_template', $this->templateType);
-
-        $menuTemplate = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $menuTemplate);
-
-        $menuContents .= $menuTemplate.infy_nl();
-
-        file_put_contents($this->path, $menuContents);
+        file_put_contents($this->path, $this->menuContents);
         $this->commandData->commandComment("\n".$this->commandData->config->mCamelPlural.' menu added.');
+    }
+
+    public function rollback()
+    {
+        if (Str::contains($this->menuContents, $this->menuTemplate)) {
+            $this->commandData->commandComment("menu found");
+        }
     }
 }

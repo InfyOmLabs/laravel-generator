@@ -52,6 +52,8 @@ class GeneratorConfig
     /* Command Options */
     public static $availableOptions = ['fieldsFile', 'jsonFromGUI', 'tableName', 'fromTable', 'save', 'primary', 'prefix', 'paginate'];
 
+    public $tableName;
+
     /* Generator AddOns */
     public $addOns;
 
@@ -161,13 +163,9 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$NAMESPACE_REQUEST$', $this->nsRequest);
         $commandData->addDynamicVariable('$NAMESPACE_REQUEST_BASE$', $this->nsRequestBase);
 
-        if ($this->getOption('tableName')) {
-            $tableName = $this->getOption('tableName');
-        } else {
-            $tableName = $this->mSnakePlural;
-        }
+        $this->prepareTableName();
 
-        $commandData->addDynamicVariable('$TABLE_NAME$', $tableName);
+        $commandData->addDynamicVariable('$TABLE_NAME$', $this->tableName);
 
         $commandData->addDynamicVariable('$MODEL_NAME$', $this->mName);
         $commandData->addDynamicVariable('$MODEL_NAME_CAMEL$', $this->mCamel);
@@ -203,6 +201,15 @@ class GeneratorConfig
         return $commandData;
     }
 
+    public function prepareTableName()
+    {
+        if ($this->getOption('tableName')) {
+            $this->tableName = $this->getOption('tableName');
+        } else {
+            $this->tableName = $this->mSnakePlural;
+        }
+    }
+
     public function prepareModelNames()
     {
         $this->mPlural = Str::plural($this->mName);
@@ -212,15 +219,17 @@ class GeneratorConfig
         $this->mSnakePlural = Str::snake($this->mPlural);
     }
 
-    public function prepareOptions(CommandData &$commandData)
+    public function prepareOptions(CommandData &$commandData, $options = null)
     {
-        $options = self::$availableOptions;
+        if (empty($options)) {
+            $options = self::$availableOptions;
+        }
 
         foreach ($options as $option) {
             $this->options[$option] = $commandData->commandObj->option($option);
         }
 
-        if ($this->options['fromTable']) {
+        if (isset($options['fromTable']) and $this->options['fromTable']) {
             if (!$this->options['tableName']) {
                 $commandData->commandError('tableName required with fromTable option.');
                 exit;

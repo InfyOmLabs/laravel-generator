@@ -14,6 +14,7 @@ use InfyOm\Generator\Commands\Common\RepositoryGeneratorCommand;
 use InfyOm\Generator\Commands\Publish\LayoutPublishCommand;
 use InfyOm\Generator\Commands\Publish\GeneratorPublishCommand;
 use InfyOm\Generator\Commands\Publish\PublishTemplateCommand;
+use InfyOm\Generator\Commands\RollbackGeneratorCommand;
 use InfyOm\Generator\Commands\Scaffold\ControllerGeneratorCommand;
 use InfyOm\Generator\Commands\Scaffold\RequestsGeneratorCommand;
 use InfyOm\Generator\Commands\Scaffold\ScaffoldGeneratorCommand;
@@ -102,6 +103,10 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
             return new ViewsGeneratorCommand();
         });
 
+        $this->app->singleton('infyom.rollback', function ($app) {
+            return new RollbackGeneratorCommand();
+        });
+
         $this->commands([
             'infyom.publish',
             'infyom.api',
@@ -118,6 +123,7 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
             'infyom.scaffold.controller',
             'infyom.scaffold.requests',
             'infyom.scaffold.views',
+            'infyom.rollback',
         ]);
     }
 }

@@ -7,7 +7,7 @@ use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\TableFieldsGenerator;
 use InfyOm\Generator\Utils\TemplateUtil;
 
-class ModelGenerator
+class ModelGenerator extends BaseGenerator
 {
     /** @var CommandData */
     private $commandData;
@@ -15,10 +15,14 @@ class ModelGenerator
     /** @var string */
     private $path;
 
+    /** @var string */
+    private $fileName;
+
     public function __construct(CommandData $commandData)
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathModel;
+        $this->fileName = $this->commandData->modelName.'.php';
     }
 
     public function generate()
@@ -27,12 +31,10 @@ class ModelGenerator
 
         $templateData = $this->fillTemplate($templateData);
 
-        $fileName = $this->commandData->modelName.'.php';
-
-        FileUtil::createFile($this->path, $fileName, $templateData);
+        FileUtil::createFile($this->path, $this->fileName, $templateData);
 
         $this->commandData->commandComment("\nModel created: ");
-        $this->commandData->commandInfo($fileName);
+        $this->commandData->commandInfo($this->fileName);
     }
 
     private function fillTemplate($templateData)
@@ -225,5 +227,12 @@ class ModelGenerator
         }
 
         return $casts;
+    }
+
+    public function rollback()
+    {
+        if ($this->rollbackFile($this->path, $this->fileName)) {
+            $this->commandData->commandComment("Model file found: ". $this->fileName);
+        }
     }
 }
