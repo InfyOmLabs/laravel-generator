@@ -50,7 +50,7 @@ class GeneratorConfig
     public $options;
 
     /* Command Options */
-    public static $availableOptions = ['fieldsFile', 'jsonFromGUI', 'tableName', 'fromTable', 'save', 'primary', 'prefix', 'paginate'];
+    public static $availableOptions = ['fieldsFile', 'jsonFromGUI', 'tableName', 'fromTable', 'save', 'primary', 'prefix', 'paginate', 'skipDumpOptimized'];
 
     public $tableName;
 
