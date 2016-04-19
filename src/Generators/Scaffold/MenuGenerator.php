@@ -31,7 +31,7 @@ class MenuGenerator extends BaseGenerator
             'infyom.laravel_generator.path.views',
             base_path('resources/views/'
             )
-        ). $commandData->getAddOn('menu.menu_file');
+        ).$commandData->getAddOn('menu.menu_file');
         $this->templateType = config('infyom.laravel_generator.templates', 'core-templates');
 
         $this->menuContents = file_get_contents($this->path);
@@ -52,7 +52,7 @@ class MenuGenerator extends BaseGenerator
     public function rollback()
     {
         if (Str::contains($this->menuContents, $this->menuTemplate)) {
-            $this->commandData->commandComment("menu found");
+            $this->commandData->commandComment('menu found');
         }
     }
 }

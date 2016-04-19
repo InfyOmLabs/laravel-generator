@@ -241,19 +241,19 @@ class GeneratorConfig
 
     public function overrideOptionsFromJsonFile($jsonData)
     {
-        $options = GeneratorConfig::$availableOptions;
+        $options = self::$availableOptions;
 
         foreach ($options as $option) {
-            if (isset($jsonData["options"][$option])) {
-                $this->setOption($option, $jsonData["options"][$option]);
+            if (isset($jsonData['options'][$option])) {
+                $this->setOption($option, $jsonData['options'][$option]);
             }
         }
 
-        $addOns = ["swagger", "tests", "datatables"];
+        $addOns = ['swagger', 'tests', 'datatables'];
 
         foreach ($addOns as $addOn) {
-            if (isset($jsonData["addOns"][$addOn])) {
-                $this->addOns[$addOn] = $jsonData["addOns"][$addOn];
+            if (isset($jsonData['addOns'][$addOn])) {
+                $this->addOns[$addOn] = $jsonData['addOns'][$addOn];
             }
         }
     }

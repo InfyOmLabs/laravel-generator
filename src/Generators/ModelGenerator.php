@@ -232,7 +232,7 @@ class ModelGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment("Model file found: ". $this->fileName);
+            $this->commandData->commandComment('Model file found: '.$this->fileName);
         }
     }
 }

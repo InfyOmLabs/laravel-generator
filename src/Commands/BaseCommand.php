@@ -49,7 +49,7 @@ class BaseCommand extends Command
         if ($runMigration) {
             if ($this->commandData->config->forceMigrate) {
                 $this->call('migrate');
-            } else if($this->confirm("\nDo you want to migrate database? [y|N]", false)) {
+            } elseif ($this->confirm("\nDo you want to migrate database? [y|N]", false)) {
                 $this->call('migrate');
             }
         }

@@ -63,7 +63,7 @@ class APIControllerGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment("API Controller file found: ". $this->fileName);
+            $this->commandData->commandComment('API Controller file found: '.$this->fileName);
         }
     }
 }
