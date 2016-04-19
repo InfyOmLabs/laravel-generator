@@ -32,6 +32,44 @@ class LayoutPublishCommand extends PublishBaseCommand
         $this->updateRoutes();
     }
 
+    private function getViews()
+    {
+        $version = $this->getApplication()->getVersion();
+        if (str_contains($version, '5.1')) {
+            return $this->getLaravel51Views();
+        } else {
+            return $this->getLaravel52Views();
+        }
+    }
+
+    private function getLaravel51Views()
+    {
+        return [
+            'layouts/app.stub'     => 'layouts/app.blade.php',
+            'layouts/sidebar.stub' => 'layouts/sidebar.blade.php',
+            'layouts/menu.stub'    => 'layouts/menu.blade.php',
+            'auth/login.stub'      => 'auth/login.blade.php',
+            'auth/register.stub'   => 'auth/register.blade.php',
+            'auth/email.stub'      => 'auth/password.blade.php',
+            'auth/reset.stub'      => 'auth/reset.blade.php',
+            'emails/password.stub' => 'emails/password.blade.php',
+        ];
+    }
+
+    private function getLaravel52Views()
+    {
+        return [
+            'layouts/app.stub'     => 'layouts/app.blade.php',
+            'layouts/sidebar.stub' => 'layouts/sidebar.blade.php',
+            'layouts/menu.stub'    => 'layouts/menu.blade.php',
+            'auth/login.stub'      => 'auth/login.blade.php',
+            'auth/register.stub'   => 'auth/register.blade.php',
+            'auth/email.stub'      => 'auth/passwords/email.blade.php',
+            'auth/reset.stub'      => 'auth/passwords/reset.blade.php',
+            'emails/password.stub' => 'auth/emails/password.blade.php',
+        ];
+    }
+
     private function copyView()
     {
         $viewsPath = config('infyom.laravel_generator.path.views', base_path('resources/views/'));
@@ -42,16 +80,7 @@ class LayoutPublishCommand extends PublishBaseCommand
         FileUtil::createDirectoryIfNotExist($viewsPath.'auth/passwords');
         FileUtil::createDirectoryIfNotExist($viewsPath.'emails');
 
-        $files = [
-            'layouts/app.stub'     => 'layouts/app.blade.php',
-            'layouts/sidebar.stub' => 'layouts/sidebar.blade.php',
-            'layouts/menu.stub'    => 'layouts/menu.blade.php',
-            'auth/login.stub'      => 'auth/login.blade.php',
-            'auth/register.stub'   => 'auth/register.blade.php',
-            'auth/password.stub'   => 'auth/password.blade.php',
-            'auth/reset.stub'      => 'auth/reset.blade.php',
-            'emails/password.stub' => 'emails/password.blade.php',
-        ];
+        $files = $this->getViews();
 
         foreach ($files as $stub => $blade) {
             $sourceFile = base_path('vendor/infyomlabs/'.$templateType.'/templates/scaffold/'.$stub);
