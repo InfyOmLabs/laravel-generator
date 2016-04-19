@@ -30,6 +30,7 @@ class LayoutPublishCommand extends PublishBaseCommand
     {
         $this->copyView();
         $this->updateRoutes();
+        $this->publishHomeController();
     }
 
     private function getViews()
@@ -101,6 +102,29 @@ class LayoutPublishCommand extends PublishBaseCommand
         $this->comment("\nRoutes added");
     }
 
+    private function publishHomeController()
+    {
+        $templateData = TemplateUtil::getTemplate('home_controller', 'laravel-generator');
+
+        $templateData = $this->fillTemplate($templateData);
+
+        $controllerPath = config('infyom.laravel_generator.path.controller', app_path('Http/Controllers/'));
+
+        $fileName = "HomeController.php";
+
+        if (file_exists($controllerPath.$fileName)) {
+            $answer = $this->ask('Do you want to overwrite '.$fileName.'? (y|N) :', false);
+
+            if (strtolower($answer) != 'y' and strtolower($answer) != 'yes') {
+                return;
+            }
+        }
+
+        FileUtil::createFile($controllerPath, $fileName, $templateData);
+
+        $this->info('HomeController created');
+    }
+
     /**
      * Get the console command options.
      *
@@ -109,13 +133,6 @@ class LayoutPublishCommand extends PublishBaseCommand
     public function getOptions()
     {
         return [];
-    }
-
-    /**
-     * Publishes api_routes.php.
-     */
-    public function publishAPIRoutes()
-    {
     }
 
     /**
