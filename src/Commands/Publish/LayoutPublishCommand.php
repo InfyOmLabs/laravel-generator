@@ -24,7 +24,8 @@ class LayoutPublishCommand extends PublishBaseCommand
     /**
      * Laravel Application version
      *
-     * @var string  */
+     * @var string
+     */
     protected $laravelVersion;
 
     /**
