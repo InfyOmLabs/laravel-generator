@@ -43,6 +43,20 @@ class LayoutPublishCommand extends PublishBaseCommand
         }
     }
 
+    private function createDirectories($viewsPath)
+    {
+        FileUtil::createDirectoryIfNotExist($viewsPath.'layouts');
+        FileUtil::createDirectoryIfNotExist($viewsPath.'auth');
+
+        $version = $this->getApplication()->getVersion();
+        if (str_contains($version, '5.1')) {
+            FileUtil::createDirectoryIfNotExist($viewsPath.'emails');
+        } else {
+            FileUtil::createDirectoryIfNotExist($viewsPath.'auth/passwords');
+            FileUtil::createDirectoryIfNotExist($viewsPath.'auth/emails');
+        }
+    }
+
     private function getLaravel51Views()
     {
         return [
@@ -76,10 +90,7 @@ class LayoutPublishCommand extends PublishBaseCommand
         $viewsPath = config('infyom.laravel_generator.path.views', base_path('resources/views/'));
         $templateType = config('infyom.laravel_generator.templates', 'core-templates');
 
-        FileUtil::createDirectoryIfNotExist($viewsPath.'layouts');
-        FileUtil::createDirectoryIfNotExist($viewsPath.'auth');
-        FileUtil::createDirectoryIfNotExist($viewsPath.'auth/passwords');
-        FileUtil::createDirectoryIfNotExist($viewsPath.'emails');
+        $this->createDirectories($viewsPath);
 
         $files = $this->getViews();
 
@@ -124,6 +135,29 @@ class LayoutPublishCommand extends PublishBaseCommand
 
         $this->info('HomeController created');
     }
+
+    /**
+     * Replaces dynamic variables of template.
+     *
+     * @param string $templateData
+     *
+     * @return string
+     */
+    private function fillTemplate($templateData)
+    {
+        $templateData = str_replace(
+            '$NAMESPACE_CONTROLLER$',
+            config('infyom.laravel_generator.namespace.controller'), $templateData
+        );
+
+        $templateData = str_replace(
+            '$NAMESPACE_REQUEST$',
+            config('infyom.laravel_generator.namespace.request'), $templateData
+        );
+
+        return $templateData;
+    }
+
 
     /**
      * Get the console command options.
