@@ -22,6 +22,12 @@ class LayoutPublishCommand extends PublishBaseCommand
     protected $description = 'Publishes auth files';
 
     /**
+     * Laravel Application version
+     *
+     * @var string  */
+    protected $laravelVersion;
+
+    /**
      * Execute the command.
      *
      * @return void
@@ -31,12 +37,17 @@ class LayoutPublishCommand extends PublishBaseCommand
         $this->copyView();
         $this->updateRoutes();
         $this->publishHomeController();
+        $version = $this->getApplication()->getVersion();
+        if (str_contains($version, '5.1')) {
+            $this->laravelVersion = "5.1";
+        } else {
+            $this->laravelVersion = "5.2";
+        }
     }
 
     private function getViews()
     {
-        $version = $this->getApplication()->getVersion();
-        if (str_contains($version, '5.1')) {
+        if ($this->laravelVersion == "5.1") {
             return $this->getLaravel51Views();
         } else {
             return $this->getLaravel52Views();
@@ -48,8 +59,7 @@ class LayoutPublishCommand extends PublishBaseCommand
         FileUtil::createDirectoryIfNotExist($viewsPath.'layouts');
         FileUtil::createDirectoryIfNotExist($viewsPath.'auth');
 
-        $version = $this->getApplication()->getVersion();
-        if (str_contains($version, '5.1')) {
+        if ($this->laravelVersion == "5.1") {
             FileUtil::createDirectoryIfNotExist($viewsPath.'emails');
         } else {
             FileUtil::createDirectoryIfNotExist($viewsPath.'auth/passwords');
@@ -109,6 +119,12 @@ class LayoutPublishCommand extends PublishBaseCommand
         $routeContents = file_get_contents($path);
 
         $routesTemplate = TemplateUtil::getTemplate('routes.auth', 'laravel-generator');
+        if ($this->laravelVersion == "5.1") {
+            $routesTemplate = str_replace('$LOGOUT_METHOD$', "getLogout", $routesTemplate);
+        } else {
+            $routesTemplate = str_replace('$LOGOUT_METHOD$', "logout", $routesTemplate);
+        }
+
         $routeContents .= "\n\n".$routesTemplate;
 
         file_put_contents($path, $routeContents);
