@@ -22,7 +22,7 @@ class LayoutPublishCommand extends PublishBaseCommand
     protected $description = 'Publishes auth files';
 
     /**
-     * Laravel Application version
+     * Laravel Application version.
      *
      * @var string
      */
@@ -40,15 +40,15 @@ class LayoutPublishCommand extends PublishBaseCommand
         $this->publishHomeController();
         $version = $this->getApplication()->getVersion();
         if (str_contains($version, '5.1')) {
-            $this->laravelVersion = "5.1";
+            $this->laravelVersion = '5.1';
         } else {
-            $this->laravelVersion = "5.2";
+            $this->laravelVersion = '5.2';
         }
     }
 
     private function getViews()
     {
-        if ($this->laravelVersion == "5.1") {
+        if ($this->laravelVersion == '5.1') {
             return $this->getLaravel51Views();
         } else {
             return $this->getLaravel52Views();
@@ -60,7 +60,7 @@ class LayoutPublishCommand extends PublishBaseCommand
         FileUtil::createDirectoryIfNotExist($viewsPath.'layouts');
         FileUtil::createDirectoryIfNotExist($viewsPath.'auth');
 
-        if ($this->laravelVersion == "5.1") {
+        if ($this->laravelVersion == '5.1') {
             FileUtil::createDirectoryIfNotExist($viewsPath.'emails');
         } else {
             FileUtil::createDirectoryIfNotExist($viewsPath.'auth/passwords');
@@ -120,10 +120,10 @@ class LayoutPublishCommand extends PublishBaseCommand
         $routeContents = file_get_contents($path);
 
         $routesTemplate = TemplateUtil::getTemplate('routes.auth', 'laravel-generator');
-        if ($this->laravelVersion == "5.1") {
-            $routesTemplate = str_replace('$LOGOUT_METHOD$', "getLogout", $routesTemplate);
+        if ($this->laravelVersion == '5.1') {
+            $routesTemplate = str_replace('$LOGOUT_METHOD$', 'getLogout', $routesTemplate);
         } else {
-            $routesTemplate = str_replace('$LOGOUT_METHOD$', "logout", $routesTemplate);
+            $routesTemplate = str_replace('$LOGOUT_METHOD$', 'logout', $routesTemplate);
         }
 
         $routeContents .= "\n\n".$routesTemplate;
@@ -140,7 +140,7 @@ class LayoutPublishCommand extends PublishBaseCommand
 
         $controllerPath = config('infyom.laravel_generator.path.controller', app_path('Http/Controllers/'));
 
-        $fileName = "HomeController.php";
+        $fileName = 'HomeController.php';
 
         if (file_exists($controllerPath.$fileName)) {
             $answer = $this->ask('Do you want to overwrite '.$fileName.'? (y|N) :', false);
@@ -176,7 +176,6 @@ class LayoutPublishCommand extends PublishBaseCommand
 
         return $templateData;
     }
-
 
     /**
      * Get the console command options.

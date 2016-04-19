@@ -37,7 +37,7 @@ class ControllerGenerator extends BaseGenerator
             $this->generateDataTable();
         } else {
             $templateData = TemplateUtil::getTemplate('scaffold.controller.controller', 'laravel-generator');
-            
+
             $paginate = $this->commandData->getOption('paginate');
 
             if ($paginate) {
@@ -81,10 +81,10 @@ class ControllerGenerator extends BaseGenerator
 
         $fileName = $this->commandData->modelName.'DataTable.php';
 
-        $fields = implode(",".infy_nl_tab(1, 3), $headerFields);
+        $fields = implode(','.infy_nl_tab(1, 3), $headerFields);
 
         $templateData = str_replace('$DATATABLE_COLUMNS$', $fields, $templateData);
-        
+
         FileUtil::createFile($path, $fileName, $templateData);
 
         $this->commandData->commandComment("\n$fileName created: ");
@@ -94,7 +94,7 @@ class ControllerGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment("Controller file found: ". $this->fileName);
+            $this->commandData->commandComment('Controller file found: '.$this->fileName);
         }
     }
 }
