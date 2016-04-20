@@ -1,6 +1,6 @@
 Route::get('login', 'Auth\AuthController@getLogin');
 Route::post('login', 'Auth\AuthController@postLogin');
-Route::get('logout', 'Auth\AuthController@getLogout');
+Route::get('logout', 'Auth\AuthController@$LOGOUT_METHOD$');
 
 // Registration Routes...
 Route::get('register', 'Auth\AuthController@getRegister');
