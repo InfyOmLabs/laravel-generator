@@ -7,7 +7,7 @@ use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\TableFieldsGenerator;
 use InfyOm\Generator\Utils\TemplateUtil;
 
-class ModelGenerator
+class ModelGenerator extends BaseGenerator
 {
     /** @var CommandData */
     private $commandData;
@@ -15,10 +15,14 @@ class ModelGenerator
     /** @var string */
     private $path;
 
+    /** @var string */
+    private $fileName;
+
     public function __construct(CommandData $commandData)
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathModel;
+        $this->fileName = $this->commandData->modelName.'.php';
     }
 
     public function generate()
@@ -27,12 +31,10 @@ class ModelGenerator
 
         $templateData = $this->fillTemplate($templateData);
 
-        $fileName = $this->commandData->modelName.'.php';
-
-        FileUtil::createFile($this->path, $fileName, $templateData);
+        FileUtil::createFile($this->path, $this->fileName, $templateData);
 
         $this->commandData->commandComment("\nModel created: ");
-        $this->commandData->commandInfo($fileName);
+        $this->commandData->commandInfo($this->fileName);
     }
 
     private function fillTemplate($templateData)
@@ -54,18 +56,18 @@ class ModelGenerator
         $templateData = $this->fillTimestamps($templateData);
 
         if ($this->commandData->getOption('primary')) {
-            $primary = str_repeat(' ', 4)."protected \$primaryKey = '".$this->commandData->getOption('primary')."';\n";
+            $primary = infy_tab()."protected \$primaryKey = '".$this->commandData->getOption('primary')."';\n";
         } else {
             $primary = '';
         }
 
         $templateData = str_replace('$PRIMARY$', $primary, $templateData);
 
-        $templateData = str_replace('$FIELDS$', implode(','.PHP_EOL.str_repeat(' ', 8), $fillables), $templateData);
+        $templateData = str_replace('$FIELDS$', implode(','.infy_nl_tab(1, 2), $fillables), $templateData);
 
-        $templateData = str_replace('$RULES$', implode(','.PHP_EOL.str_repeat(' ', 8), $this->generateRules()), $templateData);
+        $templateData = str_replace('$RULES$', implode(','.infy_nl_tab(1, 2), $this->generateRules()), $templateData);
 
-        $templateData = str_replace('$CAST$', implode(','.PHP_EOL.str_repeat(' ', 8), $this->generateCasts()), $templateData);
+        $templateData = str_replace('$CAST$', implode(','.infy_nl_tab(1, 2), $this->generateCasts()), $templateData);
 
         return $templateData;
     }
@@ -81,10 +83,10 @@ class ModelGenerator
                 '$SOFT_DELETE_IMPORT$', "use Illuminate\\Database\\Eloquent\\SoftDeletes;\n",
                 $templateData
             );
-            $templateData = str_replace('$SOFT_DELETE$', str_repeat(' ', 4)."use SoftDeletes;\n", $templateData);
+            $templateData = str_replace('$SOFT_DELETE$', infy_tab()."use SoftDeletes;\n", $templateData);
             $deletedAtTimestamp = config('infyom.laravel_generator.timestamps.deleted_at', 'deleted_at');
             $templateData = str_replace(
-                '$SOFT_DELETE_DATES$', PHP_EOL.str_repeat(' ', 4)."protected \$dates = ['".$deletedAtTimestamp."'];\n",
+                '$SOFT_DELETE_DATES$', infy_nl_tab()."protected \$dates = ['".$deletedAtTimestamp."'];\n",
                 $templateData
             );
         }
@@ -225,5 +227,12 @@ class ModelGenerator
         }
 
         return $casts;
+    }
+
+    public function rollback()
+    {
+        if ($this->rollbackFile($this->path, $this->fileName)) {
+            $this->commandData->commandComment('Model file deleted: '.$this->fileName);
+        }
     }
 }

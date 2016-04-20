@@ -10,6 +10,7 @@ class GeneratorConfig
     public $nsApp;
     public $nsRepository;
     public $nsModel;
+    public $nsDataTables;
     public $nsModelExtend;
 
     public $nsApiController;
@@ -22,6 +23,7 @@ class GeneratorConfig
     /* Path variables */
     public $pathRepository;
     public $pathModel;
+    public $pathDataTables;
 
     public $pathApiController;
     public $pathApiRequest;
@@ -42,8 +44,15 @@ class GeneratorConfig
     public $mSnake;
     public $mSnakePlural;
 
+    public $forceMigrate;
+
     /* Generator Options */
     public $options;
+
+    /* Command Options */
+    public static $availableOptions = ['fieldsFile', 'jsonFromGUI', 'tableName', 'fromTable', 'save', 'primary', 'prefix', 'paginate', 'skipDumpOptimized'];
+
+    public $tableName;
 
     /* Generator AddOns */
     public $addOns;
@@ -71,6 +80,7 @@ class GeneratorConfig
         $this->nsApp = $commandData->commandObj->getLaravel()->getNamespace();
         $this->nsRepository = config('infyom.laravel_generator.namespace.repository', 'App\Repositories').$prefix;
         $this->nsModel = config('infyom.laravel_generator.namespace.model', 'App\Models').$prefix;
+        $this->nsDataTables = config('infyom.laravel_generator.namespace.datatables', 'App\DataTables').$prefix;
         $this->nsModelExtend = config(
             'infyom.laravel_generator.model_extend_class',
             'Illuminate\Database\Eloquent\Model'
@@ -103,6 +113,8 @@ class GeneratorConfig
         ).$prefixTitle;
 
         $this->pathModel = config('infyom.laravel_generator.path.model', app_path('Models/')).$prefixTitle;
+
+        $this->pathDataTables = config('infyom.laravel_generator.path.datatables', app_path('DataTables/')).$prefixTitle;
 
         $this->pathApiController = config(
             'infyom.laravel_generator.path.api_controller',
@@ -140,6 +152,8 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$NAMESPACE_APP$', $this->nsApp);
         $commandData->addDynamicVariable('$NAMESPACE_REPOSITORY$', $this->nsRepository);
         $commandData->addDynamicVariable('$NAMESPACE_MODEL$', $this->nsModel);
+        $commandData->addDynamicVariable('$NAMESPACE_MODEL$', $this->nsModel);
+        $commandData->addDynamicVariable('$NAMESPACE_DATATABLES$', $this->nsDataTables);
         $commandData->addDynamicVariable('$NAMESPACE_MODEL_EXTEND$', $this->nsModelExtend);
 
         $commandData->addDynamicVariable('$NAMESPACE_API_CONTROLLER$', $this->nsApiController);
@@ -149,13 +163,9 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$NAMESPACE_REQUEST$', $this->nsRequest);
         $commandData->addDynamicVariable('$NAMESPACE_REQUEST_BASE$', $this->nsRequestBase);
 
-        if ($this->getOption('tableName')) {
-            $tableName = $this->getOption('tableName');
-        } else {
-            $tableName = $this->mSnakePlural;
-        }
+        $this->prepareTableName();
 
-        $commandData->addDynamicVariable('$TABLE_NAME$', $tableName);
+        $commandData->addDynamicVariable('$TABLE_NAME$', $this->tableName);
 
         $commandData->addDynamicVariable('$MODEL_NAME$', $this->mName);
         $commandData->addDynamicVariable('$MODEL_NAME_CAMEL$', $this->mCamel);
@@ -179,7 +189,7 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$ROUTES_AS_PREFIX$', $prefixAs);
 
         $commandData->addDynamicVariable(
-            '$MODEL_NAME_PLURAL_SNAKE$',
+            '$API_PREFIX$',
             config('infyom.laravel_generator.api_prefix', 'api')
         );
 
@@ -191,6 +201,15 @@ class GeneratorConfig
         return $commandData;
     }
 
+    public function prepareTableName()
+    {
+        if ($this->getOption('tableName')) {
+            $this->tableName = $this->getOption('tableName');
+        } else {
+            $this->tableName = $this->mSnakePlural;
+        }
+    }
+
     public function prepareModelNames()
     {
         $this->mPlural = Str::plural($this->mName);
@@ -200,15 +219,17 @@ class GeneratorConfig
         $this->mSnakePlural = Str::snake($this->mPlural);
     }
 
-    public function prepareOptions(CommandData &$commandData)
+    public function prepareOptions(CommandData &$commandData, $options = null)
     {
-        $options = ['fieldsFile', 'tableName', 'fromTable', 'save', 'primary', 'prefix', 'paginate', 'skipDumpOptimized'];
+        if (empty($options)) {
+            $options = self::$availableOptions;
+        }
 
         foreach ($options as $option) {
             $this->options[$option] = $commandData->commandObj->option($option);
         }
 
-        if ($this->options['fromTable']) {
+        if (isset($options['fromTable']) and $this->options['fromTable']) {
             if (!$this->options['tableName']) {
                 $commandData->commandError('tableName required with fromTable option.');
                 exit;
@@ -216,6 +237,25 @@ class GeneratorConfig
         }
 
         $this->options['softDelete'] = config('infyom.laravel_generator.options.softDelete', false);
+    }
+
+    public function overrideOptionsFromJsonFile($jsonData)
+    {
+        $options = self::$availableOptions;
+
+        foreach ($options as $option) {
+            if (isset($jsonData['options'][$option])) {
+                $this->setOption($option, $jsonData['options'][$option]);
+            }
+        }
+
+        $addOns = ['swagger', 'tests', 'datatables'];
+
+        foreach ($addOns as $addOn) {
+            if (isset($jsonData['addOns'][$addOn])) {
+                $this->addOns[$addOn] = $jsonData['addOns'][$addOn];
+            }
+        }
     }
 
     public function getOption($option)
@@ -245,5 +285,8 @@ class GeneratorConfig
     {
         $this->addOns['swagger'] = config('infyom.laravel_generator.add_on.swagger', false);
         $this->addOns['tests'] = config('infyom.laravel_generator.add_on.tests', false);
+        $this->addOns['datatables'] = config('infyom.laravel_generator.add_on.datatables', false);
+        $this->addOns['menu.enabled'] = config('infyom.laravel_generator.add_on.menu.enabled', false);
+        $this->addOns['menu.menu_file'] = config('infyom.laravel_generator.add_on.menu.menu_file', 'layouts.menu');
     }
 }

@@ -96,8 +96,8 @@ class CommandData
     {
         $this->inputFields = [];
 
-        if ($this->getOption('fieldsFile')) {
-            $this->getInputFromFile();
+        if ($this->getOption('fieldsFile') or $this->getOption('jsonFromGUI')) {
+            $this->getInputFromFileOrJson();
         } elseif ($this->getOption('fromTable')) {
             $this->getInputFromTable();
         } else {
@@ -210,24 +210,35 @@ class CommandData
         );
     }
 
-    private function getInputFromFile()
+    private function getInputFromFileOrJson()
     {
+        // fieldsFile option will get high priority than json option if both options are passed
         try {
-            if (file_exists($this->getOption('fieldsFile'))) {
-                $filePath = $this->getOption('fieldsFile');
+            if ($this->getOption('fieldsFile')) {
+                if (file_exists($this->getOption('fieldsFile'))) {
+                    $filePath = $this->getOption('fieldsFile');
+                } else {
+                    $filePath = base_path($this->getOption('fieldsFile'));
+                }
+
+                if (!file_exists($filePath)) {
+                    $this->commandError('Fields file not found');
+                    exit;
+                }
+
+                $fileContents = file_get_contents($filePath);
+                $jsonData = json_decode($fileContents, true);
+                $this->inputFields = array_merge($this->inputFields, GeneratorFieldsInputUtil::validateFieldsFile($jsonData));
             } else {
-                $filePath = base_path($this->getOption('fieldsFile'));
+                $fileContents = $this->getOption('jsonFromGUI');
+                $jsonData = json_decode($fileContents, true);
+                $this->inputFields = array_merge($this->inputFields, GeneratorFieldsInputUtil::validateFieldsFile($jsonData['fields']));
+                $this->config->overrideOptionsFromJsonFile($jsonData);
+                if (isset($jsonData['migrate'])) {
+                    $this->config->forceMigrate = $jsonData['migrate'];
+                }
             }
 
-            if (!file_exists($filePath)) {
-                $this->commandError('Fields file not found');
-                exit;
-            }
-
-            $fileContents = file_get_contents($filePath);
-            $fields = json_decode($fileContents, true);
-
-            $this->inputFields = array_merge($this->inputFields, GeneratorFieldsInputUtil::validateFieldsFile($fields));
             $this->checkForDiffPrimaryKey();
         } catch (Exception $e) {
             $this->commandError($e->getMessage());

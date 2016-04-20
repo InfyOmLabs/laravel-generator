@@ -2,13 +2,13 @@
 
 namespace $NAMESPACE_CONTROLLER$;
 
+use $NAMESPACE_DATATABLES$\$MODEL_NAME$DataTable;
 use $NAMESPACE_REQUEST$;
 use $NAMESPACE_REQUEST$\Create$MODEL_NAME$Request;
 use $NAMESPACE_REQUEST$\Update$MODEL_NAME$Request;
 use $NAMESPACE_REPOSITORY$\$MODEL_NAME$Repository;
-use Illuminate\Http\Request;
 use Flash;
-use Prettus\Repository\Criteria\RequestCriteria;
+use InfyOm\Generator\Controller\AppBaseController;
 use Response;
 
 class $MODEL_NAME$Controller extends AppBaseController
@@ -24,16 +24,12 @@ class $MODEL_NAME$Controller extends AppBaseController
     /**
      * Display a listing of the $MODEL_NAME$.
      *
-     * @param Request $request
+     * @param $MODEL_NAME$DataTable $$MODEL_NAME_CAMEL$DataTable
      * @return Response
      */
-    public function index(Request $request)
+    public function index($MODEL_NAME$DataTable $$MODEL_NAME_CAMEL$DataTable)
     {
-        $this->$MODEL_NAME_CAMEL$Repository->pushCriteria(new RequestCriteria($request));
-        $$MODEL_NAME_PLURAL_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->$RENDER_TYPE$;
-
-        return view('$ROUTES_AS_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index')
-            ->with('$MODEL_NAME_PLURAL_CAMEL$', $$MODEL_NAME_PLURAL_CAMEL$);
+        return $$MODEL_NAME_CAMEL$DataTable->render('$MODEL_NAME_PLURAL_CAMEL$.index');
     }
 
     /**

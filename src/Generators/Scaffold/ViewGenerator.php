@@ -4,11 +4,12 @@ namespace InfyOm\Generator\Generators\Scaffold;
 
 use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
 use InfyOm\Generator\Utils\TemplateUtil;
 
-class ViewGenerator
+class ViewGenerator extends BaseGenerator
 {
     /** @var CommandData */
     private $commandData;
@@ -26,7 +27,7 @@ class ViewGenerator
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathViews;
-        $this->templateType = config('infyom.laravel_generator.path.templates', 'core-templates');
+        $this->templateType = config('infyom.laravel_generator.templates', 'core-templates');
     }
 
     public function generate()
@@ -48,13 +49,20 @@ class ViewGenerator
 
     private function generateTable()
     {
-        $templateData = TemplateUtil::getTemplate('scaffold.views.table', $this->templateType);
+        if ($this->commandData->getAddOn('datatables')) {
+            $templateData = $this->generateDataTableBody();
+        } else {
+            $templateData = $this->generateBladeTableBody();
+        }
+
+        FileUtil::createFile($this->path, 'table.blade.php', $templateData);
+
+        $this->commandData->commandInfo('table.blade.php created');
+    }
+
+    private function generateTableHeaderFields()
+    {
         $headerFieldTemplate = TemplateUtil::getTemplate('scaffold.views.table_header', $this->templateType);
-        $cellFieldTemplate = TemplateUtil::getTemplate('scaffold.views.table_cell', $this->templateType);
-
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
-
-        $fileName = 'table.blade.php';
 
         $headerFields = [];
 
@@ -70,9 +78,18 @@ class ViewGenerator
             );
         }
 
-        $headerFields = implode(PHP_EOL.str_repeat(' ', 8), $headerFields);
+        return implode(infy_nl_tab(1, 2), $headerFields);
+    }
 
-        $templateData = str_replace('$FIELD_HEADERS$', $headerFields, $templateData);
+    private function generateBladeTableBody()
+    {
+        $templateData = TemplateUtil::getTemplate('scaffold.views.blade_table_body', $this->templateType);
+
+        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+
+        $templateData = str_replace('$FIELD_HEADERS$', $this->generateTableHeaderFields(), $templateData);
+
+        $cellFieldTemplate = TemplateUtil::getTemplate('scaffold.views.table_cell', $this->templateType);
 
         $tableBodyFields = [];
 
@@ -89,13 +106,16 @@ class ViewGenerator
             );
         }
 
-        $tableBodyFields = implode(PHP_EOL.str_repeat(' ', 12), $tableBodyFields);
+        $tableBodyFields = implode(infy_nl_tab(1, 3), $tableBodyFields);
 
-        $templateData = str_replace('$FIELD_BODY$', $tableBodyFields, $templateData);
+        return str_replace('$FIELD_BODY$', $tableBodyFields, $templateData);
+    }
 
-        FileUtil::createFile($this->path, $fileName, $templateData);
+    private function generateDataTableBody()
+    {
+        $templateData = TemplateUtil::getTemplate('scaffold.views.datatable_body', $this->templateType);
 
-        $this->commandData->commandInfo('table.blade.php created');
+        return TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
     }
 
     private function generateIndex()
@@ -104,21 +124,23 @@ class ViewGenerator
 
         $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
 
-        $paginate = $this->commandData->getOption('paginate');
-
-        if ($paginate) {
-            $paginateTemplate = TemplateUtil::getTemplate('scaffold.views.paginate', $this->templateType);
-
-            $paginateTemplate = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $paginateTemplate);
-
-            $templateData = str_replace('$PAGINATE$', $paginateTemplate, $templateData);
-        } else {
+        if ($this->commandData->getOption('datatables')) {
             $templateData = str_replace('$PAGINATE$', '', $templateData);
+        } else {
+            $paginate = $this->commandData->getOption('paginate');
+
+            if ($paginate) {
+                $paginateTemplate = TemplateUtil::getTemplate('scaffold.views.paginate', $this->templateType);
+
+                $paginateTemplate = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $paginateTemplate);
+
+                $templateData = str_replace('$PAGINATE$', $paginateTemplate, $templateData);
+            } else {
+                $templateData = str_replace('$PAGINATE$', '', $templateData);
+            }
         }
 
-        $fileName = 'index.blade.php';
-
-        FileUtil::createFile($this->path, $fileName, $templateData);
+        FileUtil::createFile($this->path, 'index.blade.php', $templateData);
 
         $this->commandData->commandInfo('index.blade.php created');
     }
@@ -247,9 +269,7 @@ class ViewGenerator
 
         $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
 
-        $fileName = 'show.blade.php';
-
-        FileUtil::createFile($this->path, $fileName, $templateData);
+        FileUtil::createFile($this->path, 'show.blade.php', $templateData);
         $this->commandData->commandInfo('show.blade.php created');
     }
 
@@ -267,9 +287,26 @@ class ViewGenerator
             $fieldsStr .= $singleFieldStr."\n\n";
         }
 
-        $fileName = 'show_fields.blade.php';
-
-        FileUtil::createFile($this->path, $fileName, $fieldsStr);
+        FileUtil::createFile($this->path, 'show_fields.blade.php', $fieldsStr);
         $this->commandData->commandInfo('show_fields.blade.php created');
+    }
+
+    public function rollback()
+    {
+        $files = [
+            'table.blade.php',
+            'index.blade.php',
+            'fields.blade.php',
+            'create.blade.php',
+            'edit.blade.php',
+            'show.blade.php',
+            'show_fields.blade.php',
+        ];
+
+        foreach ($files as $file) {
+            if ($this->rollbackFile($this->path, $file)) {
+                $this->commandData->commandComment($file.' file deleted');
+            }
+        }
     }
 }

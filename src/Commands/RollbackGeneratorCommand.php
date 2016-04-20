@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Commands;
 
+use Illuminate\Console\Command;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\API\APIControllerGenerator;
 use InfyOm\Generator\Generators\API\APIRequestGenerator;
@@ -17,22 +18,29 @@ use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
 use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
 use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
 use InfyOm\Generator\Generators\TestTraitGenerator;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
-class APIScaffoldGeneratorCommand extends BaseCommand
+class RollbackGeneratorCommand extends Command
 {
+    /**
+     * The command Data.
+     *
+     * @var CommandData
+     */
+    public $commandData;
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'infyom:api_scaffold';
-
+    protected $name = 'infyom:rollback';
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a full CRUD API and Scaffold for given model';
+    protected $description = 'Rollback a full CRUD API and Scaffold for given model';
 
     /**
      * Create a new command instance.
@@ -40,8 +48,6 @@ class APIScaffoldGeneratorCommand extends BaseCommand
     public function __construct()
     {
         parent::__construct();
-
-        $this->commandData = new CommandData($this, CommandData::$COMMAND_TYPE_SCAFFOLD_API);
     }
 
     /**
@@ -51,57 +57,73 @@ class APIScaffoldGeneratorCommand extends BaseCommand
      */
     public function handle()
     {
-        parent::handle();
-
-        if (!$this->commandData->getOption('fromTable')) {
-            $migrationGenerator = new MigrationGenerator($this->commandData);
-            $migrationGenerator->generate();
+        if (!in_array($this->argument('type'), [
+            CommandData::$COMMAND_TYPE_API,
+            CommandData::$COMMAND_TYPE_SCAFFOLD,
+            CommandData::$COMMAND_TYPE_SCAFFOLD_API,
+        ])
+        ) {
+            $this->error('invalid rollback type');
         }
 
+        $this->commandData = new CommandData($this, $this->argument('type'));
+        $this->commandData->config->mName = $this->commandData->modelName = $this->argument('model');
+
+        $this->commandData->config->prepareOptions($this->commandData, ['tableName', 'prefix']);
+        $this->commandData->config->prepareAddOns();
+        $this->commandData->config->prepareModelNames();
+        $this->commandData->config->prepareTableName();
+        $this->commandData->config->loadPaths();
+        $this->commandData->config->loadNamespaces($this->commandData);
+        $this->commandData = $this->commandData->config->loadDynamicVariables($this->commandData);
+
+        $migrationGenerator = new MigrationGenerator($this->commandData);
+        $migrationGenerator->rollback();
+
         $modelGenerator = new ModelGenerator($this->commandData);
-        $modelGenerator->generate();
+        $modelGenerator->rollback();
 
         $repositoryGenerator = new RepositoryGenerator($this->commandData);
-        $repositoryGenerator->generate();
+        $repositoryGenerator->rollback();
 
         $requestGenerator = new APIRequestGenerator($this->commandData);
-        $requestGenerator->generate();
+        $requestGenerator->rollback();
 
         $controllerGenerator = new APIControllerGenerator($this->commandData);
-        $controllerGenerator->generate();
+        $controllerGenerator->rollback();
 
         $routesGenerator = new APIRoutesGenerator($this->commandData);
-        $routesGenerator->generate();
+        $routesGenerator->rollback();
 
         $requestGenerator = new RequestGenerator($this->commandData);
-        $requestGenerator->generate();
+        $requestGenerator->rollback();
 
         $controllerGenerator = new ControllerGenerator($this->commandData);
-        $controllerGenerator->generate();
+        $controllerGenerator->rollback();
 
         $viewGenerator = new ViewGenerator($this->commandData);
-        $viewGenerator->generate();
+        $viewGenerator->rollback();
 
         $routeGenerator = new RoutesGenerator($this->commandData);
-        $routeGenerator->generate();
+        $routeGenerator->rollback();
 
         if ($this->commandData->getAddOn('tests')) {
             $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);
-            $repositoryTestGenerator->generate();
+            $repositoryTestGenerator->rollback();
 
             $testTraitGenerator = new TestTraitGenerator($this->commandData);
-            $testTraitGenerator->generate();
+            $testTraitGenerator->rollback();
 
             $apiTestGenerator = new APITestGenerator($this->commandData);
-            $apiTestGenerator->generate();
+            $apiTestGenerator->rollback();
         }
 
         if ($this->commandData->config->getAddOn('menu.enabled')) {
             $menuGenerator = new MenuGenerator($this->commandData);
-            $menuGenerator->generate();
+            $menuGenerator->rollback();
         }
 
-        $this->performPostActionsWithMigration();
+//        $this->performPostActionsWithMigration();
     }
 
     /**
@@ -111,7 +133,10 @@ class APIScaffoldGeneratorCommand extends BaseCommand
      */
     public function getOptions()
     {
-        return array_merge(parent::getOptions(), []);
+        return [
+            ['tableName', null, InputOption::VALUE_REQUIRED, 'Table Name'],
+            ['prefix', null, InputOption::VALUE_REQUIRED, 'Prefix for all files'],
+        ];
     }
 
     /**
@@ -121,6 +146,9 @@ class APIScaffoldGeneratorCommand extends BaseCommand
      */
     protected function getArguments()
     {
-        return array_merge(parent::getArguments(), []);
+        return [
+            ['model', InputArgument::REQUIRED, 'Singular Model name'],
+            ['type', InputArgument::REQUIRED, 'Rollback type: (api / scaffold / scaffold_api)'],
+        ];
     }
 }

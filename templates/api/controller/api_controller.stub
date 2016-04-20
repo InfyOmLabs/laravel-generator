@@ -7,7 +7,7 @@ use $NAMESPACE_API_REQUEST$\Update$MODEL_NAME$APIRequest;
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
 use $NAMESPACE_REPOSITORY$\$MODEL_NAME$Repository;
 use Illuminate\Http\Request;
-use InfyOm\Generator\Controller\AppBaseController;
+use $NAMESPACE_CONTROLLER$\AppBaseController;
 use InfyOm\Generator\Criteria\LimitOffsetCriteria;
 use InfyOm\Generator\Utils\ResponseUtil;
 use Prettus\Repository\Criteria\RequestCriteria;

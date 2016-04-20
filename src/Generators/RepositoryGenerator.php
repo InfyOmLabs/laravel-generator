@@ -6,7 +6,7 @@ use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\TemplateUtil;
 
-class RepositoryGenerator
+class RepositoryGenerator extends BaseGenerator
 {
     /** @var CommandData */
     private $commandData;
@@ -14,10 +14,14 @@ class RepositoryGenerator
     /** @var string */
     private $path;
 
+    /** @var string */
+    private $fileName;
+
     public function __construct(CommandData $commandData)
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathRepository;
+        $this->fileName = $this->commandData->modelName.'Repository.php';
     }
 
     public function generate()
@@ -34,13 +38,18 @@ class RepositoryGenerator
             }
         }
 
-        $templateData = str_replace('$FIELDS$', implode(','.PHP_EOL.str_repeat(' ', 8), $searchables), $templateData);
+        $templateData = str_replace('$FIELDS$', implode(','.infy_nl_tab(1, 2), $searchables), $templateData);
 
-        $fileName = $this->commandData->modelName.'Repository.php';
-
-        FileUtil::createFile($this->path, $fileName, $templateData);
+        FileUtil::createFile($this->path, $this->fileName, $templateData);
 
         $this->commandData->commandComment("\nRepository created: ");
-        $this->commandData->commandInfo($fileName);
+        $this->commandData->commandInfo($this->fileName);
+    }
+
+    public function rollback()
+    {
+        if ($this->rollbackFile($this->path, $this->fileName)) {
+            $this->commandData->commandComment('Repository file deleted: '.$this->fileName);
+        }
     }
 }

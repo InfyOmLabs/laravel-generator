@@ -25,4 +25,13 @@ class FileUtil
             mkdir($path, 0755, true);
         }
     }
+
+    public static function deleteFile($path, $fileName)
+    {
+        if (file_exists($path.$fileName)) {
+            return unlink($path.$fileName);
+        }
+
+        return false;
+    }
 }

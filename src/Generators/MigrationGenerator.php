@@ -2,12 +2,15 @@
 
 namespace InfyOm\Generator\Generators;
 
+use File;
+use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\SchemaUtil;
 use InfyOm\Generator\Utils\TemplateUtil;
+use SplFileInfo;
 
-class MigrationGenerator
+class MigrationGenerator extends BaseGenerator
 {
     /** @var CommandData */
     private $commandData;
@@ -56,6 +59,31 @@ class MigrationGenerator
             $fields[] = '$table->softDeletes();';
         }
 
-        return implode(PHP_EOL.str_repeat(' ', 12), $fields);
+        return implode(infy_nl_tab(1, 3), $fields);
+    }
+
+    public function rollback()
+    {
+        $fileName = 'create_'.$this->commandData->config->tableName.'_table.php';
+
+        /** @var SplFileInfo $allFiles */
+        $allFiles = File::allFiles($this->path);
+
+        $files = [];
+
+        foreach ($allFiles as $file) {
+            $files[] = $file->getFilename();
+        }
+
+        $files = array_reverse($files);
+
+        foreach ($files as $file) {
+            if (Str::contains($file, $fileName)) {
+                if ($this->rollbackFile($this->path, $file)) {
+                    $this->commandData->commandComment('Migration file deleted: '.$file);
+                }
+                break;
+            }
+        }
     }
 }

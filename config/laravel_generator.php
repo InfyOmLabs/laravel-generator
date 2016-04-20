@@ -15,6 +15,8 @@ return [
 
         'model'             => app_path('Models/'),
 
+        'datatables'        => app_path('DataTables/'),
+
         'repository'        => app_path('Repositories/'),
 
         'routes'            => app_path('Http/routes.php'),
@@ -52,6 +54,8 @@ return [
     'namespace' => [
 
         'model'             => 'App\Models',
+
+        'datatables'        => 'App\DataTables',
 
         'repository'        => 'App\Repositories',
 
@@ -116,9 +120,18 @@ return [
 
     'add_on' => [
 
-        'swagger'   => true,
+        'swagger'       => true,
 
-        'tests'     => true,
+        'tests'         => true,
+
+        'datatables'    => false,
+
+        'menu'          => [
+
+            'enabled'       => false,
+
+            'menu_file'     => 'layouts/menu.blade.php',
+        ],
     ],
 
     /*

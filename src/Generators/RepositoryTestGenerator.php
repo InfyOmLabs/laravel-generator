@@ -6,14 +6,7 @@ use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\TemplateUtil;
 
-/**
- * Company: Neon Mobile, Copyright 2015, All Rights Reserved.
- * Author: Mitul Golakiya
- * Email: me@mitul.me
- * Date: 29.06.2015
- * Time: 19:25.
- */
-class RepositoryTestGenerator
+class RepositoryTestGenerator extends BaseGenerator
 {
     /** @var CommandData */
     private $commandData;
@@ -21,10 +14,14 @@ class RepositoryTestGenerator
     /** @var string */
     private $path;
 
+    /** @var string */
+    private $fileName;
+
     public function __construct($commandData)
     {
         $this->commandData = $commandData;
         $this->path = config('infyom.laravel_generator.path.repository_test', base_path('tests/'));
+        $this->fileName = $this->commandData->modelName.'RepositoryTest.php';
     }
 
     public function generate()
@@ -33,12 +30,10 @@ class RepositoryTestGenerator
 
         $templateData = $this->fillTemplate($templateData);
 
-        $fileName = $this->commandData->modelName.'RepositoryTest.php';
-
-        FileUtil::createFile($this->path, $fileName, $templateData);
+        FileUtil::createFile($this->path, $this->fileName, $templateData);
 
         $this->commandData->commandObj->comment("\nRepositoryTest created: ");
-        $this->commandData->commandObj->info($fileName);
+        $this->commandData->commandObj->info($this->fileName);
     }
 
     private function fillTemplate($templateData)
@@ -46,5 +41,12 @@ class RepositoryTestGenerator
         $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
 
         return $templateData;
+    }
+
+    public function rollback()
+    {
+        if ($this->rollbackFile($this->path, $this->fileName)) {
+            $this->commandData->commandComment('Repository Test file deleted: '.$this->fileName);
+        }
     }
 }
