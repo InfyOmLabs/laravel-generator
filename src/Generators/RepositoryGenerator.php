@@ -49,7 +49,7 @@ class RepositoryGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('Repository file found: '.$this->fileName);
+            $this->commandData->commandComment("Repository file deleted: ".$this->fileName);
         }
     }
 }

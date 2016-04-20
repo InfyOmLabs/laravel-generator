@@ -52,7 +52,7 @@ class MenuGenerator extends BaseGenerator
     public function rollback()
     {
         if (Str::contains($this->menuContents, $this->menuTemplate)) {
-            $this->commandData->commandComment('menu found');
+            $this->commandData->commandComment("menu deleted");
         }
     }
 }

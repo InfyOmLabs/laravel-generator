@@ -94,7 +94,7 @@ class ControllerGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('Controller file found: '.$this->fileName);
+            $this->commandData->commandComment("Controller file deleted: ".$this->fileName);
         }
     }
 }

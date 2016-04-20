@@ -305,7 +305,7 @@ class ViewGenerator extends BaseGenerator
 
         foreach ($files as $file) {
             if ($this->rollbackFile($this->path, $file)) {
-                $this->commandData->commandComment($file.' file found');
+                $this->commandData->commandComment($file." file deleted");
             }
         }
     }
