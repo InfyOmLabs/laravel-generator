@@ -45,7 +45,7 @@ class APIRoutesGenerator extends BaseGenerator
     public function rollback()
     {
         if (Str::contains($this->routeContents, $this->routesTemplate)) {
-            $this->commandData->commandComment("api routes deleted");
+            $this->commandData->commandComment('api routes deleted');
         }
     }
 }
