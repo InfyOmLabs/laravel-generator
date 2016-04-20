@@ -40,7 +40,7 @@ class APITestGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment("API Test file deleted: ".$this->fileName);
+            $this->commandData->commandComment('API Test file deleted: '.$this->fileName);
         }
     }
 }

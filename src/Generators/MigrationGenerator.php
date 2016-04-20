@@ -80,7 +80,7 @@ class MigrationGenerator extends BaseGenerator
         foreach ($files as $file) {
             if (Str::contains($file, $fileName)) {
                 if ($this->rollbackFile($this->path, $file)) {
-                    $this->commandData->commandComment("Migration file deleted: ".$file);
+                    $this->commandData->commandComment('Migration file deleted: '.$file);
                 }
                 break;
             }
