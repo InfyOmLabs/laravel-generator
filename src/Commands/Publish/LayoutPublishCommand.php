@@ -35,15 +35,15 @@ class LayoutPublishCommand extends PublishBaseCommand
      */
     public function handle()
     {
-        $this->copyView();
-        $this->updateRoutes();
-        $this->publishHomeController();
         $version = $this->getApplication()->getVersion();
         if (str_contains($version, '5.1')) {
             $this->laravelVersion = '5.1';
         } else {
             $this->laravelVersion = '5.2';
         }
+        $this->copyView();
+        $this->updateRoutes();
+        $this->publishHomeController();
     }
 
     private function getViews()
