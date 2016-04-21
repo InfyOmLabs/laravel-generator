@@ -1,5 +1,5 @@
 /**
-     * @return \\Illuminate\\Database\\Eloquent\\Relations\\belongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
      * @version $GENERATEDAT$
      **/
     public function $FUNCTIONNAME$() {
