@@ -47,9 +47,10 @@ class ModelGenerator extends BaseGenerator
       'created_at',
       'updated_at',
     ];
-    
+
     /**
      * ModelGenerator constructor.
+     *
      * @param \InfyOm\Generator\Common\CommandData $commandData
      */
     public function __construct(CommandData $commandData)
@@ -317,7 +318,7 @@ class ModelGenerator extends BaseGenerator
              */
             foreach ($foreign as $fk) {
                 $isOneToOne = $this->detectOneToOne($fk, $primary);
-                if ($isOneToOne){
+                if ($isOneToOne) {
                     $this->addOneToOneRules($table, $fk);
                 } else {
                     $this->addOneToManyRules($table, $fk);
@@ -325,7 +326,7 @@ class ModelGenerator extends BaseGenerator
             }
         }
     }
-    
+
     /**
      * @return mixed
      */
@@ -367,7 +368,7 @@ class ModelGenerator extends BaseGenerator
      */
     public function getForeignKeyConstraints($table)
     {
-        $fieldArr                = [];
+        $fieldArr = [];
         $foreignKeyConstraintArr = $this->schemaManager->listTableForeignKeys($table);
 
         foreach ($foreignKeyConstraintArr as $foreignKeyConstraint) {
@@ -384,6 +385,7 @@ class ModelGenerator extends BaseGenerator
                 ) : 'RESTRICT',
             ];
         }
+
         return $fieldArr;
     }
 
@@ -411,6 +413,7 @@ class ModelGenerator extends BaseGenerator
 
             $functionArr[] = $templateData;
         }
+
         return $functionArr;
     }
 
@@ -438,6 +441,7 @@ class ModelGenerator extends BaseGenerator
 
             $functionArr[] = $templateData;
         }
+
         return $functionArr;
     }
 
@@ -448,9 +452,9 @@ class ModelGenerator extends BaseGenerator
     private function generateBelongsToFunctions($rulesContainerArr = []) {
         $functionArr = [];
         foreach ($rulesContainerArr as $rulesContainerRule) {
-            $belongsToModel        = $this->generateModelNameFromTableName($rulesContainerRule[0]);
+            $belongsToModel = $this->generateModelNameFromTableName($rulesContainerRule[0]);
             $belongsToFunctionName = $this->getSingularFunctionName($belongsToModel);
-            $templateData          = TemplateUtil::getTemplate('models.belongsTo', 'laravel-generator');
+            $templateData = TemplateUtil::getTemplate('models.belongsTo', 'laravel-generator');
 
             $templateData = str_replace('$FUNCTIONNAME$', $belongsToFunctionName, $templateData);
             $templateData = str_replace(
@@ -463,6 +467,7 @@ class ModelGenerator extends BaseGenerator
 
             $functionArr[] = $templateData;
         }
+
         return $functionArr;
     }
 
@@ -474,9 +479,9 @@ class ModelGenerator extends BaseGenerator
     {
         $functionArr = [];
         foreach ($rulesContainerArr as $rulesContainerRule) {
-            $belongsToManyModel        = $this->generateModelNameFromTableName($rulesContainerRule[0]);
+            $belongsToManyModel = $this->generateModelNameFromTableName($rulesContainerRule[0]);
             $belongsToManyFunctionName = $this->getPluralFunctionName($belongsToManyModel);
-            $templateData              = TemplateUtil::getTemplate('models.belongsToMany', 'laravel-generator');
+            $templateData = TemplateUtil::getTemplate('models.belongsToMany', 'laravel-generator');
 
             $templateData = str_replace('$FUNCTIONNAME$', $belongsToManyFunctionName, $templateData);
             $templateData = str_replace(
@@ -490,6 +495,7 @@ class ModelGenerator extends BaseGenerator
 
             $functionArr[] = $templateData;
         }
+
         return $functionArr;
     }
 
@@ -526,12 +532,13 @@ class ModelGenerator extends BaseGenerator
 
     private function getTables()
     {
-        $this->tables = array_map(function (\Doctrine\DBAL\Schema\Table $x) {return $x->getName();},  $this->schemaManager->listTables());
+        $this->tables = array_map(function (\Doctrine\DBAL\Schema\Table $x) {return $x->getName(); },  $this->schemaManager->listTables());
     }
 
     /**
      * @param $table
      * @return bool
+     *
      * does this table have exactly two foreign keys that are also NOT primary,
      * and no tables in the database refer to this table?
      */
@@ -666,9 +673,10 @@ class ModelGenerator extends BaseGenerator
     /**
      * Returns array of fields matched as primary keys in table
      **/
-    function getPrimaryKeys($tableName)
+    private function getPrimaryKeys($tableName)
     {
         $primary_key_index = $this->schemaManager->listTableDetails($tableName)->getPrimaryKey();
+        
         return $primary_key_index ? $primary_key_index->getColumns() : [];
     }
     
@@ -680,6 +688,7 @@ class ModelGenerator extends BaseGenerator
     private function getSingularFunctionName($modelName)
     {
         $modelName = lcfirst($modelName);
+        
         return str_singular($modelName);
     }
 
@@ -701,6 +710,7 @@ class ModelGenerator extends BaseGenerator
     private function getPluralFunctionName($modelName)
     {
         $modelName = lcfirst($modelName);
+        
         return str_plural($modelName);
     }
 }
