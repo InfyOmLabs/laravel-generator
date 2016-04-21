@@ -2,11 +2,11 @@
 
 namespace InfyOm\Generator\Generators;
 
+use DB;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\TableFieldsGenerator;
 use InfyOm\Generator\Utils\TemplateUtil;
-use DB;
 
 class ModelGenerator extends BaseGenerator
 {
@@ -39,7 +39,7 @@ class ModelGenerator extends BaseGenerator
     private $connection;
 
     /**
-     * Fields not included in the generator by default
+     * Fields not included in the generator by default.
      *
      * @var array
      */
@@ -47,6 +47,7 @@ class ModelGenerator extends BaseGenerator
       'created_at',
       'updated_at',
     ];
+    
     /**
      * ModelGenerator constructor.
      * @param \InfyOm\Generator\Common\CommandData $commandData
@@ -108,9 +109,9 @@ class ModelGenerator extends BaseGenerator
         $templateData = str_replace('$CAST$', implode(','.infy_nl_tab(1, 2), $this->generateCasts()), $templateData);
 
         $templateData = str_replace(
-            '$ELOQUENTFUNCTIONS$', implode(PHP_EOL . infy_nl_tab(1, 1), $this->generateEloquent()), $templateData
+            '$ELOQUENTFUNCTIONS$', implode(PHP_EOL.infy_nl_tab(1, 1), $this->generateEloquent()), $templateData
         );
-        $templateData = str_replace('$GENERATEDAT$', date("F j, Y, g:i a T"), $templateData);
+        $templateData = str_replace('$GENERATEDAT$', date('F j, Y, g:i a T'), $templateData);
 
         return $templateData;
     }
@@ -144,7 +145,7 @@ class ModelGenerator extends BaseGenerator
         } else {
             $docsTemplate = TemplateUtil::getTemplate('docs.model', 'laravel-generator');
             $docsTemplate = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $docsTemplate);
-            $docsTemplate = str_replace('$GENERATEDAT$', date("F j, Y, g:i a T"), $docsTemplate);
+            $docsTemplate = str_replace('$GENERATEDAT$', date('F j, Y, g:i a T'), $docsTemplate);
 
             $templateData = str_replace('$DOCS$', $docsTemplate, $templateData);
         }
@@ -284,16 +285,16 @@ class ModelGenerator extends BaseGenerator
     private function getEloquentRules()
     {
         $this->eloquentRules = [];
-        /**
+        /*
          * first create empty ruleset for each table
          */
         foreach ($this->prep as $table => $properties) {
             $this->eloquentRules[$table] = [
-                'hasMany' => [],
-                'hasOne' => [],
-                'belongsTo' => [],
+                'hasMany'       => [],
+                'hasOne'        => [],
+                'belongsTo'     => [],
                 'belongsToMany' => [],
-                'fillable' => [],
+                'fillable'      => [],
             ];
         }
 
@@ -310,19 +311,15 @@ class ModelGenerator extends BaseGenerator
                 $this->addManyToManyRules($table);
             }
 
-            /**
+            /*
              * the below used to be in an ELSE clause but we should be as verbose as possible
              * when we detect a many-to-many table, we still want to set relations on it
              */
-            foreach ($foreign as $fk)
-            {
+            foreach ($foreign as $fk) {
                 $isOneToOne = $this->detectOneToOne($fk, $primary);
-                if ($isOneToOne)
-                {
+                if ($isOneToOne){
                     $this->addOneToOneRules($table, $fk);
-                }
-                else
-                {
+                } else {
                     $this->addOneToManyRules($table, $fk);
                 }
             }
@@ -345,14 +342,12 @@ class ModelGenerator extends BaseGenerator
     private function getColumnsPrimaryAndForeignKeysPerTable()
     {
         $this->prep = [];
-        foreach ($this->tables as $table)
-        {
+        foreach ($this->tables as $table) {
             $foreignKeys = $this->getForeignKeyConstraints($table);
             $primaryKeys = $this->getPrimaryKeys($table);
-            $__columns   = $this->schemaManager->listTableColumns($table);
-            $columns     = [];
-            foreach ($__columns as $col)
-            {
+            $__columns = $this->schemaManager->listTableColumns($table);
+            $columns = [];
+            foreach ($__columns as $col) {
                 $columns[] = $col->toArray()['name'];
             }
             $this->prep[$table] = [
@@ -364,9 +359,10 @@ class ModelGenerator extends BaseGenerator
     }
 
     /**
-     * Get array of foreign keys
+     * Get array of foreign keys.
      *
      * @param string $table Table Name
+     *
      * @return array
      */
     public function getForeignKeyConstraints($table)
@@ -374,8 +370,7 @@ class ModelGenerator extends BaseGenerator
         $fieldArr                = [];
         $foreignKeyConstraintArr = $this->schemaManager->listTableForeignKeys($table);
 
-        foreach ($foreignKeyConstraintArr as $foreignKeyConstraint)
-        {
+        foreach ($foreignKeyConstraintArr as $foreignKeyConstraint) {
             $fieldArr[] = [
                 'name'       => $foreignKeyConstraint->getName(),
                 'field'      => $foreignKeyConstraint->getLocalColumns()[0],
@@ -394,16 +389,16 @@ class ModelGenerator extends BaseGenerator
 
     /**
      * @param array $rulesContainerArr
+     *
      * @return array
      */
     private function generateHasOneFunctions($rulesContainerArr = [])
     {
         $functionArr = [];
-        foreach ($rulesContainerArr as $rulesContainerRule)
-        {
-            $hasOneModel        = $this->generateModelNameFromTableName($rulesContainerRule[0]);
+        foreach ($rulesContainerArr as $rulesContainerRule) {
+            $hasOneModel = $this->generateModelNameFromTableName($rulesContainerRule[0]);
             $hasOneFunctionName = $this->getSingularFunctionName($hasOneModel);
-            $templateData       = TemplateUtil::getTemplate('models.hasOne', 'laravel-generator');
+            $templateData = TemplateUtil::getTemplate('models.hasOne', 'laravel-generator');
 
             $templateData = str_replace('$FUNCTIONNAME$', $hasOneFunctionName, $templateData);
             $templateData = str_replace(
@@ -412,7 +407,7 @@ class ModelGenerator extends BaseGenerator
             $templateData = str_replace('$MODELNAME$', $hasOneModel, $templateData);
             $templateData = str_replace('$KEY1$', $rulesContainerRule[1], $templateData);
             $templateData = str_replace('$KEY2$', $rulesContainerRule[2], $templateData);
-            $templateData = str_replace('$GENERATEDAT$', date("F j, Y, g:i a T"), $templateData);
+            $templateData = str_replace('$GENERATEDAT$', date('F j, Y, g:i a T'), $templateData);
 
             $functionArr[] = $templateData;
         }
@@ -421,16 +416,16 @@ class ModelGenerator extends BaseGenerator
 
     /**
      * @param array $rulesContainerArr
+     *
      * @return array
      */
     private function generateHasManyFunctions($rulesContainerArr = [])
     {
         $functionArr = [];
-        foreach ($rulesContainerArr as $rulesContainerRule)
-        {
-            $hasManyModel        = $this->generateModelNameFromTableName($rulesContainerRule[0]);
+        foreach ($rulesContainerArr as $rulesContainerRule) {
+            $hasManyModel = $this->generateModelNameFromTableName($rulesContainerRule[0]);
             $hasManyFunctionName = $this->getPluralFunctionName($hasManyModel);
-            $templateData        = TemplateUtil::getTemplate('models.hasMany', 'laravel-generator');
+            $templateData = TemplateUtil::getTemplate('models.hasMany', 'laravel-generator');
 
             $templateData = str_replace('$FUNCTIONNAME$', $hasManyFunctionName, $templateData);
             $templateData = str_replace(
@@ -439,7 +434,7 @@ class ModelGenerator extends BaseGenerator
             $templateData = str_replace('$MODELNAME$', $hasManyModel, $templateData);
             $templateData = str_replace('$KEY1$', $rulesContainerRule[1], $templateData);
             $templateData = str_replace('$KEY2$', $rulesContainerRule[2], $templateData);
-            $templateData = str_replace('$GENERATEDAT$', date("F j, Y, g:i a T"), $templateData);
+            $templateData = str_replace('$GENERATEDAT$', date('F j, Y, g:i a T'), $templateData);
 
             $functionArr[] = $templateData;
         }
@@ -450,11 +445,9 @@ class ModelGenerator extends BaseGenerator
      * @param array $rulesContainerArr
      * @return array
      */
-    private function generateBelongsToFunctions($rulesContainerArr = [])
-    {
+    private function generateBelongsToFunctions($rulesContainerArr = []) {
         $functionArr = [];
-        foreach ($rulesContainerArr as $rulesContainerRule)
-        {
+        foreach ($rulesContainerArr as $rulesContainerRule) {
             $belongsToModel        = $this->generateModelNameFromTableName($rulesContainerRule[0]);
             $belongsToFunctionName = $this->getSingularFunctionName($belongsToModel);
             $templateData          = TemplateUtil::getTemplate('models.belongsTo', 'laravel-generator');
@@ -466,7 +459,7 @@ class ModelGenerator extends BaseGenerator
             $templateData = str_replace('$MODELNAME$', $belongsToModel, $templateData);
             $templateData = str_replace('$KEY1$', $rulesContainerRule[1], $templateData);
             $templateData = str_replace('$KEY2$', $rulesContainerRule[2], $templateData);
-            $templateData = str_replace('$GENERATEDAT$', date("F j, Y, g:i a T"), $templateData);
+            $templateData = str_replace('$GENERATEDAT$', date('F j, Y, g:i a T'), $templateData);
 
             $functionArr[] = $templateData;
         }
@@ -480,8 +473,7 @@ class ModelGenerator extends BaseGenerator
     private function generateBelongsToManyFunctions($rulesContainerArr = [])
     {
         $functionArr = [];
-        foreach ($rulesContainerArr as $rulesContainerRule)
-        {
+        foreach ($rulesContainerArr as $rulesContainerRule) {
             $belongsToManyModel        = $this->generateModelNameFromTableName($rulesContainerRule[0]);
             $belongsToManyFunctionName = $this->getPluralFunctionName($belongsToManyModel);
             $templateData              = TemplateUtil::getTemplate('models.belongsToMany', 'laravel-generator');
@@ -494,7 +486,7 @@ class ModelGenerator extends BaseGenerator
             $templateData = str_replace('$THROUGH$', $rulesContainerRule[1], $templateData);
             $templateData = str_replace('$KEY1$', $rulesContainerRule[2], $templateData);
             $templateData = str_replace('$KEY2$', $rulesContainerRule[3], $templateData);
-            $templateData = str_replace('$GENERATEDAT$', date("F j, Y, g:i a T"), $templateData);
+            $templateData = str_replace('$GENERATEDAT$', date('F j, Y, g:i a T'), $templateData);
 
             $functionArr[] = $templateData;
         }
@@ -522,19 +514,19 @@ class ModelGenerator extends BaseGenerator
 
 	private function getSchemaManager()
     {
-        /**
+        /*
          * @todo allow from other that default DB conf
          */
         $this->connection = DB::connection()->getDoctrineConnection();
-		$this->connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
-		$this->connection->getDatabasePlatform()->registerDoctrineTypeMapping('bit', 'boolean');
-		$this->database = $this->connection->getDatabase();
-		$this->schemaManager = $this->connection->getSchemaManager();
+        $this->connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
+        $this->connection->getDatabasePlatform()->registerDoctrineTypeMapping('bit', 'boolean');
+        $this->database = $this->connection->getDatabase();
+        $this->schemaManager = $this->connection->getSchemaManager();
     }
 
     private function getTables()
     {
-        $this->tables = array_map(function(\Doctrine\DBAL\Schema\Table $x){return $x->getName();},  $this->schemaManager->listTables());
+        $this->tables = array_map(function (\Doctrine\DBAL\Schema\Table $x) {return $x->getName();},  $this->schemaManager->listTables());
     }
 
     /**
@@ -549,7 +541,7 @@ class ModelGenerator extends BaseGenerator
         $foreignKeys = $properties['foreign'];
         $primaryKeys = $properties['primary'];
 
-        /**
+        /*
          * ensure we only have two foreign keys
          */
         if (count($foreignKeys) === 2) {
@@ -565,7 +557,7 @@ class ModelGenerator extends BaseGenerator
             }
 
             if ($primaryKeyCountThatAreAlsoForeignKeys === 1) {
-                /**
+                /*
                  * one of the keys foreign keys was also a primary key this
                  * is not a many to many. (many to many is only possible when
                  * both or none of the foreign keys are also primary)
@@ -573,7 +565,9 @@ class ModelGenerator extends BaseGenerator
                 return false;
             }
 
-            //ensure no other tables refer to this one
+            /*
+             * ensure no other tables refer to this one
+             */
             foreach ($this->prep as $compareTable => $properties) {
                 if ($table !== $compareTable) {
                     foreach ($properties['foreign'] as $prop) {
@@ -583,10 +577,11 @@ class ModelGenerator extends BaseGenerator
                     }
                 }
             }
-            //this is a many to many table!
+            /*
+             * this is a many to many table!
+             */
             return true;
         }
-
         return false;
     }
 
@@ -679,6 +674,7 @@ class ModelGenerator extends BaseGenerator
     
     /**
      * @param string $modelName
+     * 
      * @return string
      */
     private function getSingularFunctionName($modelName)
@@ -689,6 +685,7 @@ class ModelGenerator extends BaseGenerator
 
     /**
      * @param string $table
+     * 
      * @return string
      */
     private function generateModelNameFromTableName($table)
@@ -698,6 +695,7 @@ class ModelGenerator extends BaseGenerator
 
     /**
      * @param string $modelName
+     * 
      * @return string
      */
     private function getPluralFunctionName($modelName)
@@ -705,5 +703,4 @@ class ModelGenerator extends BaseGenerator
         $modelName = lcfirst($modelName);
         return str_plural($modelName);
     }
-
 }
