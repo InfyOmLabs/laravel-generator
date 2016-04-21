@@ -600,7 +600,7 @@ class ModelGenerator extends BaseGenerator
     /**
      * @param $fk
      * @param $primary
-     * 
+     *
      * @return bool
      *
      * if FK is also a primary key, and there is only one primary key, we know
