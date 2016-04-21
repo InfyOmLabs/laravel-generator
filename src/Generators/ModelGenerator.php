@@ -475,6 +475,7 @@ class ModelGenerator extends BaseGenerator
 
     /**
      * @param array $rulesContainerArr
+     * 
      * @return array
      */
     private function generateBelongsToManyFunctions($rulesContainerArr = [])
@@ -680,13 +681,13 @@ class ModelGenerator extends BaseGenerator
     private function getPrimaryKeys($tableName)
     {
         $primary_key_index = $this->schemaManager->listTableDetails($tableName)->getPrimaryKey();
-        
+
         return $primary_key_index ? $primary_key_index->getColumns() : [];
     }
-    
+
     /**
      * @param string $modelName
-     * 
+     *
      * @return string
      */
     private function getSingularFunctionName($modelName)
@@ -698,7 +699,7 @@ class ModelGenerator extends BaseGenerator
 
     /**
      * @param string $table
-     * 
+     *
      * @return string
      */
     private function generateModelNameFromTableName($table)
@@ -708,7 +709,7 @@ class ModelGenerator extends BaseGenerator
 
     /**
      * @param string $modelName
-     * 
+     *
      * @return string
      */
     private function getPluralFunctionName($modelName)
