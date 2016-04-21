@@ -339,7 +339,7 @@ class ModelGenerator extends BaseGenerator
             $this->generateHasOneFunctions($this->eloquentRules[$this->table]['hasOne'])
         );
     }
-    
+
     private function getColumnsPrimaryAndForeignKeysPerTable()
     {
         $this->prep = [];
@@ -447,9 +447,11 @@ class ModelGenerator extends BaseGenerator
 
     /**
      * @param array $rulesContainerArr
+     *
      * @return array
      */
-    private function generateBelongsToFunctions($rulesContainerArr = []) {
+    private function generateBelongsToFunctions($rulesContainerArr = [])
+    {
         $functionArr = [];
         foreach ($rulesContainerArr as $rulesContainerRule) {
             $belongsToModel = $this->generateModelNameFromTableName($rulesContainerRule[0]);
@@ -518,7 +520,7 @@ class ModelGenerator extends BaseGenerator
         $this->eloquentRules[$table]['fillable'] = $fillable;
     }
 
-	private function getSchemaManager()
+    private function getSchemaManager()
     {
         /*
          * @todo allow from other that default DB conf
@@ -532,11 +534,12 @@ class ModelGenerator extends BaseGenerator
 
     private function getTables()
     {
-        $this->tables = array_map(function (\Doctrine\DBAL\Schema\Table $x) {return $x->getName(); },  $this->schemaManager->listTables());
+        $this->tables = array_map(function (\Doctrine\DBAL\Schema\Table $x) {return $x->getName(); }, $this->schemaManager->listTables());
     }
 
     /**
      * @param $table
+     *
      * @return bool
      *
      * does this table have exactly two foreign keys that are also NOT primary,
@@ -589,6 +592,7 @@ class ModelGenerator extends BaseGenerator
              */
             return true;
         }
+
         return false;
     }
 
@@ -628,10 +632,10 @@ class ModelGenerator extends BaseGenerator
         $fk2Table = $fk2['on'];
         $fk2Field = $fk2['field'];
 
-        if(in_array($fk1Table, $this->tables)) {
+        if (in_array($fk1Table, $this->tables)) {
             $this->eloquentRules[$fk1Table]['belongsToMany'][] = [$fk2Table, $table, $fk1Field, $fk2Field];
         }
-        if(in_array($fk2Table, $this->tables)) {
+        if (in_array($fk2Table, $this->tables)) {
             $this->eloquentRules[$fk2Table]['belongsToMany'][] = [$fk1Table, $table, $fk2Field, $fk1Field];
         }
     }
@@ -645,10 +649,10 @@ class ModelGenerator extends BaseGenerator
         $fkTable = $fk['on'];
         $field = $fk['field'];
         $references = $fk['references'];
-        if(in_array($fkTable, $this->tables)) {
+        if (in_array($fkTable, $this->tables)) {
             $this->eloquentRules[$fkTable]['hasMany'][] = [$table, $field, $references];
         }
-        if(in_array($table, $this->tables)) {
+        if (in_array($table, $this->tables)) {
             $this->eloquentRules[$table]['belongsTo'][] = [$fkTable, $field, $references];
         }
     }
@@ -662,16 +666,16 @@ class ModelGenerator extends BaseGenerator
         $fkTable = $fk['on'];
         $field = $fk['field'];
         $references = $fk['references'];
-        if(in_array($fkTable, $this->tables)) {
+        if (in_array($fkTable, $this->tables)) {
             $this->eloquentRules[$fkTable]['hasOne'][] = [$table, $field, $references];
         }
-        if(in_array($table, $this->tables)) {
+        if (in_array($table, $this->tables)) {
             $this->eloquentRules[$table]['belongsTo'][] = [$fkTable, $field, $references];
         }
     }
-    
+
     /**
-     * Returns array of fields matched as primary keys in table
+     * Returns array of fields matched as primary keys in table.
      **/
     private function getPrimaryKeys($tableName)
     {
@@ -688,7 +692,7 @@ class ModelGenerator extends BaseGenerator
     private function getSingularFunctionName($modelName)
     {
         $modelName = lcfirst($modelName);
-        
+
         return str_singular($modelName);
     }
 
@@ -710,7 +714,7 @@ class ModelGenerator extends BaseGenerator
     private function getPluralFunctionName($modelName)
     {
         $modelName = lcfirst($modelName);
-        
+
         return str_plural($modelName);
     }
 }
