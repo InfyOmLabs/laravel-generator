@@ -9,7 +9,7 @@
 - Introducing Support for [Publishing a full Admin Panel layout](http://labs.infyom.com/laravelgenerator/docs/advanced/publish-layout)
 - Added [Rollback command](http://labs.infyom.com/laravelgenerator/docs/advanced/commands) to delete generated files ([#44](https://github.com/InfyOmLabs/laravel-generator/issues/44))
  
-#### Enhancement
+#### Enhancements
 - Swagger Document Fix via AppBaseController Publish ([#101](https://github.com/InfyOmLabs/laravel-generator/issues/101))
 
 #### Fixes
