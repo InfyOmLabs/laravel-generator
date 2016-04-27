@@ -40,7 +40,7 @@ class RoutesGenerator
     public function rollback()
     {
         if (Str::contains($this->routeContents, $this->routesTemplate)) {
-            $this->routeContents = str_replace($this->routesTemplate, "", $this->routeContents);
+            $this->routeContents = str_replace($this->routesTemplate, '', $this->routeContents);
             file_put_contents($this->path, $this->routeContents);
             $this->commandData->commandComment('scaffold routes deleted');
         }

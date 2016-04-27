@@ -56,7 +56,7 @@ class RollbackGeneratorCommand extends Command
 
         $this->composer = app()['composer'];
     }
-    
+
     /**
      * Execute the command.
      *
