@@ -85,16 +85,26 @@ class BaseCommand extends Command
 
         $fileName = $this->commandData->modelName.'.json';
 
-        if (file_exists($path.$fileName)) {
-            if (!$this->confirm('model file '.$fileName.' already exist. Do you want to overwrite it? [y|N]',
-                false)
-            ) {
-                return;
-            }
+        if (file_exists($path.$fileName) && !$this->confirmOverwrite($fileName)) {
+            return;
         }
         FileUtil::createFile($path, $fileName, json_encode($fileFields, JSON_PRETTY_PRINT));
         $this->commandData->commandComment("\nSchema File saved: ");
         $this->commandData->commandInfo($fileName);
+    }
+
+    /**
+     * @param $fileName
+     * @param string $prompt
+     * @return bool
+     */
+    protected function confirmOverwrite($fileName, $prompt = '')
+    {
+        $prompt = (empty($prompt))
+            ? $fileName.' already exists. Do you want to overwrite it? [y|N]'
+            : $prompt;
+
+        return $this->confirm($prompt, false);
     }
 
     /**

@@ -117,6 +117,12 @@ class LayoutPublishCommand extends PublishBaseCommand
     private function updateRoutes()
     {
         $path = config('infyom.laravel_generator.path.routes', app_path('Http/routes.php'));
+
+        $prompt = 'Existing routes.php file detected. Should we add standard routes? (y|N) :';
+        if (file_exists($path) && !$this->confirmOverwrite($path, $prompt)) {
+            return;
+        }
+
         $routeContents = file_get_contents($path);
 
         $routesTemplate = TemplateUtil::getTemplate('routes.auth', 'laravel-generator');
@@ -142,12 +148,8 @@ class LayoutPublishCommand extends PublishBaseCommand
 
         $fileName = 'HomeController.php';
 
-        if (file_exists($controllerPath.$fileName)) {
-            $answer = $this->ask('Do you want to overwrite '.$fileName.'? (y|N) :', false);
-
-            if (strtolower($answer) != 'y' and strtolower($answer) != 'yes') {
-                return;
-            }
+        if (file_exists($controllerPath.$fileName) && !$this->confirmOverwrite($fileName)) {
+            return;
         }
 
         FileUtil::createFile($controllerPath, $fileName, $templateData);
