@@ -43,11 +43,18 @@ class RollbackGeneratorCommand extends Command
     protected $description = 'Rollback a full CRUD API and Scaffold for given model';
 
     /**
+     * @var Composer
+     */
+    public $composer;
+
+    /**
      * Create a new command instance.
      */
     public function __construct()
     {
         parent::__construct();
+
+        $this->composer = app()['composer'];
     }
 
     /**
@@ -123,7 +130,8 @@ class RollbackGeneratorCommand extends Command
             $menuGenerator->rollback();
         }
 
-//        $this->performPostActionsWithMigration();
+        $this->info('Generating autoload files');
+        $this->composer->dumpOptimized();
     }
 
     /**
