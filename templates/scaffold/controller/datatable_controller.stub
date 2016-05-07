@@ -29,7 +29,7 @@ class $MODEL_NAME$Controller extends AppBaseController
      */
     public function index($MODEL_NAME$DataTable $$MODEL_NAME_CAMEL$DataTable)
     {
-        return $$MODEL_NAME_CAMEL$DataTable->render('$MODEL_NAME_PLURAL_CAMEL$.index');
+        return $$MODEL_NAME_CAMEL$DataTable->render('$ROUTES_AS_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index');
     }
 
     /**
