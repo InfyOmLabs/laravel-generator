@@ -3,9 +3,9 @@
 namespace InfyOm\Generator\Commands\Publish;
 
 use File;
-use Illuminate\Console\Command;
+use InfyOm\Generator\Commands\BaseCommand;
 
-class PublishBaseCommand extends Command
+class PublishBaseCommand extends BaseCommand
 {
     public function handle()
     {
@@ -13,12 +13,8 @@ class PublishBaseCommand extends Command
 
     public function publishFile($sourceFile, $destinationFile, $fileName)
     {
-        if (file_exists($destinationFile)) {
-            $answer = $this->ask('Do you want to overwrite '.$fileName.'? (y|N) :', false);
-
-            if (strtolower($answer) != 'y' and strtolower($answer) != 'yes') {
-                return;
-            }
+        if (file_exists($destinationFile) && !$this->confirmOverwrite($destinationFile)) {
+            return;
         }
 
         copy($sourceFile, $destinationFile);
@@ -27,20 +23,20 @@ class PublishBaseCommand extends Command
         $this->info($destinationFile);
     }
 
+    /**
+     * @param $sourceDir
+     * @param $destinationDir
+     * @param $dirName
+     * @param bool $force
+     * @return bool|void
+     */
     public function publishDirectory($sourceDir, $destinationDir, $dirName, $force = false)
     {
-        if (file_exists($destinationDir)) {
-            if (!$force) {
-                $answer = $this->ask('Do you want to overwrite '.$dirName.'? (y|N) :', false);
-
-                if (strtolower($answer) != 'y' and strtolower($answer) != 'yes') {
-                    return false;
-                }
-            }
-        } else {
-            File::makeDirectory($destinationDir, 493, true);
+        if (file_exists($destinationDir) && !$force && !$this->confirmOverwrite($destinationDir)) {
+            return;
         }
 
+        File::makeDirectory($destinationDir, 493, true, true);
         File::copyDirectory($sourceDir, $destinationDir);
 
         $this->comment($dirName.' published');
