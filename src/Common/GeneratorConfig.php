@@ -19,6 +19,7 @@ class GeneratorConfig
     public $nsRequest;
     public $nsRequestBase;
     public $nsController;
+    public $nsBaseController;
 
     /* Path variables */
     public $pathRepository;
@@ -94,6 +95,7 @@ class GeneratorConfig
 
         $this->nsRequest = config('infyom.laravel_generator.namespace.request', 'App\Http\Requests').$prefix;
         $this->nsRequestBase = config('infyom.laravel_generator.namespace.request', 'App\Http\Requests');
+        $this->nsBaseController = config('infyom.laravel_generator.namespace.controller', 'App\Http\Controllers');
         $this->nsController = config('infyom.laravel_generator.namespace.controller', 'App\Http\Controllers').$prefix;
     }
 
@@ -159,6 +161,7 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$NAMESPACE_API_CONTROLLER$', $this->nsApiController);
         $commandData->addDynamicVariable('$NAMESPACE_API_REQUEST$', $this->nsApiRequest);
 
+        $commandData->addDynamicVariable('$NAMESPACE_BASE_CONTROLLER$', $this->nsBaseController);
         $commandData->addDynamicVariable('$NAMESPACE_CONTROLLER$', $this->nsController);
         $commandData->addDynamicVariable('$NAMESPACE_REQUEST$', $this->nsRequest);
         $commandData->addDynamicVariable('$NAMESPACE_REQUEST_BASE$', $this->nsRequestBase);
