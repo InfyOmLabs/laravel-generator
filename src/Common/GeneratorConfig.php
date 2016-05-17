@@ -51,7 +51,7 @@ class GeneratorConfig
     public $options;
 
     /* Command Options */
-    public static $availableOptions = ['fieldsFile', 'jsonFromGUI', 'tableName', 'fromTable', 'save', 'primary', 'prefix', 'paginate', 'skipDumpOptimized'];
+    public static $availableOptions = ['fieldsFile', 'jsonFromGUI', 'tableName', 'fromTable', 'save', 'primary', 'prefix', 'paginate', 'skip'];
 
     public $tableName;
 
@@ -245,6 +245,9 @@ class GeneratorConfig
 
         $this->options['softDelete'] = config('infyom.laravel_generator.options.softDelete', false);
         $this->options['view_prefix'] = config('infyom.laravel_generator.options.view_prefix', '');
+        if (!empty($this->options['skip'])) {
+            $this->options['skip'] = array_map('trim', explode(",", $this->options['skip']));
+        }
     }
 
     public function overrideOptionsFromJsonFile($jsonData)
