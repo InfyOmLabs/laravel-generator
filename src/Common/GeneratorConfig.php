@@ -180,16 +180,16 @@ class GeneratorConfig
         if ($this->getOption('prefix')) {
             $prefixRoutes = $this->getOption('prefix').'/';
             $prefixTitle = Str::title($this->getOption('prefix')).'\\';
-            $prefixAs = $this->getOption('prefix').'.';
+            $viewPrefix = $this->getOption('prefix').'.';
         } else {
             $prefixRoutes = '';
             $prefixTitle = '';
-            $prefixAs = '';
+            $viewPrefix = '';
         }
 
         $commandData->addDynamicVariable('$ROUTES_PREFIX$', $prefixRoutes);
         $commandData->addDynamicVariable('$NS_PREFIX$', $prefixTitle);
-        $commandData->addDynamicVariable('$ROUTES_AS_PREFIX$', $prefixAs);
+        $commandData->addDynamicVariable('$VIEW_PREFIX$', $viewPrefix);
 
         $commandData->addDynamicVariable(
             '$API_PREFIX$',
