@@ -187,6 +187,10 @@ class GeneratorConfig
             $viewPrefix = '';
         }
 
+        if (!empty($this->getOption('view_prefix'))) {
+            $viewPrefix = $this->getOption('view_prefix').".".$viewPrefix;
+        }
+
         $commandData->addDynamicVariable('$ROUTES_PREFIX$', $prefixRoutes);
         $commandData->addDynamicVariable('$NS_PREFIX$', $prefixTitle);
         $commandData->addDynamicVariable('$VIEW_PREFIX$', $viewPrefix);
@@ -240,6 +244,7 @@ class GeneratorConfig
         }
 
         $this->options['softDelete'] = config('infyom.laravel_generator.options.softDelete', false);
+        $this->options['view_prefix'] = config('infyom.laravel_generator.options.view_prefix', '');
     }
 
     public function overrideOptionsFromJsonFile($jsonData)

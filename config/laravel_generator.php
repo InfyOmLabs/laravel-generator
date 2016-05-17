@@ -109,6 +109,8 @@ return [
         'softDelete' => true,
 
         'tables_searchable_default' => false,
+
+        'view_prefix' => ''
     ],
 
     /*
