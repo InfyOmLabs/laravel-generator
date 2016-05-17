@@ -110,6 +110,9 @@ return [
 
         'tables_searchable_default' => false,
 
+        // Set the view prefix if you have sub folders in views folder.
+        // If you have resources/views/backend/admin set in your path => views above
+        // then value should be 'view_prefix' => 'backend.admin'
         'view_prefix' => ''
     ],
 
