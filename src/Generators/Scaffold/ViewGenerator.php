@@ -209,14 +209,48 @@ class ViewGenerator extends BaseGenerator
 //                    $fieldTemplate = str_replace('$CHECKBOXES$', implode("\n", $radioButtons), $fieldTemplate);
 //                    break;
 
+                case 'bool-checkbox':
+                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.bool-checkbox', $this->templateType);
+                    $checkboxValue = $value = $field['htmlTypeInputs'];
+                    if ($field['fieldType'] === 'boolean') {
+                        if ($checkboxValue === 'checked') {
+                            $checkboxValue = '1, true';
+                        } elseif ($checkboxValue === 'unchecked') {
+                            $checkboxValue = '0';
+                        }
+                    }
+                    $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
+                    $fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
+                    break;
+
+                case 'toggle-switch':
+                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.toggle-switch', $this->templateType);
+                    $checkboxValue = $value = $field['htmlTypeInputs'];
+                    if ($field['fieldType'] === 'boolean') {
+                        $checkboxValue = "[ 'On' => '1' , 'Off' => '0']";
+                    }
+                    $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
+                    //$fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
+                    break;
+
                 case 'checkbox':
                     $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.checkbox', $this->templateType);
                     $checkboxValue = $value = $field['htmlTypeInputs'];
                     if ($field['fieldType'] != 'boolean') {
-                        $checkboxValue = "'".$value."'";
+                        $checkboxValue = "'" . $value . "'";
                     }
                     $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
                     $fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
+                    break;
+
+                case 'boolean':
+                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.boolean', $this->templateType);
+                    $checkboxValue = $value = $field['htmlTypeInputs'];
+                    if ($field['fieldType'] == 'boolean') {
+                        $checkboxValue = true;
+                    }
+                    $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
+                    // $fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
                     break;
 
                 default:
