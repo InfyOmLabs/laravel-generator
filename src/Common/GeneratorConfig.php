@@ -194,6 +194,11 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$ROUTES_PREFIX$', $prefixRoutes);
         $commandData->addDynamicVariable('$NS_PREFIX$', $prefixTitle);
         $commandData->addDynamicVariable('$VIEW_PREFIX$', $viewPrefix);
+        $commandData->addDynamicVariable('$ROUTES_AS_PREFIX$', $viewPrefix);
+        
+            $commandData->addDynamicVariable('$ROUTE_SLASH_PREFIX$', $prefixRoutes);
+            $commandData->addDynamicVariable('$ROUTES_DOT_PREFIX$', $viewPrefix);
+            $commandData->addDynamicVariable('$VIEWS_DOT_PREFIX$', $viewPrefix);
 
         $commandData->addDynamicVariable(
             '$API_PREFIX$',
