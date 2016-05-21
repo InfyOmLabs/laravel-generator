@@ -27,7 +27,7 @@ class APIScaffoldGeneratorCommand extends BaseCommand
     {
         parent::__construct();
 
-        $this->commandData = new CommandData($this, CommandData::$COMMAND_TYPE_SCAFFOLD_API);
+        $this->commandData = new CommandData($this, CommandData::$COMMAND_TYPE_API_SCAFFOLD);
     }
 
     /**

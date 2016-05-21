@@ -153,7 +153,11 @@ class BaseCommand extends Command
 
     public function isSkip($skip)
     {
-        return in_array($skip, $this->commandData->getOption('skip'));
+        if($this->commandData->getOption('skip')) {
+            return in_array($skip, (array)$this->commandData->getOption('skip'));
+        }
+
+        return false;
     }
 
     public function performPostActionsWithMigration()
