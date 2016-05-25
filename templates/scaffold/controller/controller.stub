@@ -78,7 +78,7 @@ class $MODEL_NAME$Controller extends AppBaseController
         if (empty($$MODEL_NAME_CAMEL$)) {
             Flash::error('$MODEL_NAME$ not found');
 
-            return redirect(route('$MODEL_NAME_PLURAL_CAMEL$.index'));
+            return redirect(route('$ROUTES_AS_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
         }
 
         return view('$ROUTES_AS_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.show')->with('$MODEL_NAME_CAMEL$', $$MODEL_NAME_CAMEL$);
