@@ -14,4 +14,58 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
             return;
         }
     }
+
+
+    public function create(array $attributes) {
+        // Have to skip presenter to get a model not some data 
+        $temporarySkipPresenter = $this->skipPresenter;
+        $this->skipPresenter(true);
+        $model = parent::create($attributes);
+        $this->skipPresenter($temporarySkipPresenter);
+
+        $model = $this->updateRelations($model, $attributes);
+        
+        $model->save();
+
+        return $this->parserResult($model);
+    }
+
+    public function update(array $attributes, $id) {
+        // Have to skip presenter to get a model not some data 
+        $temporarySkipPresenter = $this->skipPresenter;
+        $this->skipPresenter(true);
+        $model = parent::update($attributes, $id);
+        $this->skipPresenter($temporarySkipPresenter);
+
+        $model = $this->updateRelations($model, $attributes);
+
+        $model->save();
+
+        return $this->parserResult($model);
+    }
+
+    public function updateRelations($model, $attributes) {
+        foreach ($attributes as $key => $val) {
+            if (isset($model) &&
+                method_exists($model, $key) &&
+                is_a(@$model->$key(), 'Illuminate\Database\Eloquent\Relations\Relation')
+            ) {
+                $methodClass = get_class($model->$key($key));
+                switch ($methodClass) {
+                    case 'Illuminate\Database\Eloquent\Relations\BelongsToMany':
+                        $new_values = array_get($attributes, $key, []);
+                        unset($new_values[0]);
+                        $model->$key()->sync(array_values($new_values));
+                        break;
+                    case 'Illuminate\Database\Eloquent\Relations\HasOne':
+                        break;
+                    case 'Illuminate\Database\Eloquent\Relations\HasOneOrMany':
+                        break;
+                    case 'Illuminate\Database\Eloquent\Relations\HasMany':
+                        break;
+                }
+            }
+        }
+        return $model;
+    }
 }
