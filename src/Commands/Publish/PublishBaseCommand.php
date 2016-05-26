@@ -27,7 +27,8 @@ class PublishBaseCommand extends BaseCommand
      * @param $sourceDir
      * @param $destinationDir
      * @param $dirName
-     * @param bool $force 
+     * @param bool $force
+     *
      * @return bool|void
      */
     public function publishDirectory($sourceDir, $destinationDir, $dirName, $force = false)
