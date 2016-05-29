@@ -259,7 +259,8 @@ class ViewGenerator extends BaseGenerator
             }
 
             if (!empty($fieldTemplate)) {
-                $fieldTemplate = TemplateUtil::fillFieldTemplate(
+                $fieldTemplate = TemplateUtil::fillTemplateWithFieldData(
+                    $this->commandData->dynamicVars,
                     $this->commandData->fieldNamesMapping,
                     $fieldTemplate,
                     $field
