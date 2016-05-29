@@ -76,7 +76,11 @@ class GeneratorConfig
 
     public function loadNamespaces(CommandData &$commandData)
     {
-        $prefix = '\\'.$this->prefixes['ns'];
+        if ($this->getOption('prefix')) {
+            $prefix = '\\' . $this->prefixes['ns'];
+        } else {
+            $prefix = '';
+        }
 
         $this->nsApp = $commandData->commandObj->getLaravel()->getNamespace();
         $this->nsRepository = config('infyom.laravel_generator.namespace.repository', 'App\Repositories').$prefix;
