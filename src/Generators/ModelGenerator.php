@@ -535,7 +535,9 @@ class ModelGenerator extends BaseGenerator
 
     private function getTables()
     {
-        $this->tables = array_map(function (\Doctrine\DBAL\Schema\Table $x) {return $x->getName(); }, $this->schemaManager->listTables());
+        $this->tables = array_map(function (\Doctrine\DBAL\Schema\Table $x) {
+            return $x->getName();
+        }, $this->schemaManager->listTables());
     }
 
     /**
