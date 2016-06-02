@@ -152,7 +152,6 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$NAMESPACE_APP$', $this->nsApp);
         $commandData->addDynamicVariable('$NAMESPACE_REPOSITORY$', $this->nsRepository);
         $commandData->addDynamicVariable('$NAMESPACE_MODEL$', $this->nsModel);
-        $commandData->addDynamicVariable('$NAMESPACE_MODEL$', $this->nsModel);
         $commandData->addDynamicVariable('$NAMESPACE_DATATABLES$', $this->nsDataTables);
         $commandData->addDynamicVariable('$NAMESPACE_MODEL_EXTEND$', $this->nsModelExtend);
 
