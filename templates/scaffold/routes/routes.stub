@@ -1,1 +1,7 @@
-Route::resource('$ROUTE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$', '$PATH_PREFIX$$MODEL_NAME$Controller');
+//Route::resource('$ROUTE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$', '$PATH_PREFIX$$MODEL_NAME$Controller');
+
+    Route::get('$ROUTE_PREFIX$/$MODEL_NAME_PLURAL_CAMEL$',['as'=> '$ROUTE_PREFIX$.$MODEL_NAME_PLURAL_CAMEL$', 'uses' => '$MODEL_NAME$Controller@index']);
+    Route::get('$ROUTE_PREFIX$/$MODEL_NAME_PLURAL_CAMEL$/create',['as'=> '$ROUTE_PREFIX$.$MODEL_NAME_PLURAL_CAMEL$.create', 'uses' => '$MODEL_NAME$Controller@create']);
+    Route::post('$ROUTE_PREFIX$/$MODEL_NAME_PLURAL_CAMEL$/store',['as'=> '$ROUTE_PREFIX$.$MODEL_NAME_PLURAL_CAMEL$.store', 'uses' => '$MODEL_NAME$Controller@store']);
+    Route::get('$ROUTE_PREFIX$/$MODEL_NAME_PLURAL_CAMEL$/edit',['as'=> '$ROUTE_PREFIX$.$MODEL_NAME_PLURAL_CAMEL$.edit', 'uses' => '$MODEL_NAME$Controller@edit']);
+    Route::put('$ROUTE_PREFIX$/$MODEL_NAME_PLURAL_CAMEL$/update',['as'=> '$ROUTE_PREFIX$.$MODEL_NAME_PLURAL_CAMEL$.update', 'uses' => '$MODEL_NAME$Controller@update']);
