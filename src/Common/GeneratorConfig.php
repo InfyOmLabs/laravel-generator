@@ -144,7 +144,7 @@ class GeneratorConfig
         $this->pathViews = config(
             'infyom.laravel_generator.path.views',
             base_path('resources/views/')
-        ).str_replace('.', '/', $this->prefixes['view']).$this->mCamelPlural.'/';
+        ).str_replace('.', '/', $this->prefixes['view']).'/'.$this->mCamelPlural.'/';
     }
 
     public function loadDynamicVariables(CommandData &$commandData)
