@@ -120,11 +120,11 @@ return [
 
     'prefixes' => [
 
-        'route' => '',
+        'route' => '',  // using admin will create route('admin.?.index') type routes
 
         'path' => '',
 
-        'view' => '',
+        'view' => '',  // using backend will create return view('backend.?.index') type the backend views directory
 
         'public' => '',
     ],
