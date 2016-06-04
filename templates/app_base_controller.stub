@@ -1,6 +1,6 @@
 <?php
 
-namespace $NAMESPACE_CONTROLLER$;
+namespace $NAMESPACE_BASE_CONTROLLER$;
 
 use InfyOm\Generator\Utils\ResponseUtil;
 use Response;
