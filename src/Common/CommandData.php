@@ -12,6 +12,7 @@ class CommandData
     public static $COMMAND_TYPE_API = 'api';
     public static $COMMAND_TYPE_SCAFFOLD = 'scaffold';
     public static $COMMAND_TYPE_API_SCAFFOLD = 'api_scaffold';
+    public static $COMMAND_TYPE_VUEJS = 'vuejs';
 
     /** @var string */
     public $modelName, $commandType;
