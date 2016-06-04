@@ -80,30 +80,30 @@ class VueJsLayoutPublishCommand extends PublishBaseCommand
     private function getLaravel51Views()
     {
         return [
-            'layouts/app.stub'     => 'layouts/app.blade.php',
-            'layouts/sidebar.stub' => 'layouts/sidebar.blade.php',
-            'layouts/menu.stub'    => 'layouts/menu.blade.php',
-            'layouts/home.stub'    => 'home.blade.php',
-            'auth/login.stub'      => 'auth/login.blade.php',
-            'auth/register.stub'   => 'auth/register.blade.php',
-            'auth/email.stub'      => 'auth/password.blade.php',
-            'auth/reset.stub'      => 'auth/reset.blade.php',
-            'emails/password.stub' => 'emails/password.blade.php'
+            'vuejs/layouts/app.stub'     => 'layouts/app.blade.php',
+            'scaffold/layouts/sidebar.stub' => 'layouts/sidebar.blade.php',
+            'scaffold/layouts/menu.stub'    => 'layouts/menu.blade.php',
+            'scaffold/layouts/home.stub'    => 'home.blade.php',
+            'scaffold/auth/login.stub'      => 'auth/login.blade.php',
+            'scaffold/auth/register.stub'   => 'auth/register.blade.php',
+            'scaffold/auth/email.stub'      => 'auth/password.blade.php',
+            'scaffold/auth/reset.stub'      => 'auth/reset.blade.php',
+            'scaffold/emails/password.stub' => 'emails/password.blade.php'
         ];
     }
 
     private function getLaravel52Views()
     {
         return [
-            'layouts/app.stub'     => 'layouts/app.blade.php',
-            'layouts/sidebar.stub' => 'layouts/sidebar.blade.php',
-            'layouts/menu.stub'    => 'layouts/menu.blade.php',
-            'layouts/home.stub'    => 'home.blade.php',
-            'auth/login.stub'      => 'auth/login.blade.php',
-            'auth/register.stub'   => 'auth/register.blade.php',
-            'auth/email.stub'      => 'auth/passwords/email.blade.php',
-            'auth/reset.stub'      => 'auth/passwords/reset.blade.php',
-            'emails/password.stub' => 'auth/emails/password.blade.php'
+            'vuejs/layouts/app.stub'     => 'layouts/app.blade.php',
+            'scaffold/layouts/sidebar.stub' => 'layouts/sidebar.blade.php',
+            'scaffold/layouts/menu.stub'    => 'layouts/menu.blade.php',
+            'scaffold/layouts/home.stub'    => 'home.blade.php',
+            'scaffold/auth/login.stub'      => 'auth/login.blade.php',
+            'scaffold/auth/register.stub'   => 'auth/register.blade.php',
+            'scaffold/auth/email.stub'      => 'auth/passwords/email.blade.php',
+            'scaffold/auth/reset.stub'      => 'auth/passwords/reset.blade.php',
+            'scaffold/emails/password.stub' => 'auth/emails/password.blade.php'
         ];
     }
 
@@ -164,7 +164,7 @@ class VueJsLayoutPublishCommand extends PublishBaseCommand
         $baseRequestCustomFiles = $this->getRequestBaseCustomFile();
 
         foreach ($files as $stub => $blade) {
-            $sourceFile = base_path('vendor/infyomlabs/'.$templateType.'/templates/scaffold/'.$stub);
+            $sourceFile = base_path('vendor/infyomlabs/'.$templateType.'/templates/'.$stub);
             $destinationFile = $viewsPath.$blade;
             $this->publishFile($sourceFile, $destinationFile, $blade);
         }
