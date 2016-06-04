@@ -126,7 +126,8 @@ class CommandData
             }
 
             if ($this->commandType == self::$COMMAND_TYPE_SCAFFOLD or
-                $this->commandType == self::$COMMAND_TYPE_API_SCAFFOLD
+                $this->commandType == self::$COMMAND_TYPE_API_SCAFFOLD,
+                $this->commandType == self::$COMMAND_TYPE_VUEJS
             ) {
                 $htmlType = $this->commandObj->ask('Enter field html input type (text): ', 'text');
             } else {
