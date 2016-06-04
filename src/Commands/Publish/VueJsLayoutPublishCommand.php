@@ -59,8 +59,9 @@ class VueJsLayoutPublishCommand extends PublishBaseCommand
         FileUtil::createDirectoryIfNotExist($viewsPath.'layouts/modal');
         FileUtil::createDirectoryIfNotExist($resourcesPath.'assets/js');
         FileUtil::createDirectoryIfNotExist($resourcesPath.'assets/css');
-        FileUtil::createDirectoryIfNotExist($resourcesPath.'vendor/vue-editable');
-        FileUtil::createDirectoryIfNotExist($resourcesPath.'vendor/vue-table/components');
+        FileUtil::createDirectoryIfNotExist($resourcesPath.'assets/vendor/vue-editable');
+        FileUtil::createDirectoryIfNotExist($resourcesPath.'assets/vendor/vue-table/components');
+        FileUtil::createDirectoryIfNotExist($resourcesPath.'assets/vendor/vue-strap');
     }
 
     private function createDirectories($viewsPath)
@@ -121,6 +122,7 @@ class VueJsLayoutPublishCommand extends PublishBaseCommand
     {
         return [
             'vuejs/vendor/vue-editable/vue-editable.js' => 'vue-editable/vue-editable.js',
+            'vuejs/vendor/vue-strap/vue-strap.min.js' => 'vue-strap/vue-strap.min.js',
             'vuejs/vendor/vue-table/components/VuetablePaginationMixin.vue' => 'vue-table/components/VuetablePaginationMixin.vue',            
             'vuejs/vendor/vue-table/components/VuetablePaginationSimple.vue' => 'vue-table/components/VuetablePaginationSimple.vue'            
         ];        
