@@ -1,0 +1,11 @@
+/*
+|--------------------------------------------------------------------------
+| API routes
+|--------------------------------------------------------------------------
+*/
+
+Route::group(['prefix' => '$API_PREFIX$', 'namespace' => 'API'], function () {
+    Route::group(['prefix' => '$API_VERSION$'], function () {
+        require config('infyom.laravel_generator.path.api_routes');
+    });
+});

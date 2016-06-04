@@ -1,0 +1,5 @@
+	{
+	    name: '$FIELD_NAME$',
+	    sortField: '$FIELD_NAME$',
+	    visible: $FIELD_VISIBLE$
+	},

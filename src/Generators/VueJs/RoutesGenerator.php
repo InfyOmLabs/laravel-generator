@@ -36,7 +36,12 @@ class RoutesGenerator extends BaseGenerator
         $this->pathApi = $commandData->config->pathApiRoutes;
         $this->path = $commandData->config->pathRoutes;
 
-        $this->routeContents = file_get_contents($this->path);
+        $this->routeContents = file_get_contents($this->path);    
+
+        if (!file_exists($this->pathApi)) {
+            file_put_contents($this->pathApi, TemplateUtil::getTemplate('vuejs.routes.api_routes', 'laravel-generator'));
+        }
+
         $this->apiRouteContents = file_get_contents($this->pathApi);
 
         $routesTemplate = TemplateUtil::getTemplate('vuejs.routes.routes', 'laravel-generator');

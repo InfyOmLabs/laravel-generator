@@ -1,0 +1,58 @@
+<?php
+
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+
+class $MODEL_NAME$ApiTest extends TestCase
+{
+    use Make$MODEL_NAME$Trait, ApiTestTrait, WithoutMiddleware, DatabaseTransactions;
+
+    /**
+     * @test
+     */
+    public function testCreate$MODEL_NAME$()
+    {
+        $$MODEL_NAME_CAMEL$ = $this->fake$MODEL_NAME$Data();
+        $this->json('POST', '/api/v1/$MODEL_NAME_PLURAL_CAMEL$', $$MODEL_NAME_CAMEL$);
+
+        $this->assertApiResponse($$MODEL_NAME_CAMEL$);
+    }
+
+    /**
+     * @test
+     */
+    public function testRead$MODEL_NAME$()
+    {
+        $$MODEL_NAME_CAMEL$ = $this->make$MODEL_NAME$();
+        $this->json('GET', '/api/v1/$MODEL_NAME_PLURAL_CAMEL$/'.$$MODEL_NAME_CAMEL$->id);
+
+        $this->assertApiResponse($$MODEL_NAME_CAMEL$->toArray());
+    }
+
+    /**
+     * @test
+     */
+    public function testUpdate$MODEL_NAME$()
+    {
+        $$MODEL_NAME_CAMEL$ = $this->make$MODEL_NAME$();
+        $edited$MODEL_NAME$ = $this->fake$MODEL_NAME$Data();
+
+        $this->json('PUT', '/api/v1/$MODEL_NAME_PLURAL_CAMEL$/'.$$MODEL_NAME_CAMEL$->id, $edited$MODEL_NAME$);
+
+        $this->assertApiResponse($edited$MODEL_NAME$);
+    }
+
+    /**
+     * @test
+     */
+    public function testDelete$MODEL_NAME$()
+    {
+        $$MODEL_NAME_CAMEL$ = $this->make$MODEL_NAME$();
+        $this->json('DELETE', '/api/v1/$MODEL_NAME_PLURAL_CAMEL$/'.$$MODEL_NAME_CAMEL$->id);
+
+        $this->assertApiSuccess();
+        $this->json('GET', '/api/v1/$MODEL_NAME_PLURAL_CAMEL$/'.$$MODEL_NAME_CAMEL$->id);
+
+        $this->assertResponseStatus(404);
+    }
+}
