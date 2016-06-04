@@ -19,6 +19,8 @@ use InfyOm\Generator\Commands\Scaffold\ControllerGeneratorCommand;
 use InfyOm\Generator\Commands\Scaffold\RequestsGeneratorCommand;
 use InfyOm\Generator\Commands\Scaffold\ScaffoldGeneratorCommand;
 use InfyOm\Generator\Commands\Scaffold\ViewsGeneratorCommand;
+use InfyOm\Generator\Commands\Publish\VueJsLayoutPublishCommand;
+use InfyOm\Generator\Commands\VueJs\VueJsGeneratorCommand;
 
 class InfyOmGeneratorServiceProvider extends ServiceProvider
 {
