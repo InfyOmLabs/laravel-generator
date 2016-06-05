@@ -66,9 +66,9 @@ class GeneratorConfig
         $this->mName = $commandData->modelName;
 
         $this->prepareOptions($commandData);
+        $this->prepareModelNames();
         $this->preparePrefixes();
         $this->prepareAddOns();
-        $this->prepareModelNames();
         $this->loadNamespaces($commandData);
         $this->loadPaths();
         $commandData = $this->loadDynamicVariables($commandData);
@@ -76,10 +76,10 @@ class GeneratorConfig
 
     public function loadNamespaces(CommandData &$commandData)
     {
-        if ($this->getOption('prefix')) {
-            $prefix = '\\' . $this->prefixes['ns'];
-        } else {
-            $prefix = '';
+        $prefix = $this->prefixes['ns'];
+
+        if (!empty($prefix)) {
+           $prefix = "\\".$prefix;
         }
 
         $this->nsApp = $commandData->commandObj->getLaravel()->getNamespace();
@@ -106,6 +106,16 @@ class GeneratorConfig
     public function loadPaths()
     {
         $prefix = $this->prefixes['path'];
+
+        if (!empty($prefix)) {
+            $prefix .= '/';
+        }
+
+        $viewPrefix = $this->prefixes['view'];
+
+        if (!empty($viewPrefix)) {
+            $viewPrefix .= '/';
+        }
 
         $this->pathRepository = config(
             'infyom.laravel_generator.path.repository',
@@ -144,7 +154,7 @@ class GeneratorConfig
         $this->pathViews = config(
             'infyom.laravel_generator.path.views',
             base_path('resources/views/')
-        ).str_replace('.', '/', $this->prefixes['view']).'/'.$this->mCamelPlural.'/';
+        ).$viewPrefix.$this->mCamelPlural.'/';
     }
 
     public function loadDynamicVariables(CommandData &$commandData)
@@ -174,10 +184,29 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$MODEL_NAME_SNAKE$', $this->mSnake);
         $commandData->addDynamicVariable('$MODEL_NAME_PLURAL_SNAKE$', $this->mSnakePlural);
 
-        $commandData->addDynamicVariable('$ROUTE_PREFIX$', $this->prefixes['route']);
-        $commandData->addDynamicVariable('$PATH_PREFIX$', $this->prefixes['path']);
-        $commandData->addDynamicVariable('$VIEW_PREFIX$', $this->prefixes['view']);
-        $commandData->addDynamicVariable('$PUBLIC_PREFIX$', $this->prefixes['public']);
+        if(!empty($this->prefixes['route'])) {
+            $commandData->addDynamicVariable('$ROUTE_PREFIX$', $this->prefixes['route'].".");
+        } else {
+            $commandData->addDynamicVariable('$ROUTE_PREFIX$', "");
+        }
+
+        if(!empty($this->prefixes['ns'])) {
+            $commandData->addDynamicVariable('$PATH_PREFIX$', $this->prefixes['ns'] . "\\");
+        } else {
+            $commandData->addDynamicVariable('$PATH_PREFIX$', "");
+        }
+
+        if(!empty($this->prefixes['view'])) {
+            $commandData->addDynamicVariable('$VIEW_PREFIX$', str_replace("/", ".", $this->prefixes['view']) . ".");
+        } else {
+            $commandData->addDynamicVariable('$VIEW_PREFIX$', "");
+        }
+
+        if(!empty($this->prefixes['public'])) {
+            $commandData->addDynamicVariable('$PUBLIC_PREFIX$', $this->prefixes['public']);
+        } else {
+            $commandData->addDynamicVariable('$PUBLIC_PREFIX$', "");
+        }
 
         $commandData->addDynamicVariable(
             '$API_PREFIX$',
@@ -235,50 +264,85 @@ class GeneratorConfig
 
     public function preparePrefixes()
     {
-        $this->prefixes['route'] = config('infyom.laravel_generator.prefixes.route', '');
-        $this->prefixes['path'] = config('infyom.laravel_generator.prefixes.path', '');
-        $this->prefixes['view'] = config('infyom.laravel_generator.prefixes.view', '');
-        $this->prefixes['public'] = config('infyom.laravel_generator.prefixes.public', '');
+        $this->prefixes['route'] = explode("/", config('infyom.laravel_generator.prefixes.route', ''));
+        $this->prefixes['path'] = explode("/", config('infyom.laravel_generator.prefixes.path', ''));
+        $this->prefixes['view'] = explode(".", config('infyom.laravel_generator.prefixes.view', ''));
+        $this->prefixes['public'] = explode("/", config('infyom.laravel_generator.prefixes.public', ''));
 
         if ($this->getOption('prefix')) {
 
             $multiplePrefixes = explode(",", $this->getOption('prefix'));
 
-            if (!empty($this->prefixes['route'])) {
-                $this->prefixes['route'] .= '/';
-            }
-
-            foreach ($multiplePrefixes as $prefix) {
-                $this->prefixes['route'] .= $prefix.'/';
-            }
-
-            if (!empty($this->prefixes['path'])) {
-                $this->prefixes['path'] .= '/';
-            }
-
-            foreach ($multiplePrefixes as $prefix) {
-                $this->prefixes['path'] .= Str::title($prefix).'/';
-            }
-
-            $this->prefixes['ns'] = str_replace('/', '\\', $this->prefixes['path']);
-            $this->prefixes['ns'] = substr($this->prefixes['ns'], 0, strlen($this->prefixes['ns'])-1);
-
-            if (!empty($this->prefixes['view'])) {
-                $this->prefixes['view'] .= '.';
-            }
-
-            foreach ($multiplePrefixes as $prefix) {
-                $this->prefixes['view'] .= $prefix.'.';
-            }
-
-            if (!empty($this->prefixes['route'])) {
-                $this->prefixes['public'] .= '/';
-            }
-
-            foreach ($multiplePrefixes as $prefix) {
-                $this->prefixes['public'] .= $prefix.'/';
-            }
+            $this->prefixes['route'] = array_merge($this->prefixes['route'], $multiplePrefixes);
+            $this->prefixes['path'] = array_merge($this->prefixes['path'], $multiplePrefixes);
+            $this->prefixes['view'] = array_merge($this->prefixes['view'], $multiplePrefixes);
+            $this->prefixes['public'] = array_merge($this->prefixes['public'], $multiplePrefixes);
         }
+
+        $this->prefixes['route'] = array_diff( $this->prefixes['route'], array(''));
+        $this->prefixes['path'] = array_diff( $this->prefixes['path'], array(''));
+        $this->prefixes['view'] = array_diff( $this->prefixes['view'], array(''));
+        $this->prefixes['public'] = array_diff( $this->prefixes['public'], array(''));
+
+        $routePrefix = '';
+
+        foreach($this->prefixes['route'] as $singlePrefix) {
+            $routePrefix .= Str::camel($singlePrefix) . ".";
+        }
+
+        if(!empty($routePrefix)) {
+            $routePrefix = substr($routePrefix, 0, strlen($routePrefix)-1);
+        }
+
+        $this->prefixes['route'] = $routePrefix;
+
+        $nsPrefix = '';
+
+        foreach($this->prefixes['path'] as $singlePrefix) {
+            $nsPrefix .= Str::title($singlePrefix) . "\\";
+        }
+
+        if(!empty($nsPrefix)) {
+            $nsPrefix = substr($nsPrefix, 0, strlen($nsPrefix) - 1);
+        }
+
+        $this->prefixes['ns'] = $nsPrefix;
+
+        $pathPrefix = '';
+
+        foreach($this->prefixes['path'] as $singlePrefix) {
+            $pathPrefix .= Str::title($singlePrefix) . "/";
+        }
+
+        if(!empty($pathPrefix)) {
+            $pathPrefix = substr($pathPrefix, 0, strlen($pathPrefix)-1);
+        }
+
+        $this->prefixes['path'] = $pathPrefix;
+
+        $viewPrefix = '';
+
+        foreach($this->prefixes['view'] as $singlePrefix) {
+            $viewPrefix .= Str::camel($singlePrefix) . "/";
+        }
+
+        if(!empty($viewPrefix)) {
+            $viewPrefix = substr($viewPrefix, 0, strlen($viewPrefix)-1);
+        }
+
+        $this->prefixes['view'] = $viewPrefix;
+
+        $publicPrefix = '';
+
+        foreach($this->prefixes['public'] as $singlePrefix) {
+            $publicPrefix .= Str::camel($singlePrefix) . "/";
+        }
+
+        if(!empty($publicPrefix)) {
+            $publicPrefix = substr($publicPrefix, 0, strlen($publicPrefix)-1);
+        }
+
+        $this->prefixes['public'] = $publicPrefix;
     }
 
     public function overrideOptionsFromJsonFile($jsonData)

@@ -16,7 +16,7 @@ class $MODEL_NAME$DataTable extends DataTable
     {
         return $this->datatables
             ->eloquent($this->query())
-            ->addColumn('action', '$VIEW_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.datatables-actions')
+            ->addColumn('action', '$VIEW_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.datatables_actions')
             ->make(true);
     }
 

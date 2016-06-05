@@ -51,6 +51,7 @@ class ViewGenerator extends BaseGenerator
     {
         if ($this->commandData->getAddOn('datatables')) {
             $templateData = $this->generateDataTableBody();
+            $this->generateDataTableActions();
         } else {
             $templateData = $this->generateBladeTableBody();
         }
@@ -116,6 +117,17 @@ class ViewGenerator extends BaseGenerator
         $templateData = TemplateUtil::getTemplate('scaffold.views.datatable_body', $this->templateType);
 
         return TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+    }
+
+    private function generateDataTableActions()
+    {
+        $templateData = TemplateUtil::getTemplate('scaffold.views.datatables_actions', $this->templateType);
+
+        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+
+        FileUtil::createFile($this->path, 'datatables_actions.blade.php', $templateData);
+
+        $this->commandData->commandInfo('datatables_actions.blade.php created');
     }
 
     private function generateIndex()
