@@ -197,9 +197,11 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$MODEL_NAME_PLURAL_SNAKE$', $this->mSnakePlural);
 
         if (!empty($this->prefixes['route'])) {
-            $commandData->addDynamicVariable('$ROUTE_PREFIX$', $this->prefixes['route'].'.');
+            $commandData->addDynamicVariable('$ROUTE_NAMED_PREFIX$', $this->prefixes['route'].'.');
+            $commandData->addDynamicVariable('$ROUTE_PREFIX$', str_replace(".", "/", $this->prefixes['route']).'/');
         } else {
             $commandData->addDynamicVariable('$ROUTE_PREFIX$', '');
+            $commandData->addDynamicVariable('$ROUTE_NAMED_PREFIX$', '');
         }
 
         if (!empty($this->prefixes['ns'])) {
