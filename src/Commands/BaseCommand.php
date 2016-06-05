@@ -123,7 +123,7 @@ class BaseCommand extends Command
             $routeGenerator->generate();
         }
 
-        if (!$this->isSkip('menu') and$this->commandData->config->getAddOn('menu.enabled')) {
+        if (!$this->isSkip('menu') and $this->commandData->config->getAddOn('menu.enabled')) {
             $menuGenerator = new MenuGenerator($this->commandData);
             $menuGenerator->generate();
         }
@@ -138,8 +138,7 @@ class BaseCommand extends Command
         if ($runMigration) {
             if ($this->commandData->config->forceMigrate) {
                 $this->call('migrate');
-            }
-            elseif (!$this->commandData->getOption('fromTable') and !$this->isSkip('migration')) {
+            } elseif (!$this->commandData->getOption('fromTable') and !$this->isSkip('migration')) {
                 if ($this->confirm("\nDo you want to migrate database? [y|N]", false)) {
                     $this->call('migrate');
                 }
@@ -153,8 +152,8 @@ class BaseCommand extends Command
 
     public function isSkip($skip)
     {
-        if($this->commandData->getOption('skip')) {
-            return in_array($skip, (array)$this->commandData->getOption('skip'));
+        if ($this->commandData->getOption('skip')) {
+            return in_array($skip, (array) $this->commandData->getOption('skip'));
         }
 
         return false;
@@ -197,6 +196,7 @@ class BaseCommand extends Command
     /**
      * @param $fileName
      * @param string $prompt
+     *
      * @return bool
      */
     protected function confirmOverwrite($fileName, $prompt = '')
@@ -224,7 +224,7 @@ class BaseCommand extends Command
             ['primary', null, InputOption::VALUE_REQUIRED, 'Custom primary key'],
             ['prefix', null, InputOption::VALUE_REQUIRED, 'Prefix for all files'],
             ['paginate', null, InputOption::VALUE_REQUIRED, 'Pagination for index.blade.php'],
-            ['skip', null, InputOption::VALUE_REQUIRED, 'Skip Specific Items to Generate (migration,model,controllers,api_controller,scaffold_controller,repository,requests,api_requests,scaffold_requests,routes,api_routes,scaffold_routes,views,tests,menu,dump-autoload)']
+            ['skip', null, InputOption::VALUE_REQUIRED, 'Skip Specific Items to Generate (migration,model,controllers,api_controller,scaffold_controller,repository,requests,api_requests,scaffold_requests,routes,api_routes,scaffold_routes,views,tests,menu,dump-autoload)'],
         ];
     }
 
