@@ -54,7 +54,19 @@ class GeneratorConfig
     public $prefixes;
 
     /* Command Options */
-    public static $availableOptions = ['fieldsFile', 'jsonFromGUI', 'tableName', 'fromTable', 'save', 'primary', 'prefix', 'paginate', 'skip', 'datatables'];
+    public static $availableOptions = [
+        'fieldsFile',
+        'jsonFromGUI',
+        'tableName',
+        'fromTable',
+        'save',
+        'primary',
+        'prefix',
+        'paginate',
+        'skip',
+        'datatables',
+        'views'
+    ];
 
     public $tableName;
 

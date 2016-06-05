@@ -37,13 +37,41 @@ class ViewGenerator extends BaseGenerator
         }
 
         $this->commandData->commandComment("\nGenerating Views...");
-        $this->generateTable();
-        $this->generateIndex();
-        $this->generateFields();
-        $this->generateCreate();
-        $this->generateUpdate();
-        $this->generateShowFields();
-        $this->generateShow();
+
+        if ($this->commandData->getOption('views')) {
+            $viewsToBeGenerated = explode(",", $this->commandData->getOption('views'));
+
+            if (in_array("index", $viewsToBeGenerated)) {
+                $this->generateTable();
+                $this->generateIndex();
+            }
+
+            if (in_array(["create", "update"], $viewsToBeGenerated)) {
+                $this->generateFields();
+            }
+
+            if (in_array("create", $viewsToBeGenerated)) {
+                $this->generateCreate();
+            }
+
+            if (in_array("edit", $viewsToBeGenerated)) {
+                $this->generateUpdate();
+            }
+
+            if (in_array("show", $viewsToBeGenerated)) {
+                $this->generateShowFields();
+                $this->generateShow();
+            }
+        } else {
+            $this->generateTable();
+            $this->generateIndex();
+            $this->generateFields();
+            $this->generateCreate();
+            $this->generateUpdate();
+            $this->generateShowFields();
+            $this->generateShow();
+        }
+
         $this->commandData->commandComment('Views created: ');
     }
 
