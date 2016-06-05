@@ -96,7 +96,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
         $pathPrefix = config('infyom.laravel_generator.prefixes.path');
 
         if (!empty($pathPrefix)) {
-            $controllerPath .= Str::title($pathPrefix)."/";
+            $controllerPath .= Str::title($pathPrefix).'/';
         }
 
         $fileName = 'AppBaseController.php';
@@ -131,7 +131,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
         $pathPrefix = config('infyom.laravel_generator.prefixes.path');
 
         if (!empty($pathPrefix)) {
-            $controllerNamespace .= "\\".Str::title($pathPrefix);
+            $controllerNamespace .= '\\'.Str::title($pathPrefix);
         }
 
         $templateData = str_replace(
