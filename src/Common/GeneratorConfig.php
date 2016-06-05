@@ -54,7 +54,7 @@ class GeneratorConfig
     public $prefixes;
 
     /* Command Options */
-    public static $availableOptions = ['fieldsFile', 'jsonFromGUI', 'tableName', 'fromTable', 'save', 'primary', 'prefix', 'paginate', 'skip'];
+    public static $availableOptions = ['fieldsFile', 'jsonFromGUI', 'tableName', 'fromTable', 'save', 'primary', 'prefix', 'paginate', 'skip', 'datatables'];
 
     public $tableName;
 
@@ -65,10 +65,10 @@ class GeneratorConfig
     {
         $this->mName = $commandData->modelName;
 
+        $this->prepareAddOns();
         $this->prepareOptions($commandData);
         $this->prepareModelNames();
         $this->preparePrefixes();
-        $this->prepareAddOns();
         $this->loadNamespaces($commandData);
         $this->loadPaths();
         $commandData = $this->loadDynamicVariables($commandData);
@@ -259,6 +259,14 @@ class GeneratorConfig
         $this->options['softDelete'] = config('infyom.laravel_generator.options.softDelete', false);
         if (!empty($this->options['skip'])) {
             $this->options['skip'] = array_map('trim', explode(',', $this->options['skip']));
+        }
+
+        if (!empty($this->options['datatables'])) {
+            if (strtolower($this->options['datatables']) == 'true') {
+                $this->addOns['datatables'] = true;
+            } else {
+                $this->addOns['datatables'] = false;
+            }
         }
     }
 
