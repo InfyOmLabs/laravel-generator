@@ -62,6 +62,28 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
                     case 'Illuminate\Database\Eloquent\Relations\HasOneOrMany':
                         break;
                     case 'Illuminate\Database\Eloquent\Relations\HasMany':
+                        $new_values = array_get($attributes, $key, []);
+                        unset($new_values[array_search('', $new_values)]);
+
+                        list($temp, $model_key) = explode('.', $model->$key($key)->getForeignKey());
+
+                        foreach ($model->$key as $rel) {
+                            if (!in_array($rel->id, $new_values)) {
+                                $rel->$model_key = null;
+                                $rel->save();
+
+                            }
+                            unset($new_values[array_search($rel->id, $new_values)]);
+                        }
+                        
+                        if (count($new_values)>0) {
+                            $related = get_class($model->$key()->getRelated());
+                            foreach ($new_values as $val) {
+                                $rel = $related::find($val);
+                                $rel->$model_key = $model->id;
+                                $rel->save();
+                            }
+                        }
                         break;
                 }
             }
