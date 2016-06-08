@@ -62,6 +62,7 @@ class VueJsLayoutPublishCommand extends PublishBaseCommand
         FileUtil::createDirectoryIfNotExist($resourcesPath.'assets/vendor/vue-editable');
         FileUtil::createDirectoryIfNotExist($resourcesPath.'assets/vendor/vue-table/components');
         FileUtil::createDirectoryIfNotExist($resourcesPath.'assets/vendor/vue-strap');
+        FileUtil::createDirectoryIfNotExist(base_path('app/Http/Requests/API'));
     }
 
     private function createDirectories($viewsPath)
