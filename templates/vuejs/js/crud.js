@@ -40,7 +40,7 @@ var vm = new Vue({
         showModal: false,
         deleteModal: false,
         flashMessage: null,
-        defaultErrorMessage: defaultErrorMessage: 'Some errors in sended data, please check!.',
+        defaultErrorMessage: 'Some errors in sended data, please check!.',
         flashTypeDanger: 'danger',
         flashType: null,
         submitMessage: "",
