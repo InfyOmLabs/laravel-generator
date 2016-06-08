@@ -46,7 +46,7 @@ class ViewGenerator extends BaseGenerator
                 $this->generateIndex();
             }
 
-            if (in_array(['create', 'update'], $viewsToBeGenerated)) {
+            if (count(array_intersect(["create", "update"], $viewsToBeGenerated)) > 0) {
                 $this->generateFields();
             }
 
