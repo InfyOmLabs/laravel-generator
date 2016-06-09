@@ -57,6 +57,12 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
                         unset($new_values[0]);
                         $model->$key()->sync(array_values($new_values));
                         break;
+                    case 'Illuminate\Database\Eloquent\Relations\BelongsTo':
+                        $model_key = $model->$key()->getForeignKey();
+                        $new_value = array_get($attributes, $key, null);
+                        $new_value = $new_value == '' ? null : $new_value;
+                        $model->$model_key = $new_value;
+                        break;
                     case 'Illuminate\Database\Eloquent\Relations\HasOne':
                         break;
                     case 'Illuminate\Database\Eloquent\Relations\HasOneOrMany':
