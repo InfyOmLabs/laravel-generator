@@ -3,6 +3,7 @@
 namespace $NAMESPACE_API_REQUEST$;
 
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
+use App\Http\Requests\API\MyAPIRequest;
 
 class Update$MODEL_NAME$APIRequest extends MyAPIRequest
 {

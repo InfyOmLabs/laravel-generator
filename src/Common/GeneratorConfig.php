@@ -182,7 +182,8 @@ class GeneratorConfig
 
         $commandData->addDynamicVariable('$ROUTE_PREFIX$', $this->prefixes['route']);
         $commandData->addDynamicVariable('$PATH_PREFIX$', $this->prefixes['path']);
-        $commandData->addDynamicVariable('$VIEW_PREFIX$', $this->prefixes['view']);
+        $commandData->addDynamicVariable('$NS_PREFIX$', str_replace('/', '', $this->prefixes['path']));
+        $commandData->addDynamicVariable('$VIEW_PREFIX$', $this->prefixes['view']);        
         $commandData->addDynamicVariable('$PUBLIC_PREFIX$', $this->prefixes['public']);
 
         $commandData->addDynamicVariable(
