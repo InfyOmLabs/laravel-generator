@@ -7,14 +7,14 @@ use $NAMESPACE_API_REQUEST$\Update$MODEL_NAME$APIRequest;
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
 use $NAMESPACE_REPOSITORY$\$MODEL_NAME$Repository;
 use Illuminate\Http\Request;
-use $NAMESPACE_CONTROLLER$\AppBaseController;
+use $NAMESPACE_CONTROLLER$\AppBaseController as InfyOmBaseController;
 use InfyOm\Generator\Criteria\LimitOffsetCriteria;
 use InfyOm\Generator\Utils\ResponseUtil;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
 
 $DOC_CONTROLLER$
-class $MODEL_NAME$APIController extends AppBaseController
+class $MODEL_NAME$APIController extends InfyOmBaseController
 {
     /** @var  $MODEL_NAME$Repository */
     private $$MODEL_NAME_CAMEL$Repository;
@@ -51,7 +51,7 @@ class $MODEL_NAME$APIController extends AppBaseController
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
-            return Response::json(ResponseUtil::makeError('$MODEL_NAME$ not found'), 400);
+            return Response::json(ResponseUtil::makeError('$MODEL_NAME$ not found'), 404);
         }
 
         return $this->sendResponse($$MODEL_NAME_CAMEL$->toArray(), '$MODEL_NAME$ retrieved successfully');
@@ -66,7 +66,7 @@ class $MODEL_NAME$APIController extends AppBaseController
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
-            return Response::json(ResponseUtil::makeError('$MODEL_NAME$ not found'), 400);
+            return Response::json(ResponseUtil::makeError('$MODEL_NAME$ not found'), 404);
         }
 
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->update($input, $id);
@@ -81,7 +81,7 @@ class $MODEL_NAME$APIController extends AppBaseController
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
-            return Response::json(ResponseUtil::makeError('$MODEL_NAME$ not found'), 400);
+            return Response::json(ResponseUtil::makeError('$MODEL_NAME$ not found'), 404);
         }
 
         $$MODEL_NAME_CAMEL$->delete();

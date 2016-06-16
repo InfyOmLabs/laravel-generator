@@ -16,21 +16,7 @@ class $MODEL_NAME$DataTable extends DataTable
     {
         return $this->datatables
             ->eloquent($this->query())
-            ->addColumn('actions', function ($data) {
-                            return '
-                            ' . Form::open(['route' => ['$MODEL_NAME_PLURAL_CAMEL$.destroy', $data->id], 'method' => 'delete']) . '
-                            <div class=\'btn-group\'>
-                                <a href="' . route('$MODEL_NAME_PLURAL_CAMEL$.show', [$data->id]) . '" class=\'btn btn-default btn-xs\'><i class="glyphicon glyphicon-eye-open"></i></a>
-                                <a href="' . route('$MODEL_NAME_PLURAL_CAMEL$.edit', [$data->id]) . '" class=\'btn btn-default btn-xs\'><i class="glyphicon glyphicon-edit"></i></a>
-                                ' . Form::button('<i class="glyphicon glyphicon-trash"></i>', [
-                                'type' => 'submit',
-                                'class' => 'btn btn-danger btn-xs',
-                                'onclick' => "return confirm('Are you sure?')"
-                            ]) . '
-                            </div>
-                            ' . Form::close() . '
-                            ';
-                        })
+            ->addColumn('action', '$VIEW_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.datatables_actions')
             ->make(true);
     }
 
@@ -54,28 +40,27 @@ class $MODEL_NAME$DataTable extends DataTable
     public function html()
     {
         return $this->builder()
-            ->columns(array_merge(
-                $this->getColumns(),
-                [
-                    'actions' => [
-                        'orderable' => false,
-                        'searchable' => false,
-                        'printable' => false,
-                        'exportable' => false
-                    ]
-                ]
-            ))
+            ->columns($this->getColumns())
+            ->addAction(['width' => '10%'])
+            ->ajax('')
             ->parameters([
                 'dom' => 'Bfrtip',
-                'scrollX' => true,
+                'scrollX' => false,
                 'buttons' => [
-                    'csv',
-                    'excel',
-                    'pdf',
+                    'create',
                     'print',
                     'reset',
-                    'reload'
-                ],
+                    'reload',
+                    [
+                         'extend'  => 'collection',
+                         'text'    => '<i class="fa fa-download"></i> Export',
+                         'buttons' => [
+                             'csv',
+                             'excel',
+                             'pdf',
+                         ],
+                    ]
+                ]
             ]);
     }
 

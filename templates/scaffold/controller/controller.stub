@@ -6,12 +6,13 @@ use $NAMESPACE_REQUEST$;
 use $NAMESPACE_REQUEST$\Create$MODEL_NAME$Request;
 use $NAMESPACE_REQUEST$\Update$MODEL_NAME$Request;
 use $NAMESPACE_REPOSITORY$\$MODEL_NAME$Repository;
+use $NAMESPACE_CONTROLLER$\AppBaseController as InfyOmBaseController;
 use Illuminate\Http\Request;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
 
-class $MODEL_NAME$Controller extends AppBaseController
+class $MODEL_NAME$Controller extends InfyOmBaseController
 {
     /** @var  $MODEL_NAME$Repository */
     private $$MODEL_NAME_CAMEL$Repository;
@@ -32,7 +33,7 @@ class $MODEL_NAME$Controller extends AppBaseController
         $this->$MODEL_NAME_CAMEL$Repository->pushCriteria(new RequestCriteria($request));
         $$MODEL_NAME_PLURAL_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->$RENDER_TYPE$;
 
-        return view('$ROUTES_AS_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index')
+        return view('$VIEW_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index')
             ->with('$MODEL_NAME_PLURAL_CAMEL$', $$MODEL_NAME_PLURAL_CAMEL$);
     }
 
@@ -43,7 +44,7 @@ class $MODEL_NAME$Controller extends AppBaseController
      */
     public function create()
     {
-        return view('$ROUTES_AS_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.create');
+        return view('$VIEW_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.create');
     }
 
     /**
@@ -61,7 +62,7 @@ class $MODEL_NAME$Controller extends AppBaseController
 
         Flash::success('$MODEL_NAME$ saved successfully.');
 
-        return redirect(route('$ROUTES_AS_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
+        return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
     }
 
     /**
@@ -78,10 +79,10 @@ class $MODEL_NAME$Controller extends AppBaseController
         if (empty($$MODEL_NAME_CAMEL$)) {
             Flash::error('$MODEL_NAME$ not found');
 
-            return redirect(route('$ROUTES_AS_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
+            return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
         }
 
-        return view('$ROUTES_AS_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.show')->with('$MODEL_NAME_CAMEL$', $$MODEL_NAME_CAMEL$);
+        return view('$VIEW_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.show')->with('$MODEL_NAME_CAMEL$', $$MODEL_NAME_CAMEL$);
     }
 
     /**
@@ -98,10 +99,10 @@ class $MODEL_NAME$Controller extends AppBaseController
         if (empty($$MODEL_NAME_CAMEL$)) {
             Flash::error('$MODEL_NAME$ not found');
 
-            return redirect(route('$ROUTES_AS_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
+            return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
         }
 
-        return view('$ROUTES_AS_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.edit')->with('$MODEL_NAME_CAMEL$', $$MODEL_NAME_CAMEL$);
+        return view('$VIEW_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.edit')->with('$MODEL_NAME_CAMEL$', $$MODEL_NAME_CAMEL$);
     }
 
     /**
@@ -119,14 +120,14 @@ class $MODEL_NAME$Controller extends AppBaseController
         if (empty($$MODEL_NAME_CAMEL$)) {
             Flash::error('$MODEL_NAME$ not found');
 
-            return redirect(route('$ROUTES_AS_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
+            return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
         }
 
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->update($request->all(), $id);
 
         Flash::success('$MODEL_NAME$ updated successfully.');
 
-        return redirect(route('$ROUTES_AS_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
+        return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
     }
 
     /**
@@ -143,13 +144,13 @@ class $MODEL_NAME$Controller extends AppBaseController
         if (empty($$MODEL_NAME_CAMEL$)) {
             Flash::error('$MODEL_NAME$ not found');
 
-            return redirect(route('$ROUTES_AS_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
+            return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
         }
 
         $this->$MODEL_NAME_CAMEL$Repository->delete($id);
 
         Flash::success('$MODEL_NAME$ deleted successfully.');
 
-        return redirect(route('$ROUTES_AS_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
+        return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
     }
 }

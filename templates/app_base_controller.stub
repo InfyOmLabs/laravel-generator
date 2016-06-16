@@ -3,6 +3,7 @@
 namespace $NAMESPACE_CONTROLLER$;
 
 use InfyOm\Generator\Utils\ResponseUtil;
+use $NAMESPACE_APP$Http\Controllers\Controller as LaravelController;
 use Response;
 
 /**
@@ -16,7 +17,7 @@ use Response;
  * This class should be parent class for other API controllers
  * Class AppBaseController
  */
-class AppBaseController extends Controller
+class AppBaseController extends LaravelController
 {
     public function sendResponse($result, $message)
     {
