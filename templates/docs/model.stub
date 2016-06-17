@@ -1,4 +1,5 @@
 /**
  * Class $MODEL_NAME$
  * @package $NAMESPACE_MODEL$
+ * @version $GENERATEDAT$
  */

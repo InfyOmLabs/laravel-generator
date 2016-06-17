@@ -1,0 +1,12 @@
+/**
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+     * @version $GENERATEDAT$
+     **/
+    public function $FUNCTIONNAME$() {
+        return $this->belongsToMany(
+            \$NAMESPACE_MODEL$\$MODELNAME$::class,
+            '$THROUGH$',
+            '$KEY1$',
+            '$KEY2$'
+        );
+    }
