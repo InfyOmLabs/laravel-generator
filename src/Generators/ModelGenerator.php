@@ -223,7 +223,13 @@ class ModelGenerator extends BaseGenerator
             }
             elseif($field['fieldType'] == 'integer' && preg_match("/^(.*)_id$/", $field['fieldName'], $gleaned))
             {
-                $this->commandData->inputFields[$i]['validations'] = "integer|exists:".str_plural($gleaned[1]).",id";
+                if(in_array(str_plural($gleaned[1]), $this->tables))
+                {
+                    $this->commandData->inputFields[$i]['validations'] = "integer|exists:".str_plural($gleaned[1]).",id";
+                }
+                else{
+                    $this->commandData->inputFields[$i]['validations'] = "integer";
+                }
                 $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
                 $rules[] = $rule;
             }
