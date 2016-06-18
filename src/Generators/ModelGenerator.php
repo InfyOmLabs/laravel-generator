@@ -216,9 +216,39 @@ class ModelGenerator extends BaseGenerator
     {
         $rules = [];
 
-        foreach ($this->commandData->inputFields as $field) {
+        foreach ($this->commandData->inputFields as $i => $field) {
             if (!empty($field['validations'])) {
                 $rule = "'".$field['fieldName']."' => '".$field['validations']."'";
+                $rules[] = $rule;
+            }
+            elseif($field['fieldType'] == 'integer' && preg_match("/^(.*)_id$/", $field['fieldName'], $gleaned))
+            {
+                $this->commandData->inputFields[$i]['validations'] = "integer|exists:".str_plural($gleaned[1]).",id";
+                $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
+                $rules[] = $rule;
+            }
+            elseif($field['fieldType'] == 'integer')
+            {
+                $this->commandData->inputFields[$i]['validations'] = "sometimes|integer";
+                $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
+                $rules[] = $rule;
+            }
+            elseif($field['fieldType'] == 'text')
+            {
+                $this->commandData->inputFields[$i]['validations'] = "sometimes|size:65,535";
+                $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
+                $rules[] = $rule;
+            }
+            elseif($field['fieldType'] == 'dateTime')
+            {
+                $this->commandData->inputFields[$i]['validations'] = "sometimes|date";
+                $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
+                $rules[] = $rule;
+            }
+            elseif(preg_match("/string,(\d*)$/", $field['databaseInputs'], $gleaned))
+            {
+                $this->commandData->inputFields[$i]['validations'] = "string|size:".$gleaned[1];
+                $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
                 $rules[] = $rule;
             }
         }
