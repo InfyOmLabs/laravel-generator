@@ -225,10 +225,10 @@ class ModelGenerator extends BaseGenerator
             {
                 if(in_array(str_plural($gleaned[1]), $this->tables))
                 {
-                    $this->commandData->inputFields[$i]['validations'] = "integer|exists:".str_plural($gleaned[1]).",id";
+                    $this->commandData->inputFields[$i]['validations'] = "sometimes|integer|exists:".str_plural($gleaned[1]).",id";
                 }
                 else{
-                    $this->commandData->inputFields[$i]['validations'] = "integer";
+                    $this->commandData->inputFields[$i]['validations'] = "sometimes|integer";
                 }
                 $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
                 $rules[] = $rule;
@@ -245,7 +245,7 @@ class ModelGenerator extends BaseGenerator
                 $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
                 $rules[] = $rule;
             }
-            elseif($field['fieldType'] == 'dateTime')
+            elseif($field['fieldType'] == 'dateTime' || $field['fieldType'] == 'date')
             {
                 $this->commandData->inputFields[$i]['validations'] = "sometimes|date";
                 $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
@@ -253,7 +253,7 @@ class ModelGenerator extends BaseGenerator
             }
             elseif(preg_match("/string,(\d*)$/", $field['databaseInputs'], $gleaned))
             {
-                $this->commandData->inputFields[$i]['validations'] = "string|size:".$gleaned[1];
+                $this->commandData->inputFields[$i]['validations'] = "sometimes|string|size:".$gleaned[1];
                 $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
                 $rules[] = $rule;
             }
