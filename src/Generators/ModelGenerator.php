@@ -212,6 +212,11 @@ class ModelGenerator extends BaseGenerator
         return $requiredFields;
     }
 
+    /**
+     * Generate bacic Eloquent rules
+     * 
+     * @return array
+     */
     private function generateRules()
     {
         $rules = [];
