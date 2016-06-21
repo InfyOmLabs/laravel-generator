@@ -50,7 +50,7 @@ class ModelGenerator extends BaseGenerator
 
     /**
      * ModelGenerator constructor.
-     * 
+     *
      * @param \InfyOm\Generator\Common\CommandData $commandData
      */
     public function __construct(CommandData $commandData)
@@ -213,8 +213,8 @@ class ModelGenerator extends BaseGenerator
     }
 
     /**
-     * Generate bacic Eloquent rules.
-     * 
+     * Generate basic Eloquent rules.
+     *
      * @return array
      */
     private function generateRules()
@@ -230,8 +230,7 @@ class ModelGenerator extends BaseGenerator
             } elseif ($field['fieldType'] == 'integer' && preg_match("/^(.*)_id$/", $field['fieldName'], $gleaned)) {
                 if(in_array(str_plural($gleaned[1]), $this->tables)) {
                     $this->commandData->inputFields[$i]['validations'] = "sometimes|integer|exists:".str_plural($gleaned[1]).",id";
-                }
-                else {
+                } else {
                     $this->commandData->inputFields[$i]['validations'] = "sometimes|integer";
                 }
                 $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
