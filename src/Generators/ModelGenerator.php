@@ -229,18 +229,18 @@ class ModelGenerator extends BaseGenerator
                 continue;
             } elseif ($field['fieldType'] == 'integer' && preg_match("/^(.*)_id$/", $field['fieldName'], $gleaned)) {
                 if(in_array(str_plural($gleaned[1]), $this->tables)) {
-                    $this->commandData->inputFields[$i]['validations'] = "sometimes|integer|exists:".str_plural($gleaned[1]).",id";
+                    $this->commandData->inputFields[$i]['validations'] = 'sometimes|integer|exists:'.str_plural($gleaned[1]).',id';
                 } else {
-                    $this->commandData->inputFields[$i]['validations'] = "sometimes|integer";
+                    $this->commandData->inputFields[$i]['validations'] = 'sometimes|integer';
                 }
                 $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
                 $rules[] = $rule;
             } elseif ($field['fieldType'] == 'integer') {
-                $this->commandData->inputFields[$i]['validations'] = "sometimes|integer";
+                $this->commandData->inputFields[$i]['validations'] = 'sometimes|integer';
                 $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
                 $rules[] = $rule;
             } elseif ($field['fieldType'] == 'text') {
-                $this->commandData->inputFields[$i]['validations'] = "sometimes|max:65,535";
+                $this->commandData->inputFields[$i]['validations'] = 'sometimes|max:65,535';
                 $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
                 $rules[] = $rule;
             } elseif ($field['fieldType'] == 'dateTime' || $field['fieldType'] == 'date') {
@@ -248,7 +248,7 @@ class ModelGenerator extends BaseGenerator
                 $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
                 $rules[] = $rule;
             } elseif (preg_match("/string,(\d*)$/", $field['databaseInputs'], $gleaned)) {
-                $this->commandData->inputFields[$i]['validations'] = "sometimes|string|max:".$gleaned[1];
+                $this->commandData->inputFields[$i]['validations'] = 'sometimes|string|max:'.$gleaned[1];
                 $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
                 $rules[] = $rule;
             }
