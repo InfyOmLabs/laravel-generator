@@ -220,42 +220,36 @@ class ModelGenerator extends BaseGenerator
                 $rule = "'".$field['fieldName']."' => '".$field['validations']."'";
                 $rules[] = $rule;
             }
-            elseif($this->isSkip('generate_eloquent_rules'))
-            {
+            elseif($this->isSkip('generate_eloquent_rules')) {
                 continue;
             }
             elseif($field['fieldType'] == 'integer' && preg_match("/^(.*)_id$/", $field['fieldName'], $gleaned))
             {
-                if(in_array(str_plural($gleaned[1]), $this->tables))
-                {
+                if(in_array(str_plural($gleaned[1]), $this->tables)) {
                     $this->commandData->inputFields[$i]['validations'] = "sometimes|integer|exists:".str_plural($gleaned[1]).",id";
                 }
-                else{
+                else {
                     $this->commandData->inputFields[$i]['validations'] = "sometimes|integer";
                 }
                 $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
                 $rules[] = $rule;
             }
-            elseif($field['fieldType'] == 'integer')
-            {
+            elseif($field['fieldType'] == 'integer') {
                 $this->commandData->inputFields[$i]['validations'] = "sometimes|integer";
                 $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
                 $rules[] = $rule;
             }
-            elseif($field['fieldType'] == 'text')
-            {
+            elseif($field['fieldType'] == 'text') {
                 $this->commandData->inputFields[$i]['validations'] = "sometimes|max:65,535";
                 $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
                 $rules[] = $rule;
             }
-            elseif($field['fieldType'] == 'dateTime' || $field['fieldType'] == 'date')
-            {
+            elseif($field['fieldType'] == 'dateTime' || $field['fieldType'] == 'date') {
                 $this->commandData->inputFields[$i]['validations'] = "sometimes|date";
                 $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
                 $rules[] = $rule;
             }
-            elseif(preg_match("/string,(\d*)$/", $field['databaseInputs'], $gleaned))
-            {
+            elseif(preg_match("/string,(\d*)$/", $field['databaseInputs'], $gleaned)) {
                 $this->commandData->inputFields[$i]['validations'] = "sometimes|string|max:".$gleaned[1];
                 $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
                 $rules[] = $rule;
@@ -760,6 +754,11 @@ class ModelGenerator extends BaseGenerator
 
         return str_plural($modelName);
     }
+
+    /**
+     * @param string $skip
+     * @return bool
+     */
     public function isSkip($skip)
     {
         return in_array($skip, $this->commandData->getOption('skip'));
