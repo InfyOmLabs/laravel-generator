@@ -50,7 +50,6 @@ class ModelGenerator extends BaseGenerator
 
     /**
      * ModelGenerator constructor.
-     *
      * @param \InfyOm\Generator\Common\CommandData $commandData
      */
     public function __construct(CommandData $commandData)
@@ -220,6 +219,10 @@ class ModelGenerator extends BaseGenerator
             if (!empty($field['validations'])) {
                 $rule = "'".$field['fieldName']."' => '".$field['validations']."'";
                 $rules[] = $rule;
+            }
+            elseif($this->isSkip('generate_eloquent_rules'))
+            {
+                continue;
             }
             elseif($field['fieldType'] == 'integer' && preg_match("/^(.*)_id$/", $field['fieldName'], $gleaned))
             {
@@ -756,5 +759,9 @@ class ModelGenerator extends BaseGenerator
         $modelName = lcfirst($modelName);
 
         return str_plural($modelName);
+    }
+    public function isSkip($skip)
+    {
+        return in_array($skip, $this->commandData->getOption('skip'));
     }
 }
