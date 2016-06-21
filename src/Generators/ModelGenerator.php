@@ -241,7 +241,7 @@ class ModelGenerator extends BaseGenerator
             }
             elseif($field['fieldType'] == 'text')
             {
-                $this->commandData->inputFields[$i]['validations'] = "sometimes|size:65,535";
+                $this->commandData->inputFields[$i]['validations'] = "sometimes|max:65,535";
                 $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
                 $rules[] = $rule;
             }
@@ -253,7 +253,7 @@ class ModelGenerator extends BaseGenerator
             }
             elseif(preg_match("/string,(\d*)$/", $field['databaseInputs'], $gleaned))
             {
-                $this->commandData->inputFields[$i]['validations'] = "sometimes|string|size:".$gleaned[1];
+                $this->commandData->inputFields[$i]['validations'] = "sometimes|string|max:".$gleaned[1];
                 $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
                 $rules[] = $rule;
             }
