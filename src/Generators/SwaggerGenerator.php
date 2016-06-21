@@ -100,7 +100,7 @@ class SwaggerGenerator
 
         $templateData = TemplateUtil::fillTemplate($variables, $template);
 
-        $templateData = str_replace('$REQUIRED_FIELDS$', implode(', ', $fillables), $templateData);
+        $templateData = str_replace('$REQUIRED_FIELDS$', '"'.implode('", "', $fillables).'"', $templateData);
 
         $propertyTemplate = TemplateUtil::getTemplate('model.property', 'swagger-generator');
 
