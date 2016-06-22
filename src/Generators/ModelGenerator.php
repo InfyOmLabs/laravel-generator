@@ -240,7 +240,7 @@ class ModelGenerator extends BaseGenerator
                 $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
                 $rules[] = $rule;
             } elseif ($field['fieldType'] == 'text') {
-                $this->commandData->inputFields[$i]['validations'] = 'sometimes|max:65,535';
+                $this->commandData->inputFields[$i]['validations'] = 'sometimes';
                 $rule = "'".$field['fieldName']."' => '".$this->commandData->inputFields[$i]['validations']."'";
                 $rules[] = $rule;
             } elseif ($field['fieldType'] == 'dateTime' || $field['fieldType'] == 'date') {
