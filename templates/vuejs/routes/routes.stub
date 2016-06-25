@@ -1,0 +1,9 @@
+/* 
+ * ------------------- Route index for $MODEL_NAME$ ---------------
+ */
+Route::get('$ROUTE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$', [
+	'as' => '$VIEW_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index',
+	'uses' => function() {
+		return view('$VIEW_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index');
+	}
+]);

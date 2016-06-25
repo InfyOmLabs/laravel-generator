@@ -1,0 +1,25 @@
+/* 
+ * ------------------- Route API CRUD for $MODEL_NAME$ ---------------
+ */
+Route::group(['prefix' => '$MODEL_NAME_PLURAL_CAMEL$', 'namespace' => '$PATH_PREFIX$'], function () {
+	Route::get('/', [
+		'as' => '$API_PREFIX$.$API_VERSION$.$VIEW_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index',
+		'uses' => '$MODEL_NAME$APIController@index'
+	]);
+	Route::get('show/{id?}', [
+		'as' => '$API_PREFIX$.$API_VERSION$.$VIEW_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.show',
+		'uses' => '$MODEL_NAME$APIController@show'
+	]);
+	Route::patch('update/{id?}', [
+		'as' => '$API_PREFIX$.$API_VERSION$.$VIEW_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.update',
+		'uses' => '$MODEL_NAME$APIController@update'
+	]);
+	Route::delete('delete/{id?}', [
+		'as' => '$API_PREFIX$.$API_VERSION$.$VIEW_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.delete',
+		'uses' => '$MODEL_NAME$APIController@destroy'
+	]);
+	Route::post('store', [
+		'as' => '$API_PREFIX$.$API_VERSION$.$VIEW_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.store',
+		'uses' => '$MODEL_NAME$APIController@store'
+	]);
+});
