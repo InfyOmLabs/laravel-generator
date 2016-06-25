@@ -36,6 +36,7 @@ class GeneratorConfig
     public $pathRequest;
     public $pathRoutes;
     public $pathViews;
+    public $modelJsPath;
 
     /* Model Names */
     public $mName;
@@ -167,6 +168,11 @@ class GeneratorConfig
             'infyom.laravel_generator.path.views',
             base_path('resources/views/')
         ).$viewPrefix.$this->mCamelPlural.'/';
+
+        $this->modelJsPath = config(
+                'infyom.laravel_generator.path.modelsJs',
+                base_path('resources/assets/js/models/')
+        );
     }
 
     public function loadDynamicVariables(CommandData &$commandData)
