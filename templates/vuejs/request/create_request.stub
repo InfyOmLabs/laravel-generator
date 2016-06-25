@@ -3,8 +3,6 @@
 namespace $NAMESPACE_API_REQUEST$;
 
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
-use InfyOm\Generator\Request\MyAPIRequest;
-use App\Http\Requests\API\MyAPIRequest;
 
 class Create$MODEL_NAME$APIRequest extends MyAPIRequest
 {
