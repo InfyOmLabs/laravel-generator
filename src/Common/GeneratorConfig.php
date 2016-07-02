@@ -45,6 +45,8 @@ class GeneratorConfig
     public $mCamelPlural;
     public $mSnake;
     public $mSnakePlural;
+    public $mDashed;
+    public $mDashedPlural;
 
     public $forceMigrate;
 
@@ -201,6 +203,8 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$MODEL_NAME_PLURAL_CAMEL$', $this->mCamelPlural);
         $commandData->addDynamicVariable('$MODEL_NAME_SNAKE$', $this->mSnake);
         $commandData->addDynamicVariable('$MODEL_NAME_PLURAL_SNAKE$', $this->mSnakePlural);
+        $commandData->addDynamicVariable('$MODEL_NAME_DASHED$', $this->mDashed);
+        $commandData->addDynamicVariable('$MODEL_NAME_PLURAL_DASHED$', $this->mDashedPlural);
 
         if (!empty($this->prefixes['route'])) {
             $commandData->addDynamicVariable('$ROUTE_NAMED_PREFIX$', $this->prefixes['route'].'.');
