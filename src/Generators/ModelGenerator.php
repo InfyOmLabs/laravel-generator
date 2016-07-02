@@ -332,12 +332,16 @@ class ModelGenerator extends BaseGenerator
      */
     private function generateEloquent()
     {
-        return array_merge(
-            $this->generateBelongsToFunctions($this->eloquentRules[$this->table]['belongsTo']),
-            $this->generateBelongsToManyFunctions($this->eloquentRules[$this->table]['belongsToMany']),
-            $this->generateHasManyFunctions($this->eloquentRules[$this->table]['hasMany']),
-            $this->generateHasOneFunctions($this->eloquentRules[$this->table]['hasOne'])
-        );
+        if(isset($this->eloquentRules[$this->table])) {
+            return array_merge(
+                $this->generateBelongsToFunctions($this->eloquentRules[$this->table]['belongsTo']),
+                $this->generateBelongsToManyFunctions($this->eloquentRules[$this->table]['belongsToMany']),
+                $this->generateHasManyFunctions($this->eloquentRules[$this->table]['hasMany']),
+                $this->generateHasOneFunctions($this->eloquentRules[$this->table]['hasOne'])
+            );
+        }
+
+        return [];
     }
 
     private function getColumnsPrimaryAndForeignKeysPerTable()
