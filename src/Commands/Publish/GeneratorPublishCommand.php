@@ -93,12 +93,6 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
         $controllerPath = config('infyom.laravel_generator.path.controller', app_path('Http/Controllers/'));
 
-        $pathPrefix = config('infyom.laravel_generator.prefixes.path');
-
-        if (!empty($pathPrefix)) {
-            $controllerPath .= Str::title($pathPrefix).'/';
-        }
-
         $fileName = 'AppBaseController.php';
 
         if (file_exists($controllerPath.$fileName) && !$this->confirmOverwrite($fileName)) {
@@ -128,14 +122,8 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
         $controllerNamespace = config('infyom.laravel_generator.namespace.controller');
 
-        $pathPrefix = config('infyom.laravel_generator.prefixes.path');
-
-        if (!empty($pathPrefix)) {
-            $controllerNamespace .= '\\'.Str::title($pathPrefix);
-        }
-
         $templateData = str_replace(
-            '$NAMESPACE_CONTROLLER$',
+            '$NAMESPACE_BASE_CONTROLLER$',
             $controllerNamespace, $templateData
         );
 
