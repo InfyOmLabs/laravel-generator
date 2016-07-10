@@ -118,14 +118,9 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
         $templateData = str_replace('$API_VERSION$', $apiVersion, $templateData);
         $templateData = str_replace('$API_PREFIX$', $apiPrefix, $templateData);
-        $templateData = str_replace('$NAMESPACE_APP$', $this->getLaravel()->getNamespace(), $templateData);
-
-        $controllerNamespace = config('infyom.laravel_generator.namespace.controller');
-
-        $templateData = str_replace(
-            '$NAMESPACE_BASE_CONTROLLER$',
-            $controllerNamespace, $templateData
-        );
+        $appNamespace = $this->getLaravel()->getNamespace();
+        $appNamespace = substr($appNamespace, 0, strlen($appNamespace)-1);
+        $templateData = str_replace('$NAMESPACE_APP$', $appNamespace, $templateData);
 
         return $templateData;
     }

@@ -98,6 +98,7 @@ class GeneratorConfig
         }
 
         $this->nsApp = $commandData->commandObj->getLaravel()->getNamespace();
+        $this->nsApp = substr($this->nsApp, 0, strlen($this->nsApp)-1);
         $this->nsRepository = config('infyom.laravel_generator.namespace.repository', 'App\Repositories').$prefix;
         $this->nsModel = config('infyom.laravel_generator.namespace.model', 'App\Models').$prefix;
         $this->nsDataTables = config('infyom.laravel_generator.namespace.datatables', 'App\DataTables').$prefix;
