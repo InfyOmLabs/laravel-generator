@@ -11,7 +11,7 @@ class CommandData
 {
     public static $COMMAND_TYPE_API = 'api';
     public static $COMMAND_TYPE_SCAFFOLD = 'scaffold';
-    public static $COMMAND_TYPE_SCAFFOLD_API = 'scaffold_api';
+    public static $COMMAND_TYPE_API_SCAFFOLD = 'api_scaffold';
 
     /** @var string */
     public $modelName, $commandType;
@@ -125,7 +125,7 @@ class CommandData
             }
 
             if ($this->commandType == self::$COMMAND_TYPE_SCAFFOLD or
-                $this->commandType == self::$COMMAND_TYPE_SCAFFOLD_API
+                $this->commandType == self::$COMMAND_TYPE_API_SCAFFOLD
             ) {
                 $htmlType = $this->commandObj->ask('Enter field html input type (text): ', 'text');
             } else {

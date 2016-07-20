@@ -4,15 +4,6 @@ namespace InfyOm\Generator\Commands\API;
 
 use InfyOm\Generator\Commands\BaseCommand;
 use InfyOm\Generator\Common\CommandData;
-use InfyOm\Generator\Generators\API\APIControllerGenerator;
-use InfyOm\Generator\Generators\API\APIRequestGenerator;
-use InfyOm\Generator\Generators\API\APIRoutesGenerator;
-use InfyOm\Generator\Generators\API\APITestGenerator;
-use InfyOm\Generator\Generators\MigrationGenerator;
-use InfyOm\Generator\Generators\ModelGenerator;
-use InfyOm\Generator\Generators\RepositoryGenerator;
-use InfyOm\Generator\Generators\RepositoryTestGenerator;
-use InfyOm\Generator\Generators\TestTraitGenerator;
 
 class APIGeneratorCommand extends BaseCommand
 {
@@ -49,36 +40,9 @@ class APIGeneratorCommand extends BaseCommand
     {
         parent::handle();
 
-        if (!$this->commandData->getOption('fromTable')) {
-            $migrationGenerator = new MigrationGenerator($this->commandData);
-            $migrationGenerator->generate();
-        }
+        $this->generateCommonItems();
 
-        $modelGenerator = new ModelGenerator($this->commandData);
-        $modelGenerator->generate();
-
-        $repositoryGenerator = new RepositoryGenerator($this->commandData);
-        $repositoryGenerator->generate();
-
-        $controllerGenerator = new APIControllerGenerator($this->commandData);
-        $controllerGenerator->generate();
-
-        $requestGenerator = new APIRequestGenerator($this->commandData);
-        $requestGenerator->generate();
-
-        $routesGenerator = new APIRoutesGenerator($this->commandData);
-        $routesGenerator->generate();
-
-        if ($this->commandData->getAddOn('tests')) {
-            $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);
-            $repositoryTestGenerator->generate();
-
-            $testTraitGenerator = new TestTraitGenerator($this->commandData);
-            $testTraitGenerator->generate();
-
-            $apiTestGenerator = new APITestGenerator($this->commandData);
-            $apiTestGenerator->generate();
-        }
+        $this->generateAPIItems();
 
         $this->performPostActionsWithMigration();
     }

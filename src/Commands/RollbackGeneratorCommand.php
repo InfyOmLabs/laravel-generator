@@ -67,9 +67,8 @@ class RollbackGeneratorCommand extends Command
         if (!in_array($this->argument('type'), [
             CommandData::$COMMAND_TYPE_API,
             CommandData::$COMMAND_TYPE_SCAFFOLD,
-            CommandData::$COMMAND_TYPE_SCAFFOLD_API,
-        ])
-        ) {
+            CommandData::$COMMAND_TYPE_API_SCAFFOLD,
+        ])) {
             $this->error('invalid rollback type');
         }
 

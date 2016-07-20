@@ -37,13 +37,41 @@ class ViewGenerator extends BaseGenerator
         }
 
         $this->commandData->commandComment("\nGenerating Views...");
-        $this->generateTable();
-        $this->generateIndex();
-        $this->generateFields();
-        $this->generateCreate();
-        $this->generateUpdate();
-        $this->generateShowFields();
-        $this->generateShow();
+
+        if ($this->commandData->getOption('views')) {
+            $viewsToBeGenerated = explode(',', $this->commandData->getOption('views'));
+
+            if (in_array('index', $viewsToBeGenerated)) {
+                $this->generateTable();
+                $this->generateIndex();
+            }
+
+            if (count(array_intersect(['create', 'update'], $viewsToBeGenerated)) > 0) {
+                $this->generateFields();
+            }
+
+            if (in_array('create', $viewsToBeGenerated)) {
+                $this->generateCreate();
+            }
+
+            if (in_array('edit', $viewsToBeGenerated)) {
+                $this->generateUpdate();
+            }
+
+            if (in_array('show', $viewsToBeGenerated)) {
+                $this->generateShowFields();
+                $this->generateShow();
+            }
+        } else {
+            $this->generateTable();
+            $this->generateIndex();
+            $this->generateFields();
+            $this->generateCreate();
+            $this->generateUpdate();
+            $this->generateShowFields();
+            $this->generateShow();
+        }
+
         $this->commandData->commandComment('Views created: ');
     }
 
@@ -51,6 +79,7 @@ class ViewGenerator extends BaseGenerator
     {
         if ($this->commandData->getAddOn('datatables')) {
             $templateData = $this->generateDataTableBody();
+            $this->generateDataTableActions();
         } else {
             $templateData = $this->generateBladeTableBody();
         }
@@ -116,6 +145,17 @@ class ViewGenerator extends BaseGenerator
         $templateData = TemplateUtil::getTemplate('scaffold.views.datatable_body', $this->templateType);
 
         return TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+    }
+
+    private function generateDataTableActions()
+    {
+        $templateData = TemplateUtil::getTemplate('scaffold.views.datatables_actions', $this->templateType);
+
+        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+
+        FileUtil::createFile($this->path, 'datatables_actions.blade.php', $templateData);
+
+        $this->commandData->commandInfo('datatables_actions.blade.php created');
     }
 
     private function generateIndex()
@@ -209,6 +249,30 @@ class ViewGenerator extends BaseGenerator
 //                    $fieldTemplate = str_replace('$CHECKBOXES$', implode("\n", $radioButtons), $fieldTemplate);
 //                    break;
 
+                case 'bool-checkbox':
+                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.bool-checkbox', $this->templateType);
+                    $checkboxValue = $value = $field['htmlTypeInputs'];
+                    if ($field['fieldType'] === 'boolean') {
+                        if ($checkboxValue === 'checked') {
+                            $checkboxValue = '1, true';
+                        } elseif ($checkboxValue === 'unchecked') {
+                            $checkboxValue = '0';
+                        }
+                    }
+                    $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
+                    $fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
+                    break;
+
+                case 'toggle-switch':
+                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.toggle-switch', $this->templateType);
+                    $checkboxValue = $value = $field['htmlTypeInputs'];
+                    if ($field['fieldType'] === 'boolean') {
+                        $checkboxValue = "[ 'On' => '1' , 'Off' => '0']";
+                    }
+                    $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
+                    //$fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
+                    break;
+
                 case 'checkbox':
                     $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.checkbox', $this->templateType);
                     $checkboxValue = $value = $field['htmlTypeInputs'];
@@ -219,13 +283,24 @@ class ViewGenerator extends BaseGenerator
                     $fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
                     break;
 
+                case 'boolean':
+                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.boolean', $this->templateType);
+                    $checkboxValue = $value = $field['htmlTypeInputs'];
+                    if ($field['fieldType'] == 'boolean') {
+                        $checkboxValue = true;
+                    }
+                    $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
+                    // $fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
+                    break;
+
                 default:
                     $fieldTemplate = '';
                     break;
             }
 
             if (!empty($fieldTemplate)) {
-                $fieldTemplate = TemplateUtil::fillFieldTemplate(
+                $fieldTemplate = TemplateUtil::fillTemplateWithFieldData(
+                    $this->commandData->dynamicVars,
                     $this->commandData->fieldNamesMapping,
                     $fieldTemplate,
                     $field
