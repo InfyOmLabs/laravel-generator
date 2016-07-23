@@ -72,7 +72,7 @@
         "inIndex": false
     },
     {
-        "fieldInput": "private_post:string",  /* CHECKBOX WITH VALUE OPTION */
+        "fieldInput": "private_post:string",
         "htmlType": "checkbox:Yes",
         "validations": "",
         "searchable": true,
@@ -82,8 +82,8 @@
         "inIndex": false
     },
     {
-        "fieldInput": "is_active:boolean", /* BOOLEAN CHECKBOX */
-        "htmlType": "bool-checkbox:checked", /* OPTIONS ARE CHECKED | UNCHECKED */
+        "fieldInput": "is_active:boolean",
+        "htmlType": "bool-checkbox:checked",
         "validations": "",
         "searchable": true,
         "fillable": true,
@@ -92,7 +92,7 @@
         "inIndex": false
     },
     {
-        "fieldInput": "is_published:boolean",   /* BOOTSTRAP STYLED TOGGLE SWICH */
+        "fieldInput": "is_published:boolean",
         "htmlType": "toggle-switch",
         "validations": "",
         "searchable": true,
