@@ -61,13 +61,20 @@ class GeneratorFieldsInputUtil
             } else {
                 $inIndex = true;
             }
+            
+            if (isset($field['bsColumnSize'])) {
+                $bscolumnsize = $field['bsColumnSize'];
+            } else {
+                $bscolumnsize = 6;
+            }
 
             $fieldSettings = [
-                'searchable' => $searchable,
-                'fillable'   => $fillable,
-                'primary'    => $primary,
-                'inForm'     => $inForm,
-                'inIndex'    => $inIndex,
+                'searchable'   => $searchable,
+                'fillable'     => $fillable,
+                'primary'      => $primary,
+                'inForm'       => $inForm,
+                'inIndex'      => $inIndex,
+                'bsColumnSize' => $bscolumnsize
             ];
 
             $fieldsArr[] = self::processFieldInput($field['fieldInput'], $htmlType, $validations, $fieldSettings);
@@ -116,6 +123,7 @@ class GeneratorFieldsInputUtil
             'primary'        => isset($fieldSettings['primary']) ? $fieldSettings['primary'] : false,
             'inForm'         => isset($fieldSettings['inForm']) ? $fieldSettings['inForm'] : true,
             'inIndex'        => isset($fieldSettings['inIndex']) ? $fieldSettings['inIndex'] : true,
+            'bsColumnSize'   => isset($fieldSettings['bsColumnSize']) ? $fieldSettings['bsColumnSize'] : 6,
         ];
     }
 
