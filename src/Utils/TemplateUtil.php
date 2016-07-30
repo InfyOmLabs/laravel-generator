@@ -4,7 +4,7 @@ namespace InfyOm\Generator\Utils;
 
 class TemplateUtil
 {
-    public static function getTemplate($templateName, $templateType)
+    public static function getTemplateFilePath($templateName, $templateType)
     {
         $templateName = str_replace('.', '/', $templateName);
 
@@ -16,10 +16,15 @@ class TemplateUtil
         $path = $templatesPath.$templateName.'.stub';
 
         if (file_exists($path)) {
-            return file_get_contents($path);
+            return $path;
         }
 
-        $path = base_path('vendor/infyomlabs/'.$templateType.'/templates/'.$templateName.'.stub');
+        return base_path('vendor/infyomlabs/'.$templateType.'/templates/'.$templateName.'.stub');
+    }
+
+    public static function getTemplate($templateName, $templateType)
+    {
+        $path = self::getTemplateFilePath($templateName, $templateType);
 
         return file_get_contents($path);
     }
