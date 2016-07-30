@@ -84,8 +84,9 @@ class GeneratorConfig
         $this->prepareOptions($commandData);
         $this->prepareModelNames();
         $this->preparePrefixes();
-        $this->loadNamespaces($commandData);
         $this->loadPaths();
+        $this->prepareTableName();
+        $this->loadNamespaces($commandData);
         $commandData = $this->loadDynamicVariables($commandData);
     }
 
@@ -194,8 +195,6 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$NAMESPACE_REQUEST$', $this->nsRequest);
         $commandData->addDynamicVariable('$NAMESPACE_REQUEST_BASE$', $this->nsRequestBase);
 
-        $this->prepareTableName();
-
         $commandData->addDynamicVariable('$TABLE_NAME$', $this->tableName);
 
         $commandData->addDynamicVariable('$MODEL_NAME$', $this->mName);
@@ -271,7 +270,9 @@ class GeneratorConfig
         }
 
         foreach ($options as $option) {
-            $this->options[$option] = $commandData->commandObj->option($option);
+            if ($commandData->commandObj->hasOption($option)) {
+                $this->options[$option] = $commandData->commandObj->option($option);
+            }
         }
 
         if (isset($options['fromTable']) and $this->options['fromTable']) {
