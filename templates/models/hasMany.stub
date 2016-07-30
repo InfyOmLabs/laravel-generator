@@ -1,10 +1,10 @@
 /**
      * @return \Illuminate\Database\Eloquent\Relations\\hasMany
-     * @version $GENERATEDAT$
+     * @version $GENERATE_DATE$
      **/
-    public function $FUNCTIONNAME$() {
+    public function $FUNCTION_NAME$() {
         return $this->hasMany(
-            \$NAMESPACE_MODEL$\$MODELNAME$::class,
+            \$NAMESPACE_MODEL$\$RELATION_MODEL_NAME$::class,
             '$KEY1$',
             '$KEY2$'
         );

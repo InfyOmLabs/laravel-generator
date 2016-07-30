@@ -48,6 +48,8 @@ class ModelGenerator extends BaseGenerator
       'updated_at',
     ];
 
+    private $database;
+
     /**
      * ModelGenerator constructor.
      *
@@ -59,10 +61,12 @@ class ModelGenerator extends BaseGenerator
         $this->path = $commandData->config->pathModel;
         $this->fileName = $this->commandData->modelName.'.php';
         $this->table = $this->commandData->dynamicVars['$TABLE_NAME$'];
-        $this->getSchemaManager();
-        $this->getTables();
-        $this->getColumnsPrimaryAndForeignKeysPerTable();
-        $this->getEloquentRules();
+        if ($this->commandData->getOption('fromTable')) {
+            $this->getSchemaManager();
+            $this->getTables();
+            $this->getColumnsPrimaryAndForeignKeysPerTable();
+            $this->getEloquentRules();
+        }
     }
 
     public function generate()
@@ -112,7 +116,7 @@ class ModelGenerator extends BaseGenerator
         $templateData = str_replace(
             '$ELOQUENTFUNCTIONS$', implode(PHP_EOL.infy_nl_tab(1, 1), $this->generateEloquent()), $templateData
         );
-        $templateData = str_replace('$GENERATEDAT$', date('F j, Y, g:i a T'), $templateData);
+        $templateData = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $templateData);
 
         return $templateData;
     }
@@ -146,7 +150,7 @@ class ModelGenerator extends BaseGenerator
         } else {
             $docsTemplate = TemplateUtil::getTemplate('docs.model', 'laravel-generator');
             $docsTemplate = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $docsTemplate);
-            $docsTemplate = str_replace('$GENERATEDAT$', date('F j, Y, g:i a T'), $docsTemplate);
+            $docsTemplate = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $docsTemplate);
 
             $templateData = str_replace('$DOCS$', $docsTemplate, $templateData);
         }
@@ -406,14 +410,14 @@ class ModelGenerator extends BaseGenerator
             $hasOneFunctionName = $this->getSingularFunctionName($hasOneModel);
             $templateData = TemplateUtil::getTemplate('models.hasOne', 'laravel-generator');
 
-            $templateData = str_replace('$FUNCTIONNAME$', $hasOneFunctionName, $templateData);
+            $templateData = str_replace('$FUNCTION_NAME$', $hasOneFunctionName, $templateData);
             $templateData = str_replace(
                 '$NAMESPACE_MODEL$', $this->commandData->dynamicVars['$NAMESPACE_MODEL$'], $templateData
             );
-            $templateData = str_replace('$MODELNAME$', $hasOneModel, $templateData);
+            $templateData = str_replace('$RELATION_MODEL_NAME$', $hasOneModel, $templateData);
             $templateData = str_replace('$KEY1$', $rulesContainerRule[1], $templateData);
             $templateData = str_replace('$KEY2$', $rulesContainerRule[2], $templateData);
-            $templateData = str_replace('$GENERATEDAT$', date('F j, Y, g:i a T'), $templateData);
+            $templateData = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $templateData);
 
             $functionArr[] = $templateData;
         }
@@ -434,14 +438,14 @@ class ModelGenerator extends BaseGenerator
             $hasManyFunctionName = $this->getPluralFunctionName($hasManyModel);
             $templateData = TemplateUtil::getTemplate('models.hasMany', 'laravel-generator');
 
-            $templateData = str_replace('$FUNCTIONNAME$', $hasManyFunctionName, $templateData);
+            $templateData = str_replace('$FUNCTION_NAME$', $hasManyFunctionName, $templateData);
             $templateData = str_replace(
                 '$NAMESPACE_MODEL$', $this->commandData->dynamicVars['$NAMESPACE_MODEL$'], $templateData
             );
-            $templateData = str_replace('$MODELNAME$', $hasManyModel, $templateData);
+            $templateData = str_replace('$RELATION_MODEL_NAME$', $hasManyModel, $templateData);
             $templateData = str_replace('$KEY1$', $rulesContainerRule[1], $templateData);
             $templateData = str_replace('$KEY2$', $rulesContainerRule[2], $templateData);
-            $templateData = str_replace('$GENERATEDAT$', date('F j, Y, g:i a T'), $templateData);
+            $templateData = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $templateData);
 
             $functionArr[] = $templateData;
         }
@@ -462,14 +466,14 @@ class ModelGenerator extends BaseGenerator
             $belongsToFunctionName = $this->getSingularFunctionName($belongsToModel);
             $templateData = TemplateUtil::getTemplate('models.belongsTo', 'laravel-generator');
 
-            $templateData = str_replace('$FUNCTIONNAME$', $belongsToFunctionName, $templateData);
+            $templateData = str_replace('$FUNCTION_NAME$', $belongsToFunctionName, $templateData);
             $templateData = str_replace(
                 '$NAMESPACE_MODEL$', $this->commandData->dynamicVars['$NAMESPACE_MODEL$'], $templateData
             );
-            $templateData = str_replace('$MODELNAME$', $belongsToModel, $templateData);
+            $templateData = str_replace('$RELATION_MODEL_NAME$', $belongsToModel, $templateData);
             $templateData = str_replace('$KEY1$', $rulesContainerRule[1], $templateData);
             $templateData = str_replace('$KEY2$', $rulesContainerRule[2], $templateData);
-            $templateData = str_replace('$GENERATEDAT$', date('F j, Y, g:i a T'), $templateData);
+            $templateData = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $templateData);
 
             $functionArr[] = $templateData;
         }
@@ -490,15 +494,15 @@ class ModelGenerator extends BaseGenerator
             $belongsToManyFunctionName = $this->getPluralFunctionName($belongsToManyModel);
             $templateData = TemplateUtil::getTemplate('models.belongsToMany', 'laravel-generator');
 
-            $templateData = str_replace('$FUNCTIONNAME$', $belongsToManyFunctionName, $templateData);
+            $templateData = str_replace('$FUNCTION_NAME$', $belongsToManyFunctionName, $templateData);
             $templateData = str_replace(
                 '$NAMESPACE_MODEL$', $this->commandData->dynamicVars['$NAMESPACE_MODEL$'], $templateData
             );
-            $templateData = str_replace('$MODELNAME$', $belongsToManyModel, $templateData);
+            $templateData = str_replace('$RELATION_MODEL_NAME$', $belongsToManyModel, $templateData);
             $templateData = str_replace('$THROUGH$', $rulesContainerRule[1], $templateData);
             $templateData = str_replace('$KEY1$', $rulesContainerRule[2], $templateData);
             $templateData = str_replace('$KEY2$', $rulesContainerRule[3], $templateData);
-            $templateData = str_replace('$GENERATEDAT$', date('F j, Y, g:i a T'), $templateData);
+            $templateData = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $templateData);
 
             $functionArr[] = $templateData;
         }
