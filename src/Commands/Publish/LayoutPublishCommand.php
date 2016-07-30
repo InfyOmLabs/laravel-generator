@@ -71,30 +71,30 @@ class LayoutPublishCommand extends PublishBaseCommand
     private function getLaravel51Views()
     {
         return [
-            'layouts/app.stub'     => 'layouts/app.blade.php',
-            'layouts/sidebar.stub' => 'layouts/sidebar.blade.php',
-            'layouts/menu.stub'    => 'layouts/menu.blade.php',
-            'layouts/home.stub'    => 'home.blade.php',
-            'auth/login.stub'      => 'auth/login.blade.php',
-            'auth/register.stub'   => 'auth/register.blade.php',
-            'auth/email.stub'      => 'auth/password.blade.php',
-            'auth/reset.stub'      => 'auth/reset.blade.php',
-            'emails/password.stub' => 'emails/password.blade.php',
+            'layouts/app'     => 'layouts/app.blade.php',
+            'layouts/sidebar' => 'layouts/sidebar.blade.php',
+            'layouts/menu'    => 'layouts/menu.blade.php',
+            'layouts/home'    => 'home.blade.php',
+            'auth/login'      => 'auth/login.blade.php',
+            'auth/register'   => 'auth/register.blade.php',
+            'auth/email'      => 'auth/password.blade.php',
+            'auth/reset'      => 'auth/reset.blade.php',
+            'emails/password' => 'emails/password.blade.php',
         ];
     }
 
     private function getLaravel52Views()
     {
         return [
-            'layouts/app.stub'     => 'layouts/app.blade.php',
-            'layouts/sidebar.stub' => 'layouts/sidebar.blade.php',
-            'layouts/menu.stub'    => 'layouts/menu.blade.php',
-            'layouts/home.stub'    => 'home.blade.php',
-            'auth/login.stub'      => 'auth/login.blade.php',
-            'auth/register.stub'   => 'auth/register.blade.php',
-            'auth/email.stub'      => 'auth/passwords/email.blade.php',
-            'auth/reset.stub'      => 'auth/passwords/reset.blade.php',
-            'emails/password.stub' => 'auth/emails/password.blade.php',
+            'layouts/app'     => 'layouts/app.blade.php',
+            'layouts/sidebar' => 'layouts/sidebar.blade.php',
+            'layouts/menu'    => 'layouts/menu.blade.php',
+            'layouts/home'    => 'home.blade.php',
+            'auth/login'      => 'auth/login.blade.php',
+            'auth/register'   => 'auth/register.blade.php',
+            'auth/email'      => 'auth/passwords/email.blade.php',
+            'auth/reset'      => 'auth/passwords/reset.blade.php',
+            'emails/password' => 'auth/emails/password.blade.php',
         ];
     }
 
@@ -108,7 +108,7 @@ class LayoutPublishCommand extends PublishBaseCommand
         $files = $this->getViews();
 
         foreach ($files as $stub => $blade) {
-            $sourceFile = base_path('vendor/infyomlabs/'.$templateType.'/templates/scaffold/'.$stub);
+            $sourceFile = TemplateUtil::getTemplateFilePath('scaffold/'.$stub, $templateType);
             $destinationFile = $viewsPath.$blade;
             $this->publishFile($sourceFile, $destinationFile, $blade);
         }
