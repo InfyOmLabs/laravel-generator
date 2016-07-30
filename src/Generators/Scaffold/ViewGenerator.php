@@ -378,10 +378,15 @@ class ViewGenerator extends BaseGenerator
             'show_fields.blade.php',
         ];
 
+        if ($this->commandData->getAddOn('datatables')) {
+            $files[]='datatables_actions.blade.php';
+        }
+
         foreach ($files as $file) {
             if ($this->rollbackFile($this->path, $file)) {
                 $this->commandData->commandComment($file.' file deleted');
             }
         }
     }
+
 }
