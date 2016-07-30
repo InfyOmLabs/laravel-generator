@@ -137,7 +137,7 @@ class ModelGenerator extends BaseGenerator
 
         $template = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $template);
 
-        $template = str_replace('$REQUIRED_FIELDS$', implode(', ', $this->generateRequiredFields()), $template);
+        $template = str_replace('$REQUIRED_FIELDS$', '"' . implode('"' . ', ' . '"', $this->generateRequiredFields()) . '"', $template);
 
         $propertyTemplate = TemplateUtil::getTemplate('model.property', 'swagger-generator');
 
