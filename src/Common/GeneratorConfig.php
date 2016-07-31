@@ -73,8 +73,12 @@ class GeneratorConfig
     /* Generator AddOns */
     public $addOns;
 
-    public function init(CommandData &$commandData)
+    public function init(CommandData &$commandData, $options = null)
     {
+        if (!empty($options)) {
+            self::$availableOptions = $options;
+        }
+
         $this->mName = $commandData->modelName;
 
         $this->prepareAddOns();
@@ -252,16 +256,10 @@ class GeneratorConfig
         $this->mSnakePlural = Str::snake($this->mPlural);
     }
 
-    public function prepareOptions(CommandData &$commandData, $options = null)
+    public function prepareOptions(CommandData &$commandData)
     {
-        if (empty($options)) {
-            $options = self::$availableOptions;
-        }
-
-        foreach ($options as $option) {
-            if ($commandData->commandObj->hasOption($option)) {
-                $this->options[$option] = $commandData->commandObj->option($option);
-            }
+        foreach (self::$availableOptions as $option) {
+            $this->options[$option] = $commandData->commandObj->option($option);
         }
 
         if (isset($options['fromTable']) and $this->options['fromTable']) {

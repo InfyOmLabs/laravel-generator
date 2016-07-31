@@ -75,7 +75,7 @@ class RollbackGeneratorCommand extends Command
         $this->commandData = new CommandData($this, $this->argument('type'));
         $this->commandData->config->mName = $this->commandData->modelName = $this->argument('model');
 
-        $this->commandData->config->init($this->commandData);
+        $this->commandData->config->init($this->commandData, ['tableName', 'prefix']);
 
         $migrationGenerator = new MigrationGenerator($this->commandData);
         $migrationGenerator->rollback();
