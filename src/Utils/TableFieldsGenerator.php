@@ -156,10 +156,11 @@ class TableFieldsGenerator
 
         if ($column->getAutoincrement()) {
             $fieldInput .= ',true';
-        }
-
-        if ($column->getUnsigned()) {
-            $fieldInput .= ',true';
+            if ($column->getUnsigned()) {
+            	$fieldInput .= ',true';
+        	}
+        } elseif ($column->getUnsigned()) {
+            $fieldInput .= ',false, true';
         }
 
         return $fieldInput;
