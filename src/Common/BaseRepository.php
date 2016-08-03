@@ -54,7 +54,7 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
                 switch ($methodClass) {
                     case 'Illuminate\Database\Eloquent\Relations\BelongsToMany':
                         $new_values = array_get($attributes, $key, []);
-                        if (array_search('', $new_values) != null) {
+                        if (array_search('', $new_values) !== null) {
                             unset($new_values[array_search('', $new_values)]);
                         }
                         $model->$key()->sync(array_values($new_values));
@@ -71,7 +71,7 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
                         break;
                     case 'Illuminate\Database\Eloquent\Relations\HasMany':
                         $new_values = array_get($attributes, $key, []);
-                        if (array_search('', $new_values) != null) {
+                        if (array_search('', $new_values) !== null) {
                             unset($new_values[array_search('', $new_values)]);    
                         }
 
