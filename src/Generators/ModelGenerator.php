@@ -59,10 +59,33 @@ class ModelGenerator extends BaseGenerator
         $this->path = $commandData->config->pathModel;
         $this->fileName = $this->commandData->modelName.'.php';
         $this->table = $this->commandData->dynamicVars['$TABLE_NAME$'];
-        $this->getSchemaManager();
-        $this->getTables();
-        $this->getColumnsPrimaryAndForeignKeysPerTable();
-        $this->getEloquentRules();
+        if ($this->commandData->getOption('fromTable')) {
+            $this->getSchemaManager();
+            $this->getTables();
+            $this->getColumnsPrimaryAndForeignKeysPerTable();
+            $this->getEloquentRules();
+        } else if($this->commandData->getOption('jsonFromGUI')) {
+            // TODO should be in getTable
+            $this->tables[] = $this->table;
+            // TODO should be in get eloquent rules
+            $this->eloquentRules[$this->table] = [
+                'hasMany'       => [],
+                'hasOne'        => [],
+                'belongsTo'     => [],
+                'belongsToMany' => [],
+                'fillable'      => [],
+            ];
+            foreach ($commandData->relationships as $relationship){
+                $fkFields = $relationship['fkFields'];
+                if($relationship['relationshipType'] == 'belongsTo'){
+                    $this->addOneToOneRules($this->table, $fkFields[0]['fkOptions']);
+                } elseif($relationship['relationshipType'] == 'hasOne'){
+                    $this->addOneToOneRules($fkFields[0]['fkOptions']['table'], $fkFields[0]['fkOptions']);
+                } else if($relationship['relationshipType'] == 'hasMany'){
+                    $this->addOneToManyRules($fkFields[0]['fkOptions']['table'], $fkFields[0]['fkOptions']);
+                }
+            }
+        }
     }
 
     public function generate()
@@ -724,5 +747,14 @@ class ModelGenerator extends BaseGenerator
         $modelName = lcfirst($modelName);
 
         return str_plural($modelName);
+    }
+
+    private function getRelationshipForeignKeyConstraints($relationship){
+        array_map(
+            function($fkField){
+
+            },
+            $relationship['fkFields']
+        );
     }
 }

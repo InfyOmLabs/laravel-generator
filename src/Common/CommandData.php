@@ -21,7 +21,7 @@ class CommandData
     public $config;
 
     /** @var array */
-    public $inputFields;
+    public $inputFields, $relationships;
 
     /** @var Command */
     public $commandObj;
@@ -105,6 +105,19 @@ class CommandData
             $this->getInputFromConsole();
         }
     }
+
+    public function getRelationships()
+    {
+        
+        $this->relationships = [];
+        if ($this->getOption('jsonFromGUI')) {
+            $fileContents = $this->getOption('jsonFromGUI');
+            $this->relationships = json_decode($fileContents, true)['relationships'];
+        } else {
+            $this->relationships = [];
+        }
+    }
+
 
     private function getInputFromConsole()
     {
