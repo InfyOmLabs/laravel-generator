@@ -59,10 +59,37 @@ class ModelGenerator extends BaseGenerator
         $this->path = $commandData->config->pathModel;
         $this->fileName = $this->commandData->modelName.'.php';
         $this->table = $this->commandData->dynamicVars['$TABLE_NAME$'];
-        $this->getSchemaManager();
-        $this->getTables();
-        $this->getColumnsPrimaryAndForeignKeysPerTable();
-        $this->getEloquentRules();
+        if ($this->commandData->getOption('fromTable')) {
+            $this->getSchemaManager();
+            $this->getTables();
+            $this->getColumnsPrimaryAndForeignKeysPerTable();
+            $this->getEloquentRules();
+        } else if($this->commandData->getOption('jsonFromGUI')) {
+            // TODO should be in getTable
+            $this->tables[] = $this->table;
+            // TODO should be in get eloquent rules
+            $this->eloquentRules[$this->table] = [
+                'hasMany'       => [],
+                'hasOne'        => [],
+                'belongsTo'     => [],
+                'belongsToMany' => [],
+                'fillable'      => [],
+            ];
+            foreach ($commandData->relationships as $relationship){
+                $fkFields = $relationship['fkFields'];
+                if($relationship['relationshipType'] == 'belongsTo'){
+                    $this->addOneToOneRules($this->table, $fkFields[0]['fkOptions']);
+                } elseif($relationship['relationshipType'] == 'hasOne'){
+                    $this->addOneToOneRules($fkFields[0]['fkOptions']['table'], $fkFields[0]['fkOptions']);
+                } else if($relationship['relationshipType'] == 'hasMany'){
+                    $this->addOneToManyRules($fkFields[0]['fkOptions']['table'], $fkFields[0]['fkOptions']);
+                } else if($relationship['relationshipType'] == 'belongsToMany'){
+                    $fk1 = $fkFields[0]['fkOptions'];
+                    $fk2 = $fkFields[1]['fkOptions'];
+                    $this->addManyToManyRulesFromForeignKeys($this->table, $fk1, $fk2);
+                }
+            }
+        }
     }
 
     public function generate()
@@ -637,6 +664,27 @@ class ModelGenerator extends BaseGenerator
         $fk1Field = $fk1['field'];
 
         $fk2 = $foreign[1];
+        $fk2Table = $fk2['on'];
+        $fk2Field = $fk2['field'];
+
+        if (in_array($fk1Table, $this->tables)) {
+            $this->eloquentRules[$fk1Table]['belongsToMany'][] = [$fk2Table, $table, $fk1Field, $fk2Field];
+        }
+        if (in_array($fk2Table, $this->tables)) {
+            $this->eloquentRules[$fk2Table]['belongsToMany'][] = [$fk1Table, $table, $fk2Field, $fk1Field];
+        }
+    }
+
+    /**
+     * @param $table string
+     */
+    private function addManyToManyRulesFromForeignKeys($table, $fk1, $fk2)
+    {
+        $foreign = $this->prep[$table]['foreign'];
+
+        $fk1Table = $fk1['on'];
+        $fk1Field = $fk1['field'];
+
         $fk2Table = $fk2['on'];
         $fk2Field = $fk2['field'];
 

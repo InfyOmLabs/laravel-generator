@@ -52,6 +52,7 @@ class BaseCommand extends Command
 
         $this->commandData->initCommandData();
         $this->commandData->getInputFields();
+        $this->commandData->getRelationships();
     }
 
     public function generateCommonItems()
