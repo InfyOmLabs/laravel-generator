@@ -2,7 +2,7 @@
 
 namespace InfyOm\Generator\Utils;
 
-use Illuminate\Support\Str;
+use InfyOm\Generator\Common\GeneratorField;
 use RuntimeException;
 
 class GeneratorFieldsInputUtil
@@ -78,7 +78,7 @@ class GeneratorFieldsInputUtil
 
     public static function validateFieldInput($fieldInputStr)
     {
-        $fieldInputs = explode(':', $fieldInputStr);
+        $fieldInputs = explode(' ', $fieldInputStr);
 
         if (count($fieldInputs) < 2) {
             return false;
@@ -87,36 +87,44 @@ class GeneratorFieldsInputUtil
         return true;
     }
 
-    public static function processFieldInput($fieldInput, $htmlType, $validations, $fieldSettings = [])
+    /**
+     * @param $fieldInput
+     * @param $validations
+     * @return GeneratorField
+     */
+    public static function processFieldInput($fieldInput, $validations)
     {
-        $fieldInputs = explode(':', $fieldInput);
+        /*
+         * Field Input Format: field_name <space> db_type <space> html_type(optional) <space> options(optional)
+         * Options are to skip the field from certain criteria like searchable, fillable, not in form, not in index
+         * Searchable (s), Fillable (f), In Form (if), In Index (ii)
+         * Sample Field Inputs
+         *
+         * title string text
+         * body text textarea
+         * name string,20 text
+         * post_id integer:unsigned:nullable
+         * post_id integer:unsigned:nullable:foreign,posts,id
+         * password string text if,ii,s - options will skip field from being added in form, in index and searchable
+         */
 
-        $fieldName = array_shift($fieldInputs);
-        $databaseInputs = implode(':', $fieldInputs);
-        $fieldType = explode(',', $fieldInputs[0])[0];
+        $fieldInputsArr = explode(' ', $fieldInput);
 
-        $htmlTypeInputs = explode(':', $htmlType);
-        $htmlType = array_shift($htmlTypeInputs);
+        $field = new GeneratorField();
+        $field->name = $fieldInputsArr[0];
+        $field->parseDBType($fieldInputsArr[1]);
 
-        if (count($htmlTypeInputs) > 0) {
-            $htmlTypeInputs = array_shift($htmlTypeInputs);
+        if(count($fieldInputsArr) > 2) {
+            $field->htmlType = $fieldInputsArr[2];
         }
 
-        return [
-            'fieldInput'     => $fieldInput,
-            'fieldTitle'     => Str::title(str_replace('_', ' ', $fieldName)),
-            'fieldType'      => $fieldType,
-            'fieldName'      => $fieldName,
-            'databaseInputs' => $databaseInputs,
-            'htmlType'       => $htmlType,
-            'htmlTypeInputs' => $htmlTypeInputs,
-            'validations'    => $validations,
-            'searchable'     => isset($fieldSettings['searchable']) ? $fieldSettings['searchable'] : false,
-            'fillable'       => isset($fieldSettings['fillable']) ? $fieldSettings['fillable'] : true,
-            'primary'        => isset($fieldSettings['primary']) ? $fieldSettings['primary'] : false,
-            'inForm'         => isset($fieldSettings['inForm']) ? $fieldSettings['inForm'] : true,
-            'inIndex'        => isset($fieldSettings['inIndex']) ? $fieldSettings['inIndex'] : true,
-        ];
+        if(count($fieldInputsArr) > 3) {
+            $field->parseOptions($fieldInputsArr[3]);
+        }
+
+        $field->validations = $validations;
+
+        return $field;
     }
 
     public static function prepareKeyValueArrayStr($arr)

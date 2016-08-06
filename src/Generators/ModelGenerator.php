@@ -19,7 +19,7 @@ class ModelGenerator extends BaseGenerator
     /** @var string */
     private $fileName;
 
-    /** @var Doctrine\DBAL\Schema\SchemaManager */
+    /** @var \Doctrine\DBAL\Schema\AbstractSchemaManager */
     private $schemaManager;
 
     /** @var string */
@@ -34,7 +34,7 @@ class ModelGenerator extends BaseGenerator
     /** @var array */
     private $eloquentRules;
     /**
-     * @var Doctrine\DBAL\Connection
+     * @var \Doctrine\DBAL\Connection
      */
     private $connection;
 
@@ -62,11 +62,16 @@ class ModelGenerator extends BaseGenerator
         $this->fileName = $this->commandData->modelName.'.php';
         $this->table = $this->commandData->dynamicVars['$TABLE_NAME$'];
         if ($this->commandData->getOption('fromTable')) {
-            $this->getSchemaManager();
-            $this->getTables();
-            $this->getColumnsPrimaryAndForeignKeysPerTable();
-            $this->getEloquentRules();
+            $this->prepareRelationships();
         }
+    }
+
+    public function prepareRelationships()
+    {
+        $this->getSchemaManager();
+        $this->getTables();
+        $this->getColumnsPrimaryAndForeignKeysPerTable();
+        $this->getEloquentRules();
     }
 
     public function generate()
@@ -688,7 +693,9 @@ class ModelGenerator extends BaseGenerator
 
     /**
      * Returns array of fields matched as primary keys in table.
-     **/
+     * @param string $tableName
+     * @return array
+     */
     private function getPrimaryKeys($tableName)
     {
         $primary_key_index = $this->schemaManager->listTableDetails($tableName)->getPrimaryKey();

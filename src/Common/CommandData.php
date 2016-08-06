@@ -20,7 +20,7 @@ class CommandData
     /** @var GeneratorConfig */
     public $config;
 
-    /** @var array */
+    /** @var GeneratorField[] */
     public $inputFields;
 
     /** @var Command */
@@ -109,12 +109,13 @@ class CommandData
     private function getInputFromConsole()
     {
         $this->commandInfo('Specify fields for the model (skip id & timestamp fields, we will add it automatically)');
+        $this->commandInfo('Read docs carefully to specify field inputs)');
         $this->commandInfo('Enter "exit" to finish');
 
         $this->addPrimaryKey();
 
         while (true) {
-            $fieldInputStr = $this->commandObj->ask('Field: (field_name:field_database_type)', '');
+            $fieldInputStr = $this->commandObj->ask('Field: (name db_type html_type options)', '');
 
             if (empty($fieldInputStr) || $fieldInputStr == false || $fieldInputStr == 'exit') {
                 break;
@@ -125,29 +126,12 @@ class CommandData
                 continue;
             }
 
-            if ($this->commandType == self::$COMMAND_TYPE_SCAFFOLD or
-                $this->commandType == self::$COMMAND_TYPE_API_SCAFFOLD or
-                $this->commandType == self::$COMMAND_TYPE_VUEJS
-            ) {
-                $htmlType = $this->commandObj->ask('Enter field html input type (text): ', 'text');
-            } else {
-                $htmlType = '';
-            }
-
             $validations = $this->commandObj->ask('Enter validations: ', false);
-            $searchable = $this->commandObj->ask('Is Searchable (y/N): ', false);
-
             $validations = ($validations == false) ? '' : $validations;
-
-            if ($searchable) {
-                $searchable = (strtolower($searchable) == 'y') ? true : false;
-            }
 
             $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput(
                 $fieldInputStr,
-                $htmlType,
-                $validations,
-                ['searchable' => $searchable]
+                $validations
             );
         }
 
@@ -156,60 +140,31 @@ class CommandData
 
     private function addPrimaryKey()
     {
+        $primaryKey = new GeneratorField();
         if ($this->getOption('primary')) {
-            $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput(
-                $this->getOption('primary').':increments',
-                '',
-                '',
-                [
-                    'searchable' => false,
-                    'fillable'   => false,
-                    'primary'    => true,
-                    'inForm'     => false,
-                    'inIndex'    => false,
-                ]
-            );
+            $primaryKey->name = $this->getOption('primary');
         } else {
-            $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput(
-                'id:increments',
-                '',
-                '',
-                [
-                    'searchable' => false,
-                    'fillable'   => false,
-                    'primary'    => true,
-                    'inForm'     => false,
-                    'inIndex'    => false,
-                ]
-            );
+            $primaryKey->name = 'id';
         }
+        $primaryKey->parseDBType('increments');
+        $primaryKey->parseOptions('s,f,p,if,ii');
+
+        $this->inputFields[] = $primaryKey;
     }
 
     private function addTimestamps()
     {
-        $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput(
-            'created_at:timestamp',
-            '',
-            '',
-            [
-                'searchable' => false,
-                'fillable'   => false,
-                'inForm'     => false,
-                'inIndex'    => false,
-            ]
-        );
+        $createdAt = new GeneratorField();
+        $createdAt->name = 'created_at';
+        $createdAt->parseDBType('timestamp');
+        $createdAt->parseOptions('s,f,if,in');
+        $this->inputFields[] = $createdAt;
 
-        $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput(
-            'updated_at:timestamp',
-            '',
-            '',
-            [
-                'searchable' => false,
-                'fillable'   => false,
-                'inForm'     => false,
-                'inIndex'    => false,
-            ]
-        );
+        $updatedAt = new GeneratorField();
+        $updatedAt->name = 'updated_at';
+        $updatedAt->parseDBType('timestamp');
+        $updatedAt->parseOptions('s,f,if,in');
+        $this->inputFields[] = $updatedAt;
     }
 
     private function getInputFromFileOrJson()

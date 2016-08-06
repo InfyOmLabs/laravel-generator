@@ -45,15 +45,31 @@ class MigrationGenerator extends BaseGenerator
     private function generateFields()
     {
         $fields = [];
+        $createdAtField = null;
+        $updatedAtField = null;
 
         foreach ($this->commandData->inputFields as $field) {
-            if ($field['fieldName'] == 'created_at' or $field['fieldName'] == 'updated_at') {
+            if ($field->name == 'created_at') {
+                $createdAtField = $field;
+                continue;
+            } else if ($field->name == 'updated_at') {
+                $updatedAtField = $field;
                 continue;
             }
-            $fields[] = SchemaUtil::createField($field);
+
+            $fields[] = $field->migrationText;
         }
 
-        $fields[] = '$table->timestamps();';
+        if($createdAtField and $updatedAtField) {
+            $fields[] = '$table->timestamps();';
+        } else {
+            if ($createdAtField) {
+                $fields[] = $createdAtField->migrationText;
+            }
+            if ($updatedAtField) {
+                $fields[] = $updatedAtField->migrationText;
+            }
+        }
 
         if ($this->commandData->getOption('softDelete')) {
             $fields[] = '$table->softDeletes();';

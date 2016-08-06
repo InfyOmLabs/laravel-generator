@@ -61,15 +61,15 @@ class BaseCommand extends Command
             $migrationGenerator->generate();
         }
 
-        if (!$this->isSkip('model')) {
-            $modelGenerator = new ModelGenerator($this->commandData);
-            $modelGenerator->generate();
-        }
-
-        if (!$this->isSkip('repository')) {
-            $repositoryGenerator = new RepositoryGenerator($this->commandData);
-            $repositoryGenerator->generate();
-        }
+//        if (!$this->isSkip('model')) {
+//            $modelGenerator = new ModelGenerator($this->commandData);
+//            $modelGenerator->generate();
+//        }
+//
+//        if (!$this->isSkip('repository')) {
+//            $repositoryGenerator = new RepositoryGenerator($this->commandData);
+//            $repositoryGenerator->generate();
+//        }
     }
 
     public function generateAPIItems()

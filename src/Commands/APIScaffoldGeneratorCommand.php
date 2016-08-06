@@ -41,9 +41,9 @@ class APIScaffoldGeneratorCommand extends BaseCommand
 
         $this->generateCommonItems();
 
-        $this->generateAPIItems();
-
-        $this->generateScaffoldItems();
+//        $this->generateAPIItems();
+//
+//        $this->generateScaffoldItems();
 
         $this->performPostActionsWithMigration();
     }
