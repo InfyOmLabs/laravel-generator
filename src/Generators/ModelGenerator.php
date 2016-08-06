@@ -95,8 +95,8 @@ class ModelGenerator extends BaseGenerator
         $fillables = [];
 
         foreach ($this->commandData->inputFields as $field) {
-            if ($field['fillable']) {
-                $fillables[] = "'".$field['fieldName']."'";
+            if ($field->isFillable) {
+                $fillables[] = "'".$field->name."'";
             }
         }
 
@@ -211,9 +211,9 @@ class ModelGenerator extends BaseGenerator
         $requiredFields = [];
 
         foreach ($this->commandData->inputFields as $field) {
-            if (!empty($field['validations'])) {
-                if (str_contains($field['validations'], 'required')) {
-                    $requiredFields[] = $field['fieldName'];
+            if (!empty($field->validations)) {
+                if (str_contains($field->validations, 'required')) {
+                    $requiredFields[] = $field->name;
                 }
             }
         }
@@ -226,8 +226,8 @@ class ModelGenerator extends BaseGenerator
         $rules = [];
 
         foreach ($this->commandData->inputFields as $field) {
-            if (!empty($field['validations'])) {
-                $rule = "'".$field['fieldName']."' => '".$field['validations']."'";
+            if (!empty($field->validations)) {
+                $rule = "'".$field->name."' => '".$field->validations."'";
                 $rules[] = $rule;
             }
         }
@@ -242,35 +242,37 @@ class ModelGenerator extends BaseGenerator
         $timestamps = TableFieldsGenerator::getTimestampFieldNames();
 
         foreach ($this->commandData->inputFields as $field) {
-            if (in_array($field['fieldName'], $timestamps)) {
+            if (in_array($field->name, $timestamps)) {
                 continue;
             }
 
-            switch ($field['fieldType']) {
+            $rule = "'".$field->name."' => ";
+
+            switch ($field->fieldType) {
                 case 'integer':
-                    $rule = "'".$field['fieldName']."' => 'integer'";
+                    $rule .= "'integer'";
                     break;
                 case 'double':
-                    $rule = "'".$field['fieldName']."' => 'double'";
+                    $rule .= "'double'";
                     break;
                 case 'float':
-                    $rule = "'".$field['fieldName']."' => 'float'";
+                    $rule .= "'float'";
                     break;
                 case 'boolean':
-                    $rule = "'".$field['fieldName']."' => 'boolean'";
+                    $rule .= "'boolean'";
                     break;
                 case 'dateTime':
                 case 'dateTimeTz':
-                    $rule = "'".$field['fieldName']."' => 'datetime'";
+                    $rule .= "'datetime'";
                     break;
                 case 'date':
-                    $rule = "'".$field['fieldName']."' => 'date'";
+                    $rule .= "'date'";
                     break;
                 case 'enum':
                 case 'string':
                 case 'char':
                 case 'text':
-                    $rule = "'".$field['fieldName']."' => 'string'";
+                    $rule .= "'string'";
                     break;
                 default:
                     $rule = '';

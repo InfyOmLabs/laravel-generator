@@ -5,7 +5,7 @@ namespace InfyOm\Generator\Common;
 class GeneratorField
 {
     /** @var  string */
-    public $name, $dbInput, $htmlType;
+    public $name, $dbInput, $htmlType, $fieldType;
 
     /** @var  string */
     public $migrationText, $validations;
@@ -49,8 +49,8 @@ class GeneratorField
         $this->migrationText = '$table->';
 
         $fieldTypeParams = explode(",", array_shift($inputsArr));
-        $fieldType = array_shift($fieldTypeParams);
-        $this->migrationText .= $fieldType . "('" . $this->name . "'";
+        $this->fieldType = array_shift($fieldTypeParams);
+        $this->migrationText .= $this->fieldType . "('" . $this->name . "'";
 
         foreach ($fieldTypeParams as $param) {
             $this->migrationText .= ", " . $param;
