@@ -51,9 +51,9 @@ class ModelJsConfigGenerator extends BaseGenerator
         $lenghtFields = count($this->commandData->inputFields);
         foreach ($this->commandData->inputFields as $field) {
             if ($i == $lenghtFields - 1)
-                $fieldsRow .= "\t" . $field['fieldName'] . ': ""';
+                $fieldsRow .= "\t" . $field->name . ': ""';
             else
-                $fieldsRow .= "\t" . $field['fieldName'] . ": \"\",\n";
+                $fieldsRow .= "\t" . $field->name . ": \"\",\n";
             $i++;
         }
         $templateData = str_replace('$FIELDS_ROW$', $fieldsRow, $templateData);
@@ -63,9 +63,9 @@ class ModelJsConfigGenerator extends BaseGenerator
         $i = 0;
         foreach ($this->commandData->inputFields as $field) {
             $fieldCol = $fieldsColTemplateData;
-            $fieldCol = str_replace('$FIELD_NAME$', $field['fieldName'], $fieldCol);                
+            $fieldCol = str_replace('$FIELD_NAME$', $field->name, $fieldCol);
             $fieldVisible = 'true';
-            if (!$field['inIndex']) 
+            if (!$field->inIndex)
                 $fieldVisible = 'false';
             $fieldCol = str_replace('$FIELD_VISIBLE$', $fieldVisible, $fieldCol);
             if ($i == $lenghtFields - 1)

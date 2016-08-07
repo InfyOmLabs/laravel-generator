@@ -96,7 +96,7 @@ class ViewGenerator extends BaseGenerator
         $headerFields = [];
 
         foreach ($this->commandData->inputFields as $field) {
-            if (!$field['inIndex']) {
+            if (!$field->inIndex) {
                 continue;
             }
             $headerFields[] = $fieldTemplate = TemplateUtil::fillTemplateWithFieldData(
@@ -123,7 +123,7 @@ class ViewGenerator extends BaseGenerator
         $tableBodyFields = [];
 
         foreach ($this->commandData->inputFields as $field) {
-            if (!$field['inIndex']) {
+            if (!$field->inIndex) {
                 continue;
             }
 
@@ -190,10 +190,10 @@ class ViewGenerator extends BaseGenerator
         $this->htmlFields = [];
 
         foreach ($this->commandData->inputFields as $field) {
-            if (!$field['inForm']) {
+            if (!$field->inForm) {
                 continue;
             }
-            switch ($field['htmlType']) {
+            switch ($field->htmlType) {
                 case 'text':
                 case 'textarea':
                 case 'date':
@@ -355,8 +355,8 @@ class ViewGenerator extends BaseGenerator
         $fieldsStr = '';
 
         foreach ($this->commandData->inputFields as $field) {
-            $singleFieldStr = str_replace('$FIELD_NAME_TITLE$', Str::title(str_replace('_', ' ', $field['fieldName'])), $fieldTemplate);
-            $singleFieldStr = str_replace('$FIELD_NAME$', $field['fieldName'], $singleFieldStr);
+            $singleFieldStr = str_replace('$FIELD_NAME_TITLE$', Str::title(str_replace('_', ' ', $field->name)), $fieldTemplate);
+            $singleFieldStr = str_replace('$FIELD_NAME$', $field->name, $singleFieldStr);
             $singleFieldStr = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $singleFieldStr);
 
             $fieldsStr .= $singleFieldStr."\n\n";

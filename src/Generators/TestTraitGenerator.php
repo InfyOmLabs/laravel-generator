@@ -51,13 +51,13 @@ class TestTraitGenerator extends BaseGenerator
         $fields = [];
 
         foreach ($this->commandData->inputFields as $field) {
-            if ($field['primary']) {
+            if ($field->isPrimary) {
                 continue;
             }
 
-            $fieldData = "'".$field['fieldName']."' => ".'$fake->';
+            $fieldData = "'".$field->name."' => ".'$fake->';
 
-            switch ($field['fieldType']) {
+            switch ($field->fieldType) {
                 case 'integer':
                 case 'float':
                     $fakerData = 'randomDigitNotNull';

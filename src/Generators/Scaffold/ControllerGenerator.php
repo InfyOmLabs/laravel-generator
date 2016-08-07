@@ -66,7 +66,7 @@ class ControllerGenerator extends BaseGenerator
         $headerFields = [];
 
         foreach ($this->commandData->inputFields as $field) {
-            if (!$field['inIndex']) {
+            if (!$field->inIndex) {
                 continue;
             }
             $headerFields[] = $fieldTemplate = TemplateUtil::fillTemplateWithFieldData(

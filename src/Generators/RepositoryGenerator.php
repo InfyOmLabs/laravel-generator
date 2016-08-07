@@ -33,8 +33,8 @@ class RepositoryGenerator extends BaseGenerator
         $searchables = [];
 
         foreach ($this->commandData->inputFields as $field) {
-            if ($field['searchable']) {
-                $searchables[] = "'".$field['fieldName']."'";
+            if ($field->isSearchable) {
+                $searchables[] = "'".$field->name."'";
             }
         }
 

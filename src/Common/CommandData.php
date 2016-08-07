@@ -146,7 +146,7 @@ class CommandData
         } else {
             $primaryKey->name = 'id';
         }
-        $primaryKey->parseDBType('increments');
+        $primaryKey->parseDBInput('increments');
         $primaryKey->parseOptions('s,f,p,if,ii');
 
         $this->inputFields[] = $primaryKey;
@@ -156,13 +156,13 @@ class CommandData
     {
         $createdAt = new GeneratorField();
         $createdAt->name = 'created_at';
-        $createdAt->parseDBType('timestamp');
+        $createdAt->parseDBInput('timestamp');
         $createdAt->parseOptions('s,f,if,in');
         $this->inputFields[] = $createdAt;
 
         $updatedAt = new GeneratorField();
         $updatedAt->name = 'updated_at';
-        $updatedAt->parseDBType('timestamp');
+        $updatedAt->parseDBInput('timestamp');
         $updatedAt->parseOptions('s,f,if,in');
         $this->inputFields[] = $updatedAt;
     }
@@ -185,15 +185,18 @@ class CommandData
 
                 $fileContents = file_get_contents($filePath);
                 $jsonData = json_decode($fileContents, true);
-                $this->inputFields = array_merge($this->inputFields, GeneratorFieldsInputUtil::validateFieldsFile($jsonData));
-            } else {
-                $fileContents = $this->getOption('jsonFromGUI');
-                $jsonData = json_decode($fileContents, true);
-                $this->inputFields = array_merge($this->inputFields, GeneratorFieldsInputUtil::validateFieldsFile($jsonData['fields']));
-                $this->config->overrideOptionsFromJsonFile($jsonData);
-                if (isset($jsonData['migrate'])) {
-                    $this->config->forceMigrate = $jsonData['migrate'];
+                $this->inputFields = [];
+                foreach($jsonData as $field) {
+                    $this->inputFields[] = GeneratorField::parseFieldFromFile($field);
                 }
+            } else {
+//                $fileContents = $this->getOption('jsonFromGUI');
+//                $jsonData = json_decode($fileContents, true);
+//                $this->inputFields = array_merge($this->inputFields, GeneratorFieldsInputUtil::validateFieldsFile($jsonData['fields']));
+//                $this->config->overrideOptionsFromJsonFile($jsonData);
+//                if (isset($jsonData['migrate'])) {
+//                    $this->config->forceMigrate = $jsonData['migrate'];
+//                }
             }
 
             $this->checkForDiffPrimaryKey();
@@ -206,8 +209,8 @@ class CommandData
     private function checkForDiffPrimaryKey()
     {
         foreach ($this->inputFields as $field) {
-            if (isset($field['primary']) && $field['primary'] && $field['fieldName'] != 'id') {
-                $this->setOption('primary', $field['fieldName']);
+            if (isset($field->isPrimary) && $field->isPrimary && $field->name != 'id') {
+                $this->setOption('primary', $field->name);
                 break;
             }
         }

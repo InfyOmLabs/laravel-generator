@@ -34,8 +34,7 @@ class ControllerGenerator extends BaseGenerator
 
         $fields = $this->commandData->inputFields;
         $i = 0;
-        $fieldLenght = count($fields) ;
-        $filter = '';  
+        $filter = '';
         $searchableCount = 0;
         foreach ($fields as $field) {
             if ($field['searchable'])

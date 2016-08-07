@@ -3,79 +3,9 @@
 namespace InfyOm\Generator\Utils;
 
 use InfyOm\Generator\Common\GeneratorField;
-use RuntimeException;
 
 class GeneratorFieldsInputUtil
 {
-    public static function validateFieldsFile($fields)
-    {
-        $fieldsArr = [];
-
-        foreach ($fields as $field) {
-            if (!self::validateFieldInput($field['fieldInput'])) {
-                throw new RuntimeException('Invalid Input '.$field['fieldInput']);
-            }
-
-            if (isset($field['htmlType'])) {
-                $htmlType = $field['htmlType'];
-            } else {
-                $htmlType = 'text';
-            }
-
-            if (isset($field['validations'])) {
-                $validations = $field['validations'];
-            } else {
-                $validations = '';
-            }
-
-            if (isset($field['searchable'])) {
-                $searchable = $field['searchable'];
-            } else {
-                $searchable = false;
-            }
-
-            if (isset($field['fillable'])) {
-                $fillable = $field['fillable'];
-            } else {
-                $fillable = true;
-            }
-
-            if (isset($field['primary'])) {
-                $primary = $field['primary'];
-            } else {
-                $primary = false;
-            }
-
-            if (isset($field['inForm'])) {
-                $inForm = $field['inForm'];
-            } elseif ($primary) {
-                $inForm = false;
-            } else {
-                $inForm = true;
-            }
-
-            if (isset($field['inIndex'])) {
-                $inIndex = $field['inIndex'];
-            } elseif ($primary) {
-                $inIndex = false;
-            } else {
-                $inIndex = true;
-            }
-
-            $fieldSettings = [
-                'searchable' => $searchable,
-                'fillable'   => $fillable,
-                'primary'    => $primary,
-                'inForm'     => $inForm,
-                'inIndex'    => $inIndex,
-            ];
-
-            $fieldsArr[] = self::processFieldInput($field['fieldInput'], $htmlType, $validations, $fieldSettings);
-        }
-
-        return $fieldsArr;
-    }
-
     public static function validateFieldInput($fieldInputStr)
     {
         $fieldInputs = explode(' ', $fieldInputStr);
@@ -112,7 +42,7 @@ class GeneratorFieldsInputUtil
 
         $field = new GeneratorField();
         $field->name = $fieldInputsArr[0];
-        $field->parseDBType($fieldInputsArr[1]);
+        $field->parseDBInput($fieldInputsArr[1]);
 
         if(count($fieldInputsArr) > 2) {
             $field->htmlType = $fieldInputsArr[2];

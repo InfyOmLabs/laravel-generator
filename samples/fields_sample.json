@@ -1,6 +1,7 @@
 [
     {
-        "fieldInput": "id:increments",
+        "fieldInput": "id",
+        "dbInput": "increments",
         "htmlType": "",
         "validations": "",
         "searchable": false,
@@ -10,7 +11,8 @@
         "inIndex": false
     },
     {
-        "fieldInput": "title:string,20",
+        "fieldInput": "title",
+        "dbInput": "string,20",
         "htmlType": "text",
         "validations": "required",
         "searchable": true,
@@ -18,41 +20,49 @@
         "inIndex": true
     },
     {
-        "fieldInput": "email:string",
+        "fieldInput": "email",
+        "dbInput": "string",
         "htmlType": "email",
         "searchable": true
     },
     {
-        "fieldInput": "post_date:dateTime",
+        "fieldInput": "post_date",
+        "dbInput": "dateTime",
         "htmlType": "date"
     },
     {
-        "fieldInput": "words:integer",
+        "fieldInput": "words",
+        "dbInput": "integer",
         "htmlType": "number"
     },
     {
-        "fieldInput": "attachment:string",
+        "fieldInput": "attachment",
+        "dbInput": "string",
         "htmlType": "file"
     },
     {
         "fieldInput": "password:string",
+        "dbInput": "string,20",
         "htmlType": "password",
         "inIndex": false
     },
     {
-        "fieldInput": "post_type:string",
+        "fieldInput": "post_type",
+        "dbInput": "string",
         "htmlType": "select:Type1,Type2,Type3,Type4",
         "validations": "",
         "searchable": true
     },
     {
-        "fieldInput": "post_day:enum",
+        "fieldInput": "post_day",
+        "dbInput": "enum",
         "htmlType": "enum:Mon,Tue,Wed,Thu,Fri,Sat,Sun",
         "validations": "",
         "searchable": true
     },
     {
-        "fieldInput": "post_author_gender:string",
+        "fieldInput": "post_author_gender",
+        "dbInput": "string",
         "htmlType": "radio:Male,Female",
         "validations": "",
         "searchable": false,
@@ -62,7 +72,8 @@
         "inIndex": false
     },
     {
-        "fieldInput": "body:text",
+        "fieldInput": "body",
+        "dbInput": "text",
         "htmlType": "textarea",
         "validations": "",
         "searchable": false,
@@ -72,7 +83,8 @@
         "inIndex": false
     },
     {
-        "fieldInput": "private_post:string",
+        "fieldInput": "private_post",
+        "dbInput": "string",
         "htmlType": "checkbox:Yes",
         "validations": "",
         "searchable": true,
@@ -82,7 +94,8 @@
         "inIndex": false
     },
     {
-        "fieldInput": "is_active:boolean",
+        "fieldInput": "is_active",
+        "dbInput": "boolean",
         "htmlType": "bool-checkbox:checked",
         "validations": "",
         "searchable": true,
@@ -92,7 +105,8 @@
         "inIndex": false
     },
     {
-        "fieldInput": "is_published:boolean",
+        "fieldInput": "is_published",
+        "dbInput": "boolean",
         "htmlType": "toggle-switch",
         "validations": "",
         "searchable": true,
@@ -100,5 +114,5 @@
         "primary": false,
         "inForm": true,
         "inIndex": false
-    },
+    }
 ]

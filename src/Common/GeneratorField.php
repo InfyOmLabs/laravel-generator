@@ -16,7 +16,7 @@ class GeneratorField
     /** @var  GeneratorFieldRelation[] */
     public $relations;
 
-    public function parseDBType($dbInput)
+    public function parseDBInput($dbInput)
     {
         $this->dbInput = $dbInput;
         $this->prepareMigrationText();
@@ -76,5 +76,20 @@ class GeneratorField
         }
 
         $this->migrationText .= ";";
+    }
+
+    public static function parseFieldFromFile($fieldInput)
+    {
+        $field = new GeneratorField();
+        $field->name = $fieldInput['fieldInput'];
+        $field->parseDBInput($fieldInput['dbInput']);
+        $field->htmlType = isset($fieldInput['htmlType']) ? $fieldInput['htmlType'] : '';
+        $field->validations = isset($fieldInput['validations']) ? $fieldInput['validations'] : '';
+        $field->isSearchable = isset($fieldInput['searchable']) ? $fieldInput['searchable'] : false;
+        $field->isFillable = isset($fieldInput['fillable']) ? $fieldInput['fillable'] : true;
+        $field->isPrimary = isset($fieldInput['primary']) ? $fieldInput['primary'] : false;
+        $field->inForm = isset($fieldInput['inForm']) ? $fieldInput['inForm'] : false;
+        $field->inIndex = isset($fieldInput['inIndex']) ? $fieldInput['inIndex'] : false;
+        return $field;
     }
 }

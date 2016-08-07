@@ -93,10 +93,10 @@ class ViewGenerator extends BaseGenerator
     {
         $this->htmlFields = [];
         foreach ($this->commandData->inputFields as $field) {
-            if (!$field['inForm']) {
+            if (!$field->inForm) {
                 continue;
             }
-            switch ($field['htmlType']) {
+            switch ($field->htmlType) {
                 case 'text':
                 case 'textarea':
                 case 'date':
@@ -104,7 +104,7 @@ class ViewGenerator extends BaseGenerator
                 case 'email':
                 case 'password':
                 case 'number':
-                    $fieldTemplate = TemplateUtil::getTemplate('vuejs.fields.'.$field['htmlType'], $this->templateType);
+                    $fieldTemplate = TemplateUtil::getTemplate('vuejs.fields.'.$field->htmlType, $this->templateType);
                     break;
 
                 case 'select':
