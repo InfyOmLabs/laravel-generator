@@ -41,7 +41,7 @@ class TemplateUtil
     public static function fillFieldTemplate($variables, $template, $field)
     {
         foreach ($variables as $variable => $key) {
-            $template = str_replace($variable, $field[$key], $template);
+            $template = str_replace($variable, $field->$key, $template);
         }
 
         return $template;

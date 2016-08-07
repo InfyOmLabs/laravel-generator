@@ -201,7 +201,7 @@ class ViewGenerator extends BaseGenerator
                 case 'email':
                 case 'password':
                 case 'number':
-                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.'.$field['htmlType'], $this->templateType);
+                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.'.$field->htmlType, $this->templateType);
                     break;
 
                 case 'select':

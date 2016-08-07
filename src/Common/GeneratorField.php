@@ -2,6 +2,8 @@
 
 namespace InfyOm\Generator\Common;
 
+use Illuminate\Support\Str;
+
 class GeneratorField
 {
     /** @var  string */
@@ -91,5 +93,14 @@ class GeneratorField
         $field->inForm = isset($fieldInput['inForm']) ? $fieldInput['inForm'] : false;
         $field->inIndex = isset($fieldInput['inIndex']) ? $fieldInput['inIndex'] : false;
         return $field;
+    }
+
+    public function __get($key)
+    {
+        if ($key == 'fieldTitle') {
+            return Str::title(str_replace('_', ' ', $this->name));
+        }
+
+        return $this->$key;
     }
 }
