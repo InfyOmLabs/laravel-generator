@@ -156,6 +156,8 @@ class TableFieldsGenerator
 
         if ($column->getAutoincrement()) {
             $fieldInput .= ',true';
+        } else {
+            $fieldInput .= ',false';
         }
 
         if ($column->getUnsigned()) {
