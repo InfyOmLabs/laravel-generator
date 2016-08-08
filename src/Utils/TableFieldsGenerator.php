@@ -121,7 +121,7 @@ class TableFieldsGenerator
         $schema = DB::getDoctrineSchemaManager();
         $indexes = collect($schema->listTableIndexes($tableName));
 
-        $primaryKey = $indexes->first(function ($i, $index) {
+        $primaryKey = $indexes->first(function ($index) {
             return $index->isPrimary() && 1 === count($index->getColumns());
         });
 
