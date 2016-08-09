@@ -25,13 +25,32 @@ class HTMLFieldGenerator
             case 'select':
             case 'enum':
                 $fieldTemplate = get_template('scaffold.fields.select', $templateType);
-                $inputsArr = GeneratorFieldsInputUtil::prepareKeyValueArrFromLabelValueStr($field->htmlValues);
+                $radioLabels = GeneratorFieldsInputUtil::prepareKeyValueArrFromLabelValueStr($field->htmlValues);
 
                 $fieldTemplate = str_replace(
                     '$INPUT_ARR$',
-                    GeneratorFieldsInputUtil::prepareKeyValueArrayStr($inputsArr),
+                    GeneratorFieldsInputUtil::prepareKeyValueArrayStr($radioLabels),
                     $fieldTemplate
                 );
+                break;
+            case 'checkbox':
+                $fieldTemplate = get_template('scaffold.fields.checkbox', $templateType);
+                $checkboxValue = $field->htmlValues[0];
+                $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
+                break;
+            case 'radio':
+                $fieldTemplate = get_template('scaffold.fields.radio_group', $templateType);
+                $radioTemplate = get_template('scaffold.fields.radio', $templateType);
+
+                $radioLabels = GeneratorFieldsInputUtil::prepareKeyValueArrFromLabelValueStr($field->htmlValues);
+
+                $radioButtons = [];
+                foreach ($radioLabels as $label => $value) {
+                    $radioButtonTemplate = str_replace('$LABEL$', $label, $radioTemplate);
+                    $radioButtonTemplate = str_replace('$VALUE$', $value, $radioButtonTemplate);
+                    $radioButtons[] = $radioButtonTemplate;
+                }
+                $fieldTemplate = str_replace('$RADIO_BUTTONS$', implode("\n", $radioButtons), $fieldTemplate);
                 break;
         }
 
