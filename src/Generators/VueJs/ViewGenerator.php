@@ -2,12 +2,10 @@
 
 namespace InfyOm\Generator\Generators\VueJs;
 
-use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
-use InfyOm\Generator\Utils\TemplateUtil;
 
 class ViewGenerator extends BaseGenerator
 {
@@ -57,16 +55,17 @@ class ViewGenerator extends BaseGenerator
 
     private function generateBladeTableBody()
     {
-        $templateData = TemplateUtil::getTemplate('vuejs.views.blade_table_body', $this->templateType);
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = get_template('vuejs.views.blade_table_body', $this->templateType);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+
         return $templateData;
     }
 
     private function generateIndex()
     {
-        $templateData = TemplateUtil::getTemplate('vuejs.views.index', $this->templateType);
+        $templateData = get_template('vuejs.views.index', $this->templateType);
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         if ($this->commandData->getOption('datatables')) {
             $templateData = str_replace('$PAGINATE$', '', $templateData);
@@ -74,9 +73,9 @@ class ViewGenerator extends BaseGenerator
             $paginate = $this->commandData->getOption('paginate');
 
             if ($paginate) {
-                $paginateTemplate = TemplateUtil::getTemplate('vuejs.views.paginate', $this->templateType);
+                $paginateTemplate = get_template('vuejs.views.paginate', $this->templateType);
 
-                $paginateTemplate = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $paginateTemplate);
+                $paginateTemplate = fill_template($this->commandData->dynamicVars, $paginateTemplate);
 
                 $templateData = str_replace('$PAGINATE$', $paginateTemplate, $templateData);
             } else {
@@ -104,12 +103,12 @@ class ViewGenerator extends BaseGenerator
                 case 'email':
                 case 'password':
                 case 'number':
-                    $fieldTemplate = TemplateUtil::getTemplate('vuejs.fields.'.$field->htmlType, $this->templateType);
+                    $fieldTemplate = get_template('vuejs.fields.' . $field->htmlType, $this->templateType);
                     break;
 
                 case 'select':
                 case 'enum':
-                    $fieldTemplate = TemplateUtil::getTemplate('vuejs.fields.select', $this->templateType);
+                    $fieldTemplate = get_template('vuejs.fields.select', $this->templateType);
                     $inputsArr = explode(',', $field['htmlTypeInputs']);
 
                     $fieldTemplate = str_replace(
@@ -120,12 +119,12 @@ class ViewGenerator extends BaseGenerator
                     break;
 
                 case 'radio':
-                    $fieldTemplate = TemplateUtil::getTemplate('vuejs.fields.radio_group', $this->templateType);
-                    $radioTemplate = TemplateUtil::getTemplate('vuejs.fields.radio', $this->templateType);
+                    $fieldTemplate = get_template('vuejs.fields.radio_group', $this->templateType);
+                    $radioTemplate = get_template('vuejs.fields.radio', $this->templateType);
                     $inputsArr = explode(',', $field['htmlTypeInputs']);
                     $radioButtons = [];
                     foreach ($inputsArr as $item) {
-                        $radioButtonsTemplate = TemplateUtil::fillFieldTemplate(
+                        $radioButtonsTemplate = fill_field_template(
                             $this->commandData->fieldNamesMapping,
                             $radioTemplate, $field
                         );
@@ -136,12 +135,12 @@ class ViewGenerator extends BaseGenerator
                     break;
 
 //                case 'checkbox-group':
-//                    $fieldTemplate = TemplateUtil::getTemplate('vuejs.fields.checkbox_group', $this->templateType);
-//                      $radioTemplate = TemplateUtil::getTemplate('vuejs.fields.checks', $this->templateType);
+//                    $fieldTemplate = get_template('vuejs.fields.checkbox_group', $this->templateType);
+//                      $radioTemplate = get_template('vuejs.fields.checks', $this->templateType);
 //                      $inputsArr = explode(',', $field['htmlTypeInputs']);
 //                      $radioButtons = [];
 //                      foreach ($inputsArr as $item) {
-//                          $radioButtonsTemplate = TemplateUtil::fillFieldTemplate(
+//                          $radioButtonsTemplate = fill_field_template(
 //                              $this->commandData->fieldNamesMapping,
 //                              $radioTemplate,
 //                              $field
@@ -153,10 +152,10 @@ class ViewGenerator extends BaseGenerator
 //                    break;
 
                 case 'checkbox':
-                    $fieldTemplate = TemplateUtil::getTemplate('vuejs.fields.checkbox', $this->templateType);
+                    $fieldTemplate = get_template('vuejs.fields.checkbox', $this->templateType);
                     $checkboxValue = $value = $field['htmlTypeInputs'];
                     if ($field['fieldType'] != 'boolean') {
-                        $checkboxValue = "'".$value."'";
+                        $checkboxValue = "'" . $value . "'";
                     }
                     $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
                     $fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
@@ -167,8 +166,8 @@ class ViewGenerator extends BaseGenerator
                     break;
             }
 
-            if (!empty($fieldTemplate)) {                
-                if (isset($field['validations']) && !empty($field['validations'])) {               
+            if (!empty($fieldTemplate)) {
+                if (isset($field['validations']) && !empty($field['validations'])) {
                     $rules = explode('|', $field['validations']);
                     foreach ($rules as $key => $rule) {
                         if ($rule == 'required') {
@@ -181,27 +180,27 @@ class ViewGenerator extends BaseGenerator
                     }
                     $validationRules = implode(', ', $rules);
                     $fieldTemplate = str_replace('$VALIDATION_RULES$', $validationRules, $fieldTemplate);
-                    
-                    $validationMessagesTemplate = TemplateUtil::getTemplate('vuejs.fields.validation_messages', $this->templateType);
+
+                    $validationMessagesTemplate = get_template('vuejs.fields.validation_messages', $this->templateType);
                     $validationMessages = '';
                     foreach ($rules as $rule) {
                         $rule = explode(':', $rule)[0];
                         $validationMessages .= str_replace('$RULE$', $rule, $validationMessagesTemplate) . "\n";
-                    }           
-                    $fieldTemplate = str_replace('$VALIDATION_MESSAGES$', $validationMessages, $fieldTemplate);      
+                    }
+                    $fieldTemplate = str_replace('$VALIDATION_MESSAGES$', $validationMessages, $fieldTemplate);
                 }
 
-                $fieldTemplate = TemplateUtil::fillFieldTemplate(
+                $fieldTemplate = fill_field_template(
                     $this->commandData->fieldNamesMapping,
                     $fieldTemplate,
                     $field
-                );                
+                );
                 $this->htmlFields[] = $fieldTemplate;
             }
         }
 
-        $templateData = TemplateUtil::getTemplate('vuejs.views.fields', $this->templateType);
-        //$templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = get_template('vuejs.views.fields', $this->templateType);
+        //$templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         $templateData = str_replace('$FIELDS$', implode("\n\n", $this->htmlFields), $templateData);
 
@@ -211,9 +210,9 @@ class ViewGenerator extends BaseGenerator
 
     private function generateForm()
     {
-        $templateData = TemplateUtil::getTemplate('vuejs.views.form', $this->templateType);
+        $templateData = get_template('vuejs.views.form', $this->templateType);
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, 'form.blade.php', $templateData);
         $this->commandData->commandInfo('form.blade.php created');
@@ -221,9 +220,9 @@ class ViewGenerator extends BaseGenerator
 
     private function generateShow()
     {
-        $templateData = TemplateUtil::getTemplate('vuejs.views.show', $this->templateType);
+        $templateData = get_template('vuejs.views.show', $this->templateType);
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, 'show.blade.php', $templateData);
         $this->commandData->commandInfo('show.blade.php created');
@@ -231,13 +230,13 @@ class ViewGenerator extends BaseGenerator
 
     private function generateDelete()
     {
-        $templateData = TemplateUtil::getTemplate('vuejs.views.delete', $this->templateType);
+        $templateData = get_template('vuejs.views.delete', $this->templateType);
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, 'delete.blade.php', $templateData);
         $this->commandData->commandInfo('delete.blade.php created');
-    }    
+    }
 
     public function rollback()
     {
@@ -252,7 +251,7 @@ class ViewGenerator extends BaseGenerator
 
         foreach ($files as $file) {
             if ($this->rollbackFile($this->path, $file)) {
-                $this->commandData->commandComment($file.' file deleted');
+                $this->commandData->commandComment($file . ' file deleted');
             }
         }
     }

@@ -5,7 +5,6 @@ namespace InfyOm\Generator\Generators\VueJs;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\FileUtil;
-use InfyOm\Generator\Utils\TemplateUtil;
 
 class ControllerGenerator extends BaseGenerator
 {
@@ -22,14 +21,14 @@ class ControllerGenerator extends BaseGenerator
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathApiController;
-        $this->fileName = $this->commandData->modelName.'APIController.php';
+        $this->fileName = $this->commandData->modelName . 'APIController.php';
     }
 
     public function generate()
     {
-        $templateData = TemplateUtil::getTemplate('vuejs.controller.api_controller', 'laravel-generator');
+        $templateData = get_template('vuejs.controller.api_controller', 'laravel-generator');
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
         $templateData = $this->fillDocs($templateData);
 
         $fields = $this->commandData->inputFields;
@@ -37,9 +36,10 @@ class ControllerGenerator extends BaseGenerator
         $filter = '';
         $searchableCount = 0;
         foreach ($fields as $field) {
-            if ($field['searchable'])
+            if ($field['searchable']) {
                 $searchableCount++;
-        }      
+            }
+        }
         foreach ($fields as $field) {
             if ($field['searchable']) {
                 if ($i == 0) {
@@ -49,10 +49,12 @@ class ControllerGenerator extends BaseGenerator
                     } else {
                         $filter .= "\n";
                     }
-                } else if ($i == $searchableCount - 1) {
-                    $filter .= '                  ->orWhere("' . $field['fieldName'] . '", "like", $value);';
                 } else {
-                    $filter .= '                  ->orWhere("' . $field['fieldName'] . '", "like", $value)' . "\n";
+                    if ($i == $searchableCount - 1) {
+                        $filter .= '                  ->orWhere("' . $field['fieldName'] . '", "like", $value);';
+                    } else {
+                        $filter .= '                  ->orWhere("' . $field['fieldName'] . '", "like", $value)' . "\n";
+                    }
                 }
                 $i++;
             }
@@ -77,9 +79,9 @@ class ControllerGenerator extends BaseGenerator
         }
 
         foreach ($methods as $method) {
-            $key = '$DOC_'.strtoupper($method).'$';
-            $docTemplate = TemplateUtil::getTemplate($templatePrefix.'.'.$method, $templateType);
-            $docTemplate = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $docTemplate);
+            $key = '$DOC_' . strtoupper($method) . '$';
+            $docTemplate = get_template($templatePrefix . '.' . $method, $templateType);
+            $docTemplate = fill_template($this->commandData->dynamicVars, $docTemplate);
             $templateData = str_replace($key, $docTemplate, $templateData);
         }
 
@@ -89,7 +91,7 @@ class ControllerGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('API Controller file deleted: '.$this->fileName);
+            $this->commandData->commandComment('API Controller file deleted: ' . $this->fileName);
         }
     }
 }

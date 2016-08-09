@@ -5,7 +5,6 @@ namespace InfyOm\Generator\Generators\Scaffold;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\FileUtil;
-use InfyOm\Generator\Utils\TemplateUtil;
 
 class ControllerGenerator extends BaseGenerator
 {
@@ -26,28 +25,28 @@ class ControllerGenerator extends BaseGenerator
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathController;
         $this->templateType = config('infyom.laravel_generator.templates', 'core-templates');
-        $this->fileName = $this->commandData->modelName.'Controller.php';
+        $this->fileName = $this->commandData->modelName . 'Controller.php';
     }
 
     public function generate()
     {
         if ($this->commandData->getAddOn('datatables')) {
-            $templateData = TemplateUtil::getTemplate('scaffold.controller.datatable_controller', 'laravel-generator');
+            $templateData = get_template('scaffold.controller.datatable_controller', 'laravel-generator');
 
             $this->generateDataTable();
         } else {
-            $templateData = TemplateUtil::getTemplate('scaffold.controller.controller', 'laravel-generator');
+            $templateData = get_template('scaffold.controller.controller', 'laravel-generator');
 
             $paginate = $this->commandData->getOption('paginate');
 
             if ($paginate) {
-                $templateData = str_replace('$RENDER_TYPE$', 'paginate('.$paginate.')', $templateData);
+                $templateData = str_replace('$RENDER_TYPE$', 'paginate(' . $paginate . ')', $templateData);
             } else {
                 $templateData = str_replace('$RENDER_TYPE$', 'all()', $templateData);
             }
         }
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
@@ -57,11 +56,11 @@ class ControllerGenerator extends BaseGenerator
 
     private function generateDataTable()
     {
-        $templateData = TemplateUtil::getTemplate('scaffold.datatable', 'laravel-generator');
+        $templateData = get_template('scaffold.datatable', 'laravel-generator');
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
-        $headerFieldTemplate = TemplateUtil::getTemplate('scaffold.views.datatable_column', $this->templateType);
+        $headerFieldTemplate = get_template('scaffold.views.datatable_column', $this->templateType);
 
         $headerFields = [];
 
@@ -69,7 +68,7 @@ class ControllerGenerator extends BaseGenerator
             if (!$field->inIndex) {
                 continue;
             }
-            $headerFields[] = $fieldTemplate = TemplateUtil::fillTemplateWithFieldData(
+            $headerFields[] = $fieldTemplate = fill_templateWithFieldData(
                 $this->commandData->dynamicVars,
                 $this->commandData->fieldNamesMapping,
                 $headerFieldTemplate,
@@ -79,9 +78,9 @@ class ControllerGenerator extends BaseGenerator
 
         $path = $this->commandData->config->pathDataTables;
 
-        $fileName = $this->commandData->modelName.'DataTable.php';
+        $fileName = $this->commandData->modelName . 'DataTable.php';
 
-        $fields = implode(','.infy_nl_tab(1, 3), $headerFields);
+        $fields = implode(',' . infy_nl_tab(1, 3), $headerFields);
 
         $templateData = str_replace('$DATATABLE_COLUMNS$', $fields, $templateData);
 
@@ -94,7 +93,7 @@ class ControllerGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('Controller file deleted: '.$this->fileName);
+            $this->commandData->commandComment('Controller file deleted: ' . $this->fileName);
         }
     }
 }

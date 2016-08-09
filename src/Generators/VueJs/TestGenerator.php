@@ -5,7 +5,6 @@ namespace InfyOm\Generator\Generators\API;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\FileUtil;
-use InfyOm\Generator\Utils\TemplateUtil;
 
 class APITestGenerator extends BaseGenerator
 {
@@ -22,14 +21,14 @@ class APITestGenerator extends BaseGenerator
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathApiTests;
-        $this->fileName = $this->commandData->modelName.'ApiTest.php';
+        $this->fileName = $this->commandData->modelName . 'ApiTest.php';
     }
 
     public function generate()
     {
-        $templateData = TemplateUtil::getTemplate('api.test.api_test', 'laravel-generator');
+        $templateData = get_template('api.test.api_test', 'laravel-generator');
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
@@ -40,7 +39,7 @@ class APITestGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('API Test file deleted: '.$this->fileName);
+            $this->commandData->commandComment('API Test file deleted: ' . $this->fileName);
         }
     }
 }

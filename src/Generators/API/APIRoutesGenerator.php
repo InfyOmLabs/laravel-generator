@@ -5,7 +5,6 @@ namespace InfyOm\Generator\Generators\API;
 use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
-use InfyOm\Generator\Utils\TemplateUtil;
 
 class APIRoutesGenerator extends BaseGenerator
 {
@@ -29,21 +28,21 @@ class APIRoutesGenerator extends BaseGenerator
         $this->routeContents = file_get_contents($this->path);
 
         if (!empty($this->commandData->config->prefixes['route'])) {
-            $routesTemplate = TemplateUtil::getTemplate('api.routes.prefix_routes', 'laravel-generator');
+            $routesTemplate = get_template('api.routes.prefix_routes', 'laravel-generator');
         } else {
-            $routesTemplate = TemplateUtil::getTemplate('api.routes.routes', 'laravel-generator');
+            $routesTemplate = get_template('api.routes.routes', 'laravel-generator');
         }
 
-        $this->routesTemplate = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $routesTemplate);
+        $this->routesTemplate = fill_template($this->commandData->dynamicVars, $routesTemplate);
     }
 
     public function generate()
     {
-        $this->routeContents .= "\n\n".$this->routesTemplate;
+        $this->routeContents .= "\n\n" . $this->routesTemplate;
 
         file_put_contents($this->path, $this->routeContents);
 
-        $this->commandData->commandComment("\n".$this->commandData->config->mCamelPlural.' api routes added.');
+        $this->commandData->commandComment("\n" . $this->commandData->config->mCamelPlural . ' api routes added.');
     }
 
     public function rollback()

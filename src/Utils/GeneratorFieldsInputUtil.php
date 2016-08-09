@@ -45,7 +45,7 @@ class GeneratorFieldsInputUtil
         $field->parseDBInput($fieldInputsArr[1]);
 
         if(count($fieldInputsArr) > 2) {
-            $field->htmlType = $fieldInputsArr[2];
+            $field->parseHtmlInput($fieldInputsArr[2]);
         }
 
         if(count($fieldInputsArr) > 3) {

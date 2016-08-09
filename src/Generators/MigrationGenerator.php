@@ -6,8 +6,6 @@ use File;
 use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Utils\FileUtil;
-use InfyOm\Generator\Utils\SchemaUtil;
-use InfyOm\Generator\Utils\TemplateUtil;
 use SplFileInfo;
 
 class MigrationGenerator extends BaseGenerator
@@ -26,15 +24,15 @@ class MigrationGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = TemplateUtil::getTemplate('migration', 'laravel-generator');
+        $templateData = get_template('migration', 'laravel-generator');
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         $templateData = str_replace('$FIELDS$', $this->generateFields(), $templateData);
 
         $tableName = $this->commandData->dynamicVars['$TABLE_NAME$'];
 
-        $fileName = date('Y_m_d_His').'_'.'create_'.$tableName.'_table.php';
+        $fileName = date('Y_m_d_His') . '_' . 'create_' . $tableName . '_table.php';
 
         FileUtil::createFile($this->path, $fileName, $templateData);
 
@@ -52,15 +50,17 @@ class MigrationGenerator extends BaseGenerator
             if ($field->name == 'created_at') {
                 $createdAtField = $field;
                 continue;
-            } else if ($field->name == 'updated_at') {
-                $updatedAtField = $field;
-                continue;
+            } else {
+                if ($field->name == 'updated_at') {
+                    $updatedAtField = $field;
+                    continue;
+                }
             }
 
             $fields[] = $field->migrationText;
         }
 
-        if($createdAtField and $updatedAtField) {
+        if ($createdAtField and $updatedAtField) {
             $fields[] = '$table->timestamps();';
         } else {
             if ($createdAtField) {
@@ -80,7 +80,7 @@ class MigrationGenerator extends BaseGenerator
 
     public function rollback()
     {
-        $fileName = 'create_'.$this->commandData->config->tableName.'_table.php';
+        $fileName = 'create_' . $this->commandData->config->tableName . '_table.php';
 
         /** @var SplFileInfo $allFiles */
         $allFiles = File::allFiles($this->path);
@@ -96,7 +96,7 @@ class MigrationGenerator extends BaseGenerator
         foreach ($files as $file) {
             if (Str::contains($file, $fileName)) {
                 if ($this->rollbackFile($this->path, $file)) {
-                    $this->commandData->commandComment('Migration file deleted: '.$file);
+                    $this->commandData->commandComment('Migration file deleted: ' . $file);
                 }
                 break;
             }

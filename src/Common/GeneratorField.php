@@ -9,6 +9,9 @@ class GeneratorField
     /** @var  string */
     public $name, $dbInput, $htmlType, $fieldType;
 
+    /** @var  array */
+    public $htmlValues;
+
     /** @var  string */
     public $migrationText, $validations;
 
@@ -22,6 +25,24 @@ class GeneratorField
     {
         $this->dbInput = $dbInput;
         $this->prepareMigrationText();
+    }
+
+    public function parseHtmlInput($htmlInput)
+    {
+        $this->htmlValues = [];
+
+        if(empty($htmlInput)) {
+            $this->htmlType = 'text';
+            return;
+        }
+
+        $inputsArr = explode(",", $htmlInput);
+
+        $this->htmlType = array_shift($inputsArr);
+
+        if(count($inputsArr) > 0) {
+            $this->htmlValues = $inputsArr;
+        }
     }
 
     public function parseOptions($options)
@@ -85,7 +106,7 @@ class GeneratorField
         $field = new GeneratorField();
         $field->name = $fieldInput['fieldInput'];
         $field->parseDBInput($fieldInput['dbInput']);
-        $field->htmlType = isset($fieldInput['htmlType']) ? $fieldInput['htmlType'] : '';
+        $field->parseHtmlInput(isset($fieldInput['htmlType']) ? $fieldInput['htmlType'] : '');
         $field->validations = isset($fieldInput['validations']) ? $fieldInput['validations'] : '';
         $field->isSearchable = isset($fieldInput['searchable']) ? $fieldInput['searchable'] : false;
         $field->isFillable = isset($fieldInput['fillable']) ? $fieldInput['fillable'] : true;

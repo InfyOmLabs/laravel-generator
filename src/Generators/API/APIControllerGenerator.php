@@ -5,7 +5,6 @@ namespace InfyOm\Generator\Generators\API;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\FileUtil;
-use InfyOm\Generator\Utils\TemplateUtil;
 
 class APIControllerGenerator extends BaseGenerator
 {
@@ -22,14 +21,14 @@ class APIControllerGenerator extends BaseGenerator
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathApiController;
-        $this->fileName = $this->commandData->modelName.'APIController.php';
+        $this->fileName = $this->commandData->modelName . 'APIController.php';
     }
 
     public function generate()
     {
-        $templateData = TemplateUtil::getTemplate('api.controller.api_controller', 'laravel-generator');
+        $templateData = get_template('api.controller.api_controller', 'laravel-generator');
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
         $templateData = $this->fillDocs($templateData);
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
@@ -51,9 +50,9 @@ class APIControllerGenerator extends BaseGenerator
         }
 
         foreach ($methods as $method) {
-            $key = '$DOC_'.strtoupper($method).'$';
-            $docTemplate = TemplateUtil::getTemplate($templatePrefix.'.'.$method, $templateType);
-            $docTemplate = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $docTemplate);
+            $key = '$DOC_' . strtoupper($method) . '$';
+            $docTemplate = get_template($templatePrefix . '.' . $method, $templateType);
+            $docTemplate = fill_template($this->commandData->dynamicVars, $docTemplate);
             $templateData = str_replace($key, $docTemplate, $templateData);
         }
 
@@ -63,7 +62,7 @@ class APIControllerGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('API Controller file deleted: '.$this->fileName);
+            $this->commandData->commandComment('API Controller file deleted: ' . $this->fileName);
         }
     }
 }

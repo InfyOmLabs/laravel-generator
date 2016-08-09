@@ -3,8 +3,6 @@
 namespace InfyOm\Generator\Generators;
 
 use InfyOm\Generator\Common\GeneratorField;
-use InfyOm\Generator\Utils\TemplateUtil;
-use Prettus\Repository\Generators\Generator;
 
 class SwaggerGenerator
 {
@@ -80,15 +78,15 @@ class SwaggerGenerator
 
             if (!empty($fieldType)) {
                 $fieldType = [
-                    'name'   => $field->name,
-                    'type'   => $fieldType,
+                    'name' => $field->name,
+                    'type' => $fieldType,
                     'format' => $fieldFormat,
                 ];
 
 //                if (isset($field['description'])) {
 //                    $fieldType['description'] = $field['description'];
 //                } else {
-                    $fieldType['description'] = '';
+                $fieldType['description'] = '';
 //                }
 
                 $fieldTypes[] = $fieldType;
@@ -102,13 +100,13 @@ class SwaggerGenerator
 
     public static function generateSwagger($fields, $fillables, $variables)
     {
-        $template = TemplateUtil::getTemplate('model.model', 'swagger-generator');
+        $template = get_template('model.model', 'swagger-generator');
 
-        $templateData = TemplateUtil::fillTemplate($variables, $template);
+        $templateData = fill_template($variables, $template);
 
-        $templateData = str_replace('$REQUIRED_FIELDS$', '"'.implode('", "', $fillables).'"', $templateData);
+        $templateData = str_replace('$REQUIRED_FIELDS$', '"' . implode('", "', $fillables) . '"', $templateData);
 
-        $propertyTemplate = TemplateUtil::getTemplate('model.property', 'swagger-generator');
+        $propertyTemplate = get_template('model.property', 'swagger-generator');
 
         $properties = self::preparePropertyFields($propertyTemplate, $fields);
 
@@ -138,7 +136,7 @@ class SwaggerGenerator
             $propertyTemplate = str_replace('$DESCRIPTION$', $description, $propertyTemplate);
             $propertyTemplate = str_replace('$FIELD_TYPE$', $type, $propertyTemplate);
             if (!empty($format)) {
-                $format = ",\n *          format=\"".$format.'"';
+                $format = ",\n *          format=\"" . $format . '"';
             }
             $propertyTemplate = str_replace('$FIELD_FORMAT$', $format, $propertyTemplate);
             $templates[] = $propertyTemplate;

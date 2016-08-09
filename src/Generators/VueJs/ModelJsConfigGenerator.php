@@ -2,12 +2,9 @@
 
 namespace InfyOm\Generator\Generators\VueJs;
 
-use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\FileUtil;
-use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
-use InfyOm\Generator\Utils\TemplateUtil;
 
 class ModelJsConfigGenerator extends BaseGenerator
 {
@@ -18,7 +15,7 @@ class ModelJsConfigGenerator extends BaseGenerator
     private $path;
 
     /** @var string */
-    private $fileName;    
+    private $fileName;
 
     /** @var string */
     private $templateType;
@@ -45,39 +42,42 @@ class ModelJsConfigGenerator extends BaseGenerator
 
     private function generateModelJs()
     {
-        $templateData = TemplateUtil::getTemplate('vuejs.js.model-config', 'laravel-generator');
+        $templateData = get_template('vuejs.js.model-config', 'laravel-generator');
         $fieldsRow = '';
         $i = 0;
         $lenghtFields = count($this->commandData->inputFields);
         foreach ($this->commandData->inputFields as $field) {
-            if ($i == $lenghtFields - 1)
+            if ($i == $lenghtFields - 1) {
                 $fieldsRow .= "\t" . $field->name . ': ""';
-            else
+            } else {
                 $fieldsRow .= "\t" . $field->name . ": \"\",\n";
+            }
             $i++;
         }
         $templateData = str_replace('$FIELDS_ROW$', $fieldsRow, $templateData);
 
-        $fieldsColTemplateData = TemplateUtil::getTemplate('vuejs.js.fields_col', 'laravel-generator');
+        $fieldsColTemplateData = get_template('vuejs.js.fields_col', 'laravel-generator');
         $fieldsColTemplate = '';
         $i = 0;
         foreach ($this->commandData->inputFields as $field) {
             $fieldCol = $fieldsColTemplateData;
             $fieldCol = str_replace('$FIELD_NAME$', $field->name, $fieldCol);
             $fieldVisible = 'true';
-            if (!$field->inIndex)
+            if (!$field->inIndex) {
                 $fieldVisible = 'false';
+            }
             $fieldCol = str_replace('$FIELD_VISIBLE$', $fieldVisible, $fieldCol);
-            if ($i == $lenghtFields - 1)
+            if ($i == $lenghtFields - 1) {
                 $fieldsColTemplate .= $fieldCol;
-            else
+            } else {
                 $fieldsColTemplate .= $fieldCol . "\n";
+            }
             $i++;
         }
         $templateData = str_replace('$FIELDS_COL$', $fieldsColTemplate, $templateData);
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
-        $this->commandData->commandInfo($this->path . $this->fileName . ' created');        
+        $this->commandData->commandInfo($this->path . $this->fileName . ' created');
     }
 
     public function rollback()
@@ -87,7 +87,7 @@ class ModelJsConfigGenerator extends BaseGenerator
         ];
         foreach ($files as $file) {
             if ($this->rollbackFile($this->path, $file)) {
-                $this->commandData->commandComment($file.' file deleted');
+                $this->commandData->commandComment($file . ' file deleted');
             }
         }
     }

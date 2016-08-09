@@ -5,7 +5,6 @@ namespace InfyOm\Generator\Generators\VueJs;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\FileUtil;
-use InfyOm\Generator\Utils\TemplateUtil;
 
 class APIRequestGenerator extends BaseGenerator
 {
@@ -25,8 +24,8 @@ class APIRequestGenerator extends BaseGenerator
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathApiRequest;
-        $this->createFileName = 'Create'.$this->commandData->modelName.'APIRequest.php';
-        $this->updateFileName = 'Update'.$this->commandData->modelName.'APIRequest.php';
+        $this->createFileName = 'Create' . $this->commandData->modelName . 'APIRequest.php';
+        $this->updateFileName = 'Update' . $this->commandData->modelName . 'APIRequest.php';
     }
 
     public function generate()
@@ -37,9 +36,9 @@ class APIRequestGenerator extends BaseGenerator
 
     private function generateCreateRequest()
     {
-        $templateData = TemplateUtil::getTemplate('vuejs.request.create_request', 'laravel-generator');
+        $templateData = get_template('vuejs.request.create_request', 'laravel-generator');
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, $this->createFileName, $templateData);
 
@@ -49,9 +48,9 @@ class APIRequestGenerator extends BaseGenerator
 
     private function generateUpdateRequest()
     {
-        $templateData = TemplateUtil::getTemplate('vuejs.request.update_request', 'laravel-generator');
+        $templateData = get_template('vuejs.request.update_request', 'laravel-generator');
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, $this->updateFileName, $templateData);
 
@@ -62,11 +61,11 @@ class APIRequestGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->createFileName)) {
-            $this->commandData->commandComment('Create API Request file deleted: '.$this->createFileName);
+            $this->commandData->commandComment('Create API Request file deleted: ' . $this->createFileName);
         }
 
         if ($this->rollbackFile($this->path, $this->updateFileName)) {
-            $this->commandData->commandComment('Update API Request file deleted: '.$this->updateFileName);
+            $this->commandData->commandComment('Update API Request file deleted: ' . $this->updateFileName);
         }
     }
 }
