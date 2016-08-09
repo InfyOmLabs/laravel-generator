@@ -68,7 +68,7 @@ class ControllerGenerator extends BaseGenerator
             if (!$field->inIndex) {
                 continue;
             }
-            $headerFields[] = $fieldTemplate = fill_templateWithFieldData(
+            $headerFields[] = $fieldTemplate = fill_template_with_field_data(
                 $this->commandData->dynamicVars,
                 $this->commandData->fieldNamesMapping,
                 $headerFieldTemplate,

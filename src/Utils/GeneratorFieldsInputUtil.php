@@ -44,11 +44,11 @@ class GeneratorFieldsInputUtil
         $field->name = $fieldInputsArr[0];
         $field->parseDBInput($fieldInputsArr[1]);
 
-        if(count($fieldInputsArr) > 2) {
+        if (count($fieldInputsArr) > 2) {
             $field->parseHtmlInput($fieldInputsArr[2]);
         }
 
-        if(count($fieldInputsArr) > 3) {
+        if (count($fieldInputsArr) > 3) {
             $field->parseOptions($fieldInputsArr[3]);
         }
 
@@ -83,5 +83,23 @@ class GeneratorFieldsInputUtil
         $arrStr .= ']';
 
         return $arrStr;
+    }
+
+    public static function prepareKeyValueArrFromLabelValueStr($values)
+    {
+        $arr = [];
+
+        foreach ($values as $value) {
+            $labelValue = explode(":", $value);
+
+            if(count($labelValue) > 1) {
+                $arr[$labelValue[0]] = $labelValue[1];
+            } else {
+                $arr[$labelValue[0]] = $labelValue[0];
+            }
+        }
+
+        return $arr;
+
     }
 }
