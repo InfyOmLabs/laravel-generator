@@ -90,8 +90,8 @@ class GeneratorField
         $field->isSearchable = isset($fieldInput['searchable']) ? $fieldInput['searchable'] : false;
         $field->isFillable = isset($fieldInput['fillable']) ? $fieldInput['fillable'] : true;
         $field->isPrimary = isset($fieldInput['primary']) ? $fieldInput['primary'] : false;
-        $field->inForm = isset($fieldInput['inForm']) ? $fieldInput['inForm'] : false;
-        $field->inIndex = isset($fieldInput['inIndex']) ? $fieldInput['inIndex'] : false;
+        $field->inForm = isset($fieldInput['inForm']) ? $fieldInput['inForm'] : true;
+        $field->inIndex = isset($fieldInput['inIndex']) ? $fieldInput['inIndex'] : true;
         return $field;
     }
 
