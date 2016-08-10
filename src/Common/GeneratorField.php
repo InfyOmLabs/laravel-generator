@@ -13,7 +13,7 @@ class GeneratorField
     public $htmlValues;
 
     /** @var  string */
-    public $migrationText, $validations;
+    public $migrationText, $foreignKeyText, $validations;
 
     /** @var  boolean */
     public $isSearchable = true, $isFillable = true, $isPrimary = false, $inForm = true, $inIndex = true;
@@ -84,12 +84,12 @@ class GeneratorField
         foreach ($inputsArr as $input) {
             $inputParams = explode(",", $input);
             $functionName = array_shift($inputParams);
-            $this->migrationText .= "->" . $functionName;
             if ($functionName == "foreign") {
                 $foreignTable = array_shift($inputParams);
                 $foreignField = array_shift($inputParams);
-                $this->migrationText .= "('" . $this->name . "')->references('" . $foreignField . "')->on('" . $foreignTable . "')";
+                $this->foreignKeyText .= "\$table->foreign('" . $this->name . "')->references('" . $foreignField . "')->on('" . $foreignTable . "');";
             } else {
+                $this->migrationText .= "->" . $functionName;
                 $this->migrationText .= "(";
                 foreach ($inputParams as $param) {
                     $this->migrationText .= ", " . $param;
@@ -104,7 +104,7 @@ class GeneratorField
     public static function parseFieldFromFile($fieldInput)
     {
         $field = new GeneratorField();
-        $field->name = $fieldInput['fieldInput'];
+        $field->name = $fieldInput['name'];
         $field->parseDBInput($fieldInput['dbInput']);
         $field->parseHtmlInput(isset($fieldInput['htmlType']) ? $fieldInput['htmlType'] : '');
         $field->validations = isset($fieldInput['validations']) ? $fieldInput['validations'] : '';

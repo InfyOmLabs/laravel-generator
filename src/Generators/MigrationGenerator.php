@@ -43,6 +43,7 @@ class MigrationGenerator extends BaseGenerator
     private function generateFields()
     {
         $fields = [];
+        $foreignKeys = [];
         $createdAtField = null;
         $updatedAtField = null;
 
@@ -58,6 +59,9 @@ class MigrationGenerator extends BaseGenerator
             }
 
             $fields[] = $field->migrationText;
+            if (!empty($field->foreignKeyText)) {
+                $foreignKeys[] = $field->foreignKeyText;
+            }
         }
 
         if ($createdAtField and $updatedAtField) {
@@ -75,7 +79,7 @@ class MigrationGenerator extends BaseGenerator
             $fields[] = '$table->softDeletes();';
         }
 
-        return implode(infy_nl_tab(1, 3), $fields);
+        return implode(infy_nl_tab(1, 3), array_merge($fields, $foreignKeys));
     }
 
     public function rollback()
