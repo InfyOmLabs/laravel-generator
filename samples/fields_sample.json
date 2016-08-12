@@ -1,7 +1,7 @@
 [
     {
         "name": "id",
-        "dbInput": "increments",
+        "dbType": "increments",
         "htmlType": "",
         "validations": "",
         "searchable": false,
@@ -12,25 +12,25 @@
     },
     {
         "name": "title",
-        "dbInput": "string",
+        "dbType": "string",
         "htmlType": "text",
         "validations": "required",
         "searchable": true
     },
     {
         "name": "post_date",
-        "dbInput": "dateTime",
+        "dbType": "dateTime",
         "htmlType": "date",
         "searchable": true
     },
     {
         "name": "body",
-        "dbInput": "text",
+        "dbType": "text",
         "htmlType": "textarea"
     },
     {
         "name": "password",
-        "dbInput": "string",
+        "dbType": "string",
         "htmlType": "password",
         "searchable": false,
         "inForm": false,
@@ -38,7 +38,7 @@
     },
     {
         "name": "token",
-        "dbInput": "string",
+        "dbType": "string",
         "htmlType": "hidden",
         "searchable": false,
         "inForm": false,
@@ -46,50 +46,50 @@
     },
     {
         "name": "email",
-        "dbInput": "string",
+        "dbType": "string",
         "htmlType": "email",
         "searchable": true
     },
     {
         "name": "author_gender",
-        "dbInput": "integer",
+        "dbType": "integer",
         "htmlType": "radio,Male:1,Female:0"
     },
     {
         "name": "post_type",
-        "dbInput": "string",
+        "dbType": "string",
         "htmlType": "radio,Public,Private",
         "searchable": true
     },
     {
         "name": "post_visits",
-        "dbInput": "integer",
+        "dbType": "integer",
         "htmlType": "number"
     },
     {
         "name": "category",
-        "dbInput": "string",
+        "dbType": "string",
         "htmlType": "select,Technology,LifeStyle,Education,Games",
         "searchable": true
     },
     {
         "name": "category_short",
-        "dbInput": "string",
+        "dbType": "string",
         "htmlType": "select,Technology:tech,LifeStyle:ls,Education:edu,Games:game"
     },
     {
         "name": "is_private",
-        "dbInput": "boolean",
+        "dbType": "boolean",
         "htmlType": "checkbox:1"
     },
     {
         "name": "post_id",
-        "dbInput": "integer:unsigned:foreign,posts,id",
+        "dbType": "integer:unsigned:foreign,posts,id",
         "htmlType": "text"
     },
     {
         "name": "created_at",
-        "dbInput": "timestamp",
+        "dbType": "timestamp",
         "htmlType": "",
         "validations": "",
         "searchable": false,
@@ -100,7 +100,7 @@
     },
     {
         "name": "updated_at",
-        "dbInput": "timestamp",
+        "dbType": "timestamp",
         "htmlType": "",
         "validations": "",
         "searchable": false,

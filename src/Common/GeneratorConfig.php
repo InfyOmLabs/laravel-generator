@@ -69,6 +69,7 @@ class GeneratorConfig
         'skip',
         'datatables',
         'views',
+        'relations',
     ];
 
     public $tableName;

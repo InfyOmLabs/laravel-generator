@@ -129,9 +129,16 @@ class CommandData
             $validations = $this->commandObj->ask('Enter validations: ', false);
             $validations = ($validations == false) ? '' : $validations;
 
+            if ($this->getOption('relations')) {
+                $relation = $this->commandObj->ask('Enter relationship (Leave Black to skip):', '');
+            } else {
+                $relation = '';
+            }
+
             $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput(
                 $fieldInputStr,
-                $validations
+                $validations,
+                $relation
             );
         }
 

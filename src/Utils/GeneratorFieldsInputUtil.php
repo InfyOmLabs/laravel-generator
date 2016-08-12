@@ -20,9 +20,10 @@ class GeneratorFieldsInputUtil
     /**
      * @param $fieldInput
      * @param $validations
+     * @param string $relation
      * @return GeneratorField
      */
-    public static function processFieldInput($fieldInput, $validations)
+    public static function processFieldInput($fieldInput, $validations, $relation = '')
     {
         /*
          * Field Input Format: field_name <space> db_type <space> html_type(optional) <space> options(optional)
@@ -53,6 +54,10 @@ class GeneratorFieldsInputUtil
         }
 
         $field->validations = $validations;
+
+        if (!empty($relation)) {
+            $field->parseRelation($relation);
+        }
 
         return $field;
     }

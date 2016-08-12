@@ -66,6 +66,15 @@ class GeneratorField
         }
     }
 
+    public function parseRelation($relationInput)
+    {
+        $inputs = explode(",", $relationInput);
+
+        $relation = new GeneratorFieldRelation();
+        $relation->type = array_shift($inputs);
+        $relation->inputs = $inputs;
+    }
+
     private function prepareMigrationText()
     {
         $inputsArr = explode(":", $this->dbInput);

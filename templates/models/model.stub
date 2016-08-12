@@ -34,5 +34,5 @@ $PRIMARY$
         $RULES$
     ];
 
-    $ELOQUENTFUNCTIONS$
+    $RELATIONS$
 }
