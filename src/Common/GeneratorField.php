@@ -18,10 +18,7 @@ class GeneratorField
     /** @var  boolean */
     public $isSearchable = true, $isFillable = true, $isPrimary = false, $inForm = true, $inIndex = true;
 
-    /** @var  GeneratorFieldRelation[] */
-    public $relations;
-
-    public function parseDBInput($dbInput)
+    public function parseDBType($dbInput)
     {
         $this->dbInput = $dbInput;
         $this->prepareMigrationText();
@@ -66,15 +63,6 @@ class GeneratorField
         }
     }
 
-    public function parseRelation($relationInput)
-    {
-        $inputs = explode(",", $relationInput);
-
-        $relation = new GeneratorFieldRelation();
-        $relation->type = array_shift($inputs);
-        $relation->inputs = $inputs;
-    }
-
     private function prepareMigrationText()
     {
         $inputsArr = explode(":", $this->dbInput);
@@ -114,7 +102,7 @@ class GeneratorField
     {
         $field = new GeneratorField();
         $field->name = $fieldInput['name'];
-        $field->parseDBInput($fieldInput['dbInput']);
+        $field->parseDBType($fieldInput['dbType']);
         $field->parseHtmlInput(isset($fieldInput['htmlType']) ? $fieldInput['htmlType'] : '');
         $field->validations = isset($fieldInput['validations']) ? $fieldInput['validations'] : '';
         $field->isSearchable = isset($fieldInput['searchable']) ? $fieldInput['searchable'] : false;

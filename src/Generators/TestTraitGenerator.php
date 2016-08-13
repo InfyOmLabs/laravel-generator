@@ -50,7 +50,7 @@ class TestTraitGenerator extends BaseGenerator
     {
         $fields = [];
 
-        foreach ($this->commandData->inputFields as $field) {
+        foreach ($this->commandData->fields as $field) {
             if ($field->isPrimary) {
                 continue;
             }

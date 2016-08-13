@@ -119,7 +119,7 @@ class ViewGenerator extends BaseGenerator
 
         $tableBodyFields = [];
 
-        foreach ($this->commandData->inputFields as $field) {
+        foreach ($this->commandData->fields as $field) {
             if (!$field->inIndex) {
                 continue;
             }
@@ -143,7 +143,7 @@ class ViewGenerator extends BaseGenerator
 
         $headerFields = [];
 
-        foreach ($this->commandData->inputFields as $field) {
+        foreach ($this->commandData->fields as $field) {
             if (!$field->inIndex) {
                 continue;
             }
@@ -189,7 +189,7 @@ class ViewGenerator extends BaseGenerator
     {
         $this->htmlFields = [];
 
-        foreach ($this->commandData->inputFields as $field) {
+        foreach ($this->commandData->fields as $field) {
             if (!$field->inForm) {
                 continue;
             }
@@ -347,7 +347,7 @@ class ViewGenerator extends BaseGenerator
 
         $fieldsStr = '';
 
-        foreach ($this->commandData->inputFields as $field) {
+        foreach ($this->commandData->fields as $field) {
             $singleFieldStr = str_replace('$FIELD_NAME_TITLE$', Str::title(str_replace('_', ' ', $field->name)),
                 $fieldTemplate);
             $singleFieldStr = str_replace('$FIELD_NAME$', $field->name, $singleFieldStr);

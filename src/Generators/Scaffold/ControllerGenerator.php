@@ -64,7 +64,7 @@ class ControllerGenerator extends BaseGenerator
 
         $headerFields = [];
 
-        foreach ($this->commandData->inputFields as $field) {
+        foreach ($this->commandData->fields as $field) {
             if (!$field->inIndex) {
                 continue;
             }

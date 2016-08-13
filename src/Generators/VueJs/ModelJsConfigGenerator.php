@@ -45,8 +45,8 @@ class ModelJsConfigGenerator extends BaseGenerator
         $templateData = get_template('vuejs.js.model-config', 'laravel-generator');
         $fieldsRow = '';
         $i = 0;
-        $lenghtFields = count($this->commandData->inputFields);
-        foreach ($this->commandData->inputFields as $field) {
+        $lenghtFields = count($this->commandData->fields);
+        foreach ($this->commandData->fields as $field) {
             if ($i == $lenghtFields - 1) {
                 $fieldsRow .= "\t" . $field->name . ': ""';
             } else {
@@ -59,7 +59,7 @@ class ModelJsConfigGenerator extends BaseGenerator
         $fieldsColTemplateData = get_template('vuejs.js.fields_col', 'laravel-generator');
         $fieldsColTemplate = '';
         $i = 0;
-        foreach ($this->commandData->inputFields as $field) {
+        foreach ($this->commandData->fields as $field) {
             $fieldCol = $fieldsColTemplateData;
             $fieldCol = str_replace('$FIELD_NAME$', $field->name, $fieldCol);
             $fieldVisible = 'true';

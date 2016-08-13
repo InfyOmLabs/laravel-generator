@@ -31,7 +31,7 @@ class ControllerGenerator extends BaseGenerator
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
         $templateData = $this->fillDocs($templateData);
 
-        $fields = $this->commandData->inputFields;
+        $fields = $this->commandData->fields;
         $i = 0;
         $filter = '';
         $searchableCount = 0;

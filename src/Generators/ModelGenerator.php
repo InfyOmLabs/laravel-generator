@@ -345,7 +345,7 @@ class ModelGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = get_template('models.model', 'laravel-generator');
+        $templateData = get_template('model.model', 'laravel-generator');
 
         $templateData = $this->fillTemplate($templateData);
 
@@ -363,7 +363,7 @@ class ModelGenerator extends BaseGenerator
 
         $fillables = [];
 
-        foreach ($this->commandData->inputFields as $field) {
+        foreach ($this->commandData->fields as $field) {
             if ($field->isFillable) {
                 $fillables[] = "'" . $field->name . "'";
             }
@@ -387,9 +387,11 @@ class ModelGenerator extends BaseGenerator
 
         $templateData = str_replace('$CAST$', implode(',' . infy_nl_tab(1, 2), $this->generateCasts()), $templateData);
 
-//        $templateData = str_replace(
-//            '$ELOQUENTFUNCTIONS$', implode(PHP_EOL . infy_nl_tab(1, 1), $this->generateEloquent()), $templateData
-//        );
+        $templateData = str_replace(
+            '$RELATIONS$',
+            fill_template($this->commandData->dynamicVars, implode(PHP_EOL . infy_nl_tab(1, 1), $this->generateRelations())),
+            $templateData
+        );
 
         $templateData = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $templateData);
 
@@ -435,7 +437,7 @@ class ModelGenerator extends BaseGenerator
 
     public function generateSwagger($templateData)
     {
-        $fieldTypes = SwaggerGenerator::generateTypes($this->commandData->inputFields);
+        $fieldTypes = SwaggerGenerator::generateTypes($this->commandData->fields);
 
         $template = get_template('model.model', 'swagger-generator');
 
@@ -459,7 +461,7 @@ class ModelGenerator extends BaseGenerator
     {
         $requiredFields = [];
 
-        foreach ($this->commandData->inputFields as $field) {
+        foreach ($this->commandData->fields as $field) {
             if (!empty($field->validations)) {
                 if (str_contains($field->validations, 'required')) {
                     $requiredFields[] = $field->name;
@@ -496,7 +498,7 @@ class ModelGenerator extends BaseGenerator
     {
         $rules = [];
 
-        foreach ($this->commandData->inputFields as $field) {
+        foreach ($this->commandData->fields as $field) {
             if (!empty($field->validations)) {
                 $rule = "'" . $field->name . "' => '" . $field->validations . "'";
                 $rules[] = $rule;
@@ -512,7 +514,7 @@ class ModelGenerator extends BaseGenerator
 
         $timestamps = TableFieldsGenerator::getTimestampFieldNames();
 
-        foreach ($this->commandData->inputFields as $field) {
+        foreach ($this->commandData->fields as $field) {
             if (in_array($field->name, $timestamps)) {
                 continue;
             }
@@ -556,6 +558,21 @@ class ModelGenerator extends BaseGenerator
         }
 
         return $casts;
+    }
+
+    private function generateRelations()
+    {
+        $relations = [];
+
+        foreach ($this->commandData->relations as $relation) {
+            $relationText = $relation->getRelationFunctionText();
+
+            if (!empty($relationText)) {
+                $relations[] = $relationText;
+            }
+        }
+
+        return $relations;
     }
 
 //    /**

@@ -51,7 +51,7 @@ class BaseCommand extends Command
         $this->commandData->modelName = $this->argument('model');
 
         $this->commandData->initCommandData();
-        $this->commandData->getInputFields();
+        $this->commandData->getFields();
     }
 
     public function generateCommonItems()
@@ -168,7 +168,7 @@ class BaseCommand extends Command
     {
         $fileFields = [];
 
-        foreach ($this->commandData->inputFields as $field) {
+        foreach ($this->commandData->fields as $field) {
             $fileFields[] = [
                 'fieldInput'  => $field['fieldInput'],
                 'htmlType'    => $field['htmlType'],

@@ -21,13 +21,24 @@ class CommandData
     public $config;
 
     /** @var GeneratorField[] */
-    public $inputFields;
+    public $fields;
+
+    /** @var GeneratorFieldRelation[] */
+    public $relations;
 
     /** @var Command */
     public $commandObj;
 
     /** @var array */
     public $dynamicVars = [], $fieldNamesMapping = [];
+
+    /** @var  CommandData */
+    protected static $instance = null;
+
+    public static function getInstance()
+    {
+        return self::$instance;
+    }
 
     /**
      * @param Command $commandObj
@@ -93,9 +104,9 @@ class CommandData
         $this->dynamicVars[$name] = $val;
     }
 
-    public function getInputFields()
+    public function getFields()
     {
-        $this->inputFields = [];
+        $this->fields = [];
 
         if ($this->getOption('fieldsFile') or $this->getOption('jsonFromGUI')) {
             $this->getInputFromFileOrJson();
@@ -135,11 +146,14 @@ class CommandData
                 $relation = '';
             }
 
-            $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput(
+            $this->fields[] = GeneratorFieldsInputUtil::processFieldInput(
                 $fieldInputStr,
-                $validations,
-                $relation
+                $validations
             );
+
+            if (!empty($relation)) {
+                $this->relations[] = GeneratorFieldRelation::parseRelation($relation);
+            }
         }
 
         $this->addTimestamps();
@@ -153,25 +167,25 @@ class CommandData
         } else {
             $primaryKey->name = 'id';
         }
-        $primaryKey->parseDBInput('increments');
+        $primaryKey->parseDBType('increments');
         $primaryKey->parseOptions('s,f,p,if,ii');
 
-        $this->inputFields[] = $primaryKey;
+        $this->fields[] = $primaryKey;
     }
 
     private function addTimestamps()
     {
         $createdAt = new GeneratorField();
         $createdAt->name = 'created_at';
-        $createdAt->parseDBInput('timestamp');
+        $createdAt->parseDBType('timestamp');
         $createdAt->parseOptions('s,f,if,in');
-        $this->inputFields[] = $createdAt;
+        $this->fields[] = $createdAt;
 
         $updatedAt = new GeneratorField();
         $updatedAt->name = 'updated_at';
-        $updatedAt->parseDBInput('timestamp');
+        $updatedAt->parseDBType('timestamp');
         $updatedAt->parseOptions('s,f,if,in');
-        $this->inputFields[] = $updatedAt;
+        $this->fields[] = $updatedAt;
     }
 
     private function getInputFromFileOrJson()
@@ -192,9 +206,16 @@ class CommandData
 
                 $fileContents = file_get_contents($filePath);
                 $jsonData = json_decode($fileContents, true);
-                $this->inputFields = [];
+                $this->fields = [];
                 foreach($jsonData as $field) {
-                    $this->inputFields[] = GeneratorField::parseFieldFromFile($field);
+                    if (isset($field['type']) && $field['relation']) {
+                        $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
+                    } else {
+                        $this->fields[] = GeneratorField::parseFieldFromFile($field);
+                        if (isset($field['relation'])) {
+                            $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
+                        }
+                    }
                 }
             } else {
 //                $fileContents = $this->getOption('jsonFromGUI');
@@ -215,7 +236,7 @@ class CommandData
 
     private function checkForDiffPrimaryKey()
     {
-        foreach ($this->inputFields as $field) {
+        foreach ($this->fields as $field) {
             if (isset($field->isPrimary) && $field->isPrimary && $field->name != 'id') {
                 $this->setOption('primary', $field->name);
                 break;
@@ -227,7 +248,7 @@ class CommandData
     {
         $tableName = $this->dynamicVars['$TABLE_NAME$'];
 
-        $this->inputFields = TableFieldsGenerator::generateFieldsFromTable($tableName);
+        $this->fields = TableFieldsGenerator::generateFieldsFromTable($tableName);
         $this->checkForDiffPrimaryKey();
     }
 }

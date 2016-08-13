@@ -47,7 +47,7 @@ class MigrationGenerator extends BaseGenerator
         $createdAtField = null;
         $updatedAtField = null;
 
-        foreach ($this->commandData->inputFields as $field) {
+        foreach ($this->commandData->fields as $field) {
             if ($field->name == 'created_at') {
                 $createdAtField = $field;
                 continue;
