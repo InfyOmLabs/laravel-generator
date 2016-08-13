@@ -3,112 +3,107 @@
 namespace InfyOm\Generator\Utils;
 
 use DB;
+use InfyOm\Generator\Common\GeneratorField;
+use InfyOm\Generator\Common\GeneratorFieldRelation;
 
 class TableFieldsGenerator
 {
-    public static function generateFieldsFromTable($tableName)
+    /** @var  string */
+    public $table, $primaryKey;
+
+    /** @var  boolean */
+    public $defaultSearchable;
+
+    /** @var  array */
+    public $timestamps;
+
+    /** @var \Doctrine\DBAL\Schema\AbstractSchemaManager */
+    private $schemaManager;
+
+    /** @var  \Doctrine\DBAL\Schema\Column[] */
+    private $columns;
+
+    /** @var  GeneratorField[] */
+    public $fields;
+
+    /** @var  GeneratorFieldRelation[] */
+    public $relations;
+
+    public function __construct($tableName)
     {
-        $schema = DB::getDoctrineSchemaManager();
-        $platform = $schema->getDatabasePlatform();
+        $this->schemaManager = DB::getDoctrineSchemaManager();
+        $platform = $this->schemaManager->getDatabasePlatform();
         $platform->registerDoctrineTypeMapping('enum', 'string');
 
-        $columns = $schema->listTableColumns($tableName);
+        $this->columns = $this->schemaManager->listTableColumns($tableName);
 
-        $primaryKey = static::getPrimaryKeyFromTable($tableName);
-        $timestamps = static::getTimestampFieldNames();
-        $defaultSearchable = config('infyom.laravel_generator.options.tables_searchable_default', false);
+        $this->primaryKey = static::getPrimaryKeyOfTable($tableName);
+        $this->timestamps = static::getTimestampFieldNames();
+        $this->defaultSearchable = config('infyom.laravel_generator.options.tables_searchable_default', false);
+    }
 
-        $fields = [];
+    public function prepareFieldsFromTable()
+    {
+        foreach ($this->columns as $column) {
 
-        foreach ($columns as $column) {
-            switch ($column->getType()->getName()) {
+            $type = $column->getType()->getName();
+
+            switch ($type) {
                 case 'integer':
-                    $fieldInput = self::generateIntFieldInput($column->getName(), 'integer', $column);
-                    $type = 'number';
+                    $field = $this->generateIntFieldInput($column, 'integer');
                     break;
                 case 'smallint':
-                    $fieldInput = self::generateIntFieldInput($column->getName(), 'smallInteger', $column);
-                    $type = 'number';
+                    $field = $this->generateIntFieldInput($column, 'smallInteger');
                     break;
                 case 'bigint':
-                    $fieldInput = self::generateIntFieldInput($column->getName(), 'bigInteger', $column);
-                    $type = 'number';
+                    $field = $this->generateIntFieldInput($column, 'bigInteger');
                     break;
                 case 'boolean':
-                    $fieldInput = self::generateSingleFieldInput($column->getName(), 'boolean');
-                    $type = 'text';
+                    $name = title_case(str_replace("_", " ", $column->getName()));
+                    $field = $this->generateField($column, 'bigInteger', 'checkbox,'.$name.",1");
                     break;
                 case 'datetime':
-                    $fieldInput = self::generateSingleFieldInput($column->getName(), 'dateTime');
-                    $type = 'date';
+                    $field = $this->generateField($column, 'datetime', 'date');
                     break;
                 case 'datetimetz':
-                    $fieldInput = self::generateSingleFieldInput($column->getName(), 'dateTimeTz');
-                    $type = 'date';
+                    $field = $this->generateField($column, 'dateTimeTz', 'date');
                     break;
                 case 'date':
-                    $fieldInput = self::generateSingleFieldInput($column->getName(), 'date');
-                    $type = 'date';
+                    $field = $this->generateField($column, 'date', 'date');
                     break;
                 case 'time':
-                    $fieldInput = self::generateSingleFieldInput($column->getName(), 'time');
-                    $type = 'text';
+                    $field = $this->generateField($column, 'time', 'text');
                     break;
                 case 'decimal':
-                    $fieldInput = self::generateDecimalInput($column);
-                    $type = 'number';
+                    $field = $this->generateNumberInput($column, 'decimal');
                     break;
                 case 'float':
-                    $fieldInput = self::generateFloatInput($column);
-                    $type = 'number';
+                    $field = $this->generateNumberInput($column, 'float');
                     break;
                 case 'string':
-                    $fieldInput = self::generateStringInput($column);
-                    $type = 'text';
+                    $field = $this->generateField($column, 'string', 'text');
                     break;
                 case 'text':
-                    $fieldInput = self::generateTextInput($column);
-                    $type = 'textarea';
+                    $field = $this->generateField($column, 'text', 'textarea`');
                     break;
                 default:
-                    $fieldInput = self::generateTextInput($column);
-                    $type = 'text';
+                    $field = $this->generateField($column, 'string', 'text');
+                    break;
             }
 
-            if (strtolower($column->getName()) == 'password') {
-                $type = 'password';
-            } elseif (strtolower($column->getName()) == 'email') {
-                $type = 'email';
+            if (strtolower($field->name) == 'password') {
+                $field->htmlType = 'password';
+            } elseif (strtolower($field->name) == 'email') {
+                $field->htmlType = 'email';
+            } elseif (in_array($field->name, $this->timestamps)) {
+                $field->isSearchable = false;
+                $field->isFillable = false;
+                $field->inForm = false;
+                $field->inIndex = false;
             }
 
-            if (!empty($fieldInput)) {
-                $field = GeneratorFieldsInputUtil::processFieldInput(
-                    $fieldInput,
-                    $type,
-                    '',
-                    ['searchable' => $defaultSearchable]
-                );
-
-                $columnName = $column->getName();
-
-                if ($columnName === $primaryKey) {
-                    $field['primary'] = true;
-                    $field['inFrom'] = false;
-                    $field['inIndex'] = false;
-                    $field['fillable'] = false;
-                    $field['searchable'] = false;
-                } elseif (in_array($columnName, $timestamps)) {
-                    $field['fillable'] = false;
-                    $field['searchable'] = false;
-                    $field['inFrom'] = true;
-                    $field['inIndex'] = true;
-                }
-
-                $fields[] = $field;
-            }
+            $this->fields[] = $field;
         }
-
-        return $fields;
     }
 
     /**
@@ -116,16 +111,12 @@ class TableFieldsGenerator
      *
      * @return string|null The column name of the (simple) primary key
      */
-    public static function getPrimaryKeyFromTable($tableName)
+    public static function getPrimaryKeyOfTable($tableName)
     {
         $schema = DB::getDoctrineSchemaManager();
-        $indexes = collect($schema->listTableIndexes($tableName));
+        $column = $schema->listTableDetails($tableName)->getPrimaryKey();
 
-        $primaryKey = $indexes->first(function ($i, $index) {
-            return $index->isPrimary() && 1 === count($index->getColumns());
-        });
-
-        return !empty($primaryKey) ? $primaryKey->getColumns()[0] : null;
+        return $column ? $column->getColumns()[0] : '';
     }
 
     /**
@@ -139,87 +130,81 @@ class TableFieldsGenerator
 
         $createdAtName = config('infyom.laravel_generator.timestamps.created_at', 'created_at');
         $updatedAtName = config('infyom.laravel_generator.timestamps.updated_at', 'updated_at');
+        $deletedAtName = config('infyom.laravel_generator.timestamps.deleted_at', 'deleted_at');
 
-        return [$createdAtName, $updatedAtName];
+        return [$createdAtName, $updatedAtName, $deletedAtName];
     }
 
     /**
-     * @param string                       $name
-     * @param string                       $type
+     * @param string $dbType
      * @param \Doctrine\DBAL\Schema\Column $column
-     *
-     * @return string
+     * @return GeneratorField
      */
-    private static function generateIntFieldInput($name, $type, $column)
+    private function generateIntFieldInput($column, $dbType)
     {
-        $fieldInput = "$name:$type";
+        $field = new GeneratorField();
+        $field->name = $column->getName();
+        $field->parseDBType($dbType);
+        $field->htmlType = "number";
 
         if ($column->getAutoincrement()) {
-            $fieldInput .= ',true';
+            $field->dbInput .= ',true';
         } else {
-            $fieldInput .= ',false';
+            $field->dbInput .= ',false';
         }
 
         if ($column->getUnsigned()) {
-            $fieldInput .= ',true';
+            $field->dbInput .= ',true';
         }
 
-        return $fieldInput;
+        return $this->checkForPrimary($field);
     }
 
-    private static function generateSingleFieldInput($name, $type)
+    /**
+     * @param GeneratorField $field
+     * @return GeneratorField
+     */
+    private function checkForPrimary(GeneratorField $field)
     {
-        $fieldInput = "$name:$type";
+        if ($field->name == $this->primaryKey) {
+            $field->isPrimary = true;
+            $field->isFillable = false;
+            $field->isSearchable = false;
+            $field->inIndex = false;
+            $field->inForm = false;
+        }
 
-        return $fieldInput;
+        return $field;
     }
 
     /**
      * @param \Doctrine\DBAL\Schema\Column $column
-     *
-     * @return string
+     * @param $dbType
+     * @param $htmlType
+     * @return GeneratorField
      */
-    private static function generateDecimalInput($column)
+    private function generateField($column, $dbType, $htmlType)
     {
-        $fieldInput = $column->getName().':decimal,'.$column->getPrecision().','.$column->getScale();
+        $field = new GeneratorField();
+        $field->name = $column->getName();
+        $field->parseDBType($dbType);
+        $field->htmlType = $htmlType;
 
-        return $fieldInput;
+        return $this->checkForPrimary($field);
     }
 
     /**
      * @param \Doctrine\DBAL\Schema\Column $column
-     *
-     * @return string
+     * @param string $dbType
+     * @return GeneratorField
      */
-    private static function generateFloatInput($column)
+    private function generateNumberInput($column, $dbType)
     {
-        $fieldInput = $column->getName().':float,'.$column->getPrecision().','.$column->getScale();
+        $field = new GeneratorField();
+        $field->name = $column->getName();
+        $field->parseDBType($dbType.',' . $column->getPrecision() . ',' . $column->getScale());
+        $field->htmlType = "number";
 
-        return $fieldInput;
-    }
-
-    /**
-     * @param \Doctrine\DBAL\Schema\Column $column
-     * @param int                          $length
-     *
-     * @return string
-     */
-    private static function generateStringInput($column, $length = 255)
-    {
-        $fieldInput = $column->getName().':string,'.$length;
-
-        return $fieldInput;
-    }
-
-    /**
-     * @param \Doctrine\DBAL\Schema\Column $column
-     *
-     * @return string
-     */
-    private static function generateTextInput($column)
-    {
-        $fieldInput = $column->getName().':text';
-
-        return $fieldInput;
+        return $this->checkForPrimary($field);
     }
 }
