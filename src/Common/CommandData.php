@@ -21,10 +21,10 @@ class CommandData
     public $config;
 
     /** @var GeneratorField[] */
-    public $fields;
+    public $fields = [];
 
     /** @var GeneratorFieldRelation[] */
-    public $relations;
+    public $relations = [];
 
     /** @var Command */
     public $commandObj;
@@ -226,21 +226,9 @@ class CommandData
 //                    $this->config->forceMigrate = $jsonData['migrate'];
 //                }
             }
-
-            $this->checkForDiffPrimaryKey();
         } catch (Exception $e) {
             $this->commandError($e->getMessage());
             exit;
-        }
-    }
-
-    private function checkForDiffPrimaryKey()
-    {
-        foreach ($this->fields as $field) {
-            if (isset($field->isPrimary) && $field->isPrimary && $field->name != 'id') {
-                $this->setOption('primary', $field->name);
-                break;
-            }
         }
     }
 
@@ -248,7 +236,9 @@ class CommandData
     {
         $tableName = $this->dynamicVars['$TABLE_NAME$'];
 
-        $this->fields = TableFieldsGenerator::generateFieldsFromTable($tableName);
-        $this->checkForDiffPrimaryKey();
+        $tableFieldsGenerator = new TableFieldsGenerator($tableName);
+        $tableFieldsGenerator->prepareFieldsFromTable();
+
+        $this->fields = $tableFieldsGenerator->fields;
     }
 }
