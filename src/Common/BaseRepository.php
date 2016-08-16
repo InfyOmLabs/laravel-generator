@@ -15,17 +15,15 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
         }
     }
 
-
     public function create(array $attributes)
     {
-        // Have to skip presenter to get a model not some data 
+        // Have to skip presenter to get a model not some data
         $temporarySkipPresenter = $this->skipPresenter;
         $this->skipPresenter(true);
         $model = parent::create($attributes);
         $this->skipPresenter($temporarySkipPresenter);
 
         $model = $this->updateRelations($model, $attributes);
-        
         $model->save();
 
         return $this->parserResult($model);
@@ -33,14 +31,13 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
 
     public function update(array $attributes, $id)
     {
-        // Have to skip presenter to get a model not some data 
+        // Have to skip presenter to get a model not some data
         $temporarySkipPresenter = $this->skipPresenter;
         $this->skipPresenter(true);
         $model = parent::update($attributes, $id);
         $this->skipPresenter($temporarySkipPresenter);
 
         $model = $this->updateRelations($model, $attributes);
-
         $model->save();
 
         return $this->parserResult($model);
@@ -84,11 +81,10 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
                             if (!in_array($rel->id, $new_values)) {
                                 $rel->$model_key = null;
                                 $rel->save();
-
                             }
                             unset($new_values[array_search($rel->id, $new_values)]);
                         }
-                        
+
                         if (count($new_values) > 0) {
                             $related = get_class($model->$key()->getRelated());
                             foreach ($new_values as $val) {
@@ -101,6 +97,7 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
                 }
             }
         }
+
         return $model;
     }
 }
