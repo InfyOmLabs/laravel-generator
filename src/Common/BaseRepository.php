@@ -16,7 +16,8 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
     }
 
 
-    public function create(array $attributes) {
+    public function create(array $attributes)
+    {
         // Have to skip presenter to get a model not some data 
         $temporarySkipPresenter = $this->skipPresenter;
         $this->skipPresenter(true);
@@ -30,7 +31,8 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
         return $this->parserResult($model);
     }
 
-    public function update(array $attributes, $id) {
+    public function update(array $attributes, $id)
+    {
         // Have to skip presenter to get a model not some data 
         $temporarySkipPresenter = $this->skipPresenter;
         $this->skipPresenter(true);
@@ -44,7 +46,8 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
         return $this->parserResult($model);
     }
 
-    public function updateRelations($model, $attributes) {
+    public function updateRelations($model, $attributes)
+    {
         foreach ($attributes as $key => $val) {
             if (isset($model) &&
                 method_exists($model, $key) &&
@@ -72,7 +75,7 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
                     case 'Illuminate\Database\Eloquent\Relations\HasMany':
                         $new_values = array_get($attributes, $key, []);
                         if (array_search('', $new_values) !== false) {
-                            unset($new_values[array_search('', $new_values)]);    
+                            unset($new_values[array_search('', $new_values)]);
                         }
 
                         list($temp, $model_key) = explode('.', $model->$key($key)->getForeignKey());
@@ -86,7 +89,7 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
                             unset($new_values[array_search($rel->id, $new_values)]);
                         }
                         
-                        if (count($new_values)>0) {
+                        if (count($new_values) > 0) {
                             $related = get_class($model->$key()->getRelated());
                             foreach ($new_values as $val) {
                                 $rel = $related::find($val);
