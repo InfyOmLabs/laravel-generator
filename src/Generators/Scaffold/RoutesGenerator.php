@@ -34,10 +34,10 @@ class RoutesGenerator
 
     public function generate()
     {
-        $this->routeContents .= "\n\n" . $this->routesTemplate;
+        $this->routeContents .= "\n\n".$this->routesTemplate;
 
         file_put_contents($this->path, $this->routeContents);
-        $this->commandData->commandComment("\n" . $this->commandData->config->mCamelPlural . ' routes added.');
+        $this->commandData->commandComment("\n".$this->commandData->config->mCamelPlural.' routes added.');
     }
 
     public function rollback()

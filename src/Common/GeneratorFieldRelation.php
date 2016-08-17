@@ -4,14 +4,15 @@ namespace InfyOm\Generator\Common;
 
 class GeneratorFieldRelation
 {
-    /** @var  string  */
-    public $type, $inputs;
+    /** @var string */
+    public $type;
+    public $inputs;
 
     public static function parseRelation($relationInput)
     {
-        $inputs = explode(",", $relationInput);
+        $inputs = explode(',', $relationInput);
 
-        $relation = new GeneratorFieldRelation();
+        $relation = new self();
         $relation->type = array_shift($inputs);
         $relation->inputs = $inputs;
 
@@ -74,7 +75,7 @@ class GeneratorFieldRelation
 
         if (count($this->inputs) > 0) {
             $inputFields = implode("', '", $this->inputs);
-            $inputFields = ", '" . $inputFields . "'";
+            $inputFields = ", '".$inputFields."'";
         } else {
             $inputFields = '';
         }

@@ -24,8 +24,8 @@ class RequestGenerator extends BaseGenerator
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathRequest;
-        $this->createFileName = 'Create' . $this->commandData->modelName . 'Request.php';
-        $this->updateFileName = 'Update' . $this->commandData->modelName . 'Request.php';
+        $this->createFileName = 'Create'.$this->commandData->modelName.'Request.php';
+        $this->updateFileName = 'Update'.$this->commandData->modelName.'Request.php';
     }
 
     public function generate()
@@ -61,11 +61,11 @@ class RequestGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->createFileName)) {
-            $this->commandData->commandComment('Create API Request file deleted: ' . $this->createFileName);
+            $this->commandData->commandComment('Create API Request file deleted: '.$this->createFileName);
         }
 
         if ($this->rollbackFile($this->path, $this->updateFileName)) {
-            $this->commandData->commandComment('Update API Request file deleted: ' . $this->updateFileName);
+            $this->commandData->commandComment('Update API Request file deleted: '.$this->updateFileName);
         }
     }
 }

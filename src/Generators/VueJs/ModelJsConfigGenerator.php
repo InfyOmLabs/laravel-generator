@@ -27,7 +27,7 @@ class ModelJsConfigGenerator extends BaseGenerator
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->modelJsPath;
-        $this->fileName = $this->commandData->config->mCamel . '-config.js';
+        $this->fileName = $this->commandData->config->mCamel.'-config.js';
     }
 
     public function generate()
@@ -48,9 +48,9 @@ class ModelJsConfigGenerator extends BaseGenerator
         $lenghtFields = count($this->commandData->fields);
         foreach ($this->commandData->fields as $field) {
             if ($i == $lenghtFields - 1) {
-                $fieldsRow .= "\t" . $field->name . ': ""';
+                $fieldsRow .= "\t".$field->name.': ""';
             } else {
-                $fieldsRow .= "\t" . $field->name . ": \"\",\n";
+                $fieldsRow .= "\t".$field->name.": \"\",\n";
             }
             $i++;
         }
@@ -70,24 +70,24 @@ class ModelJsConfigGenerator extends BaseGenerator
             if ($i == $lenghtFields - 1) {
                 $fieldsColTemplate .= $fieldCol;
             } else {
-                $fieldsColTemplate .= $fieldCol . "\n";
+                $fieldsColTemplate .= $fieldCol."\n";
             }
             $i++;
         }
         $templateData = str_replace('$FIELDS_COL$', $fieldsColTemplate, $templateData);
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
-        $this->commandData->commandInfo($this->path . $this->fileName . ' created');
+        $this->commandData->commandInfo($this->path.$this->fileName.' created');
     }
 
     public function rollback()
     {
         $files = [
-            $this->fileName
+            $this->fileName,
         ];
         foreach ($files as $file) {
             if ($this->rollbackFile($this->path, $file)) {
-                $this->commandData->commandComment($file . ' file deleted');
+                $this->commandData->commandComment($file.' file deleted');
             }
         }
     }

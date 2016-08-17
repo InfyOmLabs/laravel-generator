@@ -21,7 +21,7 @@ class ControllerGenerator extends BaseGenerator
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathApiController;
-        $this->fileName = $this->commandData->modelName . 'APIController.php';
+        $this->fileName = $this->commandData->modelName.'APIController.php';
     }
 
     public function generate()
@@ -43,7 +43,7 @@ class ControllerGenerator extends BaseGenerator
         foreach ($fields as $field) {
             if ($field['searchable']) {
                 if ($i == 0) {
-                    $filter .= '$q->where("' . $field['fieldName'] . '", "like", $value)';
+                    $filter .= '$q->where("'.$field['fieldName'].'", "like", $value)';
                     if ($searchableCount == 1) {
                         $filter .= ';';
                     } else {
@@ -51,9 +51,9 @@ class ControllerGenerator extends BaseGenerator
                     }
                 } else {
                     if ($i == $searchableCount - 1) {
-                        $filter .= '                  ->orWhere("' . $field['fieldName'] . '", "like", $value);';
+                        $filter .= '                  ->orWhere("'.$field['fieldName'].'", "like", $value);';
                     } else {
-                        $filter .= '                  ->orWhere("' . $field['fieldName'] . '", "like", $value)' . "\n";
+                        $filter .= '                  ->orWhere("'.$field['fieldName'].'", "like", $value)'."\n";
                     }
                 }
                 $i++;
@@ -79,8 +79,8 @@ class ControllerGenerator extends BaseGenerator
         }
 
         foreach ($methods as $method) {
-            $key = '$DOC_' . strtoupper($method) . '$';
-            $docTemplate = get_template($templatePrefix . '.' . $method, $templateType);
+            $key = '$DOC_'.strtoupper($method).'$';
+            $docTemplate = get_template($templatePrefix.'.'.$method, $templateType);
             $docTemplate = fill_template($this->commandData->dynamicVars, $docTemplate);
             $templateData = str_replace($key, $docTemplate, $templateData);
         }
@@ -91,7 +91,7 @@ class ControllerGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('API Controller file deleted: ' . $this->fileName);
+            $this->commandData->commandComment('API Controller file deleted: '.$this->fileName);
         }
     }
 }

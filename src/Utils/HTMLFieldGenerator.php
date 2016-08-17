@@ -10,7 +10,7 @@ class HTMLFieldGenerator
     {
         $fieldTemplate = '';
 
-        switch($field->htmlType) {
+        switch ($field->htmlType) {
             case 'text':
             case 'textarea':
             case 'date':
@@ -20,7 +20,7 @@ class HTMLFieldGenerator
                 $fieldTemplate = get_template('scaffold.fields.'.$field->htmlType, $templateType);
                 break;
             case 'number':
-                $fieldTemplate = get_template('scaffold.fields.' . $field->htmlType, $templateType);
+                $fieldTemplate = get_template('scaffold.fields.'.$field->htmlType, $templateType);
                 break;
             case 'select':
             case 'enum':
@@ -56,5 +56,4 @@ class HTMLFieldGenerator
 
         return $fieldTemplate;
     }
-
 }

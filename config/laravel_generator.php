@@ -43,7 +43,7 @@ return [
 
         'templates_dir'     => base_path('resources/infyom/infyom-generator-templates/'),
 
-        'modelJs'           => base_path('resources/assets/js/models/')
+        'modelJs'           => base_path('resources/assets/js/models/'),
     ],
 
     /*

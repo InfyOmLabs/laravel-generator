@@ -15,7 +15,8 @@ class CommandData
     public static $COMMAND_TYPE_VUEJS = 'vuejs';
 
     /** @var string */
-    public $modelName, $commandType;
+    public $modelName;
+    public $commandType;
 
     /** @var GeneratorConfig */
     public $config;
@@ -30,9 +31,10 @@ class CommandData
     public $commandObj;
 
     /** @var array */
-    public $dynamicVars = [], $fieldNamesMapping = [];
+    public $dynamicVars = [];
+    public $fieldNamesMapping = [];
 
-    /** @var  CommandData */
+    /** @var CommandData */
     protected static $instance = null;
 
     public static function getInstance()
@@ -207,7 +209,7 @@ class CommandData
                 $fileContents = file_get_contents($filePath);
                 $jsonData = json_decode($fileContents, true);
                 $this->fields = [];
-                foreach($jsonData as $field) {
+                foreach ($jsonData as $field) {
                     if (isset($field['type']) && $field['relation']) {
                         $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
                     } else {
@@ -218,7 +220,7 @@ class CommandData
                     }
                 }
             } else {
-//                $fileContents = $this->getOption('jsonFromGUI');
+                //                $fileContents = $this->getOption('jsonFromGUI');
 //                $jsonData = json_decode($fileContents, true);
 //                $this->inputFields = array_merge($this->inputFields, GeneratorFieldsInputUtil::validateFieldsFile($jsonData['fields']));
 //                $this->config->overrideOptionsFromJsonFile($jsonData);
