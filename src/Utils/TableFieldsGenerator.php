@@ -45,6 +45,9 @@ class TableFieldsGenerator
         $this->defaultSearchable = config('infyom.laravel_generator.options.tables_searchable_default', false);
     }
 
+    /**
+     * Prepares array of GeneratorField from table columns
+     */
     public function prepareFieldsFromTable()
     {
         foreach ($this->columns as $column) {
@@ -109,6 +112,8 @@ class TableFieldsGenerator
     }
 
     /**
+     * Get primary key of given table
+     *
      * @param string $tableName
      *
      * @return string|null The column name of the (simple) primary key
@@ -122,6 +127,8 @@ class TableFieldsGenerator
     }
 
     /**
+     * Get timestamp columns from config
+     *
      * @return array the set of [created_at column name, updated_at column name]
      */
     public static function getTimestampFieldNames()
@@ -138,6 +145,8 @@ class TableFieldsGenerator
     }
 
     /**
+     * Generates integer text field for database
+     *
      * @param string                       $dbType
      * @param \Doctrine\DBAL\Schema\Column $column
      *
@@ -164,6 +173,8 @@ class TableFieldsGenerator
     }
 
     /**
+     * Check if key is primary key and sets field options
+     *
      * @param GeneratorField $field
      *
      * @return GeneratorField
@@ -182,6 +193,8 @@ class TableFieldsGenerator
     }
 
     /**
+     * Generates field
+     *
      * @param \Doctrine\DBAL\Schema\Column $column
      * @param $dbType
      * @param $htmlType
@@ -199,6 +212,8 @@ class TableFieldsGenerator
     }
 
     /**
+     * Generates number field
+     *
      * @param \Doctrine\DBAL\Schema\Column $column
      * @param string                       $dbType
      *
@@ -214,12 +229,20 @@ class TableFieldsGenerator
         return $this->checkForPrimary($field);
     }
 
+    /**
+     * Prepares relations (GeneratorFieldRelation) array from table foreign keys
+     */
     public function prepareRelations()
     {
         $foreignKeys = $this->prepareForeignKeys();
         $this->checkForRelations($foreignKeys);
     }
 
+    /**
+     * Prepares foreign keys from table with required details
+     *
+     * @return array
+     */
     public function prepareForeignKeys()
     {
         $tables = $this->schemaManager->listTables();
@@ -253,14 +276,21 @@ class TableFieldsGenerator
         return $fields;
     }
 
+    /**
+     * Prepares relations array from table foreign keys
+     *
+     * @param array $tables
+     */
     private function checkForRelations($tables)
     {
+        // get Model table name and table details from tables list
         $modelTableName = $this->tableName;
         $modelTable = $tables[$modelTableName];
         unset($tables[$modelTableName]);
 
         $this->relations = [];
 
+        // detects many to one rules for model table
         $manyToOneRelations = $this->detectManyToOne($tables, $modelTable);
 
         if (count($manyToOneRelations) > 0) {
@@ -271,6 +301,7 @@ class TableFieldsGenerator
             $foreignKeys = $table['foreign'];
             $primary = $table['primary'];
 
+            // if foreign key count is 2 then check if many to many relationship is there
             if (count($foreignKeys) == 2) {
                 $manyToManyRelation = $this->isManyToMany($tables, $tableName, $modelTable, $modelTableName);
                 if ($manyToManyRelation) {
@@ -279,8 +310,12 @@ class TableFieldsGenerator
                 }
             }
 
+            // iterate each foreign key and check for relationship
             foreach ($foreignKeys as $foreignKey) {
+                // check if foreign key is on the model table for which we are using generator command
                 if ($foreignKey['foreignTable'] == $modelTableName) {
+
+                    // detect if one to one relationship is there
                     $isOneToOne = $this->isOneToOne($primary, $foreignKey, $modelTable['primary']);
                     if ($isOneToOne) {
                         $modelName = model_name_from_table_name($tableName);
@@ -288,6 +323,7 @@ class TableFieldsGenerator
                         continue;
                     }
 
+                    // detect if one to many relationship is there
                     $isOneToMany = $this->isOneToMany($primary, $foreignKey, $modelTable['primary']);
                     if ($isOneToMany) {
                         $modelName = model_name_from_table_name($tableName);
@@ -299,37 +335,62 @@ class TableFieldsGenerator
         }
     }
 
+    /**
+     * Detects many to many relationship
+     * If table has only two foreign keys
+     * Both foreign keys are primary key in foreign table
+     * Also one is from model table and one is from diff table
+     *
+     * @param array $tables
+     * @param string $tableName
+     * @param string $modelTable
+     * @param string $modelTableName
+     * @return bool|GeneratorFieldRelation
+     */
     private function isManyToMany($tables, $tableName, $modelTable, $modelTableName)
     {
+        // get table details
         $table = $tables[$tableName];
+
         $isAnyKeyOnModelTable = false;
+
+        // many to many model table name
         $manyToManyTable = '';
+
         $foreignKeys = $table['foreign'];
         $primary = $table['primary'];
 
+        // check if any foreign key is there from model table
         foreach ($foreignKeys as $foreignKey) {
             if ($foreignKey['foreignTable'] == $modelTableName) {
                 $isAnyKeyOnModelTable = true;
             }
         }
 
+        // if foreign key is there
         if ($isAnyKeyOnModelTable) {
             foreach ($foreignKeys as $foreignKey) {
                 $foreignField = $foreignKey['foreignField'];
                 $foreignTableName = $foreignKey['foreignTable'];
 
+                // if foreign table is model table
                 if ($foreignTableName == $modelTableName) {
                     $foreignTable = $modelTable;
                 } else {
                     $foreignTable = $tables[$foreignTableName];
+                    // get the many to many model table name
                     $manyToManyTable = $foreignTableName;
                 }
 
+                // if foreign field is not primary key of foreign table
+                // then it can not be many to many
                 if ($foreignField != $foreignTable['primary']) {
                     return false;
                     break;
                 }
 
+                // if foreign field is primary key of this table
+                // then it can not be many to many
                 if ($foreignField == $primary) {
                     return false;
                 }
@@ -337,10 +398,19 @@ class TableFieldsGenerator
         }
 
         $modelName = model_name_from_table_name($manyToManyTable);
-
         return GeneratorFieldRelation::parseRelation('mtm,'.$modelName.','.$tableName);
     }
 
+    /**
+     * Detects if one to one relationship is there
+     * If foreign key of table is primary key of foreign table
+     * Also foreign key field is primary key of this table
+     *
+     * @param string $primaryKey
+     * @param array $foreignKey
+     * @param string $modelTablePrimary
+     * @return bool
+     */
     private function isOneToOne($primaryKey, $foreignKey, $modelTablePrimary)
     {
         if ($foreignKey['foreignField'] == $modelTablePrimary) {
@@ -352,6 +422,16 @@ class TableFieldsGenerator
         return false;
     }
 
+    /**
+     * Detects if one to many relationship is there
+     * If foreign key of table is primary key of foreign table
+     * Also foreign key field is not primary key of this table
+     *
+     * @param string $primaryKey
+     * @param array $foreignKey
+     * @param string $modelTablePrimary
+     * @return bool
+     */
     private function isOneToMany($primaryKey, $foreignKey, $modelTablePrimary)
     {
         if ($foreignKey['foreignField'] == $modelTablePrimary) {
@@ -363,6 +443,14 @@ class TableFieldsGenerator
         return false;
     }
 
+    /**
+     * Detect many to one relationship on model table
+     * If foreign key of model table is primary key of foreign table
+     *
+     * @param array $tables
+     * @param array $modelTable
+     * @return array
+     */
     private function detectManyToOne($tables, $modelTable)
     {
         $manyToOneRelations = [];
