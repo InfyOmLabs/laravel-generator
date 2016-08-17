@@ -6,17 +6,26 @@ use Illuminate\Support\Str;
 
 class GeneratorField
 {
-    /** @var  string */
-    public $name, $dbInput, $htmlType, $fieldType;
+    /** @var string */
+    public $name;
+    public $dbInput;
+    public $htmlType;
+    public $fieldType;
 
-    /** @var  array */
+    /** @var array */
     public $htmlValues;
 
-    /** @var  string */
-    public $migrationText, $foreignKeyText, $validations;
+    /** @var string */
+    public $migrationText;
+    public $foreignKeyText;
+    public $validations;
 
-    /** @var  boolean */
-    public $isSearchable = true, $isFillable = true, $isPrimary = false, $inForm = true, $inIndex = true;
+    /** @var bool */
+    public $isSearchable = true;
+    public $isFillable = true;
+    public $isPrimary = false;
+    public $inForm = true;
+    public $inIndex = true;
 
     public function parseDBType($dbInput)
     {
@@ -28,16 +37,17 @@ class GeneratorField
     {
         $this->htmlValues = [];
 
-        if(empty($htmlInput)) {
+        if (empty($htmlInput)) {
             $this->htmlType = 'text';
+
             return;
         }
 
-        $inputsArr = explode(",", $htmlInput);
+        $inputsArr = explode(',', $htmlInput);
 
         $this->htmlType = array_shift($inputsArr);
 
-        if(count($inputsArr) > 0) {
+        if (count($inputsArr) > 0) {
             $this->htmlValues = $inputsArr;
         }
     }
@@ -45,62 +55,62 @@ class GeneratorField
     public function parseOptions($options)
     {
         $options = strtolower($options);
-        $optionsArr = explode(",", $options);
-        if (in_array("s", $optionsArr)) {
+        $optionsArr = explode(',', $options);
+        if (in_array('s', $optionsArr)) {
             $this->isSearchable = false;
         }
-        if (in_array("p", $optionsArr)) {
+        if (in_array('p', $optionsArr)) {
             $this->isPrimary = true;
         }
-        if (in_array("f", $optionsArr)) {
+        if (in_array('f', $optionsArr)) {
             $this->isFillable = false;
         }
-        if (in_array("if", $optionsArr)) {
+        if (in_array('if', $optionsArr)) {
             $this->inForm = false;
         }
-        if (in_array("ii", $optionsArr)) {
+        if (in_array('ii', $optionsArr)) {
             $this->inIndex = false;
         }
     }
 
     private function prepareMigrationText()
     {
-        $inputsArr = explode(":", $this->dbInput);
+        $inputsArr = explode(':', $this->dbInput);
         $this->migrationText = '$table->';
 
-        $fieldTypeParams = explode(",", array_shift($inputsArr));
+        $fieldTypeParams = explode(',', array_shift($inputsArr));
         $this->fieldType = array_shift($fieldTypeParams);
-        $this->migrationText .= $this->fieldType . "('" . $this->name . "'";
+        $this->migrationText .= $this->fieldType."('".$this->name."'";
 
         foreach ($fieldTypeParams as $param) {
-            $this->migrationText .= ", " . $param;
+            $this->migrationText .= ', '.$param;
         }
 
-        $this->migrationText .= ")";
+        $this->migrationText .= ')';
 
         foreach ($inputsArr as $input) {
-            $inputParams = explode(",", $input);
+            $inputParams = explode(',', $input);
             $functionName = array_shift($inputParams);
-            if ($functionName == "foreign") {
+            if ($functionName == 'foreign') {
                 $foreignTable = array_shift($inputParams);
                 $foreignField = array_shift($inputParams);
-                $this->foreignKeyText .= "\$table->foreign('" . $this->name . "')->references('" . $foreignField . "')->on('" . $foreignTable . "');";
+                $this->foreignKeyText .= "\$table->foreign('".$this->name."')->references('".$foreignField."')->on('".$foreignTable."');";
             } else {
-                $this->migrationText .= "->" . $functionName;
-                $this->migrationText .= "(";
+                $this->migrationText .= '->'.$functionName;
+                $this->migrationText .= '(';
                 foreach ($inputParams as $param) {
-                    $this->migrationText .= ", " . $param;
+                    $this->migrationText .= ', '.$param;
                 }
-                $this->migrationText .= ")";
+                $this->migrationText .= ')';
             }
         }
 
-        $this->migrationText .= ";";
+        $this->migrationText .= ';';
     }
 
     public static function parseFieldFromFile($fieldInput)
     {
-        $field = new GeneratorField();
+        $field = new self();
         $field->name = $fieldInput['name'];
         $field->parseDBType($fieldInput['dbType']);
         $field->parseHtmlInput(isset($fieldInput['htmlType']) ? $fieldInput['htmlType'] : '');
@@ -110,6 +120,7 @@ class GeneratorField
         $field->isPrimary = isset($fieldInput['primary']) ? $fieldInput['primary'] : false;
         $field->inForm = isset($fieldInput['inForm']) ? $fieldInput['inForm'] : true;
         $field->inIndex = isset($fieldInput['inIndex']) ? $fieldInput['inIndex'] : true;
+
         return $field;
     }
 

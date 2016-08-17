@@ -103,7 +103,7 @@ class ViewGenerator extends BaseGenerator
                 case 'email':
                 case 'password':
                 case 'number':
-                    $fieldTemplate = get_template('vuejs.fields.' . $field->htmlType, $this->templateType);
+                    $fieldTemplate = get_template('vuejs.fields.'.$field->htmlType, $this->templateType);
                     break;
 
                 case 'select':
@@ -155,7 +155,7 @@ class ViewGenerator extends BaseGenerator
                     $fieldTemplate = get_template('vuejs.fields.checkbox', $this->templateType);
                     $checkboxValue = $value = $field['htmlTypeInputs'];
                     if ($field['fieldType'] != 'boolean') {
-                        $checkboxValue = "'" . $value . "'";
+                        $checkboxValue = "'".$value."'";
                     }
                     $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
                     $fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
@@ -185,7 +185,7 @@ class ViewGenerator extends BaseGenerator
                     $validationMessages = '';
                     foreach ($rules as $rule) {
                         $rule = explode(':', $rule)[0];
-                        $validationMessages .= str_replace('$RULE$', $rule, $validationMessagesTemplate) . "\n";
+                        $validationMessages .= str_replace('$RULE$', $rule, $validationMessagesTemplate)."\n";
                     }
                     $fieldTemplate = str_replace('$VALIDATION_MESSAGES$', $validationMessages, $fieldTemplate);
                 }
@@ -251,7 +251,7 @@ class ViewGenerator extends BaseGenerator
 
         foreach ($files as $file) {
             if ($this->rollbackFile($this->path, $file)) {
-                $this->commandData->commandComment($file . ' file deleted');
+                $this->commandData->commandComment($file.' file deleted');
             }
         }
     }

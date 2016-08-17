@@ -30,7 +30,7 @@ class MenuGenerator extends BaseGenerator
                 'infyom.laravel_generator.path.views',
                 base_path('resources/views/'
                 )
-            ) . $commandData->getAddOn('menu.menu_file');
+            ).$commandData->getAddOn('menu.menu_file');
         $this->templateType = config('infyom.laravel_generator.templates', 'core-templates');
 
         $this->menuContents = file_get_contents($this->path);
@@ -42,10 +42,10 @@ class MenuGenerator extends BaseGenerator
 
     public function generate()
     {
-        $this->menuContents .= $this->menuTemplate . infy_nl();
+        $this->menuContents .= $this->menuTemplate.infy_nl();
 
         file_put_contents($this->path, $this->menuContents);
-        $this->commandData->commandComment("\n" . $this->commandData->config->mCamelPlural . ' menu added.');
+        $this->commandData->commandComment("\n".$this->commandData->config->mCamelPlural.' menu added.');
     }
 
     public function rollback()

@@ -353,7 +353,7 @@ class ViewGenerator extends BaseGenerator
             $singleFieldStr = str_replace('$FIELD_NAME$', $field->name, $singleFieldStr);
             $singleFieldStr = fill_template($this->commandData->dynamicVars, $singleFieldStr);
 
-            $fieldsStr .= $singleFieldStr . "\n\n";
+            $fieldsStr .= $singleFieldStr."\n\n";
         }
 
         FileUtil::createFile($this->path, 'show_fields.blade.php', $fieldsStr);
@@ -388,9 +388,8 @@ class ViewGenerator extends BaseGenerator
 
         foreach ($files as $file) {
             if ($this->rollbackFile($this->path, $file)) {
-                $this->commandData->commandComment($file . ' file deleted');
+                $this->commandData->commandComment($file.' file deleted');
             }
         }
     }
-
 }

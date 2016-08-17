@@ -20,6 +20,7 @@ class GeneratorFieldsInputUtil
     /**
      * @param $fieldInput
      * @param $validations
+     *
      * @return GeneratorField
      */
     public static function processFieldInput($fieldInput, $validations)
@@ -90,9 +91,9 @@ class GeneratorFieldsInputUtil
         $arr = [];
 
         foreach ($values as $value) {
-            $labelValue = explode(":", $value);
+            $labelValue = explode(':', $value);
 
-            if(count($labelValue) > 1) {
+            if (count($labelValue) > 1) {
                 $arr[$labelValue[0]] = $labelValue[1];
             } else {
                 $arr[$labelValue[0]] = $labelValue[0];
@@ -100,6 +101,5 @@ class GeneratorFieldsInputUtil
         }
 
         return $arr;
-
     }
 }

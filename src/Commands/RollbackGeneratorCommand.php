@@ -17,11 +17,11 @@ use InfyOm\Generator\Generators\Scaffold\MenuGenerator;
 use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
 use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
 use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
-use InfyOm\Generator\Generators\VueJs\ViewGenerator as VueJsViewGenerator;
-use InfyOm\Generator\Generators\VueJs\ControllerGenerator as VueJsControllerGenerator;
-use InfyOm\Generator\Generators\VueJs\RoutesGenerator as VueJsRoutesGenerator;
-use InfyOm\Generator\Generators\VueJs\ModelJsConfigGenerator;
 use InfyOm\Generator\Generators\TestTraitGenerator;
+use InfyOm\Generator\Generators\VueJs\ControllerGenerator as VueJsControllerGenerator;
+use InfyOm\Generator\Generators\VueJs\ModelJsConfigGenerator;
+use InfyOm\Generator\Generators\VueJs\RoutesGenerator as VueJsRoutesGenerator;
+use InfyOm\Generator\Generators\VueJs\ViewGenerator as VueJsViewGenerator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -113,16 +113,16 @@ class RollbackGeneratorCommand extends Command
         $routeGenerator->rollback();
 
         $controllerGenerator = new VueJsControllerGenerator($this->commandData);
-        $controllerGenerator->rollback(); 
+        $controllerGenerator->rollback();
 
         $routesGenerator = new VueJsRoutesGenerator($this->commandData);
-        $routesGenerator->rollback();    
-        
+        $routesGenerator->rollback();
+
         $viewGenerator = new VueJsViewGenerator($this->commandData);
-        $viewGenerator->rollback();            
+        $viewGenerator->rollback();
 
         $modelJsConfigGenerator = new ModelJsConfigGenerator($this->commandData);
-        $modelJsConfigGenerator->rollback();          
+        $modelJsConfigGenerator->rollback();
 
         if ($this->commandData->getAddOn('tests')) {
             $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);

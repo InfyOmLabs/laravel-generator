@@ -38,7 +38,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
      */
     public function publishAPIRoutes()
     {
-        $routesPath = __DIR__ . '/../../../templates/api/routes/api_routes.stub';
+        $routesPath = __DIR__.'/../../../templates/api/routes/api_routes.stub';
 
         $apiRoutesPath = config('infyom.laravel_generator.path.api_routes', app_path('Http/api_routes.php'));
 
@@ -65,7 +65,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
         $templateData = $this->fillTemplate($templateData);
 
-        file_put_contents($path, $routeContents . "\n\n" . $templateData);
+        file_put_contents($path, $routeContents."\n\n".$templateData);
         $this->comment("\nAPI group added to routes.php");
     }
 
@@ -92,14 +92,14 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
     private function publishTestCases()
     {
-        $traitPath = __DIR__ . '/../../../templates/test/api_test_trait.stub';
+        $traitPath = __DIR__.'/../../../templates/test/api_test_trait.stub';
 
         $testsPath = config('infyom.laravel_generator.path.api_test', base_path('tests/'));
 
-        $this->publishFile($traitPath, $testsPath . 'ApiTestTrait.php', 'ApiTestTrait.php');
+        $this->publishFile($traitPath, $testsPath.'ApiTestTrait.php', 'ApiTestTrait.php');
 
-        if (!file_exists($testsPath . 'traits/')) {
-            mkdir($testsPath . 'traits/');
+        if (!file_exists($testsPath.'traits/')) {
+            mkdir($testsPath.'traits/');
             $this->info('traits directory created');
         }
     }
@@ -114,7 +114,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
         $fileName = 'AppBaseController.php';
 
-        if (file_exists($controllerPath . $fileName) && !$this->confirmOverwrite($fileName)) {
+        if (file_exists($controllerPath.$fileName) && !$this->confirmOverwrite($fileName)) {
             return;
         }
 

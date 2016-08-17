@@ -10,6 +10,7 @@ class SwaggerGenerator
 
     /**
      * @param GeneratorField[] $inputFields
+     *
      * @return array
      */
     public static function generateTypes($inputFields)
@@ -78,8 +79,8 @@ class SwaggerGenerator
 
             if (!empty($fieldType)) {
                 $fieldType = [
-                    'name' => $field->name,
-                    'type' => $fieldType,
+                    'name'   => $field->name,
+                    'type'   => $fieldType,
                     'format' => $fieldFormat,
                 ];
 
@@ -104,7 +105,7 @@ class SwaggerGenerator
 
         $templateData = fill_template($variables, $template);
 
-        $templateData = str_replace('$REQUIRED_FIELDS$', '"' . implode('", "', $fillables) . '"', $templateData);
+        $templateData = str_replace('$REQUIRED_FIELDS$', '"'.implode('", "', $fillables).'"', $templateData);
 
         $propertyTemplate = get_template('model.property', 'swagger-generator');
 
@@ -118,6 +119,7 @@ class SwaggerGenerator
     /**
      * @param $template
      * @param $fields
+     *
      * @return array
      */
     public static function preparePropertyFields($template, $fields)
@@ -136,7 +138,7 @@ class SwaggerGenerator
             $propertyTemplate = str_replace('$DESCRIPTION$', $description, $propertyTemplate);
             $propertyTemplate = str_replace('$FIELD_TYPE$', $type, $propertyTemplate);
             if (!empty($format)) {
-                $format = ",\n *          format=\"" . $format . '"';
+                $format = ",\n *          format=\"".$format.'"';
             }
             $propertyTemplate = str_replace('$FIELD_FORMAT$', $format, $propertyTemplate);
             $templates[] = $propertyTemplate;

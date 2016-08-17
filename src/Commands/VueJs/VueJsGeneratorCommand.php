@@ -7,12 +7,12 @@ use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\MigrationGenerator;
 use InfyOm\Generator\Generators\ModelGenerator;
 use InfyOm\Generator\Generators\RepositoryGenerator;
-use InfyOm\Generator\Generators\VueJs\ControllerGenerator;
 use InfyOm\Generator\Generators\Scaffold\MenuGenerator;
 use InfyOm\Generator\Generators\VueJs\APIRequestGenerator;
+use InfyOm\Generator\Generators\VueJs\ControllerGenerator;
+use InfyOm\Generator\Generators\VueJs\ModelJsConfigGenerator;
 use InfyOm\Generator\Generators\VueJs\RoutesGenerator;
 use InfyOm\Generator\Generators\VueJs\ViewGenerator;
-use InfyOm\Generator\Generators\VueJs\ModelJsConfigGenerator;
 
 class VueJsGeneratorCommand extends BaseCommand
 {
@@ -70,7 +70,7 @@ class VueJsGeneratorCommand extends BaseCommand
         $viewGenerator->generate();
 
         $modelJsConfigGenerator = new ModelJsConfigGenerator($this->commandData);
-        $modelJsConfigGenerator->generate();        
+        $modelJsConfigGenerator->generate();
 
         $routeGenerator = new RoutesGenerator($this->commandData);
         $routeGenerator->generate();

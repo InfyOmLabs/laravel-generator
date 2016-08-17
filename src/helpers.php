@@ -75,10 +75,11 @@ if (!function_exists('infy_nl_tab')) {
 
 if (!function_exists('get_template_file_path')) {
     /**
-     * get path for template file
+     * get path for template file.
      *
      * @param string $templateName
      * @param string $templateType
+     *
      * @return string
      */
     function get_template_file_path($templateName, $templateType)
@@ -102,10 +103,11 @@ if (!function_exists('get_template_file_path')) {
 
 if (!function_exists('get_template')) {
     /**
-     * get template contents
+     * get template contents.
      *
      * @param string $templateName
      * @param string $templateType
+     *
      * @return string
      */
     function get_template($templateName, $templateType)
@@ -118,10 +120,11 @@ if (!function_exists('get_template')) {
 
 if (!function_exists('fill_template')) {
     /**
-     * fill template with variable values
+     * fill template with variable values.
      *
-     * @param array $variables
+     * @param array  $variables
      * @param string $template
+     *
      * @return string
      */
     function fill_template($variables, $template)
@@ -136,11 +139,12 @@ if (!function_exists('fill_template')) {
 
 if (!function_exists('fill_field_template')) {
     /**
-     * fill field template with variable values
+     * fill field template with variable values.
      *
-     * @param array $variables
-     * @param string $template
+     * @param array                                   $variables
+     * @param string                                  $template
      * @param \InfyOm\Generator\Common\GeneratorField $field
+     *
      * @return string
      */
     function fill_field_template($variables, $template, $field)
@@ -155,12 +159,13 @@ if (!function_exists('fill_field_template')) {
 
 if (!function_exists('fill_template_with_field_data')) {
     /**
-     * fill template with field data
+     * fill template with field data.
      *
-     * @param array $variables
-     * @param array $fieldVariables
-     * @param string $template
+     * @param array                                   $variables
+     * @param array                                   $fieldVariables
+     * @param string                                  $template
      * @param \InfyOm\Generator\Common\GeneratorField $field
+     *
      * @return string
      */
     function fill_template_with_field_data($variables, $fieldVariables, $template, $field)
@@ -173,12 +178,13 @@ if (!function_exists('fill_template_with_field_data')) {
 
 if (!function_exists('fill_template_with_field_data')) {
     /**
-     * fill template with field data
+     * fill template with field data.
      *
-     * @param array $variables
-     * @param array $fieldVariables
-     * @param string $template
+     * @param array                                   $variables
+     * @param array                                   $fieldVariables
+     * @param string                                  $template
      * @param \InfyOm\Generator\Common\GeneratorField $field
+     *
      * @return string
      */
     function fill_template_with_field_data($variables, $fieldVariables, $template, $field)
@@ -191,9 +197,10 @@ if (!function_exists('fill_template_with_field_data')) {
 
 if (!function_exists('model_name_from_table_name')) {
     /**
-     * generates model name from table name
+     * generates model name from table name.
      *
      * @param string $tableName
+     *
      * @return string
      */
     function model_name_from_table_name($tableName)

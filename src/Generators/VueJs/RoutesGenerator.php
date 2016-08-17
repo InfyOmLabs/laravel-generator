@@ -51,13 +51,13 @@ class RoutesGenerator extends BaseGenerator
 
     public function generate()
     {
-        $this->routeContents .= "\n\n" . $this->routesTemplate;
-        $this->apiRouteContents .= "\n\n" . $this->apiRoutesTemplate;
+        $this->routeContents .= "\n\n".$this->routesTemplate;
+        $this->apiRouteContents .= "\n\n".$this->apiRoutesTemplate;
 
         file_put_contents($this->path, $this->routeContents);
         file_put_contents($this->pathApi, $this->apiRouteContents);
 
-        $this->commandData->commandComment("\n" . $this->commandData->config->mCamelPlural . ' routes added.');
+        $this->commandData->commandComment("\n".$this->commandData->config->mCamelPlural.' routes added.');
     }
 
     public function rollback()

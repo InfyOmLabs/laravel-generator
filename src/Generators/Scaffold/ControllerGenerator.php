@@ -25,7 +25,7 @@ class ControllerGenerator extends BaseGenerator
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathController;
         $this->templateType = config('infyom.laravel_generator.templates', 'core-templates');
-        $this->fileName = $this->commandData->modelName . 'Controller.php';
+        $this->fileName = $this->commandData->modelName.'Controller.php';
     }
 
     public function generate()
@@ -40,7 +40,7 @@ class ControllerGenerator extends BaseGenerator
             $paginate = $this->commandData->getOption('paginate');
 
             if ($paginate) {
-                $templateData = str_replace('$RENDER_TYPE$', 'paginate(' . $paginate . ')', $templateData);
+                $templateData = str_replace('$RENDER_TYPE$', 'paginate('.$paginate.')', $templateData);
             } else {
                 $templateData = str_replace('$RENDER_TYPE$', 'all()', $templateData);
             }
@@ -78,9 +78,9 @@ class ControllerGenerator extends BaseGenerator
 
         $path = $this->commandData->config->pathDataTables;
 
-        $fileName = $this->commandData->modelName . 'DataTable.php';
+        $fileName = $this->commandData->modelName.'DataTable.php';
 
-        $fields = implode(',' . infy_nl_tab(1, 3), $headerFields);
+        $fields = implode(','.infy_nl_tab(1, 3), $headerFields);
 
         $templateData = str_replace('$DATATABLE_COLUMNS$', $fields, $templateData);
 
@@ -93,7 +93,7 @@ class ControllerGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('Controller file deleted: ' . $this->fileName);
+            $this->commandData->commandComment('Controller file deleted: '.$this->fileName);
         }
     }
 }
