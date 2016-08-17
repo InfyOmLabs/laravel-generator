@@ -9,7 +9,7 @@ use InfyOm\Generator\Common\GeneratorFieldRelation;
 class TableFieldsGenerator
 {
     /** @var  string */
-    public $table, $primaryKey;
+    public $tableName, $primaryKey;
 
     /** @var  boolean */
     public $defaultSearchable;
@@ -31,6 +31,8 @@ class TableFieldsGenerator
 
     public function __construct($tableName)
     {
+        $this->tableName = $tableName;
+
         $this->schemaManager = DB::getDoctrineSchemaManager();
         $platform = $this->schemaManager->getDatabasePlatform();
         $platform->registerDoctrineTypeMapping('enum', 'string');
@@ -206,5 +208,173 @@ class TableFieldsGenerator
         $field->htmlType = "number";
 
         return $this->checkForPrimary($field);
+    }
+
+    public function prepareRelations()
+    {
+        $foreignKeys = $this->prepareForeignKeys();
+        $this->checkForRelations($foreignKeys);
+    }
+
+    public function prepareForeignKeys()
+    {
+        $tables = $this->schemaManager->listTables();
+
+        $fields = [];
+
+        foreach ($tables as $table) {
+            $primaryKeys = $table->getPrimaryKey();
+            if ($primaryKeys) {
+                $primaryKeys = $primaryKeys->getColumns()[0];
+            }
+            $formattedForeignKeys = [];
+            $tableForeignKeys = $table->getForeignKeys();
+            foreach($tableForeignKeys as $tableForeignKey) {
+                $formattedForeignKeys[] = [
+                    'name' => $tableForeignKey->getName(),
+                    'localField' => $tableForeignKey->getLocalColumns()[0],
+                    'foreignField' => $tableForeignKey->getForeignColumns()[0],
+                    'foreignTable' => $tableForeignKey->getForeignTableName(),
+                    'onUpdate' => $tableForeignKey->onUpdate(),
+                    'onDelete' => $tableForeignKey->onDelete()
+                ];
+            }
+
+            $fields[$table->getName()] = [
+                'primary' => $primaryKeys,
+                'foreign' => $formattedForeignKeys,
+            ];
+        }
+
+        return $fields;
+    }
+
+    private function checkForRelations($tables)
+    {
+        $modelTableName = $this->tableName;
+        $modelTable = $tables[$modelTableName];
+        unset($tables[$modelTableName]);
+
+        $this->relations = [];
+
+        $manyToOneRelations = $this->detectManyToOne($tables, $modelTable);
+
+        if (count($manyToOneRelations) > 0) {
+            $this->relations = array_merge($this->relations, $manyToOneRelations);
+        }
+
+        foreach ($tables as $tableName => $table) {
+            $foreignKeys = $table['foreign'];
+            $primary = $table['primary'];
+
+            if (count($foreignKeys) == 2) {
+                $manyToManyRelation = $this->isManyToMany($tables, $tableName, $modelTable, $modelTableName);
+                if ($manyToManyRelation) {
+                    $this->relations[] = $manyToManyRelation;
+                    continue;
+                }
+            }
+
+            foreach ($foreignKeys as $foreignKey) {
+                if ($foreignKey['foreignTable'] == $modelTableName) {
+
+                    $isOneToOne = $this->isOneToOne($primary, $foreignKey, $modelTable['primary']);
+                    if ($isOneToOne) {
+                        $modelName = ucfirst(camel_case(str_singular($tableName)));
+                        $this->relations[] = GeneratorFieldRelation::parseRelation('1t1,' . $modelName);
+                        continue;
+                    }
+
+                    $isOneToMany = $this->isOneToMany($primary, $foreignKey, $modelTable['primary']);
+                    if ($isOneToMany) {
+                        $modelName = ucfirst(camel_case(str_singular($tableName)));
+                        $this->relations[] = GeneratorFieldRelation::parseRelation('1tm,' . $modelName);
+                        continue;
+                    }
+                }
+            }
+        }
+    }
+
+    private function isManyToMany($tables, $tableName, $modelTable, $modelTableName)
+    {
+        $table = $tables[$tableName];
+        $isAnyKeyOnModelTable = false;
+        $manyToManyTable = '';
+        $foreignKeys = $table['foreign'];
+        $primary = $table['primary'];
+
+        foreach ($foreignKeys as $foreignKey) {
+            if ($foreignKey['foreignTable'] == $modelTableName) {
+                $isAnyKeyOnModelTable = true;
+            }
+        }
+
+        if ($isAnyKeyOnModelTable) {
+            foreach ($foreignKeys as $foreignKey) {
+                $foreignField = $foreignKey['foreignField'];
+                $foreignTableName = $foreignKey['foreignTable'];
+
+                if ($foreignTableName == $modelTableName) {
+                    $foreignTable = $modelTable;
+                } else {
+                    $foreignTable = $tables[$foreignTableName];
+                    $manyToManyTable = $foreignTableName;
+                }
+
+                if ($foreignField != $foreignTable['primary']) {
+                    return false;
+                    break;
+                }
+
+                if ($foreignField == $primary) {
+                    return false;
+                }
+            }
+        }
+
+        $modelName = ucfirst(camel_case(str_singular($manyToManyTable)));
+        return GeneratorFieldRelation::parseRelation('mtm,' . $modelName.','.$tableName);
+    }
+
+    private function isOneToOne($primaryKey, $foreignKey, $modelTablePrimary)
+    {
+        if ($foreignKey['foreignField'] == $modelTablePrimary) {
+            if ($foreignKey['localField'] == $primaryKey) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isOneToMany($primaryKey, $foreignKey, $modelTablePrimary)
+    {
+        if ($foreignKey['foreignField'] == $modelTablePrimary) {
+            if ($foreignKey['localField'] != $primaryKey) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function detectManyToOne($tables, $modelTable)
+    {
+        $manyToOneRelations = [];
+
+        $foreignKeys = $modelTable['foreign'];
+
+        foreach ($foreignKeys as $foreignKey) {
+            $foreignTable = $foreignKey['foreignTable'];
+            $foreignField = $foreignKey['foreignField'];
+
+            if($foreignField == $tables[$foreignTable]['primary']) {
+                $modelName = ucfirst(camel_case(str_singular($foreignTable)));
+                $manyToOneRelations[] = GeneratorFieldRelation::parseRelation('mt1,'.$modelName);
+            }
+        }
+
+        return $manyToOneRelations;
     }
 }

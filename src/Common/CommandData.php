@@ -238,7 +238,9 @@ class CommandData
 
         $tableFieldsGenerator = new TableFieldsGenerator($tableName);
         $tableFieldsGenerator->prepareFieldsFromTable();
+        $tableFieldsGenerator->prepareRelations();
 
         $this->fields = $tableFieldsGenerator->fields;
+        $this->relations = $tableFieldsGenerator->relations;
     }
 }
