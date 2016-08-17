@@ -60,7 +60,12 @@ class GeneratorField
             $this->isSearchable = false;
         }
         if (in_array('p', $optionsArr)) {
+            // if field is primary key, then its not searchable, fillable, not in index & form
             $this->isPrimary = true;
+            $this->isSearchable = false;
+            $this->isFillable = false;
+            $this->inForm = false;
+            $this->inIndex = false;
         }
         if (in_array('f', $optionsArr)) {
             $this->isFillable = false;
