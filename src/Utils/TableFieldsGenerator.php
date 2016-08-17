@@ -280,14 +280,14 @@ class TableFieldsGenerator
 
                     $isOneToOne = $this->isOneToOne($primary, $foreignKey, $modelTable['primary']);
                     if ($isOneToOne) {
-                        $modelName = ucfirst(camel_case(str_singular($tableName)));
+                        $modelName = model_name_from_table_name($tableName);
                         $this->relations[] = GeneratorFieldRelation::parseRelation('1t1,' . $modelName);
                         continue;
                     }
 
                     $isOneToMany = $this->isOneToMany($primary, $foreignKey, $modelTable['primary']);
                     if ($isOneToMany) {
-                        $modelName = ucfirst(camel_case(str_singular($tableName)));
+                        $modelName = model_name_from_table_name($tableName);
                         $this->relations[] = GeneratorFieldRelation::parseRelation('1tm,' . $modelName);
                         continue;
                     }
@@ -333,7 +333,7 @@ class TableFieldsGenerator
             }
         }
 
-        $modelName = ucfirst(camel_case(str_singular($manyToManyTable)));
+        $modelName = model_name_from_table_name($manyToManyTable);
         return GeneratorFieldRelation::parseRelation('mtm,' . $modelName.','.$tableName);
     }
 
@@ -370,7 +370,7 @@ class TableFieldsGenerator
             $foreignField = $foreignKey['foreignField'];
 
             if($foreignField == $tables[$foreignTable]['primary']) {
-                $modelName = ucfirst(camel_case(str_singular($foreignTable)));
+                $modelName = model_name_from_table_name($foreignTable);
                 $manyToOneRelations[] = GeneratorFieldRelation::parseRelation('mt1,'.$modelName);
             }
         }

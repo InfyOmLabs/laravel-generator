@@ -189,4 +189,15 @@ if (!function_exists('fill_template_with_field_data')) {
     }
 }
 
-
+if (!function_exists('model_name_from_table_name')) {
+    /**
+     * generates model name from table name
+     *
+     * @param string $tableName
+     * @return string
+     */
+    function model_name_from_table_name($tableName)
+    {
+        return ucfirst(camel_case(str_singular($tableName)));
+    }
+}
