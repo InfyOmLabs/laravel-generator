@@ -6,6 +6,21 @@ use DB;
 use InfyOm\Generator\Common\GeneratorField;
 use InfyOm\Generator\Common\GeneratorFieldRelation;
 
+class GeneratorForeignKey
+{
+    /** @var string */
+    public $name, $localField, $foreignField, $foreignTable, $onUpdate,$onDelete;
+}
+
+class GeneratorTable
+{
+    /** @var  string */
+    public $primaryKey;
+
+    /** @var  GeneratorForeignKey[] */
+    public $foreignKeys;
+}
+
 class TableFieldsGenerator
 {
     /** @var string */
@@ -241,7 +256,7 @@ class TableFieldsGenerator
     /**
      * Prepares foreign keys from table with required details
      *
-     * @return array
+     * @return GeneratorTable[]
      */
     public function prepareForeignKeys()
     {
@@ -250,27 +265,29 @@ class TableFieldsGenerator
         $fields = [];
 
         foreach ($tables as $table) {
-            $primaryKeys = $table->getPrimaryKey();
-            if ($primaryKeys) {
-                $primaryKeys = $primaryKeys->getColumns()[0];
+            $primaryKey = $table->getPrimaryKey();
+            if ($primaryKey) {
+                $primaryKey = $primaryKey->getColumns()[0];
             }
             $formattedForeignKeys = [];
             $tableForeignKeys = $table->getForeignKeys();
             foreach ($tableForeignKeys as $tableForeignKey) {
-                $formattedForeignKeys[] = [
-                    'name'         => $tableForeignKey->getName(),
-                    'localField'   => $tableForeignKey->getLocalColumns()[0],
-                    'foreignField' => $tableForeignKey->getForeignColumns()[0],
-                    'foreignTable' => $tableForeignKey->getForeignTableName(),
-                    'onUpdate'     => $tableForeignKey->onUpdate(),
-                    'onDelete'     => $tableForeignKey->onDelete(),
-                ];
+                $generatorForeignKey = new GeneratorForeignKey();
+                $generatorForeignKey->name = $tableForeignKey->getName();
+                $generatorForeignKey->localField = $tableForeignKey->getLocalColumns()[0];
+                $generatorForeignKey->foreignField = $tableForeignKey->getForeignColumns()[0];
+                $generatorForeignKey->foreignTable = $tableForeignKey->getForeignTableName();
+                $generatorForeignKey->onUpdate = $tableForeignKey->onUpdate();
+                $generatorForeignKey->onDelete = $tableForeignKey->onDelete();
+
+                $formattedForeignKeys[] = $generatorForeignKey;
             }
 
-            $fields[$table->getName()] = [
-                'primary' => $primaryKeys,
-                'foreign' => $formattedForeignKeys,
-            ];
+            $generatorTable = new GeneratorTable();
+            $generatorTable->primaryKey = $primaryKey;
+            $generatorTable->foreignKeys = $formattedForeignKeys;
+
+            $fields[$table->getName()] = $generatorTable;
         }
 
         return $fields;
@@ -279,7 +296,7 @@ class TableFieldsGenerator
     /**
      * Prepares relations array from table foreign keys
      *
-     * @param array $tables
+     * @param GeneratorTable[] $tables
      */
     private function checkForRelations($tables)
     {
@@ -298,8 +315,8 @@ class TableFieldsGenerator
         }
 
         foreach ($tables as $tableName => $table) {
-            $foreignKeys = $table['foreign'];
-            $primary = $table['primary'];
+            $foreignKeys = $table->foreignKeys;
+            $primary = $table->primaryKey;
 
             // if foreign key count is 2 then check if many to many relationship is there
             if (count($foreignKeys) == 2) {
@@ -313,10 +330,10 @@ class TableFieldsGenerator
             // iterate each foreign key and check for relationship
             foreach ($foreignKeys as $foreignKey) {
                 // check if foreign key is on the model table for which we are using generator command
-                if ($foreignKey['foreignTable'] == $modelTableName) {
+                if ($foreignKey->foreignTable == $modelTableName) {
 
                     // detect if one to one relationship is there
-                    $isOneToOne = $this->isOneToOne($primary, $foreignKey, $modelTable['primary']);
+                    $isOneToOne = $this->isOneToOne($primary, $foreignKey, $modelTable->primaryKey);
                     if ($isOneToOne) {
                         $modelName = model_name_from_table_name($tableName);
                         $this->relations[] = GeneratorFieldRelation::parseRelation('1t1,'.$modelName);
@@ -324,7 +341,7 @@ class TableFieldsGenerator
                     }
 
                     // detect if one to many relationship is there
-                    $isOneToMany = $this->isOneToMany($primary, $foreignKey, $modelTable['primary']);
+                    $isOneToMany = $this->isOneToMany($primary, $foreignKey, $modelTable->primaryKey);
                     if ($isOneToMany) {
                         $modelName = model_name_from_table_name($tableName);
                         $this->relations[] = GeneratorFieldRelation::parseRelation('1tm,'.$modelName);
@@ -341,9 +358,9 @@ class TableFieldsGenerator
      * Both foreign keys are primary key in foreign table
      * Also one is from model table and one is from diff table
      *
-     * @param array $tables
+     * @param GeneratorTable[] $tables
      * @param string $tableName
-     * @param string $modelTable
+     * @param GeneratorTable $modelTable
      * @param string $modelTableName
      * @return bool|GeneratorFieldRelation
      */
@@ -357,12 +374,12 @@ class TableFieldsGenerator
         // many to many model table name
         $manyToManyTable = '';
 
-        $foreignKeys = $table['foreign'];
-        $primary = $table['primary'];
+        $foreignKeys = $table->foreignKeys;
+        $primary = $table->primaryKey;
 
         // check if any foreign key is there from model table
         foreach ($foreignKeys as $foreignKey) {
-            if ($foreignKey['foreignTable'] == $modelTableName) {
+            if ($foreignKey->foreignTable == $modelTableName) {
                 $isAnyKeyOnModelTable = true;
             }
         }
@@ -370,8 +387,8 @@ class TableFieldsGenerator
         // if foreign key is there
         if ($isAnyKeyOnModelTable) {
             foreach ($foreignKeys as $foreignKey) {
-                $foreignField = $foreignKey['foreignField'];
-                $foreignTableName = $foreignKey['foreignTable'];
+                $foreignField = $foreignKey->foreignField;
+                $foreignTableName = $foreignKey->foreignTable;
 
                 // if foreign table is model table
                 if ($foreignTableName == $modelTableName) {
@@ -384,7 +401,7 @@ class TableFieldsGenerator
 
                 // if foreign field is not primary key of foreign table
                 // then it can not be many to many
-                if ($foreignField != $foreignTable['primary']) {
+                if ($foreignField != $foreignTable->primaryKey) {
                     return false;
                     break;
                 }
@@ -407,14 +424,14 @@ class TableFieldsGenerator
      * Also foreign key field is primary key of this table
      *
      * @param string $primaryKey
-     * @param array $foreignKey
+     * @param GeneratorForeignKey $foreignKey
      * @param string $modelTablePrimary
      * @return bool
      */
     private function isOneToOne($primaryKey, $foreignKey, $modelTablePrimary)
     {
-        if ($foreignKey['foreignField'] == $modelTablePrimary) {
-            if ($foreignKey['localField'] == $primaryKey) {
+        if ($foreignKey->foreignField == $modelTablePrimary) {
+            if ($foreignKey->localField == $primaryKey) {
                 return true;
             }
         }
@@ -428,14 +445,14 @@ class TableFieldsGenerator
      * Also foreign key field is not primary key of this table
      *
      * @param string $primaryKey
-     * @param array $foreignKey
+     * @param GeneratorForeignKey $foreignKey
      * @param string $modelTablePrimary
      * @return bool
      */
     private function isOneToMany($primaryKey, $foreignKey, $modelTablePrimary)
     {
-        if ($foreignKey['foreignField'] == $modelTablePrimary) {
-            if ($foreignKey['localField'] != $primaryKey) {
+        if ($foreignKey->foreignField == $modelTablePrimary) {
+            if ($foreignKey->localField != $primaryKey) {
                 return true;
             }
         }
@@ -447,21 +464,21 @@ class TableFieldsGenerator
      * Detect many to one relationship on model table
      * If foreign key of model table is primary key of foreign table
      *
-     * @param array $tables
-     * @param array $modelTable
+     * @param GeneratorTable[] $tables
+     * @param GeneratorTable $modelTable
      * @return array
      */
     private function detectManyToOne($tables, $modelTable)
     {
         $manyToOneRelations = [];
 
-        $foreignKeys = $modelTable['foreign'];
+        $foreignKeys = $modelTable->foreignKeys;
 
         foreach ($foreignKeys as $foreignKey) {
-            $foreignTable = $foreignKey['foreignTable'];
-            $foreignField = $foreignKey['foreignField'];
+            $foreignTable = $foreignKey->foreignTable;
+            $foreignField = $foreignKey->foreignField;
 
-            if ($foreignField == $tables[$foreignTable]['primary']) {
+            if ($foreignField == $tables[$foreignTable]->primaryKey) {
                 $modelName = model_name_from_table_name($foreignTable);
                 $manyToOneRelations[] = GeneratorFieldRelation::parseRelation('mt1,'.$modelName);
             }
