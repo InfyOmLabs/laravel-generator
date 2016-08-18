@@ -53,7 +53,7 @@ class $MODEL_NAME$APIController extends AppBaseController
             return $this->sendError('$MODEL_NAME_HUMAN$ not found');
         }
 
-        return $this->sendResponse($$MODEL_NAME_CAMEL$->toArray(), '$MODEL_NAM_HUMANE$ retrieved successfully');
+        return $this->sendResponse($$MODEL_NAME_CAMEL$->toArray(), '$MODEL_NAME_HUMAN$ retrieved successfully');
     }
 
     $DOC_UPDATE$
