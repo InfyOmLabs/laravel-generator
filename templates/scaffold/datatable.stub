@@ -59,7 +59,8 @@ class $MODEL_NAME$DataTable extends DataTable
                              'excel',
                              'pdf',
                          ],
-                    ]
+                    ],
+                    'colvis'
                 ]
             ]);
     }
