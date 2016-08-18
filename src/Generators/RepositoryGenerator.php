@@ -4,7 +4,6 @@ namespace InfyOm\Generator\Generators;
 
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Utils\FileUtil;
-use InfyOm\Generator\Utils\TemplateUtil;
 
 class RepositoryGenerator extends BaseGenerator
 {
@@ -26,15 +25,15 @@ class RepositoryGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = TemplateUtil::getTemplate('repository', 'laravel-generator');
+        $templateData = get_template('repository', 'laravel-generator');
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         $searchables = [];
 
-        foreach ($this->commandData->inputFields as $field) {
-            if ($field['searchable']) {
-                $searchables[] = "'".$field['fieldName']."'";
+        foreach ($this->commandData->fields as $field) {
+            if ($field->isSearchable) {
+                $searchables[] = "'".$field->name."'";
             }
         }
 

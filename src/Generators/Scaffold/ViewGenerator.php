@@ -7,7 +7,7 @@ use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
-use InfyOm\Generator\Utils\TemplateUtil;
+use InfyOm\Generator\Utils\HTMLFieldGenerator;
 
 class ViewGenerator extends BaseGenerator
 {
@@ -89,45 +89,42 @@ class ViewGenerator extends BaseGenerator
         $this->commandData->commandInfo('table.blade.php created');
     }
 
-    private function generateTableHeaderFields()
+    private function generateDataTableBody()
     {
-        $headerFieldTemplate = TemplateUtil::getTemplate('scaffold.views.table_header', $this->templateType);
+        $templateData = get_template('scaffold.views.datatable_body', $this->templateType);
 
-        $headerFields = [];
+        return fill_template($this->commandData->dynamicVars, $templateData);
+    }
 
-        foreach ($this->commandData->inputFields as $field) {
-            if (!$field['inIndex']) {
-                continue;
-            }
-            $headerFields[] = $fieldTemplate = TemplateUtil::fillTemplateWithFieldData(
-                $this->commandData->dynamicVars,
-                $this->commandData->fieldNamesMapping,
-                $headerFieldTemplate,
-                $field
-            );
-        }
+    private function generateDataTableActions()
+    {
+        $templateData = get_template('scaffold.views.datatables_actions', $this->templateType);
 
-        return implode(infy_nl_tab(1, 2), $headerFields);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+
+        FileUtil::createFile($this->path, 'datatables_actions.blade.php', $templateData);
+
+        $this->commandData->commandInfo('datatables_actions.blade.php created');
     }
 
     private function generateBladeTableBody()
     {
-        $templateData = TemplateUtil::getTemplate('scaffold.views.blade_table_body', $this->templateType);
+        $templateData = get_template('scaffold.views.blade_table_body', $this->templateType);
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         $templateData = str_replace('$FIELD_HEADERS$', $this->generateTableHeaderFields(), $templateData);
 
-        $cellFieldTemplate = TemplateUtil::getTemplate('scaffold.views.table_cell', $this->templateType);
+        $cellFieldTemplate = get_template('scaffold.views.table_cell', $this->templateType);
 
         $tableBodyFields = [];
 
-        foreach ($this->commandData->inputFields as $field) {
-            if (!$field['inIndex']) {
+        foreach ($this->commandData->fields as $field) {
+            if (!$field->inIndex) {
                 continue;
             }
 
-            $tableBodyFields[] = TemplateUtil::fillTemplateWithFieldData(
+            $tableBodyFields[] = fill_template_with_field_data(
                 $this->commandData->dynamicVars,
                 $this->commandData->fieldNamesMapping,
                 $cellFieldTemplate,
@@ -140,29 +137,32 @@ class ViewGenerator extends BaseGenerator
         return str_replace('$FIELD_BODY$', $tableBodyFields, $templateData);
     }
 
-    private function generateDataTableBody()
+    private function generateTableHeaderFields()
     {
-        $templateData = TemplateUtil::getTemplate('scaffold.views.datatable_body', $this->templateType);
+        $headerFieldTemplate = get_template('scaffold.views.table_header', $this->templateType);
 
-        return TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
-    }
+        $headerFields = [];
 
-    private function generateDataTableActions()
-    {
-        $templateData = TemplateUtil::getTemplate('scaffold.views.datatables_actions', $this->templateType);
+        foreach ($this->commandData->fields as $field) {
+            if (!$field->inIndex) {
+                continue;
+            }
+            $headerFields[] = $fieldTemplate = fill_template_with_field_data(
+                $this->commandData->dynamicVars,
+                $this->commandData->fieldNamesMapping,
+                $headerFieldTemplate,
+                $field
+            );
+        }
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
-
-        FileUtil::createFile($this->path, 'datatables_actions.blade.php', $templateData);
-
-        $this->commandData->commandInfo('datatables_actions.blade.php created');
+        return implode(infy_nl_tab(1, 2), $headerFields);
     }
 
     private function generateIndex()
     {
-        $templateData = TemplateUtil::getTemplate('scaffold.views.index', $this->templateType);
+        $templateData = get_template('scaffold.views.index', $this->templateType);
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         if ($this->commandData->getOption('datatables')) {
             $templateData = str_replace('$PAGINATE$', '', $templateData);
@@ -170,9 +170,9 @@ class ViewGenerator extends BaseGenerator
             $paginate = $this->commandData->getOption('paginate');
 
             if ($paginate) {
-                $paginateTemplate = TemplateUtil::getTemplate('scaffold.views.paginate', $this->templateType);
+                $paginateTemplate = get_template('scaffold.views.paginate', $this->templateType);
 
-                $paginateTemplate = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $paginateTemplate);
+                $paginateTemplate = fill_template($this->commandData->dynamicVars, $paginateTemplate);
 
                 $templateData = str_replace('$PAGINATE$', $paginateTemplate, $templateData);
             } else {
@@ -189,117 +189,120 @@ class ViewGenerator extends BaseGenerator
     {
         $this->htmlFields = [];
 
-        foreach ($this->commandData->inputFields as $field) {
-            if (!$field['inForm']) {
+        foreach ($this->commandData->fields as $field) {
+            if (!$field->inForm) {
                 continue;
             }
-            switch ($field['htmlType']) {
-                case 'text':
-                case 'textarea':
-                case 'date':
-                case 'file':
-                case 'email':
-                case 'password':
-                case 'number':
-                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.'.$field['htmlType'], $this->templateType);
-                    break;
 
-                case 'select':
-                case 'enum':
-                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.select', $this->templateType);
-                    $inputsArr = explode(',', $field['htmlTypeInputs']);
-
-                    $fieldTemplate = str_replace(
-                        '$INPUT_ARR$',
-                        GeneratorFieldsInputUtil::prepareKeyValueArrayStr($inputsArr),
-                        $fieldTemplate
-                    );
-                    break;
-
-                case 'radio':
-                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.radio_group', $this->templateType);
-                    $radioTemplate = TemplateUtil::getTemplate('scaffold.fields.radio', $this->templateType);
-                    $inputsArr = explode(',', $field['htmlTypeInputs']);
-                    $radioButtons = [];
-                    foreach ($inputsArr as $item) {
-                        $radioButtonsTemplate = TemplateUtil::fillFieldTemplate(
-                            $this->commandData->fieldNamesMapping,
-                            $radioTemplate, $field
-                        );
-                        $radioButtonsTemplate = str_replace('$VALUE$', $item, $radioButtonsTemplate);
-                        $radioButtons[] = $radioButtonsTemplate;
-                    }
-                    $fieldTemplate = str_replace('$RADIO_BUTTONS$', implode("\n", $radioButtons), $fieldTemplate);
-                    break;
-
-//                case 'checkbox-group':
-//                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.checkbox_group', $this->templateType);
-//                      $radioTemplate = TemplateUtil::getTemplate('scaffold.fields.checks', $this->templateType);
-//                      $inputsArr = explode(',', $field['htmlTypeInputs']);
-//                      $radioButtons = [];
-//                      foreach ($inputsArr as $item) {
-//                          $radioButtonsTemplate = TemplateUtil::fillFieldTemplate(
-//                              $this->commandData->fieldNamesMapping,
-//                              $radioTemplate,
-//                              $field
-//                          );
-//                          $radioButtonsTemplate = str_replace('$VALUE$', $item, $radioButtonsTemplate);
-//                          $radioButtons[] = $radioButtonsTemplate;
-//                      }
-//                    $fieldTemplate = str_replace('$CHECKBOXES$', implode("\n", $radioButtons), $fieldTemplate);
+//            switch ($field->htmlType) {
+//                case 'text':
+//                case 'textarea':
+//                case 'date':
+//                case 'file':
+//                case 'email':
+//                case 'password':
+//                case 'number':
+//                    $fieldTemplate = get_template('scaffold.fields.' . $field->htmlType, $this->templateType);
 //                    break;
+//
+//                case 'select':
+//                case 'enum':
+//                    $fieldTemplate = get_template('scaffold.fields.select', $this->templateType);
+//                    $inputsArr = explode(',', $field['htmlTypeInputs']);
+//
+//                    $fieldTemplate = str_replace(
+//                        '$INPUT_ARR$',
+//                        GeneratorFieldsInputUtil::prepareKeyValueArrayStr($inputsArr),
+//                        $fieldTemplate
+//                    );
+//                    break;
+//
+//                case 'radio':
+//                    $fieldTemplate = get_template('scaffold.fields.radio_group', $this->templateType);
+//                    $radioTemplate = get_template('scaffold.fields.radio', $this->templateType);
+//                    $inputsArr = explode(',', $field['htmlTypeInputs']);
+//                    $radioButtons = [];
+//                    foreach ($inputsArr as $item) {
+//                        $radioButtonsTemplate = fill_field_template(
+//                            $this->commandData->fieldNamesMapping,
+//                            $radioTemplate, $field
+//                        );
+//                        $radioButtonsTemplate = str_replace('$VALUE$', $item, $radioButtonsTemplate);
+//                        $radioButtons[] = $radioButtonsTemplate;
+//                    }
+//                    $fieldTemplate = str_replace('$RADIO_BUTTONS$', implode("\n", $radioButtons), $fieldTemplate);
+//                    break;
+//
+////                case 'checkbox-group':
+////                    $fieldTemplate = get_template('scaffold.fields.checkbox_group', $this->templateType);
+////                      $radioTemplate = get_template('scaffold.fields.checks', $this->templateType);
+////                      $inputsArr = explode(',', $field['htmlTypeInputs']);
+////                      $radioButtons = [];
+////                      foreach ($inputsArr as $item) {
+////                          $radioButtonsTemplate = fill_field_template(
+////                              $this->commandData->fieldNamesMapping,
+////                              $radioTemplate,
+////                              $field
+////                          );
+////                          $radioButtonsTemplate = str_replace('$VALUE$', $item, $radioButtonsTemplate);
+////                          $radioButtons[] = $radioButtonsTemplate;
+////                      }
+////                    $fieldTemplate = str_replace('$CHECKBOXES$', implode("\n", $radioButtons), $fieldTemplate);
+////                    break;
+//
+//                case 'bool-checkbox':
+//                    $fieldTemplate = get_template('scaffold.fields.bool-checkbox', $this->templateType);
+//                    $checkboxValue = $value = $field['htmlTypeInputs'];
+//                    if ($field['fieldType'] === 'boolean') {
+//                        if ($checkboxValue === 'checked') {
+//                            $checkboxValue = '1, true';
+//                        } elseif ($checkboxValue === 'unchecked') {
+//                            $checkboxValue = '0';
+//                        }
+//                    }
+//                    $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
+//                    $fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
+//                    break;
+//
+//                case 'toggle-switch':
+//                    $fieldTemplate = get_template('scaffold.fields.toggle-switch', $this->templateType);
+//                    $checkboxValue = $value = $field['htmlTypeInputs'];
+//                    if ($field['fieldType'] === 'boolean') {
+//                        $checkboxValue = "[ 'On' => '1' , 'Off' => '0']";
+//                    }
+//                    $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
+//                    //$fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
+//                    break;
+//
+//                case 'checkbox':
+//                    $fieldTemplate = get_template('scaffold.fields.checkbox', $this->templateType);
+//                    $checkboxValue = $value = $field['htmlTypeInputs'];
+//                    if ($field['fieldType'] != 'boolean') {
+//                        $checkboxValue = "'" . $value . "'";
+//                    }
+//                    $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
+//                    $fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
+//                    break;
+//
+//                case 'boolean':
+//                    $fieldTemplate = get_template('scaffold.fields.boolean', $this->templateType);
+//                    $checkboxValue = $value = $field['htmlTypeInputs'];
+//                    if ($field['fieldType'] == 'boolean') {
+//                        $checkboxValue = true;
+//                    }
+//                    $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
+//                    // $fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
+//                    break;
+//
+//                default:
+//                    $fieldTemplate = '';
+//                    break;
+//            }
 
-                case 'bool-checkbox':
-                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.bool-checkbox', $this->templateType);
-                    $checkboxValue = $value = $field['htmlTypeInputs'];
-                    if ($field['fieldType'] === 'boolean') {
-                        if ($checkboxValue === 'checked') {
-                            $checkboxValue = '1, true';
-                        } elseif ($checkboxValue === 'unchecked') {
-                            $checkboxValue = '0';
-                        }
-                    }
-                    $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
-                    $fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
-                    break;
-
-                case 'toggle-switch':
-                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.toggle-switch', $this->templateType);
-                    $checkboxValue = $value = $field['htmlTypeInputs'];
-                    if ($field['fieldType'] === 'boolean') {
-                        $checkboxValue = "[ 'On' => '1' , 'Off' => '0']";
-                    }
-                    $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
-                    //$fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
-                    break;
-
-                case 'checkbox':
-                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.checkbox', $this->templateType);
-                    $checkboxValue = $value = $field['htmlTypeInputs'];
-                    if ($field['fieldType'] != 'boolean') {
-                        $checkboxValue = "'".$value."'";
-                    }
-                    $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
-                    $fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
-                    break;
-
-                case 'boolean':
-                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.boolean', $this->templateType);
-                    $checkboxValue = $value = $field['htmlTypeInputs'];
-                    if ($field['fieldType'] == 'boolean') {
-                        $checkboxValue = true;
-                    }
-                    $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
-                    // $fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
-                    break;
-
-                default:
-                    $fieldTemplate = '';
-                    break;
-            }
+            $fieldTemplate = HTMLFieldGenerator::generateHTML($field, $this->templateType);
 
             if (!empty($fieldTemplate)) {
-                $fieldTemplate = TemplateUtil::fillTemplateWithFieldData(
+                $fieldTemplate = fill_template_with_field_data(
                     $this->commandData->dynamicVars,
                     $this->commandData->fieldNamesMapping,
                     $fieldTemplate,
@@ -309,8 +312,8 @@ class ViewGenerator extends BaseGenerator
             }
         }
 
-        $templateData = TemplateUtil::getTemplate('scaffold.views.fields', $this->templateType);
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = get_template('scaffold.views.fields', $this->templateType);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         $templateData = str_replace('$FIELDS$', implode("\n\n", $this->htmlFields), $templateData);
 
@@ -320,9 +323,9 @@ class ViewGenerator extends BaseGenerator
 
     private function generateCreate()
     {
-        $templateData = TemplateUtil::getTemplate('scaffold.views.create', $this->templateType);
+        $templateData = get_template('scaffold.views.create', $this->templateType);
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, 'create.blade.php', $templateData);
         $this->commandData->commandInfo('create.blade.php created');
@@ -330,40 +333,41 @@ class ViewGenerator extends BaseGenerator
 
     private function generateUpdate()
     {
-        $templateData = TemplateUtil::getTemplate('scaffold.views.edit', $this->templateType);
+        $templateData = get_template('scaffold.views.edit', $this->templateType);
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, 'edit.blade.php', $templateData);
         $this->commandData->commandInfo('edit.blade.php created');
     }
 
-    private function generateShow()
-    {
-        $templateData = TemplateUtil::getTemplate('scaffold.views.show', $this->templateType);
-
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
-
-        FileUtil::createFile($this->path, 'show.blade.php', $templateData);
-        $this->commandData->commandInfo('show.blade.php created');
-    }
-
     private function generateShowFields()
     {
-        $fieldTemplate = TemplateUtil::getTemplate('scaffold.views.show_field', $this->templateType);
+        $fieldTemplate = get_template('scaffold.views.show_field', $this->templateType);
 
         $fieldsStr = '';
 
-        foreach ($this->commandData->inputFields as $field) {
-            $singleFieldStr = str_replace('$FIELD_NAME_TITLE$', Str::title(str_replace('_', ' ', $field['fieldName'])), $fieldTemplate);
-            $singleFieldStr = str_replace('$FIELD_NAME$', $field['fieldName'], $singleFieldStr);
-            $singleFieldStr = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $singleFieldStr);
+        foreach ($this->commandData->fields as $field) {
+            $singleFieldStr = str_replace('$FIELD_NAME_TITLE$', Str::title(str_replace('_', ' ', $field->name)),
+                $fieldTemplate);
+            $singleFieldStr = str_replace('$FIELD_NAME$', $field->name, $singleFieldStr);
+            $singleFieldStr = fill_template($this->commandData->dynamicVars, $singleFieldStr);
 
             $fieldsStr .= $singleFieldStr."\n\n";
         }
 
         FileUtil::createFile($this->path, 'show_fields.blade.php', $fieldsStr);
         $this->commandData->commandInfo('show_fields.blade.php created');
+    }
+
+    private function generateShow()
+    {
+        $templateData = get_template('scaffold.views.show', $this->templateType);
+
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+
+        FileUtil::createFile($this->path, 'show.blade.php', $templateData);
+        $this->commandData->commandInfo('show.blade.php created');
     }
 
     public function rollback()
@@ -379,7 +383,7 @@ class ViewGenerator extends BaseGenerator
         ];
 
         if ($this->commandData->getAddOn('datatables')) {
-            $files[]='datatables_actions.blade.php';
+            $files[] = 'datatables_actions.blade.php';
         }
 
         foreach ($files as $file) {
@@ -388,5 +392,4 @@ class ViewGenerator extends BaseGenerator
             }
         }
     }
-
 }

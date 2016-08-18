@@ -15,19 +15,32 @@ class CommandData
     public static $COMMAND_TYPE_VUEJS = 'vuejs';
 
     /** @var string */
-    public $modelName, $commandType;
+    public $modelName;
+    public $commandType;
 
     /** @var GeneratorConfig */
     public $config;
 
-    /** @var array */
-    public $inputFields;
+    /** @var GeneratorField[] */
+    public $fields = [];
+
+    /** @var GeneratorFieldRelation[] */
+    public $relations = [];
 
     /** @var Command */
     public $commandObj;
 
     /** @var array */
-    public $dynamicVars = [], $fieldNamesMapping = [];
+    public $dynamicVars = [];
+    public $fieldNamesMapping = [];
+
+    /** @var CommandData */
+    protected static $instance = null;
+
+    public static function getInstance()
+    {
+        return self::$instance;
+    }
 
     /**
      * @param Command $commandObj
@@ -42,7 +55,7 @@ class CommandData
 
         $this->fieldNamesMapping = [
             '$FIELD_NAME_TITLE$' => 'fieldTitle',
-            '$FIELD_NAME$'       => 'fieldName',
+            '$FIELD_NAME$'       => 'name',
         ];
 
         $this->config = new GeneratorConfig();
@@ -93,9 +106,9 @@ class CommandData
         $this->dynamicVars[$name] = $val;
     }
 
-    public function getInputFields()
+    public function getFields()
     {
-        $this->inputFields = [];
+        $this->fields = [];
 
         if ($this->getOption('fieldsFile') or $this->getOption('jsonFromGUI')) {
             $this->getInputFromFileOrJson();
@@ -109,12 +122,13 @@ class CommandData
     private function getInputFromConsole()
     {
         $this->commandInfo('Specify fields for the model (skip id & timestamp fields, we will add it automatically)');
+        $this->commandInfo('Read docs carefully to specify field inputs)');
         $this->commandInfo('Enter "exit" to finish');
 
         $this->addPrimaryKey();
 
         while (true) {
-            $fieldInputStr = $this->commandObj->ask('Field: (field_name:field_database_type)', '');
+            $fieldInputStr = $this->commandObj->ask('Field: (name db_type html_type options)', '');
 
             if (empty($fieldInputStr) || $fieldInputStr == false || $fieldInputStr == 'exit') {
                 break;
@@ -125,30 +139,23 @@ class CommandData
                 continue;
             }
 
-            if ($this->commandType == self::$COMMAND_TYPE_SCAFFOLD or
-                $this->commandType == self::$COMMAND_TYPE_API_SCAFFOLD or
-                $this->commandType == self::$COMMAND_TYPE_VUEJS
-            ) {
-                $htmlType = $this->commandObj->ask('Enter field html input type (text): ', 'text');
-            } else {
-                $htmlType = '';
-            }
-
             $validations = $this->commandObj->ask('Enter validations: ', false);
-            $searchable = $this->commandObj->ask('Is Searchable (y/N): ', false);
-
             $validations = ($validations == false) ? '' : $validations;
 
-            if ($searchable) {
-                $searchable = (strtolower($searchable) == 'y') ? true : false;
+            if ($this->getOption('relations')) {
+                $relation = $this->commandObj->ask('Enter relationship (Leave Black to skip):', '');
+            } else {
+                $relation = '';
             }
 
-            $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput(
+            $this->fields[] = GeneratorFieldsInputUtil::processFieldInput(
                 $fieldInputStr,
-                $htmlType,
-                $validations,
-                ['searchable' => $searchable]
+                $validations
             );
+
+            if (!empty($relation)) {
+                $this->relations[] = GeneratorFieldRelation::parseRelation($relation);
+            }
         }
 
         $this->addTimestamps();
@@ -156,60 +163,31 @@ class CommandData
 
     private function addPrimaryKey()
     {
+        $primaryKey = new GeneratorField();
         if ($this->getOption('primary')) {
-            $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput(
-                $this->getOption('primary').':increments',
-                '',
-                '',
-                [
-                    'searchable' => false,
-                    'fillable'   => false,
-                    'primary'    => true,
-                    'inForm'     => false,
-                    'inIndex'    => false,
-                ]
-            );
+            $primaryKey->name = $this->getOption('primary');
         } else {
-            $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput(
-                'id:increments',
-                '',
-                '',
-                [
-                    'searchable' => false,
-                    'fillable'   => false,
-                    'primary'    => true,
-                    'inForm'     => false,
-                    'inIndex'    => false,
-                ]
-            );
+            $primaryKey->name = 'id';
         }
+        $primaryKey->parseDBType('increments');
+        $primaryKey->parseOptions('s,f,p,if,ii');
+
+        $this->fields[] = $primaryKey;
     }
 
     private function addTimestamps()
     {
-        $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput(
-            'created_at:timestamp',
-            '',
-            '',
-            [
-                'searchable' => false,
-                'fillable'   => false,
-                'inForm'     => false,
-                'inIndex'    => false,
-            ]
-        );
+        $createdAt = new GeneratorField();
+        $createdAt->name = 'created_at';
+        $createdAt->parseDBType('timestamp');
+        $createdAt->parseOptions('s,f,if,in');
+        $this->fields[] = $createdAt;
 
-        $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput(
-            'updated_at:timestamp',
-            '',
-            '',
-            [
-                'searchable' => false,
-                'fillable'   => false,
-                'inForm'     => false,
-                'inIndex'    => false,
-            ]
-        );
+        $updatedAt = new GeneratorField();
+        $updatedAt->name = 'updated_at';
+        $updatedAt->parseDBType('timestamp');
+        $updatedAt->parseOptions('s,f,if,in');
+        $this->fields[] = $updatedAt;
     }
 
     private function getInputFromFileOrJson()
@@ -230,31 +208,29 @@ class CommandData
 
                 $fileContents = file_get_contents($filePath);
                 $jsonData = json_decode($fileContents, true);
-                $this->inputFields = array_merge($this->inputFields, GeneratorFieldsInputUtil::validateFieldsFile($jsonData));
-            } else {
-                $fileContents = $this->getOption('jsonFromGUI');
-                $jsonData = json_decode($fileContents, true);
-                $this->inputFields = array_merge($this->inputFields, GeneratorFieldsInputUtil::validateFieldsFile($jsonData['fields']));
-                $this->config->overrideOptionsFromJsonFile($jsonData);
-                if (isset($jsonData['migrate'])) {
-                    $this->config->forceMigrate = $jsonData['migrate'];
+                $this->fields = [];
+                foreach ($jsonData as $field) {
+                    if (isset($field['type']) && $field['relation']) {
+                        $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
+                    } else {
+                        $this->fields[] = GeneratorField::parseFieldFromFile($field);
+                        if (isset($field['relation'])) {
+                            $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
+                        }
+                    }
                 }
+            } else {
+                //                $fileContents = $this->getOption('jsonFromGUI');
+//                $jsonData = json_decode($fileContents, true);
+//                $this->inputFields = array_merge($this->inputFields, GeneratorFieldsInputUtil::validateFieldsFile($jsonData['fields']));
+//                $this->config->overrideOptionsFromJsonFile($jsonData);
+//                if (isset($jsonData['migrate'])) {
+//                    $this->config->forceMigrate = $jsonData['migrate'];
+//                }
             }
-
-            $this->checkForDiffPrimaryKey();
         } catch (Exception $e) {
             $this->commandError($e->getMessage());
             exit;
-        }
-    }
-
-    private function checkForDiffPrimaryKey()
-    {
-        foreach ($this->inputFields as $field) {
-            if (isset($field['primary']) && $field['primary'] && $field['fieldName'] != 'id') {
-                $this->setOption('primary', $field['fieldName']);
-                break;
-            }
         }
     }
 
@@ -262,7 +238,11 @@ class CommandData
     {
         $tableName = $this->dynamicVars['$TABLE_NAME$'];
 
-        $this->inputFields = TableFieldsGenerator::generateFieldsFromTable($tableName);
-        $this->checkForDiffPrimaryKey();
+        $tableFieldsGenerator = new TableFieldsGenerator($tableName);
+        $tableFieldsGenerator->prepareFieldsFromTable();
+        $tableFieldsGenerator->prepareRelations();
+
+        $this->fields = $tableFieldsGenerator->fields;
+        $this->relations = $tableFieldsGenerator->relations;
     }
 }

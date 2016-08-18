@@ -51,7 +51,7 @@ class BaseCommand extends Command
         $this->commandData->modelName = $this->argument('model');
 
         $this->commandData->initCommandData();
-        $this->commandData->getInputFields();
+        $this->commandData->getFields();
     }
 
     public function generateCommonItems()
@@ -168,7 +168,7 @@ class BaseCommand extends Command
     {
         $fileFields = [];
 
-        foreach ($this->commandData->inputFields as $field) {
+        foreach ($this->commandData->fields as $field) {
             $fileFields[] = [
                 'fieldInput'  => $field['fieldInput'],
                 'htmlType'    => $field['htmlType'],
@@ -227,6 +227,7 @@ class BaseCommand extends Command
             ['skip', null, InputOption::VALUE_REQUIRED, 'Skip Specific Items to Generate (migration,model,controllers,api_controller,scaffold_controller,repository,requests,api_requests,scaffold_requests,routes,api_routes,scaffold_routes,views,tests,menu,dump-autoload)'],
             ['datatables', null, InputOption::VALUE_REQUIRED, 'Override datatables settings'],
             ['views', null, InputOption::VALUE_REQUIRED, 'Specify only the views you want generated: index,create,edit,show'],
+            ['relations', null, InputOption::VALUE_NONE, 'Specify if you want to pass relationships for fields'],
         ];
     }
 

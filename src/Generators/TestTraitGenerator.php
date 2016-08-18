@@ -5,7 +5,6 @@ namespace InfyOm\Generator\Generators;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
-use InfyOm\Generator\Utils\TemplateUtil;
 
 class TestTraitGenerator extends BaseGenerator
 {
@@ -27,7 +26,7 @@ class TestTraitGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = TemplateUtil::getTemplate('test.trait', 'laravel-generator');
+        $templateData = get_template('test.trait', 'laravel-generator');
 
         $templateData = $this->fillTemplate($templateData);
 
@@ -39,9 +38,10 @@ class TestTraitGenerator extends BaseGenerator
 
     private function fillTemplate($templateData)
     {
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
-        $templateData = str_replace('$FIELDS$', implode(','.infy_nl_tab(1, 3), $this->generateFields()), $templateData);
+        $templateData = str_replace('$FIELDS$', implode(','.infy_nl_tab(1, 3), $this->generateFields()),
+            $templateData);
 
         return $templateData;
     }
@@ -50,14 +50,14 @@ class TestTraitGenerator extends BaseGenerator
     {
         $fields = [];
 
-        foreach ($this->commandData->inputFields as $field) {
-            if ($field['primary']) {
+        foreach ($this->commandData->fields as $field) {
+            if ($field->isPrimary) {
                 continue;
             }
 
-            $fieldData = "'".$field['fieldName']."' => ".'$fake->';
+            $fieldData = "'".$field->name."' => ".'$fake->';
 
-            switch ($field['fieldType']) {
+            switch ($field->fieldType) {
                 case 'integer':
                 case 'float':
                     $fakerData = 'randomDigitNotNull';
@@ -72,7 +72,8 @@ class TestTraitGenerator extends BaseGenerator
                     $fakerData = "date('Y-m-d H:i:s')";
                     break;
                 case 'enum':
-                    $fakerData = 'randomElement('.GeneratorFieldsInputUtil::prepareValuesArrayStr(explode(',', $field['htmlTypeInputs'])).')';
+                    $fakerData = 'randomElement('.GeneratorFieldsInputUtil::prepareValuesArrayStr(explode(',',
+                            $field['htmlTypeInputs'])).')';
                     break;
                 default:
                     $fakerData = 'word';

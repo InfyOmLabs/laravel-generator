@@ -47,6 +47,8 @@ class GeneratorConfig
     public $mSnakePlural;
     public $mDashed;
     public $mDashedPlural;
+    public $mHuman;
+    public $mHumanPlural;
 
     public $forceMigrate;
 
@@ -69,6 +71,7 @@ class GeneratorConfig
         'skip',
         'datatables',
         'views',
+        'relations',
     ];
 
     public $tableName;
@@ -103,7 +106,7 @@ class GeneratorConfig
         }
 
         $this->nsApp = $commandData->commandObj->getLaravel()->getNamespace();
-        $this->nsApp = substr($this->nsApp, 0, strlen($this->nsApp)-1);
+        $this->nsApp = substr($this->nsApp, 0, strlen($this->nsApp) - 1);
         $this->nsRepository = config('infyom.laravel_generator.namespace.repository', 'App\Repositories').$prefix;
         $this->nsModel = config('infyom.laravel_generator.namespace.model', 'App\Models').$prefix;
         $this->nsDataTables = config('infyom.laravel_generator.namespace.datatables', 'App\DataTables').$prefix;
@@ -175,7 +178,7 @@ class GeneratorConfig
         $this->pathViews = config(
             'infyom.laravel_generator.path.views',
             base_path('resources/views/')
-        ).$viewPrefix.$this->mCamelPlural.'/';
+        ).$viewPrefix.$this->mSnakePlural.'/';
 
         $this->modelJsPath = config(
                 'infyom.laravel_generator.path.modelsJs',
@@ -209,6 +212,8 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$MODEL_NAME_PLURAL_SNAKE$', $this->mSnakePlural);
         $commandData->addDynamicVariable('$MODEL_NAME_DASHED$', $this->mDashed);
         $commandData->addDynamicVariable('$MODEL_NAME_PLURAL_DASHED$', $this->mDashedPlural);
+        $commandData->addDynamicVariable('$MODEL_NAME_HUMAN$', $this->mHuman);
+        $commandData->addDynamicVariable('$MODEL_NAME_PLURAL_HUMAN$', $this->mHumanPlural);
 
         if (!empty($this->prefixes['route'])) {
             $commandData->addDynamicVariable('$ROUTE_NAMED_PREFIX$', $this->prefixes['route'].'.');
@@ -265,6 +270,10 @@ class GeneratorConfig
         $this->mCamelPlural = Str::camel($this->mPlural);
         $this->mSnake = Str::snake($this->mName);
         $this->mSnakePlural = Str::snake($this->mPlural);
+        $this->mDashed = str_replace("_", "-", Str::snake($this->mSnake));
+        $this->mDashedPlural = str_replace("_", "-", Str::snake($this->mSnakePlural));
+        $this->mHuman = title_case(str_replace("_", " ", Str::snake($this->mSnake)));
+        $this->mHumanPlural = title_case(str_replace("_", " ", Str::snake($this->mSnakePlural)));
     }
 
     public function prepareOptions(CommandData &$commandData)

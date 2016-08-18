@@ -9,7 +9,6 @@ use $NAMESPACE_REPOSITORY$\$MODEL_NAME$Repository;
 use Illuminate\Http\Request;
 use $NAMESPACE_APP$\Http\Controllers\AppBaseController;
 use InfyOm\Generator\Criteria\LimitOffsetCriteria;
-use InfyOm\Generator\Utils\ResponseUtil;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
 
@@ -31,7 +30,7 @@ class $MODEL_NAME$APIController extends AppBaseController
         $this->$MODEL_NAME_CAMEL$Repository->pushCriteria(new LimitOffsetCriteria($request));
         $$MODEL_NAME_PLURAL_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->all();
 
-        return $this->sendResponse($$MODEL_NAME_PLURAL_CAMEL$->toArray(), '$MODEL_NAME_PLURAL$ retrieved successfully');
+        return $this->sendResponse($$MODEL_NAME_PLURAL_CAMEL$->toArray(), '$MODEL_NAME_PLURAL_HUMAN$ retrieved successfully');
     }
 
     $DOC_STORE$
@@ -41,7 +40,7 @@ class $MODEL_NAME$APIController extends AppBaseController
 
         $$MODEL_NAME_PLURAL_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->create($input);
 
-        return $this->sendResponse($$MODEL_NAME_PLURAL_CAMEL$->toArray(), '$MODEL_NAME$ saved successfully');
+        return $this->sendResponse($$MODEL_NAME_PLURAL_CAMEL$->toArray(), '$MODEL_NAME_HUMAN$ saved successfully');
     }
 
     $DOC_SHOW$
@@ -51,10 +50,10 @@ class $MODEL_NAME$APIController extends AppBaseController
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
-            return Response::json(ResponseUtil::makeError('$MODEL_NAME$ not found'), 404);
+            return $this->sendError('$MODEL_NAME_HUMAN$ not found');
         }
 
-        return $this->sendResponse($$MODEL_NAME_CAMEL$->toArray(), '$MODEL_NAME$ retrieved successfully');
+        return $this->sendResponse($$MODEL_NAME_CAMEL$->toArray(), '$MODEL_NAM_HUMANE$ retrieved successfully');
     }
 
     $DOC_UPDATE$
@@ -66,7 +65,7 @@ class $MODEL_NAME$APIController extends AppBaseController
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
-            return Response::json(ResponseUtil::makeError('$MODEL_NAME$ not found'), 404);
+            return $this->sendError('$MODEL_NAME_HUMAN$ not found');
         }
 
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->update($input, $id);
@@ -81,11 +80,11 @@ class $MODEL_NAME$APIController extends AppBaseController
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
-            return Response::json(ResponseUtil::makeError('$MODEL_NAME$ not found'), 404);
+            return $this->sendError('$MODEL_NAME_HUMAN$ not found');
         }
 
         $$MODEL_NAME_CAMEL$->delete();
 
-        return $this->sendResponse($id, '$MODEL_NAME$ deleted successfully');
+        return $this->sendResponse($id, '$MODEL_NAME_HUMAN$ deleted successfully');
     }
 }

@@ -3,7 +3,6 @@
 namespace InfyOm\Generator\Commands\Publish;
 
 use InfyOm\Generator\Utils\FileUtil;
-use InfyOm\Generator\Utils\TemplateUtil;
 
 class LayoutPublishCommand extends PublishBaseCommand
 {
@@ -46,12 +45,19 @@ class LayoutPublishCommand extends PublishBaseCommand
         $this->publishHomeController();
     }
 
-    private function getViews()
+    private function copyView()
     {
-        if ($this->laravelVersion == '5.1') {
-            return $this->getLaravel51Views();
-        } else {
-            return $this->getLaravel52Views();
+        $viewsPath = config('infyom.laravel_generator.path.views', base_path('resources/views/'));
+        $templateType = config('infyom.laravel_generator.templates', 'core-templates');
+
+        $this->createDirectories($viewsPath);
+
+        $files = $this->getViews();
+
+        foreach ($files as $stub => $blade) {
+            $sourceFile = get_template_file_path('scaffold/'.$stub, $templateType);
+            $destinationFile = $viewsPath.$blade;
+            $this->publishFile($sourceFile, $destinationFile, $blade);
         }
     }
 
@@ -65,6 +71,15 @@ class LayoutPublishCommand extends PublishBaseCommand
         } else {
             FileUtil::createDirectoryIfNotExist($viewsPath.'auth/passwords');
             FileUtil::createDirectoryIfNotExist($viewsPath.'auth/emails');
+        }
+    }
+
+    private function getViews()
+    {
+        if ($this->laravelVersion == '5.1') {
+            return $this->getLaravel51Views();
+        } else {
+            return $this->getLaravel52Views();
         }
     }
 
@@ -98,22 +113,6 @@ class LayoutPublishCommand extends PublishBaseCommand
         ];
     }
 
-    private function copyView()
-    {
-        $viewsPath = config('infyom.laravel_generator.path.views', base_path('resources/views/'));
-        $templateType = config('infyom.laravel_generator.templates', 'core-templates');
-
-        $this->createDirectories($viewsPath);
-
-        $files = $this->getViews();
-
-        foreach ($files as $stub => $blade) {
-            $sourceFile = TemplateUtil::getTemplateFilePath('scaffold/'.$stub, $templateType);
-            $destinationFile = $viewsPath.$blade;
-            $this->publishFile($sourceFile, $destinationFile, $blade);
-        }
-    }
-
     private function updateRoutes()
     {
         $path = config('infyom.laravel_generator.path.routes', app_path('Http/routes.php'));
@@ -125,7 +124,7 @@ class LayoutPublishCommand extends PublishBaseCommand
 
         $routeContents = file_get_contents($path);
 
-        $routesTemplate = TemplateUtil::getTemplate('routes.auth', 'laravel-generator');
+        $routesTemplate = get_template('routes.auth', 'laravel-generator');
         if ($this->laravelVersion == '5.1') {
             $routesTemplate = str_replace('$LOGOUT_METHOD$', 'getLogout', $routesTemplate);
         } else {
@@ -140,7 +139,7 @@ class LayoutPublishCommand extends PublishBaseCommand
 
     private function publishHomeController()
     {
-        $templateData = TemplateUtil::getTemplate('home_controller', 'laravel-generator');
+        $templateData = get_template('home_controller', 'laravel-generator');
 
         $templateData = $this->fillTemplate($templateData);
 
