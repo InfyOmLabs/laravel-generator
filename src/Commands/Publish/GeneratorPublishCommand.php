@@ -110,7 +110,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
         $templateData = $this->fillTemplate($templateData);
 
-        $controllerPath = config('infyom.laravel_generator.path.controller', app_path('Http/Controllers/'));
+        $controllerPath = app_path('Http/Controllers/');
 
         $fileName = 'AppBaseController.php';
 
