@@ -33,6 +33,15 @@ class HTMLFieldGenerator
                     $fieldTemplate
                 );
                 break;
+            case 'fromtable':
+                $fieldTemplate = get_template('scaffold.fields.select-from-table', $templateType);
+                $relationLabels = GeneratorFieldsInputUtil::prepareKeyValueArrFromLabelValueStr($field->htmlValues);
+                $fieldTemplate = str_replace(
+                    '$RELATIONSHIP_TABLE$',
+                    GeneratorFieldsInputUtil::prepareKeyValueArrayStr($relationLabels),
+                    $fieldTemplate
+                );
+                break;
             case 'checkbox':
                 $fieldTemplate = get_template('scaffold.fields.checkbox', $templateType);
                 $checkboxValue = $field->htmlValues[0];
