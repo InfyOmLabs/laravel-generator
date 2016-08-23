@@ -19,9 +19,9 @@ return [
 
         'repository'        => app_path('Repositories/'),
 
-        'routes'            => app_path('Http/routes.php'),
+        'routes'            => base_path('routes/web.php'),
 
-        'api_routes'        => app_path('Http/api_routes.php'),
+        'api_routes'        => base_path('routes/api.php'),
 
         'request'           => app_path('Http/Requests/'),
 
@@ -29,7 +29,7 @@ return [
 
         'controller'        => app_path('Http/Controllers/'),
 
-        'api_controller'    => app_path('Http/Controllers/API/'),
+        'api_controller'    => app_path('Http/Controllers/'),
 
         'test_trait'        => base_path('tests/traits/'),
 
@@ -63,7 +63,7 @@ return [
 
         'controller'        => 'App\Http\Controllers',
 
-        'api_controller'    => 'App\Http\Controllers\API',
+        'api_controller'    => 'App\Http\Controllers',
 
         'request'           => 'App\Http\Requests',
 

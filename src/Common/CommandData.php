@@ -180,13 +180,13 @@ class CommandData
         $createdAt = new GeneratorField();
         $createdAt->name = 'created_at';
         $createdAt->parseDBType('timestamp');
-        $createdAt->parseOptions('s,f,if,in');
+        $createdAt->parseOptions('s,f,if,ii');
         $this->fields[] = $createdAt;
 
         $updatedAt = new GeneratorField();
         $updatedAt->name = 'updated_at';
         $updatedAt->parseDBType('timestamp');
-        $updatedAt->parseOptions('s,f,if,in');
+        $updatedAt->parseOptions('s,f,if,ii');
         $this->fields[] = $updatedAt;
     }
 
