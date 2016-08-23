@@ -21,25 +21,12 @@ class LayoutPublishCommand extends PublishBaseCommand
     protected $description = 'Publishes auth files';
 
     /**
-     * Laravel Application version.
-     *
-     * @var string
-     */
-    protected $laravelVersion;
-
-    /**
      * Execute the command.
      *
      * @return void
      */
     public function handle()
     {
-        $version = $this->getApplication()->getVersion();
-        if (str_contains($version, '5.1')) {
-            $this->laravelVersion = '5.1';
-        } else {
-            $this->laravelVersion = '5.2';
-        }
         $this->copyView();
         $this->updateRoutes();
         $this->publishHomeController();
@@ -65,25 +52,10 @@ class LayoutPublishCommand extends PublishBaseCommand
     {
         FileUtil::createDirectoryIfNotExist($viewsPath.'layouts');
         FileUtil::createDirectoryIfNotExist($viewsPath.'auth');
-
-        if ($this->laravelVersion == '5.1') {
-            FileUtil::createDirectoryIfNotExist($viewsPath.'emails');
-        } else {
-            FileUtil::createDirectoryIfNotExist($viewsPath.'auth/passwords');
-            FileUtil::createDirectoryIfNotExist($viewsPath.'auth/emails');
-        }
+        FileUtil::createDirectoryIfNotExist($viewsPath.'emails');
     }
 
     private function getViews()
-    {
-        if ($this->laravelVersion == '5.1') {
-            return $this->getLaravel51Views();
-        } else {
-            return $this->getLaravel52Views();
-        }
-    }
-
-    private function getLaravel51Views()
     {
         return [
             'layouts/app'     => 'layouts/app.blade.php',
@@ -95,21 +67,6 @@ class LayoutPublishCommand extends PublishBaseCommand
             'auth/email'      => 'auth/password.blade.php',
             'auth/reset'      => 'auth/reset.blade.php',
             'emails/password' => 'emails/password.blade.php',
-        ];
-    }
-
-    private function getLaravel52Views()
-    {
-        return [
-            'layouts/app'     => 'layouts/app.blade.php',
-            'layouts/sidebar' => 'layouts/sidebar.blade.php',
-            'layouts/menu'    => 'layouts/menu.blade.php',
-            'layouts/home'    => 'home.blade.php',
-            'auth/login'      => 'auth/login.blade.php',
-            'auth/register'   => 'auth/register.blade.php',
-            'auth/email'      => 'auth/passwords/email.blade.php',
-            'auth/reset'      => 'auth/passwords/reset.blade.php',
-            'emails/password' => 'auth/emails/password.blade.php',
         ];
     }
 
