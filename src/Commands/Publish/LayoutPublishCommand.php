@@ -21,25 +21,12 @@ class LayoutPublishCommand extends PublishBaseCommand
     protected $description = 'Publishes auth files';
 
     /**
-     * Laravel Application version.
-     *
-     * @var string
-     */
-    protected $laravelVersion;
-
-    /**
      * Execute the command.
      *
      * @return void
      */
     public function handle()
     {
-        $version = $this->getApplication()->getVersion();
-        if (str_contains($version, '5.1')) {
-            $this->laravelVersion = '5.1';
-        } else {
-            $this->laravelVersion = '5.2';
-        }
         $this->copyView();
         $this->updateRoutes();
         $this->publishHomeController();
