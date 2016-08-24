@@ -29,7 +29,7 @@ return [
 
         'controller'        => app_path('Http/Controllers/'),
 
-        'api_controller'    => app_path('Http/Controllers/'),
+        'api_controller'    => app_path('Http/Controllers/API/'),
 
         'test_trait'        => base_path('tests/traits/'),
 
@@ -63,7 +63,7 @@ return [
 
         'controller'        => 'App\Http\Controllers',
 
-        'api_controller'    => 'App\Http\Controllers',
+        'api_controller'    => 'App\Http\Controllers\API',
 
         'request'           => 'App\Http\Requests',
 
