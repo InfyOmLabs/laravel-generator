@@ -270,10 +270,10 @@ class GeneratorConfig
         $this->mCamelPlural = Str::camel($this->mPlural);
         $this->mSnake = Str::snake($this->mName);
         $this->mSnakePlural = Str::snake($this->mPlural);
-        $this->mDashed = str_replace("_", "-", Str::snake($this->mSnake));
-        $this->mDashedPlural = str_replace("_", "-", Str::snake($this->mSnakePlural));
-        $this->mHuman = title_case(str_replace("_", " ", Str::snake($this->mSnake)));
-        $this->mHumanPlural = title_case(str_replace("_", " ", Str::snake($this->mSnakePlural)));
+        $this->mDashed = str_replace('_', '-', Str::snake($this->mSnake));
+        $this->mDashedPlural = str_replace('_', '-', Str::snake($this->mSnakePlural));
+        $this->mHuman = title_case(str_replace('_', ' ', Str::snake($this->mSnake)));
+        $this->mHumanPlural = title_case(str_replace('_', ' ', Str::snake($this->mSnakePlural)));
     }
 
     public function prepareOptions(CommandData &$commandData)
