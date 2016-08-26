@@ -170,22 +170,22 @@ class BaseCommand extends Command
 
         foreach ($this->commandData->fields as $field) {
             $fileFields[] = [
-                'name'  => $field->name,
-                'dbType'    => $field->dbInput,
+                'name'        => $field->name,
+                'dbType'      => $field->dbInput,
                 'htmlType'    => $field->htmlInput,
                 'validations' => $field->validations,
                 'searchable'  => $field->isSearchable,
                 'fillable'    => $field->isFillable,
                 'primary'     => $field->isPrimary,
                 'inForm'      => $field->inForm,
-                'inIndex'     => $field->inIndex
+                'inIndex'     => $field->inIndex,
             ];
         }
 
         foreach ($this->commandData->relations as $relation) {
             $fileFields[] = [
-                'type' => 'relation',
-                'relation' => $relation->type.",".implode(','.$relation->inputs)
+                'type'     => 'relation',
+                'relation' => $relation->type.','.implode(','.$relation->inputs),
             ];
         }
 
