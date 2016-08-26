@@ -9,6 +9,7 @@ class GeneratorField
     /** @var string */
     public $name;
     public $dbInput;
+    public $htmlInput;
     public $htmlType;
     public $fieldType;
 
@@ -35,6 +36,7 @@ class GeneratorField
 
     public function parseHtmlInput($htmlInput)
     {
+        $this->htmlInput = $htmlInput;
         $this->htmlValues = [];
 
         if (empty($htmlInput)) {
