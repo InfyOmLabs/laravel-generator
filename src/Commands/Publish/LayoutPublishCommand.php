@@ -82,11 +82,6 @@ class LayoutPublishCommand extends PublishBaseCommand
         $routeContents = file_get_contents($path);
 
         $routesTemplate = get_template('routes.auth', 'laravel-generator');
-        if ($this->laravelVersion == '5.1') {
-            $routesTemplate = str_replace('$LOGOUT_METHOD$', 'getLogout', $routesTemplate);
-        } else {
-            $routesTemplate = str_replace('$LOGOUT_METHOD$', 'logout', $routesTemplate);
-        }
 
         $routeContents .= "\n\n".$routesTemplate;
 
