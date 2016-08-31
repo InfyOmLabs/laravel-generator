@@ -40,7 +40,7 @@ class HTMLFieldGenerator
                 } else {
                     $checkboxValue = 1;
                 }
-                $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
+                $fieldTemplate = str_replace('$CHECKBOX_VALUE$', "'".$checkboxValue."'", $fieldTemplate);
                 break;
             case 'radio':
                 $fieldTemplate = get_template('scaffold.fields.radio_group', $templateType);
