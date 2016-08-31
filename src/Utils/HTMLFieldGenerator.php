@@ -35,7 +35,7 @@ class HTMLFieldGenerator
                 break;
             case 'checkbox':
                 $fieldTemplate = get_template('scaffold.fields.checkbox', $templateType);
-                if (sizeof($field->htmlValues) > 0) {
+                if (count($field->htmlValues) > 0) {
                     $checkboxValue = $field->htmlValues[0];
                 } else {
                     $checkboxValue = 1;
