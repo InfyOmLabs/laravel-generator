@@ -76,6 +76,9 @@ class GeneratorConfig
 
     public $tableName;
 
+    /** @var string */
+    protected $primaryName;
+
     /* Generator AddOns */
     public $addOns;
 
@@ -93,6 +96,7 @@ class GeneratorConfig
         $this->preparePrefixes();
         $this->loadPaths();
         $this->prepareTableName();
+        $this->preparePrimaryName();
         $this->loadNamespaces($commandData);
         $commandData = $this->loadDynamicVariables($commandData);
     }
@@ -203,6 +207,7 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$NAMESPACE_REQUEST_BASE$', $this->nsRequestBase);
 
         $commandData->addDynamicVariable('$TABLE_NAME$', $this->tableName);
+        $commandData->addDynamicVariable('$PRIMARY_KEY_NAME$', $this->primaryName);
 
         $commandData->addDynamicVariable('$MODEL_NAME$', $this->mName);
         $commandData->addDynamicVariable('$MODEL_NAME_CAMEL$', $this->mCamel);
@@ -260,6 +265,15 @@ class GeneratorConfig
             $this->tableName = $this->getOption('tableName');
         } else {
             $this->tableName = $this->mSnakePlural;
+        }
+    }
+
+    public function preparePrimaryName()
+    {
+        if ($this->getOption('primary')) {
+            $this->primaryName = $this->getOption('primary');
+        } else {
+            $this->primaryName = 'id';
         }
     }
 
