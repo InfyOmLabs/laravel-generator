@@ -105,9 +105,7 @@ class GeneratorField
             } else {
                 $this->migrationText .= '->'.$functionName;
                 $this->migrationText .= '(';
-                foreach ($inputParams as $param) {
-                    $this->migrationText .= ', '.$param;
-                }
+                $this->migrationText .= implode(', ', $inputParams);
                 $this->migrationText .= ')';
             }
         }
