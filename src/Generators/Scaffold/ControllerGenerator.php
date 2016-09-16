@@ -45,19 +45,18 @@ class ControllerGenerator extends BaseGenerator
                 $templateData = str_replace('$RENDER_TYPE$', 'all()', $templateData);
             }
 
-            if ($this->commandData->getOption('datagrid'))
-            {
-                $use_datagrid_path  = get_template('scaffold.controller.datagrid_use_path', 'laravel-generator');
+            if ($this->commandData->getOption('datagrid')) {
+                $use_datagrid_path = get_template('scaffold.controller.datagrid_use_path', 'laravel-generator');
                 $use_datagrid_trait = get_template('scaffold.controller.datagrid_use_trait', 'laravel-generator');
-                $call_datagrid      = get_template('scaffold.controller.datagrid_call_filter', 'laravel-generator');
+                $call_datagrid = get_template('scaffold.controller.datagrid_call_filter', 'laravel-generator');
 
-                $templateData = str_replace ('$USE_DATAGRID_PATH$', $use_datagrid_path, $templateData);
-                $templateData = str_replace ('$USE_DATAGRID_TRAIT$', $use_datagrid_trait, $templateData);
-                $templateData = str_replace ('$CALL_DATAGRID$', $call_datagrid, $templateData);
+                $templateData = str_replace('$USE_DATAGRID_PATH$', $use_datagrid_path, $templateData);
+                $templateData = str_replace('$USE_DATAGRID_TRAIT$', $use_datagrid_trait, $templateData);
+                $templateData = str_replace('$CALL_DATAGRID$', $call_datagrid, $templateData);
             } else {
-                $templateData = str_replace ('$USE_DATAGRID_PATH$', $use_datagrid, $templateData);
-                $templateData = str_replace ('$USE_DATAGRID_TRAIT$', '', $templateData);
-                $templateData = str_replace ('$CALL_DATAGRID$', '', $templateData);
+                $templateData = str_replace('$USE_DATAGRID_PATH$', $use_datagrid, $templateData);
+                $templateData = str_replace('$USE_DATAGRID_TRAIT$', '', $templateData);
+                $templateData = str_replace('$CALL_DATAGRID$', '', $templateData);
             }
         }
 

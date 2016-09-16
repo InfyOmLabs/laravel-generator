@@ -4,37 +4,37 @@ namespace InfyOm\Generator\Utils;
 
 use Illuminate\Http\Request;
 
-trait DatagridSortableAndFilterable
+trait DatagridSortableAndFilterableUtil
 {
     /**
-     * Convert datagrid filters to repository filters
-     *
-     * @param Request &$request
-     */
-     private function convertDatagridFilterToRepositoryFilter (Request &$request)
+      * Convert datagrid filters to repository filters.
+      *
+      * @param Request &$request
+      */
+     private function convertDatagridFilterToRepositoryFilter(Request &$request)
      {
-         if (!isset($request['f']))
+         if (!isset($request['f'])) {
              return;
+         }
 
          $f = $request['f'];
 
          if (isset($f['order_by']) && !empty($f['order_by'])
-             && isset($f['order_dir']) && !empty($f['order_dir']))
-         {
-             $request['orderBy']=$f['order_by'];
-             $request['sortedBy']=$f['order_dir']!=='DESC'?'asc':'desc';
+             && isset($f['order_dir']) && !empty($f['order_dir'])) {
+             $request['orderBy'] = $f['order_by'];
+             $request['sortedBy'] = $f['order_dir'] !== 'DESC' ? 'asc' : 'desc';
          }
 
          unset($f['order_by']);
          unset($f['order_dir']);
-         $searches=[];
-         foreach($f as $field => $value)
-         {
-             if ($value == '')
+         $searches = [];
+         foreach ($f as $field => $value) {
+             if ($value == '') {
                  continue;
+             }
              $searches[] = $field.':'.$value;
          }
-         $request['search']=implode(';', $searches);
+         $request['search'] = implode(';', $searches);
          $request['searchUseAnd'] = 1;
      }
 }
