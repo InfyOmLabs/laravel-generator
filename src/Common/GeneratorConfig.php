@@ -70,6 +70,7 @@ class GeneratorConfig
         'paginate',
         'skip',
         'datatables',
+        'datagrid',
         'views',
         'relations',
     ];
@@ -313,6 +314,15 @@ class GeneratorConfig
                 $this->addOns['datatables'] = true;
             } else {
                 $this->addOns['datatables'] = false;
+            }
+        }
+
+        if (!empty($this->options['datagrid']))
+        {
+            if (isset($this->options['datatables']) && $this->options['datatables'] === 'true' && $this->options['datatables'])
+            {
+                $commandData->commandError('can\'t use datagrid and datables at the same time.');
+                exit;
             }
         }
     }

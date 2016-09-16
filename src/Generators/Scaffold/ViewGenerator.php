@@ -80,6 +80,8 @@ class ViewGenerator extends BaseGenerator
         if ($this->commandData->getAddOn('datatables')) {
             $templateData = $this->generateDataTableBody();
             $this->generateDataTableActions();
+        } else if ($this->commandData->getOption('datagrid')) {
+            $templateData = $this->generateDatagridBladeTableBody();
         } else {
             $templateData = $this->generateBladeTableBody();
         }
@@ -105,6 +107,41 @@ class ViewGenerator extends BaseGenerator
         FileUtil::createFile($this->path, 'datatables_actions.blade.php', $templateData);
 
         $this->commandData->commandInfo('datatables_actions.blade.php created');
+    }
+
+    private function generateDatagridBladeTableBody()
+    {
+        $templateData = get_template('scaffold.views.blade_datagrid_table_body', $this->templateType);
+
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+
+        $templateData = str_replace('$SET_COLUMNS$', $this->generateDatagridSetColumnFields(), $templateData);
+
+        return $templateData;
+    }
+
+    private function generateDatagridSetColumnFields()
+    {
+        $setColumnsTemplate = get_template('scaffold.views.datagrid_table_set_columns', $this->templateType);
+
+        $setColumns = [];
+
+        foreach ($this->commandData->fields as $field) {
+            if (!$field->inIndex) {
+                continue;
+            }
+
+            $field->isFillable = $field->isFillable ? 'true' : 'false';
+
+            $setColumns[] = $fieldTemplate = fill_template_with_field_data(
+                $this->commandData->dynamicVars,
+                $this->commandData->fieldNamesMapping,
+                $setColumnsTemplate,
+                $field
+            );
+        }
+
+        return implode(infy_nl_tab(0, 1), $setColumns);
     }
 
     private function generateBladeTableBody()

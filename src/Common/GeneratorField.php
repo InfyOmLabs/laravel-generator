@@ -8,6 +8,7 @@ class GeneratorField
 {
     /** @var string */
     public $name;
+    public $dotNotationname;
     public $dbInput;
     public $htmlInput;
     public $htmlType;
@@ -133,6 +134,10 @@ class GeneratorField
     {
         if ($key == 'fieldTitle') {
             return Str::title(str_replace('_', ' ', $this->name));
+        }
+
+        if ($key == 'dotNotationName') {
+            return str_replace('->', '.', $this->name);
         }
 
         return $this->$key;

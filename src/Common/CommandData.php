@@ -54,8 +54,10 @@ class CommandData
         $this->commandType = $commandType;
 
         $this->fieldNamesMapping = [
-            '$FIELD_NAME_TITLE$' => 'fieldTitle',
-            '$FIELD_NAME$'       => 'name',
+            '$FIELD_NAME_TITLE$'        => 'fieldTitle',
+            '$FIELD_NAME$'              => 'name',
+            '$FIELD_DOT_NOTATION_NAME$' => 'dotNotationName',
+            '$FIELD_IS_FILLABLE$'       => 'isFillable',
         ];
 
         $this->config = new GeneratorConfig();

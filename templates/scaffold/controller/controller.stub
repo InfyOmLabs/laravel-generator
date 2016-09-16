@@ -29,6 +29,7 @@ class $MODEL_NAME$Controller extends AppBaseController
      */
     public function index(Request $request)
     {
+        $DATAGRID_USE_FILTER_CONVERT$
         $this->$MODEL_NAME_CAMEL$Repository->pushCriteria(new RequestCriteria($request));
         $$MODEL_NAME_PLURAL_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->$RENDER_TYPE$;
 
@@ -152,4 +153,5 @@ class $MODEL_NAME$Controller extends AppBaseController
 
         return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
     }
+    $DATAGRID_FILTER_CONVERT$
 }
