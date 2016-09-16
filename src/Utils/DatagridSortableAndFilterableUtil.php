@@ -1,10 +1,17 @@
+<?php
 
+namespace InfyOm\Generator\Utils;
+
+use Illuminate\Http\Request;
+
+trait DatagridSortableAndFilterable
+{
     /**
      * Convert datagrid filters to repository filters
      *
      * @param Request &$request
      */
-     private function convertDatagridFilterToRepositoryFilter (&$request)
+     private function convertDatagridFilterToRepositoryFilter (Request &$request)
      {
          if (!isset($request['f']))
              return;
@@ -28,5 +35,6 @@
              $searches[] = $field.':'.$value;
          }
          $request['search']=implode(';', $searches);
-         $request['searchUseAnd'] = 1;         
+         $request['searchUseAnd'] = 1;
      }
+}
