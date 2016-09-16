@@ -27,8 +27,47 @@ class GeneratorPublishCommand extends PublishBaseCommand
      */
     public function handle()
     {
+        $this->publishLangFile();
+        $this->publishAPIRoutes();
+        $this->initAPIRoutes();
         $this->publishTestCases();
         $this->publishBaseController();
+    }
+
+    /**
+     * Publishes api_routes.php.
+     */
+    public function publishAPIRoutes()
+    {
+        $routesPath = __DIR__.'/../../../templates/api/routes/api_routes.stub';
+
+        $apiRoutesPath = config('infyom.laravel_generator.path.api_routes', app_path('Http/api_routes.php'));
+
+        $this->publishFile($routesPath, $apiRoutesPath, 'api_routes.php');
+    }
+
+    /**
+     * Initialize routes group based on route integration.
+     */
+    private function initAPIRoutes()
+    {
+        $path = config('infyom.laravel_generator.path.routes', app_path('Http/routes.php'));
+
+        $prompt = 'Existing routes.php file detected. Should we add an API group to the file? (y|N) :';
+        if (file_exists($path) && !$this->confirmOverwrite($path, $prompt)) {
+            return;
+        }
+
+        $routeContents = file_get_contents($path);
+
+        $template = 'api.routes.api_routes_group';
+
+        $templateData = get_template($template, 'laravel-generator');
+
+        $templateData = $this->fillTemplate($templateData);
+
+        file_put_contents($path, $routeContents."\n\n".$templateData);
+        $this->comment("\nAPI group added to routes.php");
     }
 
     /**
@@ -66,6 +105,23 @@ class GeneratorPublishCommand extends PublishBaseCommand
         }
     }
 
+    private function publishLangFile()
+    {
+        $templateData = get_template('en_common', 'laravel-generator');
+
+        $langPath = resource_path('lang/en/');
+
+        $fileName = 'common.php';
+
+        if (file_exists($langPath.$fileName) && !$this->confirmOverwrite($fileName)) {
+            return;
+        }
+
+        FileUtil::createFile($langPath, $fileName, $templateData);
+
+        $this->info('resources/lang/en/common.php created');
+    }
+    
     private function publishBaseController()
     {
         $templateData = get_template('app_base_controller', 'laravel-generator');

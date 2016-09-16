@@ -1,0 +1,41 @@
+<?php
+
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Common Language Lines
+    |--------------------------------------------------------------------------
+    |
+    */
+    'yes' => 'yes',
+    'no' => 'no',
+    'new' => 'new',
+    'edit' => 'edit',
+    'update' => 'update',
+    'updated' => 'updated',
+    'save' => 'save',
+    'saved' => 'saved',
+    'successfully' => 'successfully',
+    'cancel' => 'cancel',
+    'delete' => 'delete',
+    'deleted' => 'deleted',
+    'remove' => 'remove',
+    'removed' => 'removed',
+    'done' => 'done',
+    'copy' => 'copy',
+    'export' => 'export',
+    'print' => 'print',
+    'reset' => 'print',
+    'reload' => 'print',
+    'back' => 'back',
+    'forward' => 'forward',
+    'search' => 'search',
+    'view' => 'view',
+    'show' => 'show',
+    'hide' => 'hide',
+    'not-found' => 'not found',
+    'are-you-sure' => 'are you sure',
+    'you-will-not-be-able-to-recover-this-registry' => 'you will not be able to recover this registry',
+
+];
