@@ -34,8 +34,9 @@ class RepositoryGenerator extends BaseGenerator
         foreach ($this->commandData->fields as $field) {
             if ($field->isSearchable) {
                 $condition = '';
-                if ($field->fieldType == 'text')
+                if ($field->fieldType == 'text') {
                     $condition = " => 'like'";
+                }
                 $searchables[] = "'".$field->name."'".$condition;
             }
         }

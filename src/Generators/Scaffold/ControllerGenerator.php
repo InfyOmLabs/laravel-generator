@@ -45,16 +45,15 @@ class ControllerGenerator extends BaseGenerator
                 $templateData = str_replace('$RENDER_TYPE$', 'all()', $templateData);
             }
 
-            if ($this->commandData->getOption('datagrid'))
-            {
+            if ($this->commandData->getOption('datagrid')) {
                 $use_filter_convert = get_template('scaffold.controller.datagrid_use_filter_convert', 'laravel-generator');
-                $filter_convert     = get_template('scaffold.controller.datagrid_filter_convert', 'laravel-generator');
+                $filter_convert = get_template('scaffold.controller.datagrid_filter_convert', 'laravel-generator');
 
-                $templateData = str_replace ('$DATAGRID_USE_FILTER_CONVERT$', $use_filter_convert, $templateData);
-                $templateData = str_replace ('$DATAGRID_FILTER_CONVERT$', $filter_convert, $templateData);
+                $templateData = str_replace('$DATAGRID_USE_FILTER_CONVERT$', $use_filter_convert, $templateData);
+                $templateData = str_replace('$DATAGRID_FILTER_CONVERT$', $filter_convert, $templateData);
             } else {
-                $templateData = str_replace ('$DATAGRID_USE_FILTER_CONVERT$', '', $templateData);
-                $templateData = str_replace ('$DATAGRID_FILTER_CONVERT$', '', $templateData);
+                $templateData = str_replace('$DATAGRID_USE_FILTER_CONVERT$', '', $templateData);
+                $templateData = str_replace('$DATAGRID_FILTER_CONVERT$', '', $templateData);
             }
         }
 

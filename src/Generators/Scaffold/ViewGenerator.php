@@ -80,7 +80,7 @@ class ViewGenerator extends BaseGenerator
         if ($this->commandData->getAddOn('datatables')) {
             $templateData = $this->generateDataTableBody();
             $this->generateDataTableActions();
-        } else if ($this->commandData->getOption('datagrid')) {
+        } elseif ($this->commandData->getOption('datagrid')) {
             $templateData = $this->generateDatagridBladeTableBody();
         } else {
             $templateData = $this->generateBladeTableBody();

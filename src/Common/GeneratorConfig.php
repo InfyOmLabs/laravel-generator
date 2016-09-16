@@ -317,10 +317,8 @@ class GeneratorConfig
             }
         }
 
-        if (!empty($this->options['datagrid']))
-        {
-            if (isset($this->options['datatables']) && $this->options['datatables'] === 'true' && $this->options['datatables'])
-            {
+        if (!empty($this->options['datagrid'])) {
+            if (isset($this->options['datatables']) && $this->options['datatables'] === 'true' && $this->options['datatables']) {
                 $commandData->commandError('can\'t use datagrid and datables at the same time.');
                 exit;
             }
