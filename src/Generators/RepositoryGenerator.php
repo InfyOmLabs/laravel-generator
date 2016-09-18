@@ -35,7 +35,7 @@ class RepositoryGenerator extends BaseGenerator
             if ($field->isSearchable) {
                 $condition = '';
                 if ($field->fieldType == 'text') {
-                    $condition = " => 'like'";
+                    $condition = " => 'ilike'";
                 }
                 $searchables[] = "'".$field->name."'".$condition;
             }
