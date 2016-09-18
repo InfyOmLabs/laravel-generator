@@ -21,8 +21,8 @@ trait DatagridSortableAndFilterableUtil
 
         if (isset($f['order_by']) && !empty($f['order_by'])
             && isset($f['order_dir']) && !empty($f['order_dir'])) {
-                $request['orderBy'] = $f['order_by'];
-                $request['sortedBy'] = $f['order_dir'] !== 'DESC' ? 'asc' : 'desc';
+            $request['orderBy'] = $f['order_by'];
+            $request['sortedBy'] = $f['order_dir'] !== 'DESC' ? 'asc' : 'desc';
         }
 
         unset($f['order_by']);
@@ -30,7 +30,7 @@ trait DatagridSortableAndFilterableUtil
         $searches = [];
         foreach ($f as $field => $value) {
             if ($value == '') {
-                 continue;
+                continue;
             }
             $searches[] = $field.':'.$value;
         }
@@ -39,7 +39,7 @@ trait DatagridSortableAndFilterableUtil
     }
 
     /**
-     * Set default order by and direction
+     * Set default order by and direction.
      *
      * @param Request $request
      */
@@ -47,8 +47,8 @@ trait DatagridSortableAndFilterableUtil
     {
         if (!isset($request['f']['order_by']) ||
             isset($request['f']['order_by']) && $request['f']['order_by'] == '') {
-                $request['orderBy'] = $by;
-                $request['sortedBy'] = $dir;
+            $request['orderBy'] = $by;
+            $request['sortedBy'] = $dir;
         }
     }
 }
