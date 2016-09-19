@@ -48,7 +48,7 @@ class $MODEL_NAME$APIController extends InfyOmBaseController
     public function show($id)
     {
         /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
+        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
             return Response::json(ResponseUtil::makeError('$MODEL_NAME$ not found'), 404);
@@ -63,7 +63,7 @@ class $MODEL_NAME$APIController extends InfyOmBaseController
         $input = $request->all();
 
         /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
+        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
             return Response::json(ResponseUtil::makeError('$MODEL_NAME$ not found'), 404);
@@ -78,7 +78,7 @@ class $MODEL_NAME$APIController extends InfyOmBaseController
     public function destroy($id)
     {
         /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
+        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
             return Response::json(ResponseUtil::makeError('$MODEL_NAME$ not found'), 404);
