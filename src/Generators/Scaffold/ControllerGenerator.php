@@ -86,7 +86,7 @@ class ControllerGenerator extends BaseGenerator
 
         FileUtil::createFile($path, $fileName, $templateData);
 
-        $this->commandData->commandComment("\n$fileName created: ");
+        $this->commandData->commandComment("\nDataTable created: ");
         $this->commandData->commandInfo($fileName);
     }
 
@@ -94,6 +94,12 @@ class ControllerGenerator extends BaseGenerator
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
             $this->commandData->commandComment('Controller file deleted: '.$this->fileName);
+        }
+
+        if ($this->commandData->getAddOn('datatables')) {
+            if ($this->rollbackFile($this->commandData->config->pathDataTables, $this->commandData->modelName.'DataTable.php')) {
+                $this->commandData->commandComment('DataTable file deleted: '.$this->fileName);
+            }
         }
     }
 }
