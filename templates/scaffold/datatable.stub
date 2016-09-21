@@ -46,9 +46,6 @@ class $MODEL_NAME$DataTable extends DataTable
             ->parameters([
                 'dom' => 'Bfrtip',
                 'scrollX' => false,
-                'language'=> [
-                                    "url"=> "/vendor/datatables/Portuguese-Brasil.json"
-                                ],
                 'buttons' => [
                     'print',
                     'reset',
