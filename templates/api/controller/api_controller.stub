@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use $NAMESPACE_APP$\Http\Controllers\AppBaseController;
 use InfyOm\Generator\Criteria\LimitOffsetCriteria;
 use Prettus\Repository\Criteria\RequestCriteria;
+use InfyOm\Generator\Utils\ResponseUtil;
 use Response;
 
 $DOC_CONTROLLER$
@@ -49,9 +50,7 @@ class $MODEL_NAME$APIController extends AppBaseController
         /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
 
-        if (empty($$MODEL_NAME_CAMEL$)) {
-            return $this->sendError('$MODEL_NAME_HUMAN$ not found');
-        }
+        if (empty($$MODEL_NAME_CAMEL$)) return Response::json(ResponseUtil::makeError('$MODEL_NAME_HUMAN$ not found'), 404);
 
         return $this->sendResponse($$MODEL_NAME_CAMEL$->toArray(), '$MODEL_NAME_HUMAN$ retrieved successfully');
     }
@@ -64,9 +63,7 @@ class $MODEL_NAME$APIController extends AppBaseController
         /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
 
-        if (empty($$MODEL_NAME_CAMEL$)) {
-            return $this->sendError('$MODEL_NAME_HUMAN$ not found');
-        }
+        if (empty($$MODEL_NAME_CAMEL$)) return Response::json(ResponseUtil::makeError('$MODEL_NAME_HUMAN$ not found'), 404);
 
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->update($input, $id);
 
@@ -79,9 +76,7 @@ class $MODEL_NAME$APIController extends AppBaseController
         /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
 
-        if (empty($$MODEL_NAME_CAMEL$)) {
-            return $this->sendError('$MODEL_NAME_HUMAN$ not found');
-        }
+        if (empty($$MODEL_NAME_CAMEL$)) return Response::json(ResponseUtil::makeError('$MODEL_NAME_HUMAN$ not found'), 404);
 
         $$MODEL_NAME_CAMEL$->delete();
 
