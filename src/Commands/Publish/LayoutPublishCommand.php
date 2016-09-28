@@ -3,7 +3,6 @@
 namespace InfyOm\Generator\Commands\Publish;
 
 use InfyOm\Generator\Utils\FileUtil;
-use InfyOm\Generator\Utils\TemplateUtil;
 
 class LayoutPublishCommand extends PublishBaseCommand
 {
@@ -22,80 +21,15 @@ class LayoutPublishCommand extends PublishBaseCommand
     protected $description = 'Publishes auth files';
 
     /**
-     * Laravel Application version.
-     *
-     * @var string
-     */
-    protected $laravelVersion;
-
-    /**
      * Execute the command.
      *
      * @return void
      */
     public function handle()
     {
-        $version = $this->getApplication()->getVersion();
-        if (str_contains($version, '5.1')) {
-            $this->laravelVersion = '5.1';
-        } else {
-            $this->laravelVersion = '5.2';
-        }
         $this->copyView();
         $this->updateRoutes();
         $this->publishHomeController();
-    }
-
-    private function getViews()
-    {
-        if ($this->laravelVersion == '5.1') {
-            return $this->getLaravel51Views();
-        } else {
-            return $this->getLaravel52Views();
-        }
-    }
-
-    private function createDirectories($viewsPath)
-    {
-        FileUtil::createDirectoryIfNotExist($viewsPath.'layouts');
-        FileUtil::createDirectoryIfNotExist($viewsPath.'auth');
-
-        if ($this->laravelVersion == '5.1') {
-            FileUtil::createDirectoryIfNotExist($viewsPath.'emails');
-        } else {
-            FileUtil::createDirectoryIfNotExist($viewsPath.'auth/passwords');
-            FileUtil::createDirectoryIfNotExist($viewsPath.'auth/emails');
-        }
-    }
-
-    private function getLaravel51Views()
-    {
-        return [
-            'layouts/app.stub'     => 'layouts/app.blade.php',
-            'layouts/sidebar.stub' => 'layouts/sidebar.blade.php',
-            'layouts/menu.stub'    => 'layouts/menu.blade.php',
-            'layouts/home.stub'    => 'home.blade.php',
-            'auth/login.stub'      => 'auth/login.blade.php',
-            'auth/register.stub'   => 'auth/register.blade.php',
-            'auth/email.stub'      => 'auth/password.blade.php',
-            'auth/reset.stub'      => 'auth/reset.blade.php',
-            'emails/password.stub' => 'emails/password.blade.php',
-        ];
-    }
-
-    private function getLaravel52Views()
-    {
-        return [
-            'layouts/app.stub'     => 'layouts/app.blade.php',
-            'layouts/sidebar.stub' => 'layouts/sidebar.blade.php',
-            'layouts/menu.stub'    => 'layouts/menu.blade.php',
-            'layouts/home.stub'    => 'home.blade.php',
-            'auth/login.stub'      => 'auth/login.blade.php',
-            'auth/register.stub'   => 'auth/register.blade.php',
-            'auth/email.stub'      => 'auth/passwords/email.blade.php',
-            'auth/reset.stub'      => 'auth/passwords/reset.blade.php',
-            'emails/password.stub' => 'auth/emails/password.blade.php',
-        ];
     }
 
     private function copyView()
@@ -108,29 +42,49 @@ class LayoutPublishCommand extends PublishBaseCommand
         $files = $this->getViews();
 
         foreach ($files as $stub => $blade) {
-            $sourceFile = base_path('vendor/infyomlabs/'.$templateType.'/templates/scaffold/'.$stub);
+            $sourceFile = get_template_file_path('scaffold/'.$stub, $templateType);
             $destinationFile = $viewsPath.$blade;
             $this->publishFile($sourceFile, $destinationFile, $blade);
         }
     }
 
+    private function createDirectories($viewsPath)
+    {
+        FileUtil::createDirectoryIfNotExist($viewsPath.'layouts');
+        FileUtil::createDirectoryIfNotExist($viewsPath.'auth');
+
+        FileUtil::createDirectoryIfNotExist($viewsPath.'auth/passwords');
+    }
+
+    private function getViews()
+    {
+        return [
+            'layouts/app'               => 'layouts/app.blade.php',
+            'layouts/sidebar'           => 'layouts/sidebar.blade.php',
+            'layouts/datatables_css'    => 'layouts/datatables_css.blade.php',
+            'layouts/datatables_js'     => 'layouts/datatables_js.blade.php',
+            'layouts/menu'              => 'layouts/menu.blade.php',
+            'layouts/home'              => 'home.blade.php',
+            'auth/login'                => 'auth/login.blade.php',
+            'auth/register'             => 'auth/register.blade.php',
+            'auth/email'                => 'auth/passwords/email.blade.php',
+            'auth/reset'                => 'auth/passwords/reset.blade.php',
+            'emails/password'           => 'auth/emails/password.blade.php',
+        ];
+    }
+
     private function updateRoutes()
     {
-        $path = config('infyom.laravel_generator.path.routes', app_path('Http/routes.php'));
+        $path = config('infyom.laravel_generator.path.routes', app_path('routes/web.php'));
 
-        $prompt = 'Existing routes.php file detected. Should we add standard routes? (y|N) :';
+        $prompt = 'Existing routes web.php file detected. Should we add standard auth routes? (y|N) :';
         if (file_exists($path) && !$this->confirmOverwrite($path, $prompt)) {
             return;
         }
 
         $routeContents = file_get_contents($path);
 
-        $routesTemplate = TemplateUtil::getTemplate('routes.auth', 'laravel-generator');
-        if ($this->laravelVersion == '5.1') {
-            $routesTemplate = str_replace('$LOGOUT_METHOD$', 'getLogout', $routesTemplate);
-        } else {
-            $routesTemplate = str_replace('$LOGOUT_METHOD$', 'logout', $routesTemplate);
-        }
+        $routesTemplate = get_template('routes.auth', 'laravel-generator');
 
         $routeContents .= "\n\n".$routesTemplate;
 
@@ -140,7 +94,7 @@ class LayoutPublishCommand extends PublishBaseCommand
 
     private function publishHomeController()
     {
-        $templateData = TemplateUtil::getTemplate('home_controller', 'laravel-generator');
+        $templateData = get_template('home_controller', 'laravel-generator');
 
         $templateData = $this->fillTemplate($templateData);
 

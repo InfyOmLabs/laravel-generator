@@ -5,7 +5,6 @@ namespace InfyOm\Generator\Generators\API;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\FileUtil;
-use InfyOm\Generator\Utils\TemplateUtil;
 
 class APIRequestGenerator extends BaseGenerator
 {
@@ -37,9 +36,9 @@ class APIRequestGenerator extends BaseGenerator
 
     private function generateCreateRequest()
     {
-        $templateData = TemplateUtil::getTemplate('api.request.create_request', 'laravel-generator');
+        $templateData = get_template('api.request.create_request', 'laravel-generator');
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, $this->createFileName, $templateData);
 
@@ -49,9 +48,9 @@ class APIRequestGenerator extends BaseGenerator
 
     private function generateUpdateRequest()
     {
-        $templateData = TemplateUtil::getTemplate('api.request.update_request', 'laravel-generator');
+        $templateData = get_template('api.request.update_request', 'laravel-generator');
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, $this->updateFileName, $templateData);
 

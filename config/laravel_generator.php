@@ -19,9 +19,9 @@ return [
 
         'repository'        => app_path('Repositories/'),
 
-        'routes'            => app_path('Http/routes.php'),
+        'routes'            => base_path('routes/web.php'),
 
-        'api_routes'        => app_path('Http/api_routes.php'),
+        'api_routes'        => base_path('routes/api.php'),
 
         'request'           => app_path('Http/Requests/'),
 
@@ -42,6 +42,8 @@ return [
         'schema_files'      => base_path('resources/model_schemas/'),
 
         'templates_dir'     => base_path('resources/infyom/infyom-generator-templates/'),
+
+        'modelJs'           => base_path('resources/assets/js/models/'),
     ],
 
     /*
@@ -138,7 +140,7 @@ return [
 
     'add_on' => [
 
-        'swagger'       => true,
+        'swagger'       => false,
 
         'tests'         => true,
 

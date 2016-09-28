@@ -1,0 +1,11 @@
+language: php
+php:
+- 5.6
+- 7.0
+- 7.1
+sudo: false
+install: travis_retry composer install --no-interaction --prefer-dist
+script: vendor/bin/phpunit --verbose
+notifications:
+  slack:
+    secure: AJrPVI++pqqoeb/aW/P3ppQbog00v3ynPIXYBqyKx1XCalc5RDxsxym/aiA0gryfZGYTTt7TPUblE68dF9XvNcHQ2K4I3ZA3cG2ld699XkqX7344hdA5QMkInpWh1OQzTRVzXkzZ5+k47Y+UZjXB/aJWdUeFfpAnUYDLd29fiydfez+HSG/ptT1u92MBggDRy1URYJ5329JLRRNP3Yged3mMt8CULUpqLbJbxe1shVU8tHi4/JhZB8j7EzUHWVTi+I5I7w8UHlGQvGcLK3TSpIn4P3DVifp+HbLNOE2bVVcdyduJ62+8/6zTaXQ4/VIPlfzqEhVcfeENwWllUW5N3zbPxBYFFQn/dLrAVA4BVUtheF2/z3TAWxbf9vYyfQ+b2u12nMZ3ScC4JM67KWsPJsmkSJSwHzp+yZIWGI3dAkwhv+efWhyDxYTtBwVM9rbT59g81rTyu4YL3VLVU8nC99SGeBJENSBwSRKdo/2YfL2JKPtaHLP3kD1C12XggS4cZ449T2zha8QYkonUiM36AGnIg1geG6nRR0I4436miKKX4XN3B+pUPGM9xRKdDvvQbYnSS2v9yE/lUnz30Cwt9/RChJpxXwf5qdpO/7uW4KwMKqsSnh6uZeF9pdd3sLmQB0awGDVRSVL7lChnT4wKqYVcEErkfjtTOCBz4Y/CA2E=

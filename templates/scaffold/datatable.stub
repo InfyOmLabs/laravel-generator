@@ -16,7 +16,7 @@ class $MODEL_NAME$DataTable extends DataTable
     {
         return $this->datatables
             ->eloquent($this->query())
-            ->addColumn('action', '$VIEW_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.datatables_actions')
+            ->addColumn('action', '$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.datatables_actions')
             ->make(true);
     }
 
@@ -47,7 +47,6 @@ class $MODEL_NAME$DataTable extends DataTable
                 'dom' => 'Bfrtip',
                 'scrollX' => false,
                 'buttons' => [
-                    'create',
                     'print',
                     'reset',
                     'reload',
@@ -59,7 +58,8 @@ class $MODEL_NAME$DataTable extends DataTable
                              'excel',
                              'pdf',
                          ],
-                    ]
+                    ],
+                    'colvis'
                 ]
             ]);
     }

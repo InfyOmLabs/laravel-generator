@@ -1,0 +1,102 @@
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+  /* padding-top: 50px; */
+  padding-bottom: 20px;
+}
+ul.dropdown-menu li {
+    margin-left: 20px;
+}
+.vuetable th.sortable:hover {
+    color: #2185d0;
+    cursor: pointer;
+}
+.vuetable-actions {
+    width: 11%;
+    padding: 12px 0px;
+    text-align: center;
+}
+.vuetable-actions > button {
+  padding: 3px 6px;
+  margin-right: 4px;
+}
+.vuetable-pagination {
+}
+.vuetable-pagination-info {
+    float: left;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.vuetable-pagination-component {
+  float: right;
+}
+.vuetable-pagination-component .pagination {
+  margin: 0px;
+}
+.vuetable-pagination-component .pagination .btn {
+    cursor: pointer;
+    margin: 2px;
+}
+[v-cloak] {
+    display: none;
+}
+.highlight {
+    background-color: yellow;
+}
+/* Loading Animation: */
+.vuetable-wrapper {
+    opacity: 1;
+    position: relative;
+    filter: alpha(opacity=100); /* IE8 and earlier */
+}
+.vuetable-wrapper.loading {
+  opacity:0.4;
+   transition: opacity .3s ease-in-out;
+   -moz-transition: opacity .3s ease-in-out;
+   -webkit-transition: opacity .3s ease-in-out;
+}
+.vuetable-wrapper.loading:after {
+  position: absolute;
+  content: '';
+  top: 40%;
+  left: 50%;
+  margin: -30px 0 0 -30px;
+  border-radius: 100%;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+  border: 4px solid #000;
+  height: 60px;
+  width: 60px;
+  background: transparent !important;
+  display: inline-block;
+  -webkit-animation: pulse 1s 0s ease-in-out infinite;
+          animation: pulse 1s 0s ease-in-out infinite;
+}
+@keyframes pulse {
+  0% {
+    -webkit-transform: scale(0.6);
+            transform: scale(0.6); }
+  50% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+         border-width: 12px; }
+  100% {
+    -webkit-transform: scale(0.6);
+            transform: scale(0.6); }
+}
+
+.vuetable th.sortable:hover {
+  color: #2185d0;
+  cursor: pointer;
+}
+.vuetable-actions {
+  width: 15%;
+  padding: 12px 0px;
+  text-align: center;
+}
+.vuetable-pagination {
+  background: #f9fafb !important;
+}
+.vuetable-pagination-info {
+  margin-top: auto;
+  margin-bottom: auto;
+}

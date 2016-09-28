@@ -18,6 +18,10 @@ use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
 use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
 use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
 use InfyOm\Generator\Generators\TestTraitGenerator;
+use InfyOm\Generator\Generators\VueJs\ControllerGenerator as VueJsControllerGenerator;
+use InfyOm\Generator\Generators\VueJs\ModelJsConfigGenerator;
+use InfyOm\Generator\Generators\VueJs\RoutesGenerator as VueJsRoutesGenerator;
+use InfyOm\Generator\Generators\VueJs\ViewGenerator as VueJsViewGenerator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -68,6 +72,7 @@ class RollbackGeneratorCommand extends Command
             CommandData::$COMMAND_TYPE_API,
             CommandData::$COMMAND_TYPE_SCAFFOLD,
             CommandData::$COMMAND_TYPE_API_SCAFFOLD,
+            CommandData::$COMMAND_TYPE_VUEJS,
         ])) {
             $this->error('invalid rollback type');
         }
@@ -75,13 +80,7 @@ class RollbackGeneratorCommand extends Command
         $this->commandData = new CommandData($this, $this->argument('type'));
         $this->commandData->config->mName = $this->commandData->modelName = $this->argument('model');
 
-        $this->commandData->config->prepareOptions($this->commandData, ['tableName', 'prefix']);
-        $this->commandData->config->prepareAddOns();
-        $this->commandData->config->prepareModelNames();
-        $this->commandData->config->prepareTableName();
-        $this->commandData->config->loadPaths();
-        $this->commandData->config->loadNamespaces($this->commandData);
-        $this->commandData = $this->commandData->config->loadDynamicVariables($this->commandData);
+        $this->commandData->config->init($this->commandData, ['tableName', 'prefix']);
 
         $migrationGenerator = new MigrationGenerator($this->commandData);
         $migrationGenerator->rollback();
@@ -112,6 +111,18 @@ class RollbackGeneratorCommand extends Command
 
         $routeGenerator = new RoutesGenerator($this->commandData);
         $routeGenerator->rollback();
+
+        $controllerGenerator = new VueJsControllerGenerator($this->commandData);
+        $controllerGenerator->rollback();
+
+        $routesGenerator = new VueJsRoutesGenerator($this->commandData);
+        $routesGenerator->rollback();
+
+        $viewGenerator = new VueJsViewGenerator($this->commandData);
+        $viewGenerator->rollback();
+
+        $modelJsConfigGenerator = new ModelJsConfigGenerator($this->commandData);
+        $modelJsConfigGenerator->rollback();
 
         if ($this->commandData->getAddOn('tests')) {
             $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);
