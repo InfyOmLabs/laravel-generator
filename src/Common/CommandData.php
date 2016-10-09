@@ -143,7 +143,7 @@ class CommandData
             $validations = ($validations == false) ? '' : $validations;
 
             if ($this->getOption('relations')) {
-                $relation = $this->commandObj->ask('Enter relationship (Leave Black to skip):', '');
+                $relation = $this->commandObj->ask('Enter relationship (Leave Black to skip):', false);
             } else {
                 $relation = '';
             }
