@@ -1,122 +1,164 @@
-[
-    {
-        "name": "id",
-        "dbType": "increments",
-        "htmlType": "",
-        "validations": "",
-        "searchable": false,
-        "fillable": false,
-        "primary": true,
-        "inForm": false,
-        "inIndex": false
-    },
-    {
-        "name": "title",
-        "dbType": "string",
-        "htmlType": "text",
-        "validations": "required",
-        "searchable": true
-    },
-    {
-        "name": "post_date",
-        "dbType": "dateTime",
-        "htmlType": "date",
-        "searchable": true
-    },
-    {
-        "name": "body",
-        "dbType": "text",
-        "htmlType": "textarea"
-    },
-    {
-        "name": "password",
-        "dbType": "string",
-        "htmlType": "password",
-        "searchable": false,
-        "inForm": false,
-        "inIndex": false
-    },
-    {
-        "name": "token",
-        "dbType": "string",
-        "htmlType": "hidden",
-        "searchable": false,
-        "inForm": false,
-        "inIndex": false
-    },
-    {
-        "name": "email",
-        "dbType": "string",
-        "htmlType": "email",
-        "searchable": true
-    },
-    {
-        "name": "author_gender",
-        "dbType": "integer",
-        "htmlType": "radio,Male:1,Female:0"
-    },
-    {
-        "name": "post_type",
-        "dbType": "string",
-        "htmlType": "radio,Public,Private",
-        "searchable": true
-    },
-    {
-        "name": "post_visits",
-        "dbType": "integer",
-        "htmlType": "number"
-    },
-    {
-        "name": "category",
-        "dbType": "string",
-        "htmlType": "select,Technology,LifeStyle,Education,Games",
-        "searchable": true
-    },
-    {
-        "name": "category_short",
-        "dbType": "string",
-        "htmlType": "select,Technology:tech,LifeStyle:ls,Education:edu,Games:game"
-    },
-    {
-        "name": "is_private",
-        "dbType": "boolean",
-        "htmlType": "checkbox:1"
-    },
-    {
-        "name": "writer_id",
-        "dbType": "integer:unsigned:foreign,writers,id",
-        "htmlType": "text",
-        "relation": "mt1,Writer,writer_id,id"
-    },
-    {
-        "type": "relation",
-        "relation": "1tm,Comment"
-    },
-    {
-        "name": "users",
-        "type": "relation",
-        "relation": "mtm,Role,user_roles,user_id,role_id"
-    },
-    {
-        "name": "created_at",
-        "dbType": "timestamp",
-        "htmlType": "",
-        "validations": "",
-        "searchable": false,
-        "fillable": false,
-        "primary": false,
-        "inForm": false,
-        "inIndex": false
-    },
-    {
-        "name": "updated_at",
-        "dbType": "timestamp",
-        "htmlType": "",
-        "validations": "",
-        "searchable": false,
-        "fillable": false,
-        "primary": false,
-        "inForm": false,
-        "inIndex": false
-    }
-]
+[{
+    "name": "id",
+    "dbType": "increments",
+    "htmlType": "",
+    "validations": "",
+    "searchable": false,
+    "fillable": false,
+    "primary": true,
+    "inForm": false,
+    "inIndex": false
+}, {
+    "name": "title",
+    "dbType": "string",
+    "htmlType": "text",
+    "validations": "required",
+    "validations": "required",
+    "searchable": true,
+    "fillable": true,
+    "primary": false,
+    "inForm": true,
+    "inIndex": false
+}, {
+    "name": "post_date",
+    "dbType": "dateTime",
+    "htmlType": "date",
+    "validations": "",
+    "searchable": true,
+    "fillable": true,
+    "primary": false,
+    "inForm": true,
+    "inIndex": false
+}, {
+    "name": "body",
+    "dbType": "text",
+    "htmlType": "textarea",
+    "validations": "",
+    "searchable": false,
+    "fillable": true,
+    "primary": false,
+    "inForm": true,
+    "inIndex": false
+}, {
+    "name": "password",
+    "dbType": "string",
+    "htmlType": "password",
+    "validations": "",
+    "searchable": false,
+    "fillable": true,
+    "primary": false,
+    "inForm": true,
+    "inIndex": false
+}, {
+    "name": "token",
+    "dbType": "string",
+    "htmlType": "hidden",
+    "validations": "",
+    "searchable": false,
+    "fillable": true,
+    "primary": false,
+    "inForm": true,
+    "inIndex": false
+}, {
+    "name": "email",
+    "dbType": "string",
+    "htmlType": "email",
+    "validations": "",
+    "searchable": false,
+    "fillable": true,
+    "primary": false,
+    "inForm": true,
+    "inIndex": false
+}, {
+    "name": "author_gender",
+    "dbType": "integer",
+    "htmlType": "radio,Male:1,Female:0",
+    "validations": "",
+    "searchable": false,
+    "fillable": true,
+    "primary": false,
+    "inForm": true,
+    "inIndex": false
+}, {
+    "name": "post_type",
+    "dbType": "string",
+    "htmlType": "radio,Public,Private",
+    "validations": "",
+    "searchable": false,
+    "fillable": true,
+    "primary": false,
+    "inForm": true,
+    "inIndex": false
+}, {
+    "name": "post_visits",
+    "dbType": "integer",
+    "htmlType": "number",
+    "validations": "",
+    "searchable": false,
+    "fillable": true,
+    "primary": false,
+    "inForm": true,
+    "inIndex": false
+}, {
+    "name": "category",
+    "dbType": "string",
+    "htmlType": "select,Technology,LifeStyle,Education,Games",
+    "validations": "",
+    "searchable": false,
+    "fillable": true,
+    "primary": false,
+    "inForm": true,
+    "inIndex": false
+}, {
+    "name": "category_short",
+    "dbType": "string",
+    "htmlType": "select,Technology:tech,LifeStyle:ls,Education:edu,Games:game",
+    "validations": "",
+    "searchable": false,
+    "fillable": true,
+    "primary": false,
+    "inForm": true,
+    "inIndex": false
+}, {
+    "name": "is_private",
+    "dbType": "boolean",
+    "htmlType": "checkbox:1",
+    "validations": "",
+    "searchable": false,
+    "fillable": true,
+    "primary": false,
+    "inForm": true,
+    "inIndex": false
+}, {
+    "name": "writer_id",
+    "dbType": "integer:unsigned:foreign,writers,id",
+    "htmlType": "text",
+    "relation": "mt1,Writer,writer_id,id"
+}, {
+    "type": "relation",
+    "relation": "1tm,Comment"
+}, {
+    "name": "users",
+    "type": "relation",
+    "relation": "mtm,Role,user_roles,user_id,role_id"
+}, {
+    "name": "created_at",
+    "dbType": "timestamp",
+    "htmlType": "",
+    "validations": "",
+    "searchable": false,
+    "fillable": false,
+    "primary": false,
+    "inForm": false,
+    "inIndex": false
+}, {
+    "name": "updated_at",
+    "dbType": "timestamp",
+    "htmlType": "",
+    "validations": "",
+    "searchable": false,
+    "fillable": false,
+    "primary": false,
+    "inForm": false,
+    "inIndex": false
+}]
