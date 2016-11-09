@@ -101,10 +101,35 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
                 switch ($methodClass) {
                     case 'Illuminate\Database\Eloquent\Relations\BelongsToMany':
                         $new_values = array_get($attributes, $key, []);
+                        $check_values = array_get($attributes, $key, []);
                         if (array_search('', $new_values) !== false) {
                             unset($new_values[array_search('', $new_values)]);
                         }
-                        $model->$key()->sync(array_values($new_values));
+                        // If there is any value passed
+                        if(count($check_values)){
+                            $first_element = array_shift($check_values);
+                            // Verify if is array, and if there is, adjust the index to be the id of the relation
+                            if(is_array($first_element)){
+                                $otherKeyTxt = $model->$key()->getOtherKey();
+                                $otherKeyArray = explode('.', $otherKeyTxt);
+                                $otherKey = array_pop($otherKeyArray);
+                                $final_array = [];
+                                foreach ($new_values as $idx => $item){
+                                    $index = $idx;
+                                    if(isset($item[$otherKey])){
+                                        $index = $item[$otherKey];
+                                        unset($item[$otherKey]);
+                                    }
+                                    $final_array[$index] = $item;
+
+                                }
+                                $new_values = $final_array;
+                            }else{
+                                $new_values = array_values($new_values);
+                            }
+                        }
+                        
+                        $model->$key()->sync($new_values);
                         break;
                     case 'Illuminate\Database\Eloquent\Relations\BelongsTo':
                         $model_key = $model->$key()->getForeignKey();
