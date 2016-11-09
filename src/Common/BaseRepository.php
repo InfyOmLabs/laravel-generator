@@ -44,23 +44,25 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
     }
 
     /**
-     * Search the given ID in the array
+     * Search the given ID in the array.
      * @param $id Integer
      * @param $array Array
      * @param $keyName string
+     *
      * @return bool
      */
-    private function findIdExists($id, $array, $keyName){
+    private function findIdExists($id, $array, $keyName)
+    {
         $exists = false;
-        for ($k=0;$k<count($array);$k++){
+        for ($k = 0; $k < count($array); $k++){
             if(isset($array[$k])){
-                if(isset($array[$k][$keyName]) && $array[$k][$keyName]==$id){
+                if(isset($array[$k][$keyName]) && $array[$k][$keyName] == $id){
                     $exists = true;
                     $k = count($array);
                 }
             }
-
         }
+
         return $exists;
     }
 
@@ -69,20 +71,22 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
      * @param $id Integer
      * @param $array Array_
      * @param $keyName String_
+     *
      * @return int|null
      */
-    private function findIndex($id, $array, $keyName){
+    private function findIndex($id, $array, $keyName)
+    {
         $position = null;
 
-        for ($k=0;$k<count($array);$k++){
+        for ($k = 0; $k < count($array); $k++){
             if(isset($array[$k])){
-                if(isset($array[$k][$keyName]) && $array[$k][$keyName]==$id){
+                if(isset($array[$k][$keyName]) && $array[$k][$keyName] == $id){
                     $position = $k;
                     $k = count($array);
                 }
             }
-
         }
+
         return $position;
     }
 
@@ -131,15 +135,14 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
                         foreach ($model->$key as $rel) {
                             if (!$this->findIdExists($rel->$keyName, $new_values, $keyName)) {
                                 $rel->delete();
-                            }else{
+                            } else {
                                 $position = $this->findIndex($rel->$keyName, $new_values, $keyName);
-                                if(!is_null($position)){
+                                if (!is_null($position)) {
                                     $related = get_class($model->$key()->getRelated());
-                                    $related::where($keyName,$rel->$keyName)->update($new_values[$position]);
+                                    $related::where($keyName, $rel->$keyName)->update($new_values[$position]);
                                     unset($new_values[$position]);
                                 }
                             }
-
                         }
                         // Insert the new ones
                         if (count($new_values) > 0) {
