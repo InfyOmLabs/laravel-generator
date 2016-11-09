@@ -43,6 +43,49 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
         return $this->parserResult($model);
     }
 
+    /**
+     * Search the given ID in the array
+     * @param $id Integer
+     * @param $array Array
+     * @param $keyName string
+     * @return bool
+     */
+    private function findIdExists($id, $array, $keyName){
+        $exists = false;
+        for ($k=0;$k<count($array);$k++){
+            if(isset($array[$k])){
+                if(isset($array[$k][$keyName]) && $array[$k][$keyName]==$id){
+                    $exists = true;
+                    $k = count($array);
+                }
+            }
+
+        }
+        return $exists;
+    }
+
+    /**
+     * Find the position of the ID in the given array
+     * @param $id Integer
+     * @param $array Array_
+     * @param $keyName String_
+     * @return int|null
+     */
+    private function findIndex($id, $array, $keyName){
+        $position = null;
+
+        for ($k=0;$k<count($array);$k++){
+            if(isset($array[$k])){
+                if(isset($array[$k][$keyName]) && $array[$k][$keyName]==$id){
+                    $position = $k;
+                    $k = count($array);
+                }
+            }
+
+        }
+        return $position;
+    }
+
     public function updateRelations($model, $attributes)
     {
         foreach ($attributes as $key => $val) {
@@ -71,26 +114,37 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
                         break;
                     case 'Illuminate\Database\Eloquent\Relations\HasMany':
                         $new_values = array_get($attributes, $key, []);
+                        sort($new_values);
+                        // The name of the class
+                        $related = get_class($model->$key()->getRelated());
+
                         if (array_search('', $new_values) !== false) {
                             unset($new_values[array_search('', $new_values)]);
                         }
-
                         list($temp, $model_key) = explode('.', $model->$key($key)->getForeignKey());
 
-                        foreach ($model->$key as $rel) {
-                            if (!in_array($rel->id, $new_values)) {
-                                $rel->$model_key = null;
-                                $rel->save();
-                            }
-                            unset($new_values[array_search($rel->id, $new_values)]);
-                        }
+                        $model_instance = new $related();
+                        // Get the name of the primary key
+                        $keyName = $model_instance->getKeyName();
 
+                        // Find if the id exists in the itens received
+                        foreach ($model->$key as $rel) {
+                            if (!$this->findIdExists($rel->$keyName, $new_values, $keyName)) {
+                                $rel->delete();
+                            }else{
+                                $position = $this->findIndex($rel->$keyName, $new_values, $keyName);
+                                if(!is_null($position)){
+                                    $related = get_class($model->$key()->getRelated());
+                                    $related::where($keyName,$rel->$keyName)->update($new_values[$position]);
+                                    unset($new_values[$position]);
+                                }
+                            }
+
+                        }
+                        // Insert the new ones
                         if (count($new_values) > 0) {
-                            $related = get_class($model->$key()->getRelated());
                             foreach ($new_values as $val) {
-                                $rel = $related::find($val);
-                                $rel->$model_key = $model->id;
-                                $rel->save();
+                                $rel = $related::create($val);
                             }
                         }
                         break;
