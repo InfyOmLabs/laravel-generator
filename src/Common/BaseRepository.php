@@ -117,6 +117,7 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
                     case 'Illuminate\Database\Eloquent\Relations\HasOneOrMany':
                         break;
                     case 'Illuminate\Database\Eloquent\Relations\HasMany':
+
                         $new_values = array_get($attributes, $key, []);
                         sort($new_values);
                         // The name of the class
@@ -130,24 +131,26 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
                         $model_instance = new $related();
                         // Get the name of the primary key
                         $keyName = $model_instance->getKeyName();
-
                         // Find if the id exists in the itens received
                         foreach ($model->$key as $rel) {
                             if (!$this->findIdExists($rel->$keyName, $new_values, $keyName)) {
                                 $rel->delete();
-                            } else {
+                            }else{
                                 $position = $this->findIndex($rel->$keyName, $new_values, $keyName);
-                                if (!is_null($position)) {
+                                if(!is_null($position)){
                                     $related = get_class($model->$key()->getRelated());
-                                    $related::where($keyName, $rel->$keyName)->update($new_values[$position]);
+                                    $related::where($keyName,$rel->$keyName)->update($new_values[$position]);
                                     unset($new_values[$position]);
                                 }
                             }
+
                         }
                         // Insert the new ones
                         if (count($new_values) > 0) {
                             foreach ($new_values as $val) {
-                                $rel = $related::create($val);
+                                $rel = $related::firstOrNew($val);
+                                $rel->$model_key = $model->id;
+                                $rel->save();
                             }
                         }
                         break;
