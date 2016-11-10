@@ -5,6 +5,7 @@ namespace InfyOm\Generator\Generators\API;
 use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
+use InfyOm\Generator\Utils\InfyOmHelpers;
 
 class APIRoutesGenerator extends BaseGenerator
 {
@@ -28,12 +29,12 @@ class APIRoutesGenerator extends BaseGenerator
         $this->routeContents = file_get_contents($this->path);
 
         if (!empty($this->commandData->config->prefixes['route'])) {
-            $routesTemplate = get_template('api.routes.prefix_routes', 'laravel-generator');
+            $routesTemplate = InfyOmHelpers::get_template('api.routes.prefix_routes', 'laravel-generator');
         } else {
-            $routesTemplate = get_template('api.routes.routes', 'laravel-generator');
+            $routesTemplate = InfyOmHelpers::get_template('api.routes.routes', 'laravel-generator');
         }
 
-        $this->routesTemplate = fill_template($this->commandData->dynamicVars, $routesTemplate);
+        $this->routesTemplate = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $routesTemplate);
     }
 
     public function generate()

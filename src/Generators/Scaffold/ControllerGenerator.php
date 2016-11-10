@@ -4,6 +4,7 @@ namespace InfyOm\Generator\Generators\Scaffold;
 
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
+use InfyOm\Generator\Utils\InfyOmHelpers;
 use InfyOm\Generator\Utils\FileUtil;
 
 class ControllerGenerator extends BaseGenerator
@@ -31,11 +32,11 @@ class ControllerGenerator extends BaseGenerator
     public function generate()
     {
         if ($this->commandData->getAddOn('datatables')) {
-            $templateData = get_template('scaffold.controller.datatable_controller', 'laravel-generator');
+            $templateData = InfyOmHelpers::get_template('scaffold.controller.datatable_controller', 'laravel-generator');
 
             $this->generateDataTable();
         } else {
-            $templateData = get_template('scaffold.controller.controller', 'laravel-generator');
+            $templateData = InfyOmHelpers::get_template('scaffold.controller.controller', 'laravel-generator');
 
             $paginate = $this->commandData->getOption('paginate');
 
@@ -46,7 +47,7 @@ class ControllerGenerator extends BaseGenerator
             }
         }
 
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
@@ -56,11 +57,11 @@ class ControllerGenerator extends BaseGenerator
 
     private function generateDataTable()
     {
-        $templateData = get_template('scaffold.datatable', 'laravel-generator');
+        $templateData = InfyOmHelpers::get_template('scaffold.datatable', 'laravel-generator');
 
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $templateData);
 
-        $headerFieldTemplate = get_template('scaffold.views.datatable_column', $this->templateType);
+        $headerFieldTemplate = InfyOmHelpers::get_template('scaffold.views.datatable_column', $this->templateType);
 
         $headerFields = [];
 
@@ -68,7 +69,7 @@ class ControllerGenerator extends BaseGenerator
             if (!$field->inIndex) {
                 continue;
             }
-            $headerFields[] = $fieldTemplate = fill_template_with_field_data(
+            $headerFields[] = $fieldTemplate = InfyOmHelpers::fill_template_with_field_data(
                 $this->commandData->dynamicVars,
                 $this->commandData->fieldNamesMapping,
                 $headerFieldTemplate,
@@ -80,7 +81,7 @@ class ControllerGenerator extends BaseGenerator
 
         $fileName = $this->commandData->modelName.'DataTable.php';
 
-        $fields = implode(','.infy_nl_tab(1, 3), $headerFields);
+        $fields = implode(','.InfyOmHelpers::infy_nl_tab(1, 3), $headerFields);
 
         $templateData = str_replace('$DATATABLE_COLUMNS$', $fields, $templateData);
 

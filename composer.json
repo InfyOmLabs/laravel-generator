@@ -35,10 +35,7 @@
     "autoload": {
         "psr-4": {
             "InfyOm\\Generator\\": "src/"
-        },
-        "files": [
-            "src/helpers.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {

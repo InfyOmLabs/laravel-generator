@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Generators;
 
 use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Utils\InfyOmHelpers;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
 
@@ -26,7 +27,7 @@ class TestTraitGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = get_template('test.trait', 'laravel-generator');
+        $templateData = InfyOmHelpers::get_template('test.trait', 'laravel-generator');
 
         $templateData = $this->fillTemplate($templateData);
 
@@ -38,9 +39,9 @@ class TestTraitGenerator extends BaseGenerator
 
     private function fillTemplate($templateData)
     {
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $templateData);
 
-        $templateData = str_replace('$FIELDS$', implode(','.infy_nl_tab(1, 3), $this->generateFields()),
+        $templateData = str_replace('$FIELDS$', implode(','.InfyOmHelpers::infy_nl_tab(1, 3), $this->generateFields()),
             $templateData);
 
         return $templateData;

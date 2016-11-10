@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Commands\Publish;
 
+use InfyOm\Generator\Utils\InfyOmHelpers;
 use InfyOm\Generator\Utils\FileUtil;
 
 class LayoutPublishCommand extends PublishBaseCommand
@@ -42,7 +43,7 @@ class LayoutPublishCommand extends PublishBaseCommand
         $files = $this->getViews();
 
         foreach ($files as $stub => $blade) {
-            $sourceFile = get_template_file_path('scaffold/'.$stub, $templateType);
+            $sourceFile = InfyOmHelpers::get_template_file_path('scaffold/'.$stub, $templateType);
             $destinationFile = $viewsPath.$blade;
             $this->publishFile($sourceFile, $destinationFile, $blade);
         }
@@ -85,7 +86,7 @@ class LayoutPublishCommand extends PublishBaseCommand
 
         $routeContents = file_get_contents($path);
 
-        $routesTemplate = get_template('routes.auth', 'laravel-generator');
+        $routesTemplate = InfyOmHelpers::get_template('routes.auth', 'laravel-generator');
 
         $routeContents .= "\n\n".$routesTemplate;
 
@@ -95,7 +96,7 @@ class LayoutPublishCommand extends PublishBaseCommand
 
     private function publishHomeController()
     {
-        $templateData = get_template('home_controller', 'laravel-generator');
+        $templateData = InfyOmHelpers::get_template('home_controller', 'laravel-generator');
 
         $templateData = $this->fillTemplate($templateData);
 

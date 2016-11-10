@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Commands\Publish;
 
+use InfyOm\Generator\Utils\InfyOmHelpers;
 use InfyOm\Generator\Utils\FileUtil;
 
 class GeneratorPublishCommand extends PublishBaseCommand
@@ -68,7 +69,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
     private function publishBaseController()
     {
-        $templateData = get_template('app_base_controller', 'laravel-generator');
+        $templateData = InfyOmHelpers::get_template('app_base_controller', 'laravel-generator');
 
         $templateData = $this->fillTemplate($templateData);
 

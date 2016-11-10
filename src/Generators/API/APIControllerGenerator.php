@@ -4,6 +4,7 @@ namespace InfyOm\Generator\Generators\API;
 
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
+use InfyOm\Generator\Utils\InfyOmHelpers;
 use InfyOm\Generator\Utils\FileUtil;
 
 class APIControllerGenerator extends BaseGenerator
@@ -26,9 +27,9 @@ class APIControllerGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = get_template('api.controller.api_controller', 'laravel-generator');
+        $templateData = InfyOmHelpers::get_template('api.controller.api_controller', 'laravel-generator');
 
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $templateData);
         $templateData = $this->fillDocs($templateData);
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
@@ -51,8 +52,8 @@ class APIControllerGenerator extends BaseGenerator
 
         foreach ($methods as $method) {
             $key = '$DOC_'.strtoupper($method).'$';
-            $docTemplate = get_template($templatePrefix.'.'.$method, $templateType);
-            $docTemplate = fill_template($this->commandData->dynamicVars, $docTemplate);
+            $docTemplate = InfyOmHelpers::get_template($templatePrefix.'.'.$method, $templateType);
+            $docTemplate = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $docTemplate);
             $templateData = str_replace($key, $docTemplate, $templateData);
         }
 

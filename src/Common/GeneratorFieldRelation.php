@@ -2,6 +2,8 @@
 
 namespace InfyOm\Generator\Common;
 
+use InfyOm\Generator\Utils\InfyOmHelpers;
+
 class GeneratorFieldRelation
 {
     /** @var string */
@@ -66,7 +68,7 @@ class GeneratorFieldRelation
     {
         $modelName = array_shift($this->inputs);
 
-        $template = get_template('model.relationship', 'laravel-generator');
+        $template = InfyOmHelpers::get_template('model.relationship', 'laravel-generator');
 
         $template = str_replace('$RELATIONSHIP_CLASS$', $relationClass, $template);
         $template = str_replace('$FUNCTION_NAME$', $functionName, $template);

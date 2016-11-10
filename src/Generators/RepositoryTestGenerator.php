@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Generators;
 
 use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Utils\InfyOmHelpers;
 use InfyOm\Generator\Utils\FileUtil;
 
 class RepositoryTestGenerator extends BaseGenerator
@@ -25,7 +26,7 @@ class RepositoryTestGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = get_template('test.repository_test', 'laravel-generator');
+        $templateData = InfyOmHelpers::get_template('test.repository_test', 'laravel-generator');
 
         $templateData = $this->fillTemplate($templateData);
 
@@ -37,7 +38,7 @@ class RepositoryTestGenerator extends BaseGenerator
 
     private function fillTemplate($templateData)
     {
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $templateData);
 
         return $templateData;
     }

@@ -5,6 +5,7 @@ namespace InfyOm\Generator\Utils;
 use DB;
 use InfyOm\Generator\Common\GeneratorField;
 use InfyOm\Generator\Common\GeneratorFieldRelation;
+use InfyOm\Generator\Utils\InfyOmHelpers;
 
 class GeneratorForeignKey
 {
@@ -340,7 +341,7 @@ class TableFieldsGenerator
                     // detect if one to one relationship is there
                     $isOneToOne = $this->isOneToOne($primary, $foreignKey, $modelTable->primaryKey);
                     if ($isOneToOne) {
-                        $modelName = model_name_from_table_name($tableName);
+                        $modelName = InfyOmHelpers::model_name_from_table_name($tableName);
                         $this->relations[] = GeneratorFieldRelation::parseRelation('1t1,'.$modelName);
                         continue;
                     }
@@ -348,7 +349,7 @@ class TableFieldsGenerator
                     // detect if one to many relationship is there
                     $isOneToMany = $this->isOneToMany($primary, $foreignKey, $modelTable->primaryKey);
                     if ($isOneToMany) {
-                        $modelName = model_name_from_table_name($tableName);
+                        $modelName = InfyOmHelpers::model_name_from_table_name($tableName);
                         $this->relations[] = GeneratorFieldRelation::parseRelation('1tm,'.$modelName);
                         continue;
                     }
@@ -420,7 +421,7 @@ class TableFieldsGenerator
             }
         }
 
-        $modelName = model_name_from_table_name($manyToManyTable);
+        $modelName = InfyOmHelpers::model_name_from_table_name($manyToManyTable);
 
         return GeneratorFieldRelation::parseRelation('mtm,'.$modelName.','.$tableName);
     }
@@ -489,7 +490,7 @@ class TableFieldsGenerator
             $foreignField = $foreignKey->foreignField;
 
             if ($foreignField == $tables[$foreignTable]->primaryKey) {
-                $modelName = model_name_from_table_name($foreignTable);
+                $modelName = InfyOmHelpers::model_name_from_table_name($foreignTable);
                 $manyToOneRelations[] = GeneratorFieldRelation::parseRelation('mt1,'.$modelName);
             }
         }

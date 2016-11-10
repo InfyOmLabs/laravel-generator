@@ -5,6 +5,7 @@ namespace InfyOm\Generator\Generators;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\TableFieldsGenerator;
+use InfyOm\Generator\Utils\InfyOmHelpers;
 
 class ModelGenerator extends BaseGenerator
 {
@@ -41,7 +42,7 @@ class ModelGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = get_template('model.model', 'laravel-generator');
+        $templateData = InfyOmHelpers::get_template('model.model', 'laravel-generator');
 
         $templateData = $this->fillTemplate($templateData);
 
@@ -53,7 +54,7 @@ class ModelGenerator extends BaseGenerator
 
     private function fillTemplate($templateData)
     {
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $templateData);
 
         $templateData = $this->fillSoftDeletes($templateData);
 
@@ -70,22 +71,22 @@ class ModelGenerator extends BaseGenerator
         $templateData = $this->fillTimestamps($templateData);
 
         if ($this->commandData->getOption('primary')) {
-            $primary = infy_tab()."protected \$primaryKey = '".$this->commandData->getOption('primary')."';\n";
+            $primary = InfyOmHelpers::infy_tab()."protected \$primaryKey = '".$this->commandData->getOption('primary')."';\n";
         } else {
             $primary = '';
         }
 
         $templateData = str_replace('$PRIMARY$', $primary, $templateData);
 
-        $templateData = str_replace('$FIELDS$', implode(','.infy_nl_tab(1, 2), $fillables), $templateData);
+        $templateData = str_replace('$FIELDS$', implode(','.InfyOmHelpers::infy_nl_tab(1, 2), $fillables), $templateData);
 
-        $templateData = str_replace('$RULES$', implode(','.infy_nl_tab(1, 2), $this->generateRules()), $templateData);
+        $templateData = str_replace('$RULES$', implode(','.InfyOmHelpers::infy_nl_tab(1, 2), $this->generateRules()), $templateData);
 
-        $templateData = str_replace('$CAST$', implode(','.infy_nl_tab(1, 2), $this->generateCasts()), $templateData);
+        $templateData = str_replace('$CAST$', implode(','.InfyOmHelpers::infy_nl_tab(1, 2), $this->generateCasts()), $templateData);
 
         $templateData = str_replace(
             '$RELATIONS$',
-            fill_template($this->commandData->dynamicVars, implode(PHP_EOL.infy_nl_tab(1, 1), $this->generateRelations())),
+            InfyOmHelpers::fill_template($this->commandData->dynamicVars, implode(PHP_EOL.InfyOmHelpers::infy_nl_tab(1, 1), $this->generateRelations())),
             $templateData
         );
 
@@ -105,10 +106,10 @@ class ModelGenerator extends BaseGenerator
                 '$SOFT_DELETE_IMPORT$', "use Illuminate\\Database\\Eloquent\\SoftDeletes;\n",
                 $templateData
             );
-            $templateData = str_replace('$SOFT_DELETE$', infy_tab()."use SoftDeletes;\n", $templateData);
+            $templateData = str_replace('$SOFT_DELETE$', InfyOmHelpers::infy_tab()."use SoftDeletes;\n", $templateData);
             $deletedAtTimestamp = config('infyom.laravel_generator.timestamps.deleted_at', 'deleted_at');
             $templateData = str_replace(
-                '$SOFT_DELETE_DATES$', infy_nl_tab()."protected \$dates = ['".$deletedAtTimestamp."'];\n",
+                '$SOFT_DELETE_DATES$', InfyOmHelpers::infy_nl_tab()."protected \$dates = ['".$deletedAtTimestamp."'];\n",
                 $templateData
             );
         }
@@ -121,8 +122,8 @@ class ModelGenerator extends BaseGenerator
         if ($this->commandData->getAddOn('swagger')) {
             $templateData = $this->generateSwagger($templateData);
         } else {
-            $docsTemplate = get_template('docs.model', 'laravel-generator');
-            $docsTemplate = fill_template($this->commandData->dynamicVars, $docsTemplate);
+            $docsTemplate = InfyOmHelpers::get_template('docs.model', 'laravel-generator');
+            $docsTemplate = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $docsTemplate);
             $docsTemplate = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $docsTemplate);
 
             $templateData = str_replace('$DOCS$', $docsTemplate, $templateData);
@@ -135,14 +136,14 @@ class ModelGenerator extends BaseGenerator
     {
         $fieldTypes = SwaggerGenerator::generateTypes($this->commandData->fields);
 
-        $template = get_template('model.model', 'swagger-generator');
+        $template = InfyOmHelpers::get_template('model.model', 'swagger-generator');
 
-        $template = fill_template($this->commandData->dynamicVars, $template);
+        $template = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $template);
 
         $template = str_replace('$REQUIRED_FIELDS$',
             '"'.implode('"'.', '.'"', $this->generateRequiredFields()).'"', $template);
 
-        $propertyTemplate = get_template('model.property', 'swagger-generator');
+        $propertyTemplate = InfyOmHelpers::get_template('model.property', 'swagger-generator');
 
         $properties = SwaggerGenerator::preparePropertyFields($propertyTemplate, $fieldTypes);
 
@@ -176,14 +177,14 @@ class ModelGenerator extends BaseGenerator
 
         if ($this->commandData->getOption('fromTable')) {
             if (empty($timestamps)) {
-                $replace = infy_nl_tab()."public \$timestamps = false;\n";
+                $replace = InfyOmHelpers::infy_nl_tab()."public \$timestamps = false;\n";
             } else {
                 list($created_at, $updated_at) = collect($timestamps)->map(function ($field) {
                     return !empty($field) ? "'$field'" : 'null';
                 });
 
-                $replace .= infy_nl_tab()."const CREATED_AT = $created_at;";
-                $replace .= infy_nl_tab()."const UPDATED_AT = $updated_at;\n";
+                $replace .= InfyOmHelpers::infy_nl_tab()."const CREATED_AT = $created_at;";
+                $replace .= InfyOmHelpers::infy_nl_tab()."const UPDATED_AT = $updated_at;\n";
             }
         }
 
