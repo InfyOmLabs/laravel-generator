@@ -48,7 +48,7 @@ class $MODEL_NAME$ApiTest extends TestCase
     public function testDelete$MODEL_NAME$()
     {
         $$MODEL_NAME_CAMEL$ = $this->make$MODEL_NAME$();
-        $this->json('DELETE', '/api/v1/$MODEL_NAME_PLURAL_CAMEL$/'.$$MODEL_NAME_CAMEL$->i$PRIMARY_KEY_NAME$d);
+        $this->json('DELETE', '/api/v1/$MODEL_NAME_PLURAL_CAMEL$/'.$$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
 
         $this->assertApiSuccess();
         $this->json('GET', '/api/v1/$MODEL_NAME_PLURAL_CAMEL$/'.$$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
