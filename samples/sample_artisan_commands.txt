@@ -1,0 +1,13 @@
+
+
+php artisan infyom.publish:api
+php artisan infyom:api --SINGULAR MODEL_NAME--
+
+php artisan infyom:scaffold Post
+php artisan infyom:scaffold Project
+
+php artisan infyom:scaffold --SINGULAR MODEL_NAME-- --fieldsFile=absolute_file_path_or_path_from_base_directory
+php artisan infyom:api_scaffold --SINGULAR MODEL_NAME-- --fieldsFile=absolute_file_path_or_path_from_base_directory
+
+php artisan infyom:api_scaffold Post --fieldsFile='resources/model_schemas/Post.json'
+php artisan infyom:api_scaffold Project --fieldsFile='resources/model_schemas/Project.json'
