@@ -1,0 +1,11 @@
+/**
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     * @version $GENERATEDAT$
+     **/
+    public function $FUNCTIONNAME$() {
+        return $this->belongsTo(
+            \$NAMESPACE_MODEL$\$MODELNAME$::class,
+            '$KEY1$',
+            '$KEY2$'
+        );
+    }
