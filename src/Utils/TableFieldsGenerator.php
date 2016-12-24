@@ -57,6 +57,7 @@ class TableFieldsGenerator
         $this->schemaManager = DB::getDoctrineSchemaManager();
         $platform = $this->schemaManager->getDatabasePlatform();
         $platform->registerDoctrineTypeMapping('enum', 'string');
+        $platform->registerDoctrineTypeMapping('json', 'text');
 
         $this->columns = $this->schemaManager->listTableColumns($tableName);
 
