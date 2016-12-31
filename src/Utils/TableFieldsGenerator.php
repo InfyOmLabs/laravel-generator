@@ -86,7 +86,7 @@ class TableFieldsGenerator
                     break;
                 case 'boolean':
                     $name = title_case(str_replace('_', ' ', $column->getName()));
-                    $field = $this->generateField($column, 'bigInteger', 'checkbox,1');
+                    $field = $this->generateField($column, 'boolean', 'checkbox,1');
                     break;
                 case 'datetime':
                     $field = $this->generateField($column, 'datetime', 'date');
