@@ -173,8 +173,8 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
                         // Insert the new ones
                         if (count($new_values) > 0) {
                             foreach ($new_values as $val) {
+                                $val[$model_key] = $model->id;
                                 $rel = $related::firstOrNew($val);
-                                $rel->$model_key = $model->id;
                                 $rel->save();
                             }
                         }
