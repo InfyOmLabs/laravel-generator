@@ -25,14 +25,5 @@ $PRIMARY$
         $CAST$
     ];
 
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        $RULES$
-    ];
-
     $RELATIONS$
 }

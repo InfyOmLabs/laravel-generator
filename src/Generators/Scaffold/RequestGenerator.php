@@ -40,6 +40,8 @@ class RequestGenerator extends BaseGenerator
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
+        $templateData = str_replace('$RULES$', implode(','.infy_nl_tab(1, 2), $this->generateRules()), $templateData);
+
         FileUtil::createFile($this->path, $this->createFileName, $templateData);
 
         $this->commandData->commandComment("\nCreate Request created: ");
@@ -51,6 +53,8 @@ class RequestGenerator extends BaseGenerator
         $templateData = get_template('scaffold.request.update_request', 'laravel-generator');
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+
+        $templateData = str_replace('$RULES$', implode(','.infy_nl_tab(1, 2), $this->generateRules()), $templateData);
 
         FileUtil::createFile($this->path, $this->updateFileName, $templateData);
 
@@ -67,5 +71,19 @@ class RequestGenerator extends BaseGenerator
         if ($this->rollbackFile($this->path, $this->updateFileName)) {
             $this->commandData->commandComment('Update API Request file deleted: '.$this->updateFileName);
         }
+    }
+
+    private function generateRules()
+    {
+        $rules = [];
+
+        foreach ($this->commandData->fields as $field) {
+            if (!empty($field->validations)) {
+                $rule = "'".$field->name."' => '".$field->validations."'";
+                $rules[] = $rule;
+            }
+        }
+
+        return $rules;
     }
 }
