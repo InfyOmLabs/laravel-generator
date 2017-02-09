@@ -488,6 +488,10 @@ class TableFieldsGenerator
         foreach ($foreignKeys as $foreignKey) {
             $foreignTable = $foreignKey->foreignTable;
             $foreignField = $foreignKey->foreignField;
+            
+            if (!isset($tables[$foreignTable])) {
+              continue;
+            }
 
             if ($foreignField == $tables[$foreignTable]->primaryKey) {
                 $modelName = model_name_from_table_name($foreignTable);
