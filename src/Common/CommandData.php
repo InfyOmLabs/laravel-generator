@@ -211,29 +211,33 @@ class CommandData
                 }
 
                 $fileContents = file_get_contents($filePath);
+                $fields = json_decode($fileContents, true);
+            } else {
+		$fileContents = $this->getOption('jsonFromGUI');
                 $jsonData = json_decode($fileContents, true);
-                $this->fields = [];
-                foreach ($jsonData as $field) {
-                    if (isset($field['type']) && $field['relation']) {
+                $fields = $jsonData['fields'];
+            }
+
+            $this->fields = [];
+            foreach ($fields as $field) {
+                if (isset($field['type']) && $field['relation']) {
+                    $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
+                } else {
+                    $this->fields[] = GeneratorField::parseFieldFromFile($field);
+                    if (isset($field['relation'])) {
                         $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
-                    } else {
-                        $this->fields[] = GeneratorField::parseFieldFromFile($field);
-                        if (isset($field['relation'])) {
-                            $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
-                        }
                     }
                 }
-            } else {
-                //                $fileContents = $this->getOption('jsonFromGUI');
-//                $jsonData = json_decode($fileContents, true);
-//                $this->inputFields = array_merge($this->inputFields, GeneratorFieldsInputUtil::validateFieldsFile($jsonData['fields']));
-//                $this->config->overrideOptionsFromJsonFile($jsonData);
-//                if (isset($jsonData['migrate'])) {
-//                    $this->config->forceMigrate = $jsonData['migrate'];
-//                }
+            }
+
+            if ($this->getOption('jsonFromGUI')) {
+                $this->config->overrideOptionsFromJsonFile($jsonData['GeneratorConfig']);
+		if( $jsonData['GeneratorConfig']['extra']['forceMigrate'] ){
+                    $this->config->forceMigrate = true;
+		};
             }
         } catch (Exception $e) {
-            $this->commandError($e->getMessage());
+            Log::info( $this->commandError($e->getMessage()) );
             exit;
         }
     }

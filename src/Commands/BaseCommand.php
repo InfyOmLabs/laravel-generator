@@ -3,6 +3,8 @@
 namespace InfyOm\Generator\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\API\APIControllerGenerator;
 use InfyOm\Generator\Generators\API\APIRequestGenerator;
@@ -135,12 +137,12 @@ class BaseCommand extends Command
             $this->saveSchemaFile();
         }
 
-        if ($runMigration) {
-            if ($this->commandData->config->forceMigrate) {
-                $this->call('migrate');
+        if ($runMigration or $this->commandData->config->forceMigrate) {
+            if( $this->commandData->config->forceMigrate ){
+                Artisan::call('migrate');
             } elseif (!$this->commandData->getOption('fromTable') and !$this->isSkip('migration')) {
                 if ($this->confirm("\nDo you want to migrate database? [y|N]", false)) {
-                    $this->call('migrate');
+	            Artisan::call('migrate');
                 }
             }
         }
@@ -152,8 +154,9 @@ class BaseCommand extends Command
 
     public function isSkip($skip)
     {
-        if ($this->commandData->getOption('skip')) {
-            return in_array($skip, (array) $this->commandData->getOption('skip'));
+        $skip_data = $this->commandData->getOption('skip');
+        if ( $skip_data ) {
+            return in_array($skip, (array) $skip_data);
         }
 
         return false;

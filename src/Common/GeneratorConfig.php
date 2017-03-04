@@ -76,6 +76,13 @@ class GeneratorConfig
         'relations',
     ];
 
+    public static $availableAddOns = [
+	'swagger',
+	'tests',
+	'datatables',
+	'menu.enabled',
+    ];
+
     public $tableName;
 
     /** @var string */
@@ -415,7 +422,7 @@ class GeneratorConfig
             }
         }
 
-        $addOns = ['swagger', 'tests', 'datatables'];
+        $addOns = self::$availableAddOns;
 
         foreach ($addOns as $addOn) {
             if (isset($jsonData['addOns'][$addOn])) {
