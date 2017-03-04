@@ -115,6 +115,9 @@ class GeneratorConfig
         $this->nsApp = substr($this->nsApp, 0, strlen($this->nsApp) - 1);
         $this->nsRepository = config('infyom.laravel_generator.namespace.repository', 'App\Repositories').$prefix;
         $this->nsModel = config('infyom.laravel_generator.namespace.model', 'App\Models').$prefix;
+        if (config('infyom.laravel_generator.ignore_model_prefix', false)) {
+            $this->nsModel = config('infyom.laravel_generator.namespace.model', 'App\Models');
+        }
         $this->nsDataTables = config('infyom.laravel_generator.namespace.datatables', 'App\DataTables').$prefix;
         $this->nsModelExtend = config(
             'infyom.laravel_generator.model_extend_class',
@@ -153,6 +156,9 @@ class GeneratorConfig
         ).$prefix;
 
         $this->pathModel = config('infyom.laravel_generator.path.model', app_path('Models/')).$prefix;
+        if (config('infyom.laravel_generator.ignore_model_prefix', false)) {
+            $this->pathModel = config('infyom.laravel_generator.path.model', app_path('Models/'));
+        }
 
         $this->pathDataTables = config('infyom.laravel_generator.path.datatables', app_path('DataTables/')).$prefix;
 
