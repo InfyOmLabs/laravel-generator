@@ -72,8 +72,8 @@ class TestTraitGenerator extends BaseGenerator
                     $fakerData = "date('Y-m-d H:i:s')";
                     break;
                 case 'enum':
-                    $fakerData = 'randomElement(' .
-                        GeneratorFieldsInputUtil::prepareValuesArrayStr($field->htmlValues) .
+                    $fakerData = 'randomElement('.
+                        GeneratorFieldsInputUtil::prepareValuesArrayStr($field->htmlValues).
                         ')';
                     break;
                 default:
