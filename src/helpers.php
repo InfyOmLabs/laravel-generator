@@ -90,10 +90,14 @@ if (!function_exists('get_template_file_path')) {
                 'infyom.laravel_generator.path.templates_dir',
                 base_path('resources/infyom/infyom-generator-templates/')
             );
+        } else {
+            $templatesPath = config(
+                'infyom.'. $templateType .'.path.templates_dir',
+                base_path('resources/infyom/'. $templateType .'/')
+            );
         }
 
         $path = $templatesPath.$templateName.'.stub';
-
         if (file_exists($path)) {
             return $path;
         }
