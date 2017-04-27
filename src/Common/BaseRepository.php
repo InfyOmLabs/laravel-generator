@@ -166,6 +166,8 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
                                     $related = get_class($model->$key()->getRelated());
                                     $related::where($keyName,$rel->$keyName)->update($new_values[$position]);
                                     unset($new_values[$position]);
+                                    // Sort again the array to the loop for find the item
+                                    sort($new_values);
                                 }
                             }
 
