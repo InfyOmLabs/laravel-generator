@@ -64,7 +64,8 @@ class GeneratorFieldRelation
 
     private function generateRelation($functionName, $relation, $relationClass)
     {
-        $modelName = array_shift($this->inputs);
+        $inputs = $this->inputs;
+        $modelName = array_shift($inputs);
 
         $template = get_template('model.relationship', 'laravel-generator');
 
@@ -73,8 +74,8 @@ class GeneratorFieldRelation
         $template = str_replace('$RELATION$', $relation, $template);
         $template = str_replace('$RELATION_MODEL_NAME$', $modelName, $template);
 
-        if (count($this->inputs) > 0) {
-            $inputFields = implode("', '", $this->inputs);
+        if (count($inputs) > 0) {
+            $inputFields = implode("', '", $inputs);
             $inputFields = ", '".$inputFields."'";
         } else {
             $inputFields = '';
