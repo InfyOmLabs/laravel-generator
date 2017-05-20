@@ -33,4 +33,6 @@ $PRIMARY$
     public static $rules = [
         $RULES$
     ];
+
+    $RELATIONS$
 }

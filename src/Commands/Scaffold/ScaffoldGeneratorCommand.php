@@ -4,13 +4,6 @@ namespace InfyOm\Generator\Commands\Scaffold;
 
 use InfyOm\Generator\Commands\BaseCommand;
 use InfyOm\Generator\Common\CommandData;
-use InfyOm\Generator\Generators\MigrationGenerator;
-use InfyOm\Generator\Generators\ModelGenerator;
-use InfyOm\Generator\Generators\RepositoryGenerator;
-use InfyOm\Generator\Generators\Scaffold\ControllerGenerator;
-use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
-use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
-use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
 
 class ScaffoldGeneratorCommand extends BaseCommand
 {
@@ -47,30 +40,15 @@ class ScaffoldGeneratorCommand extends BaseCommand
     {
         parent::handle();
 
-        if (!$this->commandData->getOption('fromTable')) {
-            $migrationGenerator = new MigrationGenerator($this->commandData);
-            $migrationGenerator->generate();
+        if ($this->checkIsThereAnyDataToGenerate()) {
+            $this->generateCommonItems();
+
+            $this->generateScaffoldItems();
+
+            $this->performPostActionsWithMigration();
+        } else {
+            $this->commandData->commandInfo('There isn not input fields to generate.');
         }
-
-        $modelGenerator = new ModelGenerator($this->commandData);
-        $modelGenerator->generate();
-
-        $repositoryGenerator = new RepositoryGenerator($this->commandData);
-        $repositoryGenerator->generate();
-
-        $requestGenerator = new RequestGenerator($this->commandData);
-        $requestGenerator->generate();
-
-        $controllerGenerator = new ControllerGenerator($this->commandData);
-        $controllerGenerator->generate();
-
-        $viewGenerator = new ViewGenerator($this->commandData);
-        $viewGenerator->generate();
-
-        $routeGenerator = new RoutesGenerator($this->commandData);
-        $routeGenerator->generate();
-
-        $this->performPostActionsWithMigration();
     }
 
     /**
@@ -91,5 +69,17 @@ class ScaffoldGeneratorCommand extends BaseCommand
     protected function getArguments()
     {
         return array_merge(parent::getArguments(), []);
+    }
+
+    /**
+     * Check if there is anything to generate.
+     *
+     * @return bool
+     */
+    protected function checkIsThereAnyDataToGenerate()
+    {
+        if (count($this->commandData->fields) > 3) {
+            return true;
+        }
     }
 }

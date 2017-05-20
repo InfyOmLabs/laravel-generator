@@ -2,8 +2,8 @@
 
 namespace InfyOm\Generator\Generators\Scaffold;
 
+use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
-use InfyOm\Generator\Utils\TemplateUtil;
 
 class RoutesGenerator
 {
@@ -13,23 +13,39 @@ class RoutesGenerator
     /** @var string */
     private $path;
 
+    /** @var string */
+    private $routeContents;
+
+    /** @var string */
+    private $routesTemplate;
+
     public function __construct(CommandData $commandData)
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathRoutes;
+        $this->routeContents = file_get_contents($this->path);
+        if (!empty($this->commandData->config->prefixes['route'])) {
+            $this->routesTemplate = get_template('scaffold.routes.prefix_routes', 'laravel-generator');
+        } else {
+            $this->routesTemplate = get_template('scaffold.routes.routes', 'laravel-generator');
+        }
+        $this->routesTemplate = fill_template($this->commandData->dynamicVars, $this->routesTemplate);
     }
 
     public function generate()
     {
-        $routeContents = file_get_contents($this->path);
+        $this->routeContents .= "\n\n".$this->routesTemplate;
 
-        $routesTemplate = TemplateUtil::getTemplate('scaffold.routes.routes', 'laravel-generator');
-
-        $routesTemplate = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $routesTemplate);
-
-        $routeContents .= "\n\n".$routesTemplate;
-
-        file_put_contents($this->path, $routeContents);
+        file_put_contents($this->path, $this->routeContents);
         $this->commandData->commandComment("\n".$this->commandData->config->mCamelPlural.' routes added.');
+    }
+
+    public function rollback()
+    {
+        if (Str::contains($this->routeContents, $this->routesTemplate)) {
+            $this->routeContents = str_replace($this->routesTemplate, '', $this->routeContents);
+            file_put_contents($this->path, $this->routeContents);
+            $this->commandData->commandComment('scaffold routes deleted');
+        }
     }
 }

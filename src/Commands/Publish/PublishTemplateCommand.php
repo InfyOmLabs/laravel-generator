@@ -1,6 +1,6 @@
 <?php
 
-namespace InfyOm\Generator\Commands;
+namespace InfyOm\Generator\Commands\Publish;
 
 class PublishTemplateCommand extends PublishBaseCommand
 {
@@ -42,7 +42,7 @@ class PublishTemplateCommand extends PublishBaseCommand
      */
     public function publishGeneratorTemplates()
     {
-        $templatesPath = __DIR__.'/../../templates';
+        $templatesPath = __DIR__.'/../../../templates';
 
         return $this->publishDirectory($templatesPath, $this->templatesDir, 'infyom-generator-templates');
     }

@@ -3,10 +3,10 @@
 namespace InfyOm\Generator\Generators\API;
 
 use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\FileUtil;
-use InfyOm\Generator\Utils\TemplateUtil;
 
-class APIControllerGenerator
+class APIControllerGenerator extends BaseGenerator
 {
     /** @var CommandData */
     private $commandData;
@@ -14,25 +14,27 @@ class APIControllerGenerator
     /** @var string */
     private $path;
 
+    /** @var string */
+    private $fileName;
+
     public function __construct(CommandData $commandData)
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathApiController;
+        $this->fileName = $this->commandData->modelName.'APIController.php';
     }
 
     public function generate()
     {
-        $templateData = TemplateUtil::getTemplate('api.controller.api_controller', 'laravel-generator');
+        $templateData = get_template('api.controller.api_controller', 'laravel-generator');
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
         $templateData = $this->fillDocs($templateData);
 
-        $fileName = $this->commandData->modelName.'APIController.php';
-
-        FileUtil::createFile($this->path, $fileName, $templateData);
+        FileUtil::createFile($this->path, $this->fileName, $templateData);
 
         $this->commandData->commandComment("\nAPI Controller created: ");
-        $this->commandData->commandInfo($fileName);
+        $this->commandData->commandInfo($this->fileName);
     }
 
     private function fillDocs($templateData)
@@ -49,11 +51,18 @@ class APIControllerGenerator
 
         foreach ($methods as $method) {
             $key = '$DOC_'.strtoupper($method).'$';
-            $docTemplate = TemplateUtil::getTemplate($templatePrefix.'.'.$method, $templateType);
-            $docTemplate = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $docTemplate);
+            $docTemplate = get_template($templatePrefix.'.'.$method, $templateType);
+            $docTemplate = fill_template($this->commandData->dynamicVars, $docTemplate);
             $templateData = str_replace($key, $docTemplate, $templateData);
         }
 
         return $templateData;
+    }
+
+    public function rollback()
+    {
+        if ($this->rollbackFile($this->path, $this->fileName)) {
+            $this->commandData->commandComment('API Controller file deleted: '.$this->fileName);
+        }
     }
 }
