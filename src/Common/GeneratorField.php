@@ -90,12 +90,12 @@ class GeneratorField
         $this->migrationText .= $this->fieldType."('".$this->name."'";
 
         if ($this->fieldType == 'enum') {
-            $this->migrationText .= ", [";
+            $this->migrationText .= ', [';
             foreach ($fieldTypeParams as $param) {
-                $this->migrationText .= "'". $param . "',";
+                $this->migrationText .= "'".$param."',";
             }
             $this->migrationText = substr($this->migrationText, 0, strlen($this->migrationText) - 1);
-            $this->migrationText .= "]";
+            $this->migrationText .= ']';
         } else {
             foreach ($fieldTypeParams as $param) {
                 $this->migrationText .= ', '.$param;
