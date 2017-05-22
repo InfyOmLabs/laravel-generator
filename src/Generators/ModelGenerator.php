@@ -126,12 +126,11 @@ class ModelGenerator extends BaseGenerator
 
             $fillables = '';
             foreach ($this->commandData->relations as $relation) {
-                $fillables .= ' * @property ' . $this->getPHPDocType($relation->type, $relation) . " " . ' desc ' . PHP_EOL;
+                $fillables .= ' * @property '.$this->getPHPDocType($relation->type, $relation)." ".' desc '.PHP_EOL;
             }
             foreach ($this->commandData->fields as $field) {
-                if ($field->isFillable)
-                {
-                    $fillables .= ' * @property ' . $this->getPHPDocType($field->fieldType) . " " . $field->name . ' desc ' . PHP_EOL;
+                if ($field->isFillable) {
+                    $fillables .= ' * @property '.$this->getPHPDocType($field->fieldType)." ".$field->name.' desc '.PHP_EOL;
                 }
             }
             $docsTemplate = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $docsTemplate);
@@ -144,7 +143,7 @@ class ModelGenerator extends BaseGenerator
         return $templateData;
     }
 
-    private function getPHPDocType($db_type, $relation=null)
+    private function getPHPDocType($db_type, $relation = null)
     {
         switch ($db_type) {
             case 'datetime':
@@ -153,7 +152,7 @@ class ModelGenerator extends BaseGenerator
                 return 'string';
             case '1t1':
             case 'mt1':
-                return camel_case($relation->inputs[1] .' '.camel_case($relation->inputs[1]));
+                return camel_case($relation->inputs[1].' '.camel_case($relation->inputs[1]));
             case '1tm':
                 return '\Illuminate\Database\Eloquent\Collection'.' '.$relation->inputs[0];
             case 'mtm':
