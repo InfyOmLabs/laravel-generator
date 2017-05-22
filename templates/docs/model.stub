@@ -3,9 +3,6 @@
  * @package $NAMESPACE_MODEL$
  * @version $GENERATE_DATE$
  *
- * @method static $MODEL_NAME$ find(integer $id=null) desc
- * @method \Illuminate\Database\Eloquent\Relations\BelongsTo belongsTo() desc
- * @method \Illuminate\Database\Eloquent\Relations\BelongsToMany belongsToMany() desc
- * @method \Illuminate\Database\Eloquent\Relations\HasMany hasMany() desc
- * @method \Illuminate\Database\Eloquent\Relations\HasOne hasOne() desc
- */
+ * @method static $MODEL_NAME$ find($id=null, $columns = array()) desc
+ * @method static $MODEL_NAME$|\Illuminate\Database\Eloquent\Collection findOrFail($id, $columns = ['*']) desc
+$PHPDOC$ */
