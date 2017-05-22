@@ -136,7 +136,6 @@ class ModelGenerator extends BaseGenerator
             $docsTemplate = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $docsTemplate);
             $docsTemplate = str_replace('$PHPDOC$', $fillables, $docsTemplate);
 
-
             $templateData = str_replace('$DOCS$', $docsTemplate, $templateData);
         }
 
