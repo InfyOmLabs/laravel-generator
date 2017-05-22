@@ -91,8 +91,6 @@ class ModelGenerator extends BaseGenerator
 
         $templateData = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $templateData);
 
-        $templateData = str_replace('$FUNCTIONS$', implode(','.PHP_EOL.infy_nl_tab(' ', 2), $this->generateCasts()), $templateData);
-
         return $templateData;
     }
 

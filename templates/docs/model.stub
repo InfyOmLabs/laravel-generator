@@ -8,5 +8,4 @@
  * @method \Illuminate\Database\Eloquent\Relations\BelongsToMany belongsToMany() desc
  * @method \Illuminate\Database\Eloquent\Relations\HasMany hasMany() desc
  * @method \Illuminate\Database\Eloquent\Relations\HasOne hasOne() desc
-
  */

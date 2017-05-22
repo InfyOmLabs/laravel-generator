@@ -61,22 +61,9 @@ class TableFieldsGenerator
 
         $this->columns = $this->schemaManager->listTableColumns($tableName);
 
-
         $this->primaryKey = static::getPrimaryKeyOfTable($tableName);
         $this->timestamps = static::getTimestampFieldNames();
         $this->defaultSearchable = config('infyom.laravel_generator.options.tables_searchable_default', false);
-    }
-
-    public static function generateForeignKeysFromTable($tableName)
-    {
-
-        $schema = DB::getDoctrineSchemaManager();
-        $platform = $schema->getDatabasePlatform();
-        $platform->registerDoctrineTypeMapping('enum', 'string');
-
-        $foreign_keys = $schema->listTableForeignKeys($tableName);
-
-        return $foreign_keys;
     }
 
     /**
