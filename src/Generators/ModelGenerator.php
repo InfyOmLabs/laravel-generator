@@ -126,11 +126,11 @@ class ModelGenerator extends BaseGenerator
 
             $fillables = '';
             foreach ($this->commandData->relations as $relation) {
-                $fillables .= ' * @property '.$this->getPHPDocType($relation->type, $relation)." ".' desc '.PHP_EOL;
+                $fillables .= ' * @property '.$this->getPHPDocType($relation->type, $relation).' '.' desc '.PHP_EOL;
             }
             foreach ($this->commandData->fields as $field) {
                 if ($field->isFillable) {
-                    $fillables .= ' * @property '.$this->getPHPDocType($field->fieldType)." ".$field->name.' desc '.PHP_EOL;
+                    $fillables .= ' * @property '.$this->getPHPDocType($field->fieldType).' '.$field->name.' desc '.PHP_EOL;
                 }
             }
             $docsTemplate = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $docsTemplate);
