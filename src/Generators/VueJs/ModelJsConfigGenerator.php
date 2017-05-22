@@ -4,6 +4,7 @@ namespace InfyOm\Generator\Generators\VueJs;
 
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
+use InfyOm\Generator\Utils\InfyOmHelpers;
 use InfyOm\Generator\Utils\FileUtil;
 
 class ModelJsConfigGenerator extends BaseGenerator
@@ -42,7 +43,7 @@ class ModelJsConfigGenerator extends BaseGenerator
 
     private function generateModelJs()
     {
-        $templateData = get_template('vuejs.js.model-config', 'laravel-generator');
+        $templateData = InfyOmHelpers::get_template('vuejs.js.model-config', 'laravel-generator');
         $fieldsRow = '';
         $i = 0;
         $lenghtFields = count($this->commandData->fields);
@@ -56,7 +57,7 @@ class ModelJsConfigGenerator extends BaseGenerator
         }
         $templateData = str_replace('$FIELDS_ROW$', $fieldsRow, $templateData);
 
-        $fieldsColTemplateData = get_template('vuejs.js.fields_col', 'laravel-generator');
+        $fieldsColTemplateData = InfyOmHelpers::get_template('vuejs.js.fields_col', 'laravel-generator');
         $fieldsColTemplate = '';
         $i = 0;
         foreach ($this->commandData->fields as $field) {

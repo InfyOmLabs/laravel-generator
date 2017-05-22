@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Commands\Publish;
 
+use InfyOm\Generator\Utils\InfyOmHelpers;
 use InfyOm\Generator\Utils\FileUtil;
 
 class VueJsLayoutPublishCommand extends PublishBaseCommand
@@ -214,7 +215,7 @@ class VueJsLayoutPublishCommand extends PublishBaseCommand
         $path = config('infyom.laravel_generator.path.routes', app_path('Http/routes.php'));
         $routeContents = file_get_contents($path);
 
-        $routesTemplate = get_template('routes.auth', 'laravel-generator');
+        $routesTemplate = InfyOmHelpers::get_template('routes.auth', 'laravel-generator');
         if ($this->laravelVersion == '5.1') {
             $routesTemplate = str_replace('$LOGOUT_METHOD$', 'getLogout', $routesTemplate);
         } else {
@@ -229,7 +230,7 @@ class VueJsLayoutPublishCommand extends PublishBaseCommand
 
     private function publishHomeController()
     {
-        $templateData = get_template('home_controller', 'laravel-generator');
+        $templateData = InfyOmHelpers::get_template('home_controller', 'laravel-generator');
 
         $templateData = $this->fillTemplate($templateData);
 

@@ -4,6 +4,7 @@ namespace InfyOm\Generator\Generators\VueJs;
 
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
+use InfyOm\Generator\Utils\InfyOmHelpers;
 use InfyOm\Generator\Utils\FileUtil;
 
 class ControllerGenerator extends BaseGenerator
@@ -26,9 +27,9 @@ class ControllerGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = get_template('vuejs.controller.api_controller', 'laravel-generator');
+        $templateData = InfyOmHelpers::get_template('vuejs.controller.api_controller', 'laravel-generator');
 
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $templateData);
         $templateData = $this->fillDocs($templateData);
 
         $fields = $this->commandData->fields;
@@ -80,8 +81,8 @@ class ControllerGenerator extends BaseGenerator
 
         foreach ($methods as $method) {
             $key = '$DOC_'.strtoupper($method).'$';
-            $docTemplate = get_template($templatePrefix.'.'.$method, $templateType);
-            $docTemplate = fill_template($this->commandData->dynamicVars, $docTemplate);
+            $docTemplate = InfyOmHelpers::get_template($templatePrefix.'.'.$method, $templateType);
+            $docTemplate = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $docTemplate);
             $templateData = str_replace($key, $docTemplate, $templateData);
         }
 

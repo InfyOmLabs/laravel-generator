@@ -4,6 +4,7 @@ namespace InfyOm\Generator\Generators\API;
 
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
+use InfyOm\Generator\Utils\InfyOmHelpers;
 use InfyOm\Generator\Utils\FileUtil;
 
 class TestGenerator extends BaseGenerator
@@ -26,9 +27,9 @@ class TestGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = get_template('api.test.api_test', 'laravel-generator');
+        $templateData = InfyOmHelpers::get_template('api.test.api_test', 'laravel-generator');
 
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 

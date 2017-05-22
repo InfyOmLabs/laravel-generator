@@ -4,6 +4,7 @@ namespace InfyOm\Generator\Generators\Scaffold;
 
 use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Utils\InfyOmHelpers;
 
 class RoutesGenerator
 {
@@ -25,11 +26,11 @@ class RoutesGenerator
         $this->path = $commandData->config->pathRoutes;
         $this->routeContents = file_get_contents($this->path);
         if (!empty($this->commandData->config->prefixes['route'])) {
-            $this->routesTemplate = get_template('scaffold.routes.prefix_routes', 'laravel-generator');
+            $this->routesTemplate = InfyOmHelpers::get_template('scaffold.routes.prefix_routes', 'laravel-generator');
         } else {
-            $this->routesTemplate = get_template('scaffold.routes.routes', 'laravel-generator');
+            $this->routesTemplate = InfyOmHelpers::get_template('scaffold.routes.routes', 'laravel-generator');
         }
-        $this->routesTemplate = fill_template($this->commandData->dynamicVars, $this->routesTemplate);
+        $this->routesTemplate = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $this->routesTemplate);
     }
 
     public function generate()

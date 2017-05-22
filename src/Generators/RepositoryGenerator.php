@@ -4,6 +4,7 @@ namespace InfyOm\Generator\Generators;
 
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Utils\FileUtil;
+use InfyOm\Generator\Utils\InfyOmHelpers;
 
 class RepositoryGenerator extends BaseGenerator
 {
@@ -25,9 +26,9 @@ class RepositoryGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = get_template('repository', 'laravel-generator');
+        $templateData = InfyOmHelpers::get_template('repository', 'laravel-generator');
 
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $templateData);
 
         $searchables = [];
 
@@ -37,7 +38,7 @@ class RepositoryGenerator extends BaseGenerator
             }
         }
 
-        $templateData = str_replace('$FIELDS$', implode(','.infy_nl_tab(1, 2), $searchables), $templateData);
+        $templateData = str_replace('$FIELDS$', implode(','.InfyOmHelpers::infy_nl_tab(1, 2), $searchables), $templateData);
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 

@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Generators;
 
 use InfyOm\Generator\Common\GeneratorField;
+use InfyOm\Generator\Utils\InfyOmHelpers;
 
 class SwaggerGenerator
 {
@@ -101,13 +102,13 @@ class SwaggerGenerator
 
     public static function generateSwagger($fields, $fillables, $variables)
     {
-        $template = get_template('model.model', 'swagger-generator');
+        $template = InfyOmHelpers::get_template('model.model', 'swagger-generator');
 
-        $templateData = fill_template($variables, $template);
+        $templateData = InfyOmHelpers::fill_template($variables, $template);
 
         $templateData = str_replace('$REQUIRED_FIELDS$', '"'.implode('", "', $fillables).'"', $templateData);
 
-        $propertyTemplate = get_template('model.property', 'swagger-generator');
+        $propertyTemplate = InfyOmHelpers::get_template('model.property', 'swagger-generator');
 
         $properties = self::preparePropertyFields($propertyTemplate, $fields);
 

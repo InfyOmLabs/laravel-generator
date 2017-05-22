@@ -5,6 +5,7 @@ namespace InfyOm\Generator\Generators\Scaffold;
 use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
+use InfyOm\Generator\Utils\InfyOmHelpers;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
 use InfyOm\Generator\Utils\HTMLFieldGenerator;
@@ -91,16 +92,16 @@ class ViewGenerator extends BaseGenerator
 
     private function generateDataTableBody()
     {
-        $templateData = get_template('scaffold.views.datatable_body', $this->templateType);
+        $templateData = InfyOmHelpers::get_template('scaffold.views.datatable_body', $this->templateType);
 
-        return fill_template($this->commandData->dynamicVars, $templateData);
+        return InfyOmHelpers::fill_template($this->commandData->dynamicVars, $templateData);
     }
 
     private function generateDataTableActions()
     {
-        $templateData = get_template('scaffold.views.datatables_actions', $this->templateType);
+        $templateData = InfyOmHelpers::get_template('scaffold.views.datatables_actions', $this->templateType);
 
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, 'datatables_actions.blade.php', $templateData);
 
@@ -109,13 +110,13 @@ class ViewGenerator extends BaseGenerator
 
     private function generateBladeTableBody()
     {
-        $templateData = get_template('scaffold.views.blade_table_body', $this->templateType);
+        $templateData = InfyOmHelpers::get_template('scaffold.views.blade_table_body', $this->templateType);
 
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $templateData);
 
         $templateData = str_replace('$FIELD_HEADERS$', $this->generateTableHeaderFields(), $templateData);
 
-        $cellFieldTemplate = get_template('scaffold.views.table_cell', $this->templateType);
+        $cellFieldTemplate = InfyOmHelpers::get_template('scaffold.views.table_cell', $this->templateType);
 
         $tableBodyFields = [];
 
@@ -124,7 +125,7 @@ class ViewGenerator extends BaseGenerator
                 continue;
             }
 
-            $tableBodyFields[] = fill_template_with_field_data(
+            $tableBodyFields[] = InfyOmHelpers::fill_template_with_field_data(
                 $this->commandData->dynamicVars,
                 $this->commandData->fieldNamesMapping,
                 $cellFieldTemplate,
@@ -132,14 +133,14 @@ class ViewGenerator extends BaseGenerator
             );
         }
 
-        $tableBodyFields = implode(infy_nl_tab(1, 3), $tableBodyFields);
+        $tableBodyFields = implode(InfyOmHelpers::infy_nl_tab(1, 3), $tableBodyFields);
 
         return str_replace('$FIELD_BODY$', $tableBodyFields, $templateData);
     }
 
     private function generateTableHeaderFields()
     {
-        $headerFieldTemplate = get_template('scaffold.views.table_header', $this->templateType);
+        $headerFieldTemplate = InfyOmHelpers::get_template('scaffold.views.table_header', $this->templateType);
 
         $headerFields = [];
 
@@ -147,7 +148,7 @@ class ViewGenerator extends BaseGenerator
             if (!$field->inIndex) {
                 continue;
             }
-            $headerFields[] = $fieldTemplate = fill_template_with_field_data(
+            $headerFields[] = $fieldTemplate = InfyOmHelpers::fill_template_with_field_data(
                 $this->commandData->dynamicVars,
                 $this->commandData->fieldNamesMapping,
                 $headerFieldTemplate,
@@ -155,14 +156,14 @@ class ViewGenerator extends BaseGenerator
             );
         }
 
-        return implode(infy_nl_tab(1, 2), $headerFields);
+        return implode(InfyOmHelpers::infy_nl_tab(1, 2), $headerFields);
     }
 
     private function generateIndex()
     {
-        $templateData = get_template('scaffold.views.index', $this->templateType);
+        $templateData = InfyOmHelpers::get_template('scaffold.views.index', $this->templateType);
 
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $templateData);
 
         if ($this->commandData->getOption('datatables')) {
             $templateData = str_replace('$PAGINATE$', '', $templateData);
@@ -170,9 +171,9 @@ class ViewGenerator extends BaseGenerator
             $paginate = $this->commandData->getOption('paginate');
 
             if ($paginate) {
-                $paginateTemplate = get_template('scaffold.views.paginate', $this->templateType);
+                $paginateTemplate = InfyOmHelpers::get_template('scaffold.views.paginate', $this->templateType);
 
-                $paginateTemplate = fill_template($this->commandData->dynamicVars, $paginateTemplate);
+                $paginateTemplate = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $paginateTemplate);
 
                 $templateData = str_replace('$PAGINATE$', $paginateTemplate, $templateData);
             } else {
@@ -202,12 +203,12 @@ class ViewGenerator extends BaseGenerator
 //                case 'email':
 //                case 'password':
 //                case 'number':
-//                    $fieldTemplate = get_template('scaffold.fields.' . $field->htmlType, $this->templateType);
+//                    $fieldTemplate = InfyOmHelpers::get_template('scaffold.fields.' . $field->htmlType, $this->templateType);
 //                    break;
 //
 //                case 'select':
 //                case 'enum':
-//                    $fieldTemplate = get_template('scaffold.fields.select', $this->templateType);
+//                    $fieldTemplate = InfyOmHelpers::get_template('scaffold.fields.select', $this->templateType);
 //                    $inputsArr = explode(',', $field['htmlTypeInputs']);
 //
 //                    $fieldTemplate = str_replace(
@@ -218,12 +219,12 @@ class ViewGenerator extends BaseGenerator
 //                    break;
 //
 //                case 'radio':
-//                    $fieldTemplate = get_template('scaffold.fields.radio_group', $this->templateType);
-//                    $radioTemplate = get_template('scaffold.fields.radio', $this->templateType);
+//                    $fieldTemplate = InfyOmHelpers::get_template('scaffold.fields.radio_group', $this->templateType);
+//                    $radioTemplate = InfyOmHelpers::get_template('scaffold.fields.radio', $this->templateType);
 //                    $inputsArr = explode(',', $field['htmlTypeInputs']);
 //                    $radioButtons = [];
 //                    foreach ($inputsArr as $item) {
-//                        $radioButtonsTemplate = fill_field_template(
+//                        $radioButtonsTemplate = InfyOmHelpers::fill_field_template(
 //                            $this->commandData->fieldNamesMapping,
 //                            $radioTemplate, $field
 //                        );
@@ -234,12 +235,12 @@ class ViewGenerator extends BaseGenerator
 //                    break;
 //
 ////                case 'checkbox-group':
-////                    $fieldTemplate = get_template('scaffold.fields.checkbox_group', $this->templateType);
-////                      $radioTemplate = get_template('scaffold.fields.checks', $this->templateType);
+////                    $fieldTemplate = InfyOmHelpers::get_template('scaffold.fields.checkbox_group', $this->templateType);
+////                      $radioTemplate = InfyOmHelpers::get_template('scaffold.fields.checks', $this->templateType);
 ////                      $inputsArr = explode(',', $field['htmlTypeInputs']);
 ////                      $radioButtons = [];
 ////                      foreach ($inputsArr as $item) {
-////                          $radioButtonsTemplate = fill_field_template(
+////                          $radioButtonsTemplate = InfyOmHelpers::fill_field_template(
 ////                              $this->commandData->fieldNamesMapping,
 ////                              $radioTemplate,
 ////                              $field
@@ -251,7 +252,7 @@ class ViewGenerator extends BaseGenerator
 ////                    break;
 //
 //                case 'bool-checkbox':
-//                    $fieldTemplate = get_template('scaffold.fields.bool-checkbox', $this->templateType);
+//                    $fieldTemplate = InfyOmHelpers::get_template('scaffold.fields.bool-checkbox', $this->templateType);
 //                    $checkboxValue = $value = $field['htmlTypeInputs'];
 //                    if ($field['fieldType'] === 'boolean') {
 //                        if ($checkboxValue === 'checked') {
@@ -265,7 +266,7 @@ class ViewGenerator extends BaseGenerator
 //                    break;
 //
 //                case 'toggle-switch':
-//                    $fieldTemplate = get_template('scaffold.fields.toggle-switch', $this->templateType);
+//                    $fieldTemplate = InfyOmHelpers::get_template('scaffold.fields.toggle-switch', $this->templateType);
 //                    $checkboxValue = $value = $field['htmlTypeInputs'];
 //                    if ($field['fieldType'] === 'boolean') {
 //                        $checkboxValue = "[ 'On' => '1' , 'Off' => '0']";
@@ -275,7 +276,7 @@ class ViewGenerator extends BaseGenerator
 //                    break;
 //
 //                case 'checkbox':
-//                    $fieldTemplate = get_template('scaffold.fields.checkbox', $this->templateType);
+//                    $fieldTemplate = InfyOmHelpers::get_template('scaffold.fields.checkbox', $this->templateType);
 //                    $checkboxValue = $value = $field['htmlTypeInputs'];
 //                    if ($field['fieldType'] != 'boolean') {
 //                        $checkboxValue = "'" . $value . "'";
@@ -285,7 +286,7 @@ class ViewGenerator extends BaseGenerator
 //                    break;
 //
 //                case 'boolean':
-//                    $fieldTemplate = get_template('scaffold.fields.boolean', $this->templateType);
+//                    $fieldTemplate = InfyOmHelpers::get_template('scaffold.fields.boolean', $this->templateType);
 //                    $checkboxValue = $value = $field['htmlTypeInputs'];
 //                    if ($field['fieldType'] == 'boolean') {
 //                        $checkboxValue = true;
@@ -302,7 +303,7 @@ class ViewGenerator extends BaseGenerator
             $fieldTemplate = HTMLFieldGenerator::generateHTML($field, $this->templateType);
 
             if (!empty($fieldTemplate)) {
-                $fieldTemplate = fill_template_with_field_data(
+                $fieldTemplate = InfyOmHelpers::fill_template_with_field_data(
                     $this->commandData->dynamicVars,
                     $this->commandData->fieldNamesMapping,
                     $fieldTemplate,
@@ -312,8 +313,8 @@ class ViewGenerator extends BaseGenerator
             }
         }
 
-        $templateData = get_template('scaffold.views.fields', $this->templateType);
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = InfyOmHelpers::get_template('scaffold.views.fields', $this->templateType);
+        $templateData = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $templateData);
 
         $templateData = str_replace('$FIELDS$', implode("\n\n", $this->htmlFields), $templateData);
 
@@ -323,9 +324,9 @@ class ViewGenerator extends BaseGenerator
 
     private function generateCreate()
     {
-        $templateData = get_template('scaffold.views.create', $this->templateType);
+        $templateData = InfyOmHelpers::get_template('scaffold.views.create', $this->templateType);
 
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, 'create.blade.php', $templateData);
         $this->commandData->commandInfo('create.blade.php created');
@@ -333,9 +334,9 @@ class ViewGenerator extends BaseGenerator
 
     private function generateUpdate()
     {
-        $templateData = get_template('scaffold.views.edit', $this->templateType);
+        $templateData = InfyOmHelpers::get_template('scaffold.views.edit', $this->templateType);
 
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, 'edit.blade.php', $templateData);
         $this->commandData->commandInfo('edit.blade.php created');
@@ -343,7 +344,7 @@ class ViewGenerator extends BaseGenerator
 
     private function generateShowFields()
     {
-        $fieldTemplate = get_template('scaffold.views.show_field', $this->templateType);
+        $fieldTemplate = InfyOmHelpers::get_template('scaffold.views.show_field', $this->templateType);
 
         $fieldsStr = '';
 
@@ -351,7 +352,7 @@ class ViewGenerator extends BaseGenerator
             $singleFieldStr = str_replace('$FIELD_NAME_TITLE$', Str::title(str_replace('_', ' ', $field->name)),
                 $fieldTemplate);
             $singleFieldStr = str_replace('$FIELD_NAME$', $field->name, $singleFieldStr);
-            $singleFieldStr = fill_template($this->commandData->dynamicVars, $singleFieldStr);
+            $singleFieldStr = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $singleFieldStr);
 
             $fieldsStr .= $singleFieldStr."\n\n";
         }
@@ -362,9 +363,9 @@ class ViewGenerator extends BaseGenerator
 
     private function generateShow()
     {
-        $templateData = get_template('scaffold.views.show', $this->templateType);
+        $templateData = InfyOmHelpers::get_template('scaffold.views.show', $this->templateType);
 
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, 'show.blade.php', $templateData);
         $this->commandData->commandInfo('show.blade.php created');

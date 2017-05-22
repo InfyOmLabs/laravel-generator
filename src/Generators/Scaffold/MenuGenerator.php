@@ -5,6 +5,7 @@ namespace InfyOm\Generator\Generators\Scaffold;
 use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
+use InfyOm\Generator\Utils\InfyOmHelpers;
 
 class MenuGenerator extends BaseGenerator
 {
@@ -35,14 +36,14 @@ class MenuGenerator extends BaseGenerator
 
         $this->menuContents = file_get_contents($this->path);
 
-        $this->menuTemplate = get_template('scaffold.layouts.menu_template', $this->templateType);
+        $this->menuTemplate = InfyOmHelpers::get_template('scaffold.layouts.menu_template', $this->templateType);
 
-        $this->menuTemplate = fill_template($this->commandData->dynamicVars, $this->menuTemplate);
+        $this->menuTemplate = InfyOmHelpers::fill_template($this->commandData->dynamicVars, $this->menuTemplate);
     }
 
     public function generate()
     {
-        $this->menuContents .= $this->menuTemplate.infy_nl();
+        $this->menuContents .= $this->menuTemplate.InfyOmHelpers::infy_nl();
 
         file_put_contents($this->path, $this->menuContents);
         $this->commandData->commandComment("\n".$this->commandData->config->mCamelPlural.' menu added.');
