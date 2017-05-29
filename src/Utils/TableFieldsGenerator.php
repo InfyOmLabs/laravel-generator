@@ -421,8 +421,7 @@ class TableFieldsGenerator
             }
         }
 
-        if(!$manyToManyTable)
-        {
+        if (!$manyToManyTable) {
             return false;
         }
         $modelName = model_name_from_table_name($manyToManyTable);
