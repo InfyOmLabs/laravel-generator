@@ -1,5 +1,5 @@
 /**
-     * Store a newly created $MODEL_NAME$ in storage.
+     * Store a newly created $MODEL_NAME$$MODELNAMESUFFIX$ in storage.
      * POST /$MODEL_NAME_PLURAL_CAMEL$
      *
      * @param Create$MODEL_NAME$APIRequest $request

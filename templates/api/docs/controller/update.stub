@@ -1,5 +1,5 @@
 /**
-     * Update the specified $MODEL_NAME$ in storage.
+     * Update the specified $MODEL_NAME$$MODELNAMESUFFIX$ in storage.
      * PUT/PATCH /$MODEL_NAME_PLURAL_CAMEL$/{id}
      *
      * @param  int $id

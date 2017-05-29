@@ -35,7 +35,7 @@ class ModelGenerator extends BaseGenerator
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathModel;
-        $this->fileName = $this->commandData->modelName.'.php';
+        $this->fileName = $this->commandData->modelName.$commandData->config->modelNameSuffix . '.php';
         $this->table = $this->commandData->dynamicVars['$TABLE_NAME$'];
     }
 

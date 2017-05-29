@@ -44,6 +44,20 @@ return [
         'templates_dir'     => base_path('resources/infyom/infyom-generator-templates/'),
 
         'modelJs'           => base_path('resources/assets/js/models/'),
+
+        'api_controller_name_suffix' => 'APIController',
+
+        'controller_name_suffix' => 'Controller',
+
+        'api_request_name_suffix' => 'APIRequest',
+
+        'request_name_suffix' => 'Request',
+
+        'model_name_suffix' => 'Request',
+
+        'repository_name_suffix' => 'Repository',
+
+        'api_test_suffix' => 'APITest'
     ],
 
     /*
