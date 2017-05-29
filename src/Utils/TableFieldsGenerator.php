@@ -421,6 +421,10 @@ class TableFieldsGenerator
             }
         }
 
+        if(!$manyToManyTable)
+        {
+            return false;
+        }
         $modelName = model_name_from_table_name($manyToManyTable);
 
         return GeneratorFieldRelation::parseRelation('mtm,'.$modelName.','.$tableName);
