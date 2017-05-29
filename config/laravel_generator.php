@@ -57,7 +57,7 @@ return [
 
         'repository_name_suffix' => 'Repository',
 
-        'api_test_suffix' => 'APITest'
+        'api_test_suffix' => 'APITest',
     ],
 
     /*
