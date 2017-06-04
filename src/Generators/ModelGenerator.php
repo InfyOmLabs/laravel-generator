@@ -131,6 +131,31 @@ class ModelGenerator extends BaseGenerator
         return $templateData;
     }
 
+    /**
+     * @param $db_type
+     * @param null $relation
+     * @return string
+     */
+    private function getPHPDocType($db_type, $relation = null)
+    {
+        switch ($db_type) {
+            case 'datetime':
+                return 'string|\Carbon\Carbon';
+            case 'text':
+                return 'string';
+            case '1t1':
+            case 'mt1':
+                return camel_case($relation->inputs[1].' '.camel_case($relation->inputs[0]));
+            case '1tm':
+                return '\Illuminate\Database\Eloquent\Collection'.' '.$relation->inputs[0];
+            case 'mtm':
+            case 'hmt':
+                return '\Illuminate\Database\Eloquent\Collection'.' '.camel_case($relation->inputs[0]);
+            default:
+                return $db_type;
+        }
+    }
+
     public function generateSwagger($templateData)
     {
         $fieldTypes = SwaggerGenerator::generateTypes($this->commandData->fields);
