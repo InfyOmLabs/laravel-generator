@@ -10,80 +10,107 @@ use Illuminate\Http\Request;
 use $NAMESPACE_APP$\Http\Controllers\AppBaseController;
 use InfyOm\Generator\Criteria\LimitOffsetCriteria;
 use Prettus\Repository\Criteria\RequestCriteria;
-use Response;
 
 $DOC_CONTROLLER$
 class $MODEL_NAME$APIController extends AppBaseController
 {
-    /** @var  $MODEL_NAME$Repository */
+    /**
+     * @var  $MODEL_NAME$Repository
+     */
     private $$MODEL_NAME_CAMEL$Repository;
 
-    public function __construct($MODEL_NAME$Repository $$MODEL_NAME_CAMEL$Repo)
+    /**
+     * $MODEL_NAME$Controller constructor.
+     *
+     * @param $MODEL_NAME$Repository $$MODEL_NAME_CAMEL$Repository
+     */
+    public function __construct($MODEL_NAME$Repository $$MODEL_NAME_CAMEL$Repository)
     {
-        $this->$MODEL_NAME_CAMEL$Repository = $$MODEL_NAME_CAMEL$Repo;
+        $this->$MODEL_NAME_CAMEL$Repository = $$MODEL_NAME_CAMEL$Repository;
     }
 
-    $DOC_INDEX$
+    /**
+     * Display a listing of the $MODEL_NAME$.
+     *
+     * @param Request $request
+     * @return mixed
+     */
     public function index(Request $request)
     {
         $this->$MODEL_NAME_CAMEL$Repository->pushCriteria(new RequestCriteria($request));
         $this->$MODEL_NAME_CAMEL$Repository->pushCriteria(new LimitOffsetCriteria($request));
-        $$MODEL_NAME_PLURAL_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->all();
+        $models = $this->$MODEL_NAME_CAMEL$Repository->all();
 
-        return $this->sendResponse($$MODEL_NAME_PLURAL_CAMEL$->toArray(), '$MODEL_NAME_PLURAL_HUMAN$ retrieved successfully');
+        return $this->sendResponse($models->toArray(), '$MODEL_NAME_PLURAL_HUMAN$ retrieved successfully');
     }
 
-    $DOC_STORE$
+    /**
+     * Store a newly created $MODEL_NAME$ in storage.
+     *
+     * @param Create$MODEL_NAME$APIRequest $request
+     *
+     * @return mixed
+     */
     public function store(Create$MODEL_NAME$APIRequest $request)
     {
-        $input = $request->all();
+        $model = $this->$MODEL_NAME_CAMEL$Repository->create($request->all());
 
-        $$MODEL_NAME_PLURAL_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->create($input);
-
-        return $this->sendResponse($$MODEL_NAME_PLURAL_CAMEL$->toArray(), '$MODEL_NAME_HUMAN$ saved successfully');
+        return $this->sendResponse($model->toArray(), '$MODEL_NAME_HUMAN$ saved successfully');
     }
 
-    $DOC_SHOW$
+    /**
+     * Display the specified $MODEL_NAME$.
+     *
+     * @param int $id
+     *
+     * @return mixed
+     */
     public function show($id)
     {
         /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
-
-        if (empty($$MODEL_NAME_CAMEL$)) {
+        $model = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
+        if (empty($model)) {
             return $this->sendError('$MODEL_NAME_HUMAN$ not found');
         }
 
-        return $this->sendResponse($$MODEL_NAME_CAMEL$->toArray(), '$MODEL_NAME_HUMAN$ retrieved successfully');
+        return $this->sendResponse($model->toArray(), '$MODEL_NAME_HUMAN$ retrieved successfully');
     }
 
-    $DOC_UPDATE$
+    /**
+     * Update the specified $MODEL_NAME$ in storage.
+     *
+     * @param int $id
+     * @param Update$MODEL_NAME$APIRequest $request
+     *
+     * @return mixed
+     */
     public function update($id, Update$MODEL_NAME$APIRequest $request)
     {
-        $input = $request->all();
-
         /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
-
-        if (empty($$MODEL_NAME_CAMEL$)) {
+        $model = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
+        if (empty($model)) {
             return $this->sendError('$MODEL_NAME_HUMAN$ not found');
         }
+        $model = $this->$MODEL_NAME_CAMEL$Repository->update($request->all(), $id);
 
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->update($input, $id);
-
-        return $this->sendResponse($$MODEL_NAME_CAMEL$->toArray(), '$MODEL_NAME$ updated successfully');
+        return $this->sendResponse($model->toArray(), '$MODEL_NAME$ updated successfully');
     }
 
-    $DOC_DESTROY$
+    /**
+     * Remove the specified $MODEL_NAME$ from storage.
+     *
+     * @param int $id
+     *
+     * @return mixed
+     */
     public function destroy($id)
     {
         /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
-
-        if (empty($$MODEL_NAME_CAMEL$)) {
+        $model = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
+        if (empty($model)) {
             return $this->sendError('$MODEL_NAME_HUMAN$ not found');
         }
-
-        $$MODEL_NAME_CAMEL$->delete();
+        $model->delete();
 
         return $this->sendResponse($id, '$MODEL_NAME_HUMAN$ deleted successfully');
     }
