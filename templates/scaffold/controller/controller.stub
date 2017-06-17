@@ -10,7 +10,6 @@ use $NAMESPACE_MODEL$\$MODEL_NAME$;
 use Illuminate\Http\Request;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
-use Response;
 
 class $MODEL_NAME$Controller extends AppBaseController
 {
