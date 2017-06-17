@@ -32,6 +32,7 @@ class $MODEL_NAME$Controller extends AppBaseController
      * Display a listing of the $MODEL_NAME$.
      *
      * @param Request $request
+     *
      * @return mixed
      */
     public function index(Request $request)
