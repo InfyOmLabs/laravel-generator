@@ -35,7 +35,7 @@ class ModelGenerator extends BaseGenerator
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathModel;
-        $this->fileName = $this->commandData->modelName.$commandData->config->modelNameSuffix.'.php';
+        $this->fileName = $this->commandData->modelName.($this->commandData->config->appendSuffixToFileName ? $this->commandData->config->modelNameSuffix : '') . '.php';
         $this->table = $this->commandData->dynamicVars['$TABLE_NAME$'];
     }
 
@@ -129,6 +129,26 @@ class ModelGenerator extends BaseGenerator
         }
 
         return $templateData;
+    }
+
+    private function getPHPDocType($db_type, $relation = null)
+    {
+        switch ($db_type) {
+            case 'datetime':
+                return 'string|\Carbon\Carbon';
+            case 'text':
+                return 'string';
+            case '1t1':
+            case 'mt1':
+                return camel_case($relation->inputs[0].' '.camel_case($relation->inputs[0]));
+            case '1tm':
+                return '\Illuminate\Database\Eloquent\Collection'.' '.$relation->inputs[0];
+            case 'mtm':
+            case 'hmt':
+                return '\Illuminate\Database\Eloquent\Collection'.' '.camel_case($relation->inputs[0]);
+            default:
+                return $db_type;
+        }
     }
 
     public function generateSwagger($templateData)

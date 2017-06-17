@@ -23,7 +23,7 @@ class GeneratorConfig
 
     /* Path variables */
     public $pathRepository;
-    public $repositorySuffix;
+    public $repositoryNameSuffix;
     public $pathModel;
     public $pathDataTables;
 
@@ -43,7 +43,14 @@ class GeneratorConfig
     public $pathViews;
     public $modelJsPath;
     public $controllerNameSuffix;
-    public $apiTestSuffix;
+    public $apiTestNameSuffix;
+    public $testTraitNameSuffix;
+    public $repositoryTestNameSuffix;
+
+    /**
+     * if true, suffix will be appended to file in question, not simply class names, if false, suffixes are only applied to class names
+     */
+    public $appendSuffixToFileName;
 
     /* Model Names */
     public $mName;
@@ -214,9 +221,15 @@ class GeneratorConfig
 
         $this->modelNameSuffix = config('infyom.laravel_generator.path.model_name_suffix', '');
 
-        $this->repositorySuffix = config('infyom.laravel_generator.path.repository_name_suffix', '');
+        $this->repositoryNameSuffix = config('infyom.laravel_generator.path.repository_name_suffix', '');
 
-        $this->apiTestSuffix = config('infyom.laravel_generator.api_test_suffix', 'APITest');
+        $this->apiTestNameSuffix = config('infyom.laravel_generator.path.api_test_name_suffix', 'APITest');
+
+        $this->testTraitNameSuffix = config('infyom.laravel_generator.path.test_trait_name_suffix', 'APITest');
+
+        $this->repositoryTestNameSuffix = config('infyom.laravel_generator.path.repository_test_name_suffix', 'APITest');
+
+        $this->appendSuffixToFileName = config('infyom.laravel_generator.path.append_suffix_to_file_name', true);
     }
 
     public function loadDynamicVariables(CommandData &$commandData)

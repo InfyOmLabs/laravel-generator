@@ -21,7 +21,7 @@ class TestTraitGenerator extends BaseGenerator
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathApiTestTraits;
-        $this->fileName = 'Make'.$this->commandData->modelName.'Trait.php';
+        $this->fileName = 'Make'.$this->commandData->modelName.($this->commandData->config->appendSuffixToFileName ? $this->commandData->config->testTraitNameSuffix : '') .'.php';
     }
 
     public function generate()

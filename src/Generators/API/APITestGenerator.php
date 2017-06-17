@@ -21,7 +21,7 @@ class APITestGenerator extends BaseGenerator
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathApiTests;
-        $this->fileName = $this->commandData->modelName.'ApiTest.php';
+        $this->fileName = $this->commandData->modelName.($this->commandData->config->appendSuffixToFileName ? $this->commandData->config->apiTestNameSuffix : '') .'.php';
     }
 
     public function generate()

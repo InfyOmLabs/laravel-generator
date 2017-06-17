@@ -45,19 +45,30 @@ return [
 
         'modelJs'           => base_path('resources/assets/js/models/'),
 
-        'api_controller_name_suffix' => 'APIController',
+        /**
+         * file and class suffixes
+         */
+        'api_controller_name_suffix' => 'WHATEVERAPIController',
 
-        'controller_name_suffix' => 'Controller',
+        'controller_name_suffix' => 'WHATEVERController',
 
-        'api_request_name_suffix' => 'APIRequest',
+        'api_request_name_suffix' => 'WHATEVERAPIRequest',
 
-        'request_name_suffix' => 'Request',
+        'request_name_suffix' => 'WHATEVERRequest',
 
-        'model_name_suffix' => 'Request',
+        'model_name_suffix' => 'WHATEVERRequest',
 
-        'repository_name_suffix' => 'Repository',
+        'repository_name_suffix' => 'WHATEVERRepository',
 
-        'api_test_suffix' => 'APITest',
+        'repository_test_name_suffix'=>'WHATEVERRepositoryTest',
+
+        'test_trait_name_suffix' => 'WHATEVERTrait',
+
+        'api_test_name_suffix' => 'WHATEVERApiTest',
+        /**
+         * if true, suffix will be appended to file in question, not simply class def
+         */
+        'append_suffix_to_file_name' => true
     ],
 
     /*
