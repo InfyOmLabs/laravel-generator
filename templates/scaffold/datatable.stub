@@ -8,7 +8,6 @@ use Yajra\Datatables\Services\DataTable;
 
 class $MODEL_NAME$DataTable extends DataTable
 {
-
     /**
      * @return \Illuminate\Http\JsonResponse
      */

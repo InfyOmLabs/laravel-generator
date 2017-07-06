@@ -3,11 +3,9 @@
 namespace $NAMESPACE_REQUEST$;
 
 use Illuminate\Foundation\Http\FormRequest;
-use $NAMESPACE_MODEL$\$MODEL_NAME$;
 
 class Update$MODEL_NAME$Request extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -25,6 +23,8 @@ class Update$MODEL_NAME$Request extends FormRequest
      */
     public function rules()
     {
-        return $MODEL_NAME$::$rules;
+        return [
+        $RULES$
+        ];
     }
 }
