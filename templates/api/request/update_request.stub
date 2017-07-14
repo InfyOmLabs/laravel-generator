@@ -2,10 +2,10 @@
 
 namespace $NAMESPACE_API_REQUEST$;
 
-use $NAMESPACE_MODEL$\$MODEL_NAME$;
+use $NAMESPACE_MODEL$\$MODEL_NAME$$MODELNAMESUFFIX$;
 use InfyOm\Generator\Request\APIRequest;
 
-class Update$MODEL_NAME$APIRequest extends APIRequest
+class Update$MODEL_NAME$APIREQUESTNAMESUFFIX$ extends APIRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,6 +24,6 @@ class Update$MODEL_NAME$APIRequest extends APIRequest
      */
     public function rules()
     {
-        return $MODEL_NAME$::$rules;
+        return $MODEL_NAME$$MODELNAMESUFFIX$::$rules;
     }
 }

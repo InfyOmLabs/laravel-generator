@@ -2,23 +2,23 @@
 
 namespace $NAMESPACE_CONTROLLER$;
 
-use $NAMESPACE_REQUEST$\Create$MODEL_NAME$Request;
-use $NAMESPACE_REQUEST$\Update$MODEL_NAME$Request;
-use $NAMESPACE_REPOSITORY$\$MODEL_NAME$Repository;
+use $NAMESPACE_REQUEST$\Create$MODEL_NAME$$REQUESTNAMESUFFIX$;
+use $NAMESPACE_REQUEST$\Update$MODEL_NAME$$REQUESTNAMESUFFIX$;
+use $NAMESPACE_REPOSITORY$\$MODEL_NAME$$REPOSITORYSUFFIX$;
 use $NAMESPACE_APP$\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
 
-class $MODEL_NAME$Controller extends AppBaseController
+class $MODEL_NAME$$CONTROLLERNAMESUFFIX$ extends AppBaseController
 {
-    /** @var  $MODEL_NAME$Repository */
-    private $$MODEL_NAME_CAMEL$Repository;
+    /** @var  $MODEL_NAME$$REPOSITORYSUFFIX$ */
+    private $$MODEL_NAME_CAMEL$$REPOSITORYSUFFIX$;
 
-    public function __construct($MODEL_NAME$Repository $$MODEL_NAME_CAMEL$Repo)
+    public function __construct($MODEL_NAME$$REPOSITORYSUFFIX$ $$MODEL_NAME_CAMEL$$REPOSITORYSUFFIX$)
     {
-        $this->$MODEL_NAME_CAMEL$Repository = $$MODEL_NAME_CAMEL$Repo;
+        $this->$MODEL_NAME_CAMEL$$REPOSITORYSUFFIX$ = $$MODEL_NAME_CAMEL$$REPOSITORYSUFFIX$;
     }
 
     /**
@@ -29,8 +29,8 @@ class $MODEL_NAME$Controller extends AppBaseController
      */
     public function index(Request $request)
     {
-        $this->$MODEL_NAME_CAMEL$Repository->pushCriteria(new RequestCriteria($request));
-        $$MODEL_NAME_PLURAL_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->$RENDER_TYPE$;
+        $this->$MODEL_NAME_CAMEL$REPOSITORYSUFFIX$->pushCriteria(new RequestCriteria($request));
+        $$MODEL_NAME_PLURAL_CAMEL$ = $this->$MODEL_NAME_CAMEL$REPOSITORYSUFFIX$->$RENDER_TYPE$;
 
         return view('$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.index')
             ->with('$MODEL_NAME_PLURAL_CAMEL$', $$MODEL_NAME_PLURAL_CAMEL$);
@@ -49,15 +49,15 @@ class $MODEL_NAME$Controller extends AppBaseController
     /**
      * Store a newly created $MODEL_NAME$ in storage.
      *
-     * @param Create$MODEL_NAME$Request $request
+     * @param Create$MODEL_NAME$$REPOSITORYSUFFIX$ $request
      *
      * @return Response
      */
-    public function store(Create$MODEL_NAME$Request $request)
+    public function store(Create$MODEL_NAME$$REPOSITORYSUFFIX$ $request)
     {
         $input = $request->all();
 
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->create($input);
+        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$REPOSITORYSUFFIX$->create($input);
 
         Flash::success('$MODEL_NAME_HUMAN$ saved successfully.');
 
@@ -73,7 +73,7 @@ class $MODEL_NAME$Controller extends AppBaseController
      */
     public function show($id)
     {
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
+        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$REPOSITORYSUFFIX$->findWithoutFail($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
             Flash::error('$MODEL_NAME_HUMAN$ not found');
@@ -93,7 +93,7 @@ class $MODEL_NAME$Controller extends AppBaseController
      */
     public function edit($id)
     {
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
+        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$REPOSITORYSUFFIX$->findWithoutFail($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
             Flash::error('$MODEL_NAME_HUMAN$ not found');
@@ -108,13 +108,13 @@ class $MODEL_NAME$Controller extends AppBaseController
      * Update the specified $MODEL_NAME$ in storage.
      *
      * @param  int              $id
-     * @param Update$MODEL_NAME$Request $request
+     * @param Update$MODEL_NAME$$REPOSITORYSUFFIX$ $request
      *
      * @return Response
      */
-    public function update($id, Update$MODEL_NAME$Request $request)
+    public function update($id, Update$MODEL_NAME$$REPOSITORYSUFFIX$ $request)
     {
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
+        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$REPOSITORYSUFFIX$->findWithoutFail($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
             Flash::error('$MODEL_NAME_HUMAN$ not found');
@@ -122,7 +122,7 @@ class $MODEL_NAME$Controller extends AppBaseController
             return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
         }
 
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->update($request->all(), $id);
+        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$REPOSITORYSUFFIX$->update($request->all(), $id);
 
         Flash::success('$MODEL_NAME_HUMAN$ updated successfully.');
 
@@ -138,7 +138,7 @@ class $MODEL_NAME$Controller extends AppBaseController
      */
     public function destroy($id)
     {
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
+        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$REPOSITORYSUFFIX$->findWithoutFail($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
             Flash::error('$MODEL_NAME_HUMAN$ not found');
@@ -146,7 +146,7 @@ class $MODEL_NAME$Controller extends AppBaseController
             return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
         }
 
-        $this->$MODEL_NAME_CAMEL$Repository->delete($id);
+        $this->$MODEL_NAME_CAMEL$REPOSITORYSUFFIX$->delete($id);
 
         Flash::success('$MODEL_NAME_HUMAN$ deleted successfully.');
 

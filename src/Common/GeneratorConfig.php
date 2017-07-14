@@ -23,20 +23,34 @@ class GeneratorConfig
 
     /* Path variables */
     public $pathRepository;
+    public $repositoryNameSuffix;
     public $pathModel;
     public $pathDataTables;
 
     public $pathApiController;
     public $pathApiRequest;
+    public $apiRequestNameSuffix;
     public $pathApiRoutes;
     public $pathApiTests;
     public $pathApiTestTraits;
+    public $apiControllerNameSuffix;
+    public $modelNameSuffix;
 
     public $pathController;
     public $pathRequest;
+    public $requestNameSuffix;
     public $pathRoutes;
     public $pathViews;
     public $modelJsPath;
+    public $controllerNameSuffix;
+    public $apiTestNameSuffix;
+    public $testTraitNameSuffix;
+    public $repositoryTestNameSuffix;
+
+    /**
+     * if true, suffix will be appended to file in question, not simply class names, if false, suffixes are only applied to class names
+     */
+    public $appendSuffixToFileName;
 
     /* Model Names */
     public $mName;
@@ -178,6 +192,10 @@ class GeneratorConfig
 
         $this->pathApiTestTraits = config('infyom.laravel_generator.path.test_trait', base_path('tests/traits/'));
 
+        $this->apiControllerNameSuffix = config('infyom.laravel_generator.path.api_controller_name_suffix', 'APIController');
+
+        $this->apiRequestNameSuffix = config('infyom.laravel_generator.path.api_request_name_suffix', 'APIRequest');
+
         $this->pathController = config(
             'infyom.laravel_generator.path.controller',
             app_path('Http/Controllers/')
@@ -196,6 +214,22 @@ class GeneratorConfig
                 'infyom.laravel_generator.path.modelsJs',
                 base_path('resources/assets/js/models/')
         );
+
+        $this->requestNameSuffix = config('infyom.laravel_generator.path.request_name_suffix', 'Request');
+
+        $this->controllerNameSuffix = config('infyom.laravel_generator.path.controller_name_suffix', 'Controller');
+
+        $this->modelNameSuffix = config('infyom.laravel_generator.path.model_name_suffix', '');
+
+        $this->repositoryNameSuffix = config('infyom.laravel_generator.path.repository_name_suffix', '');
+
+        $this->apiTestNameSuffix = config('infyom.laravel_generator.path.api_test_name_suffix', 'APITest');
+
+        $this->testTraitNameSuffix = config('infyom.laravel_generator.path.test_trait_name_suffix', 'APITest');
+
+        $this->repositoryTestNameSuffix = config('infyom.laravel_generator.path.repository_test_name_suffix', 'APITest');
+
+        $this->appendSuffixToFileName = config('infyom.laravel_generator.path.append_suffix_to_file_name', true);
     }
 
     public function loadDynamicVariables(CommandData &$commandData)
@@ -264,6 +298,41 @@ class GeneratorConfig
         $commandData->addDynamicVariable(
             '$API_VERSION$',
             config('infyom.laravel_generator.api_version', 'v1')
+        );
+
+        $commandData->addDynamicVariable(
+            '$APICONTROLLERNAMESUFFIX$',
+            config('infyom.laravel_generator.api_controller_name_suffix', 'APIController')
+        );
+
+        $commandData->addDynamicVariable(
+            '$APIREQUESTNAMESUFFIX$',
+            config('infyom.laravel_generator.api_request_name_suffix', 'APIRequest')
+        );
+
+        $commandData->addDynamicVariable(
+            '$REQUESTNAMESUFFIX$',
+            config('infyom.laravel_generator.request_name_suffix', 'Request')
+        );
+
+        $commandData->addDynamicVariable(
+            '$CONTROLLERNAMESUFFIX$',
+            config('infyom.laravel_generator.controller_name_suffix', 'Controller')
+        );
+
+        $commandData->addDynamicVariable(
+            '$MODELNAMESUFFIX$',
+            config('infyom.laravel_generator.model_name_suffix', '')
+        );
+
+        $commandData->addDynamicVariable(
+            '$REPOSITORYSUFFIX$',
+            config('infyom.laravel_generator.repository_name_suffix', '')
+        );
+
+        $commandData->addDynamicVariable(
+            '$APITESTSUFFIX$',
+            config('infyom.laravel_generator.pathApiTestSuffix', 'APITest')
         );
 
         return $commandData;

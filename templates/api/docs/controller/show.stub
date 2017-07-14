@@ -1,5 +1,5 @@
 /**
-     * Display the specified $MODEL_NAME$.
+     * Display the specified $MODEL_NAME$$MODELNAMESUFFIX$.
      * GET|HEAD /$MODEL_NAME_PLURAL_CAMEL$/{id}
      *
      * @param  int $id

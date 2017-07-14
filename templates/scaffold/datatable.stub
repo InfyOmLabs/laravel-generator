@@ -2,7 +2,7 @@
 
 namespace $NAMESPACE_DATATABLES$;
 
-use $NAMESPACE_MODEL$\$MODEL_NAME$;
+use $NAMESPACE_MODEL$\$MODEL_NAME$$MODELNAMESUFFIX$;
 use Form;
 use Yajra\Datatables\Services\DataTable;
 

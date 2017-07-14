@@ -44,6 +44,31 @@ return [
         'templates_dir'     => base_path('resources/infyom/infyom-generator-templates/'),
 
         'modelJs'           => base_path('resources/assets/js/models/'),
+
+        /**
+         * file and class suffixes
+         */
+        'api_controller_name_suffix' => 'WHATEVERAPIController',
+
+        'controller_name_suffix' => 'WHATEVERController',
+
+        'api_request_name_suffix' => 'WHATEVERAPIRequest',
+
+        'request_name_suffix' => 'WHATEVERRequest',
+
+        'model_name_suffix' => 'WHATEVERRequest',
+
+        'repository_name_suffix' => 'WHATEVERRepository',
+
+        'repository_test_name_suffix'=>'WHATEVERRepositoryTest',
+
+        'test_trait_name_suffix' => 'WHATEVERTrait',
+
+        'api_test_name_suffix' => 'WHATEVERApiTest',
+        /**
+         * if true, suffix will be appended to file in question, not simply class def
+         */
+        'append_suffix_to_file_name' => true
     ],
 
     /*
