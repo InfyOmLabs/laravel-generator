@@ -3,7 +3,7 @@
  * @package $NAMESPACE_REPOSITORY$
  * @version $GENERATE_DATE$
  *
- * @method $MODEL_NAME$ findWithoutFail($id, $columns = ['*']) desc
- * @method $MODEL_NAME$ find($id, $columns = ['*']) desc
- * @method $MODEL_NAME$ first($columns = ['*']) desc
+ * @method $MODEL_NAME$ findWithoutFail($id, $columns = ['*'])
+ * @method $MODEL_NAME$ find($id, $columns = ['*'])
+ * @method $MODEL_NAME$ first($columns = ['*'])
 */
