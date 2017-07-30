@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\$MODEL_NAME$;
-use App\Repositories\$MODEL_NAME$Repository;
+use $NAMESPACE_MODEL$\$MODEL_NAME$;
+use $NAMESPACE_REPOSITORY$\$MODEL_NAME$Repository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class $MODEL_NAME$RepositoryTest extends TestCase
