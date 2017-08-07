@@ -103,13 +103,13 @@ class ViewGenerator extends BaseGenerator
                 case 'email':
                 case 'password':
                 case 'number':
-                    $fieldTemplate = get_template('vuejs.fields.'.$field->htmlType, $this->templateType);
+                    $fieldTemplate = get_template('vuejs.fields.' . $field->htmlType, $this->templateType);
                     break;
 
                 case 'select':
                 case 'enum':
                     $fieldTemplate = get_template('vuejs.fields.select', $this->templateType);
-                    $inputsArr = explode(',', $field['htmlTypeInputs']);
+                    $inputsArr = explode(',', $field->htmlValues);
 
                     $fieldTemplate = str_replace(
                         '$INPUT_ARR$',
@@ -121,7 +121,8 @@ class ViewGenerator extends BaseGenerator
                 case 'radio':
                     $fieldTemplate = get_template('vuejs.fields.radio_group', $this->templateType);
                     $radioTemplate = get_template('vuejs.fields.radio', $this->templateType);
-                    $inputsArr = explode(',', $field['htmlTypeInputs']);
+                    $inputsArr = explode(',', $field->htmlValues);
+
                     $radioButtons = [];
                     foreach ($inputsArr as $item) {
                         $radioButtonsTemplate = fill_field_template(
@@ -153,9 +154,9 @@ class ViewGenerator extends BaseGenerator
 
                 case 'checkbox':
                     $fieldTemplate = get_template('vuejs.fields.checkbox', $this->templateType);
-                    $checkboxValue = $value = $field['htmlTypeInputs'];
-                    if ($field['fieldType'] != 'boolean') {
-                        $checkboxValue = "'".$value."'";
+                    $checkboxValue = $value = explode(',', $field->htmlValues);
+                    if ($field->fieldType != 'boolean') {
+                        $checkboxValue = "'" . $value . "'";
                     }
                     $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
                     $fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
@@ -167,8 +168,8 @@ class ViewGenerator extends BaseGenerator
             }
 
             if (!empty($fieldTemplate)) {
-                if (isset($field['validations']) && !empty($field['validations'])) {
-                    $rules = explode('|', $field['validations']);
+                if (isset($field->validations) && !empty($field->validations)) {
+                    $rules = explode('|', $field->validations);
                     foreach ($rules as $key => $rule) {
                         if ($rule == 'required') {
                             $rule .= ': true';
@@ -185,7 +186,7 @@ class ViewGenerator extends BaseGenerator
                     $validationMessages = '';
                     foreach ($rules as $rule) {
                         $rule = explode(':', $rule)[0];
-                        $validationMessages .= str_replace('$RULE$', $rule, $validationMessagesTemplate)."\n";
+                        $validationMessages .= str_replace('$RULE$', $rule, $validationMessagesTemplate) . "\n";
                     }
                     $fieldTemplate = str_replace('$VALIDATION_MESSAGES$', $validationMessages, $fieldTemplate);
                 }
@@ -251,7 +252,7 @@ class ViewGenerator extends BaseGenerator
 
         foreach ($files as $file) {
             if ($this->rollbackFile($this->path, $file)) {
-                $this->commandData->commandComment($file.' file deleted');
+                $this->commandData->commandComment($file . ' file deleted');
             }
         }
     }
