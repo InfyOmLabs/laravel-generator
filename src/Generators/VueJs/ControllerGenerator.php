@@ -37,7 +37,7 @@ class ControllerGenerator extends BaseGenerator
         $searchableCount = 0;
         foreach ($fields as $field) {
              $field = (array)$field;
-            if ($field['searchable']) {
+             if ($field['isSearchable']) {
                 $searchableCount++;
             }
         }
