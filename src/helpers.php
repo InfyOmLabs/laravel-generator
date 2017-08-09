@@ -85,7 +85,9 @@ if (!function_exists('get_template_file_path')) {
     function get_template_file_path($templateName, $templateType)
     {
         $templateName = str_replace('.', '/', $templateName);
-
+        if($templateType == "swagger-generator"){
+            return base_path('vendor/infyomlabs/'.$templateType.'/templates/'.$templateName.'.stub');
+        }
         $templatesPath = config(
             'infyom.laravel_generator.path.templates_dir',
             base_path('resources/infyom/infyom-generator-templates/')
