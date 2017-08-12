@@ -31,7 +31,7 @@ class ModelGenerator extends BaseGenerator
      *
      * @param \InfyOm\Generator\Common\CommandData $commandData
      */
-    public function __construct(CommandData $commandData)
+    public function __construct($commandData)
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathModel;
