@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Generators;
 
 use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Common\GeneratorFieldRelation;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\TableFieldsGenerator;
 
@@ -142,6 +143,11 @@ class ModelGenerator extends BaseGenerator
         return $templateData;
     }
 
+    /**
+     * @param $db_type
+     * @param GeneratorFieldRelation|null $relation
+     * @return string
+     */
     private function getPHPDocType($db_type, $relation = null)
     {
         switch ($db_type) {
@@ -151,7 +157,7 @@ class ModelGenerator extends BaseGenerator
                 return 'string';
             case '1t1':
             case 'mt1':
-                return camel_case($relation->inputs[1].' '.camel_case($relation->inputs[1]));
+                return "\\".$this->commandData->config->nsModel ."\\" . $relation->inputs[0].' '.camel_case($relation->inputs[0]);
             case '1tm':
                 return '\Illuminate\Database\Eloquent\Collection'.' '.$relation->inputs[0];
             case 'mtm':
