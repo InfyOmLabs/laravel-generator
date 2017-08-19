@@ -84,11 +84,11 @@ class SwaggerGenerator
                     'format' => $fieldFormat,
                 ];
 
-//                if (isset($field['description'])) {
-//                    $fieldType['description'] = $field['description'];
-//                } else {
+                //                if (isset($field['description'])) {
+                //                    $fieldType['description'] = $field['description'];
+                //                } else {
                 $fieldType['description'] = '';
-//                }
+                //                }
 
                 $fieldTypes[] = $fieldType;
             }
