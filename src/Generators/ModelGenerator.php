@@ -146,6 +146,7 @@ class ModelGenerator extends BaseGenerator
     /**
      * @param $db_type
      * @param GeneratorFieldRelation|null $relation
+     *
      * @return string
      */
     private function getPHPDocType($db_type, $relation = null)
@@ -157,7 +158,7 @@ class ModelGenerator extends BaseGenerator
                 return 'string';
             case '1t1':
             case 'mt1':
-                return "\\".$this->commandData->config->nsModel ."\\" . $relation->inputs[0].' '.camel_case($relation->inputs[0]);
+                return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.camel_case($relation->inputs[0]);
             case '1tm':
                 return '\Illuminate\Database\Eloquent\Collection'.' '.$relation->inputs[0];
             case 'mtm':
