@@ -3,6 +3,4 @@
  * @package $NAMESPACE_MODEL$
  * @version $GENERATE_DATE$
  *
- * @method static $MODEL_NAME$ find($id=null, $columns = array())
- * @method static $MODEL_NAME$|\Illuminate\Database\Eloquent\Collection findOrFail($id, $columns = ['*'])
 $PHPDOC$ */
