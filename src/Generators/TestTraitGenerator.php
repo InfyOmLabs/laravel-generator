@@ -51,7 +51,7 @@ class TestTraitGenerator extends BaseGenerator
         $fields = [];
 
         foreach ($this->commandData->fields as $field) {
-            if ($field->isPrimary) {
+            if ($field->isPrimary || in_array($field->name,['created_at','updated_at'])) {
                 continue;
             }
 
