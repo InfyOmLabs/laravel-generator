@@ -1,5 +1,8 @@
 <?php
 
+use Tests\TestCase;
+use Tests\ApiTestTrait;
+use Tests\traits\Make$MODEL_NAME$Trait;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -13,9 +16,9 @@ class $MODEL_NAME$ApiTest extends TestCase
     public function testCreate$MODEL_NAME$()
     {
         $$MODEL_NAME_CAMEL$ = $this->fake$MODEL_NAME$Data();
-        $this->json('POST', '/api/v1/$MODEL_NAME_PLURAL_CAMEL$', $$MODEL_NAME_CAMEL$);
+        $response = $this->json('POST', '/api/v1/$MODEL_NAME_PLURAL_CAMEL$', $$MODEL_NAME_CAMEL$);
 
-        $this->assertApiResponse($$MODEL_NAME_CAMEL$);
+        $this->assertApiResponse($response,$$MODEL_NAME_CAMEL$);
     }
 
     /**
@@ -24,9 +27,9 @@ class $MODEL_NAME$ApiTest extends TestCase
     public function testRead$MODEL_NAME$()
     {
         $$MODEL_NAME_CAMEL$ = $this->make$MODEL_NAME$();
-        $this->json('GET', '/api/v1/$MODEL_NAME_PLURAL_CAMEL$/'.$$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
+        $response = $this->json('GET', '/api/v1/$MODEL_NAME_PLURAL_CAMEL$/'.$$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
 
-        $this->assertApiResponse($$MODEL_NAME_CAMEL$->toArray());
+        $this->assertApiResponse($response,$$MODEL_NAME_CAMEL$->toArray());
     }
 
     /**
@@ -37,9 +40,9 @@ class $MODEL_NAME$ApiTest extends TestCase
         $$MODEL_NAME_CAMEL$ = $this->make$MODEL_NAME$();
         $edited$MODEL_NAME$ = $this->fake$MODEL_NAME$Data();
 
-        $this->json('PUT', '/api/v1/$MODEL_NAME_PLURAL_CAMEL$/'.$$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$, $edited$MODEL_NAME$);
+        $response = $this->json('PUT', '/api/v1/$MODEL_NAME_PLURAL_CAMEL$/'.$$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$, $edited$MODEL_NAME$);
 
-        $this->assertApiResponse($edited$MODEL_NAME$);
+        $this->assertApiResponse($response,$edited$MODEL_NAME$);
     }
 
     /**
@@ -51,8 +54,8 @@ class $MODEL_NAME$ApiTest extends TestCase
         $this->json('DELETE', '/api/v1/$MODEL_NAME_PLURAL_CAMEL$/'.$$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
 
         $this->assertApiSuccess();
-        $this->json('GET', '/api/v1/$MODEL_NAME_PLURAL_CAMEL$/'.$$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
+        $response = $this->json('GET', '/api/v1/$MODEL_NAME_PLURAL_CAMEL$/'.$$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
 
-        $this->assertResponseStatus(404);
+           $response->assertStatus(404);
     }
 }
