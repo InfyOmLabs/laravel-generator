@@ -21,6 +21,8 @@ class GeneratorConfig
     public $nsController;
     public $nsBaseController;
 
+    public $nsKrisForm;
+
     /* Path variables */
     public $pathRepository;
     public $pathModel;
@@ -37,6 +39,7 @@ class GeneratorConfig
     public $pathRoutes;
     public $pathViews;
     public $modelJsPath;
+    public $krisFormPath;
 
     /* Model Names */
     public $mName;
@@ -134,6 +137,10 @@ class GeneratorConfig
         $this->nsRequestBase = config('infyom.laravel_generator.namespace.request', 'App\Http\Requests');
         $this->nsBaseController = config('infyom.laravel_generator.namespace.controller', 'App\Http\Controllers');
         $this->nsController = config('infyom.laravel_generator.namespace.controller', 'App\Http\Controllers').$prefix;
+
+        if(config('infyom.laravel_generator.add_on.kris_form_builder.enable', false)){
+            $this->nsKrisForm = config('infyom.laravel_generator.add_on.kris_form_builder.namespace', 'App\Forms').$prefix;
+        }
     }
 
     public function loadPaths()
@@ -196,6 +203,9 @@ class GeneratorConfig
                 'infyom.laravel_generator.path.modelsJs',
                 base_path('resources/assets/js/models/')
         );
+        if(config('infyom.laravel_generator.add_on.kris_form_builder.enable', false)){
+            $this->krisFormPath = config('infyom.laravel_generator.add_on.kris_form_builder.form_path', app_path('Forms/'));
+        }
     }
 
     public function loadDynamicVariables(CommandData &$commandData)
@@ -266,6 +276,12 @@ class GeneratorConfig
             config('infyom.laravel_generator.api_version', 'v1')
         );
 
+        if(config('infyom.laravel_generator.add_on.kris_form_builder.enable', false)){
+            $commandData->addDynamicVariable(
+                '$NAMESPACE_KRIS_FORM$',
+                $this->nsKrisForm
+            );
+        }
         return $commandData;
     }
 
@@ -460,5 +476,7 @@ class GeneratorConfig
         $this->addOns['datatables'] = config('infyom.laravel_generator.add_on.datatables', false);
         $this->addOns['menu.enabled'] = config('infyom.laravel_generator.add_on.menu.enabled', false);
         $this->addOns['menu.menu_file'] = config('infyom.laravel_generator.add_on.menu.menu_file', 'layouts.menu');
+        $this->addOns['kris_form_builder'] = config('infyom.laravel_generator.add_on.kris_form_builder.enable', false);
+        $this->addOns['kris_form_jsvalidation'] = config('infyom.laravel_generator.add_on.kris_form_builder.jsvalidation', false);
     }
 }

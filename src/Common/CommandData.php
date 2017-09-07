@@ -24,6 +24,9 @@ class CommandData
     /** @var GeneratorField[] */
     public $fields = [];
 
+    /** @var Generatorformfields[] */
+//    public $formfields = [];
+
     /** @var GeneratorFieldRelation[] */
     public $relations = [];
 
@@ -105,7 +108,20 @@ class CommandData
     {
         $this->dynamicVars[$name] = $val;
     }
-
+//    public function getformfieldarr($name, $val)
+//    {
+//        foreach ($this->fields as $field) {
+//            $this->formfields = [];
+//            if (isset($field['type']) && $field['relation']) {
+//                $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
+//            } else {
+//                $this->fields[] = GeneratorField::parseFieldFromFile($field);
+//                if (isset($field['relation'])) {
+//                    $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
+//                }
+//            }
+//        }
+//    }
     public function getFields()
     {
         $this->fields = [];

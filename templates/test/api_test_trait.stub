@@ -1,23 +1,24 @@
 <?php
+namespace Tests;
 
 trait ApiTestTrait
 {
-    public function assertApiResponse(Array $actualData)
+    public function assertApiResponse($response,Array $actualData)
     {
-        $this->assertApiSuccess();
+        $this->assertApiSuccess($response);
 
-        $response = json_decode($this->response->getContent(), true);
+        $response = json_decode($response->getContent()->getContent(), true);
         $responseData = $response['data'];
 
         $this->assertNotEmpty($responseData['id']);
         $this->assertModelData($actualData, $responseData);
     }
 
-    public function assertApiSuccess()
+    public function assertApiSuccess($response)
     {
-        $this->assertResponseOk();
-        $this->seeJson(['success' => true]);
-    }
+        $response->assertStatus(200);
+        $response->assertJson(['success' => true]);
+     }
 
     public function assertModelData(Array $actualData, Array $expectedData)
     {
