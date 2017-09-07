@@ -152,6 +152,12 @@ return [
 
             'menu_file'     => 'layouts/menu.blade.php',
         ],
+        //https://packagist.org/packages/kris/laravel-form-builder
+        'kris_form_builder' => [
+            'enable'=>true,
+            'namespace'        => 'App\Forms',
+            'jsvalidation'=> true
+        ],
     ],
 
     /*

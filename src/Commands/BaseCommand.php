@@ -17,6 +17,7 @@ use InfyOm\Generator\Generators\Scaffold\MenuGenerator;
 use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
 use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
 use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
+use InfyOm\Generator\Generators\Scaffold\KrisFormGenerator;
 use InfyOm\Generator\Generators\TestTraitGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 use Symfony\Component\Console\Input\InputArgument;
@@ -106,6 +107,7 @@ class BaseCommand extends Command
         if (!$this->isSkip('requests') and !$this->isSkip('scaffold_requests')) {
             $requestGenerator = new RequestGenerator($this->commandData);
             $requestGenerator->generate();
+
         }
 
         if (!$this->isSkip('controllers') and !$this->isSkip('scaffold_controller')) {
@@ -115,6 +117,11 @@ class BaseCommand extends Command
 
         if (!$this->isSkip('views')) {
             $viewGenerator = new ViewGenerator($this->commandData);
+            $viewGenerator->generate();
+        }
+
+        if ($this->commandData->config->getAddOn('kris_form_builder')) {
+            $viewGenerator = new KrisFormGenerator($this->commandData);
             $viewGenerator->generate();
         }
 
@@ -155,7 +162,7 @@ class BaseCommand extends Command
     public function isSkip($skip)
     {
         if ($this->commandData->getOption('skip')) {
-            return in_array($skip, (array) $this->commandData->getOption('skip'));
+            return in_array($skip, (array)$this->commandData->getOption('skip'));
         }
 
         return false;
@@ -172,30 +179,30 @@ class BaseCommand extends Command
 
         foreach ($this->commandData->fields as $field) {
             $fileFields[] = [
-                'name'        => $field->name,
-                'dbType'      => $field->dbInput,
-                'htmlType'    => $field->htmlInput,
+                'name' => $field->name,
+                'dbType' => $field->dbInput,
+                'htmlType' => $field->htmlInput,
                 'validations' => $field->validations,
-                'searchable'  => $field->isSearchable,
-                'fillable'    => $field->isFillable,
-                'primary'     => $field->isPrimary,
-                'inForm'      => $field->inForm,
-                'inIndex'     => $field->inIndex,
+                'searchable' => $field->isSearchable,
+                'fillable' => $field->isFillable,
+                'primary' => $field->isPrimary,
+                'inForm' => $field->inForm,
+                'inIndex' => $field->inIndex,
             ];
         }
 
         foreach ($this->commandData->relations as $relation) {
             $fileFields[] = [
-                'type'     => 'relation',
-                'relation' => $relation->type.','.implode(',', $relation->inputs),
+                'type' => 'relation',
+                'relation' => $relation->type . ',' . implode(',', $relation->inputs),
             ];
         }
 
         $path = config('infyom.laravel_generator.path.schema_files', base_path('resources/model_schemas/'));
 
-        $fileName = $this->commandData->modelName.'.json';
+        $fileName = $this->commandData->modelName . '.json';
 
-        if (file_exists($path.$fileName) && !$this->confirmOverwrite($fileName)) {
+        if (file_exists($path . $fileName) && !$this->confirmOverwrite($fileName)) {
             return;
         }
         FileUtil::createFile($path, $fileName, json_encode($fileFields, JSON_PRETTY_PRINT));
@@ -212,7 +219,7 @@ class BaseCommand extends Command
     protected function confirmOverwrite($fileName, $prompt = '')
     {
         $prompt = (empty($prompt))
-            ? $fileName.' already exists. Do you want to overwrite it? [y|N]'
+            ? $fileName . ' already exists. Do you want to overwrite it? [y|N]'
             : $prompt;
 
         return $this->confirm($prompt, false);

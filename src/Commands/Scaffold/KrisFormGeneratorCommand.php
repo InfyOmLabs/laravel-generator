@@ -4,23 +4,23 @@ namespace InfyOm\Generator\Commands\Scaffold;
 
 use InfyOm\Generator\Commands\BaseCommand;
 use InfyOm\Generator\Common\CommandData;
-use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
+use InfyOm\Generator\Generators\Scaffold\KrisFormGenerator;
 
-class ViewsGeneratorCommand extends BaseCommand
+class KrisFormGeneratorCommand extends BaseCommand
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'infyom.scaffold:views';
+    protected $name = 'infyom.scaffold:krisform';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create views file command';
+    protected $description = 'Create a full CRUD views form for given model';
 
     /**
      * Create a new command instance.
@@ -41,12 +41,9 @@ class ViewsGeneratorCommand extends BaseCommand
     {
         parent::handle();
 
-        $viewGenerator = new ViewGenerator($this->commandData);
-        $viewGenerator->generate();
-        if ($this->commandData->config->getAddOn('kris_form_builder')) {
-            $viewGenerator = new KrisFormGenerator($this->commandData);
-            $viewGenerator->generate();
-        }
+        $requestGenerator = new KrisFormGenerator($this->commandData);
+        $requestGenerator->generate();
+
         $this->performPostActions();
     }
 

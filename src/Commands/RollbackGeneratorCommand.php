@@ -13,6 +13,7 @@ use InfyOm\Generator\Generators\ModelGenerator;
 use InfyOm\Generator\Generators\RepositoryGenerator;
 use InfyOm\Generator\Generators\RepositoryTestGenerator;
 use InfyOm\Generator\Generators\Scaffold\ControllerGenerator;
+use InfyOm\Generator\Generators\Scaffold\KrisFormGenerator;
 use InfyOm\Generator\Generators\Scaffold\MenuGenerator;
 use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
 use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
@@ -102,6 +103,9 @@ class RollbackGeneratorCommand extends Command
 
         $requestGenerator = new RequestGenerator($this->commandData);
         $requestGenerator->rollback();
+
+        $KrisFormGenerator = new KrisFormGenerator($this->commandData);
+        $KrisFormGenerator->rollback();
 
         $controllerGenerator = new ControllerGenerator($this->commandData);
         $controllerGenerator->rollback();

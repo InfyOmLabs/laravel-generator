@@ -28,6 +28,8 @@ class ViewGenerator extends BaseGenerator
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathViews;
         $this->templateType = config('infyom.laravel_generator.templates', 'core-templates');
+        $this->iskris_form = $this->commandData->config->getAddOn('kris_form_builder');
+
     }
 
     public function generate()
@@ -187,6 +189,7 @@ class ViewGenerator extends BaseGenerator
 
     private function generateFields()
     {
+        if ($this->iskris_form) return;
         $this->htmlFields = [];
 
         foreach ($this->commandData->fields as $field) {
@@ -321,10 +324,25 @@ class ViewGenerator extends BaseGenerator
         $this->commandData->commandInfo('field.blade.php created');
     }
 
+    private function generateaddjsvalidation($templateData,$requesttype = "Create")
+    {
+        if ($this->commandData->getAddOn("kris_form_jsvalidation")) {
+            $jsvalidationtemplateData = get_template('scaffold.krisform.jsvalidation', 'laravel-generator');
+//            $jsvalidationtemplateData = fill_template($this->commandData->dynamicVars, $jsvalidationtemplateData);
+            $jsvalidationtemplateData = str_replace('$REQUEST_TYPE$',$requesttype , $jsvalidationtemplateData);
+            $templateData = str_replace('$JS_VALIDATION$', infy_nl(1) . $jsvalidationtemplateData, $templateData);
+        } else {
+            $templateData = str_replace('$JS_VALIDATION$', "", $templateData);
+        }
+        return $templateData;
+    }
+
     private function generateCreate()
     {
-        $templateData = get_template('scaffold.views.create', $this->templateType);
-
+        //todo only for none vuejs
+        $templatename = $this->iskris_form ? "scaffold.views.kris.create" : "scaffold.views.create";
+        $templateData = get_template($templatename, $this->templateType);
+        $templateData = $this->generateaddjsvalidation($templateData, "Create");
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, 'create.blade.php', $templateData);
@@ -333,8 +351,9 @@ class ViewGenerator extends BaseGenerator
 
     private function generateUpdate()
     {
-        $templateData = get_template('scaffold.views.edit', $this->templateType);
-
+        $templatename = $this->iskris_form ? "scaffold.views.kris.edit" : "scaffold.views.edit";
+        $templateData = get_template($templatename, $this->templateType);
+        $templateData = $this->generateaddjsvalidation($templateData, "Update");
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, 'edit.blade.php', $templateData);
@@ -343,6 +362,7 @@ class ViewGenerator extends BaseGenerator
 
     private function generateShowFields()
     {
+        if ($this->iskris_form) return;
         $fieldTemplate = get_template('scaffold.views.show_field', $this->templateType);
 
         $fieldsStr = '';
@@ -353,7 +373,7 @@ class ViewGenerator extends BaseGenerator
             $singleFieldStr = str_replace('$FIELD_NAME$', $field->name, $singleFieldStr);
             $singleFieldStr = fill_template($this->commandData->dynamicVars, $singleFieldStr);
 
-            $fieldsStr .= $singleFieldStr."\n\n";
+            $fieldsStr .= $singleFieldStr . "\n\n";
         }
 
         FileUtil::createFile($this->path, 'show_fields.blade.php', $fieldsStr);
@@ -362,8 +382,8 @@ class ViewGenerator extends BaseGenerator
 
     private function generateShow()
     {
-        $templateData = get_template('scaffold.views.show', $this->templateType);
-
+        $templatename = $this->iskris_form ? "scaffold.views.kris.show" : "scaffold.views.show";
+        $templateData = get_template($templatename, $this->templateType);
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, 'show.blade.php', $templateData);
@@ -388,7 +408,7 @@ class ViewGenerator extends BaseGenerator
 
         foreach ($files as $file) {
             if ($this->rollbackFile($this->path, $file)) {
-                $this->commandData->commandComment($file.' file deleted');
+                $this->commandData->commandComment($file . ' file deleted');
             }
         }
     }

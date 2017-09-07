@@ -21,6 +21,7 @@ use InfyOm\Generator\Commands\Scaffold\RequestsGeneratorCommand;
 use InfyOm\Generator\Commands\Scaffold\ScaffoldGeneratorCommand;
 use InfyOm\Generator\Commands\Scaffold\ViewsGeneratorCommand;
 use InfyOm\Generator\Commands\VueJs\VueJsGeneratorCommand;
+use InfyOm\Generator\Commands\Scaffold\KrisFormGeneratorCommand;
 
 class InfyOmGeneratorServiceProvider extends ServiceProvider
 {
@@ -101,6 +102,9 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
             return new RequestsGeneratorCommand();
         });
 
+        $this->app->singleton('infyom.scaffold:krisform', function ($app) {
+            return new KrisFormGeneratorCommand();
+        });
         $this->app->singleton('infyom.scaffold.views', function ($app) {
             return new ViewsGeneratorCommand();
         });
@@ -131,6 +135,7 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
             'infyom.api.tests',
             'infyom.scaffold.controller',
             'infyom.scaffold.requests',
+            'infyom.scaffold:krisform',
             'infyom.scaffold.views',
             'infyom.rollback',
             'infyom.vuejs',
