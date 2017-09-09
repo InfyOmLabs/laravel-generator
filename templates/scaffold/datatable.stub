@@ -27,7 +27,7 @@ class $MODEL_NAME$DataTable extends DataTable
      * @param \App\Models\Post $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query($MODel_NAME$ $model)
+    public function query($MODEL_NAME$ $model)
     {
         return $model->newQuery();
     }
