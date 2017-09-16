@@ -44,5 +44,12 @@
         "psr-4": {
             "Tests\\": "tests/"
         }
-    }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "\\InfyOm\\Generator\\InfyOmGeneratorServiceProvider"
+            ]
+        }
+    }    
 }
