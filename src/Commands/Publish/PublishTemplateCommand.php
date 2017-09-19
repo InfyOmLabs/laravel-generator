@@ -52,7 +52,7 @@ class PublishTemplateCommand extends PublishBaseCommand
      */
     public function publishScaffoldTemplates()
     {
-        $templateType = config('infyom.laravel_generator.templates', 'core-templates');
+        $templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
 
         $templatesPath = base_path('vendor/infyomlabs/'.$templateType.'/templates/scaffold');
 
