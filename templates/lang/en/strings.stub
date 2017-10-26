@@ -1,0 +1,42 @@
+<?php
+
+return [
+    'action' =>         'Action',
+    'addnew' =>         'Add New',
+    'save' =>           'Save',
+    'cancel' =>         'Cancel',
+    'delete' =>         'Delete',
+    'back' =>           'Back',
+    'areyousure' =>     'Are you sure?',
+    'form' =>           'Form',
+
+    'store.success' =>  ':name saved successfully.',
+    'update.success' => ':name updated successfully.',
+    'destroy.success'=> ':name deleted successfully.',
+    'notfound' =>       ':name not found.',
+
+    'sEmptyTable'=>     'No data available in table',
+    'sInfo'=>           'Showing _START_ to _END_ of _TOTAL_ entries',
+    'sInfoEmpty'=>      'Showing 0 to 0 of 0 entries',
+    'sInfoFiltered'=>   '(filtered from _MAX_ total entries)',
+    'sInfoPostFix'=>    '',
+    'sInfoThousands'=>  ',',
+    'sLengthMenu'=>     'Show _MENU_ entries',
+    'sLoadingRecords'=> 'Loading...',
+    'sProcessing'=>     'Processing...',
+    'sZeroRecords'=>    'No matching records found',
+    'sSearch'=>         'Search:',
+    'sFirst'=>          'First',
+    'sLast'=>           'Last',
+    'sNext'=>           'Next',
+    'sPrevious'=>       'Previous',
+    'sSortAscending'=>  ': activate to sort column ascending',
+    'sSortDescending'=> ': activate to sort column descending',
+    'create' =>         'Create',
+    'export' =>         'Export',
+    'print' =>          'Print',
+    'reset' =>          'Reset',
+    'reload' =>         'Reload',
+    
+    $FIELDS_NAME_LABEL$
+];

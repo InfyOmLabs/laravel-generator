@@ -10,6 +10,7 @@ use InfyOm\Generator\Generators\RepositoryGenerator;
 use InfyOm\Generator\Generators\Scaffold\MenuGenerator;
 use InfyOm\Generator\Generators\VueJs\APIRequestGenerator;
 use InfyOm\Generator\Generators\VueJs\ControllerGenerator;
+use InfyOm\Generator\Generators\VueJs\LanguageGenerator;
 use InfyOm\Generator\Generators\VueJs\ModelJsConfigGenerator;
 use InfyOm\Generator\Generators\VueJs\RoutesGenerator;
 use InfyOm\Generator\Generators\VueJs\ViewGenerator;
@@ -65,6 +66,9 @@ class VueJsGeneratorCommand extends BaseCommand
 
         $controllerGenerator = new ControllerGenerator($this->commandData);
         $controllerGenerator->generate();
+
+        $languageGenerator = new LanguageGenerator($this->commandData);
+        $languageGenerator->generate();
 
         $viewGenerator = new ViewGenerator($this->commandData);
         $viewGenerator->generate();
