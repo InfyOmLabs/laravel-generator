@@ -42,7 +42,7 @@ class $MODEL_NAME$DataTable extends DataTable
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->addAction(['width' => '80px'])
+            ->addAction(['width' => '80px', 'title' => __('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.action')])
             ->parameters([
                 'dom'     => 'Bfrtip',
                 'order'   => [[0, 'desc']],
@@ -53,6 +53,36 @@ class $MODEL_NAME$DataTable extends DataTable
                     'reset',
                     'reload',
                 ],
+                'language' => [
+                    'sEmptyTable' => __('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.sEmptyTable'),
+                    'sInfo' => __('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.sInfo'),
+                    'sInfoEmpty' => __('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.sInfoEmpty'),
+                    'sInfoFiltered' => __('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.sInfoFiltered'),
+                    'sInfoPostFix' => __('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.sInfoPostFix'),
+                    'sInfoThousands' => __('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.sInfoThousands'),
+                    'sLengthMenu' => __('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.sLengthMenu'),
+                    'sLoadingRecords' => __('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.sLoadingRecords'),
+                    'sProcessing' => __('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.sProcessing'),
+                    'sZeroRecords' => __('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.sZeroRecords'),
+                    'sSearch' => __('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.sSearch'),
+                    'oPaginate' => [
+                        'sNext' => __('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.sNext'),
+                        'sPrevious' => __('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.sPrevious'),
+                        'sFirst' => __('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.sFirst'),
+                        'sLast' => __('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.sLast'),
+                    ],
+                    'oAria' => [
+                        'sSortAscending' => __('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.sSortAscending'),
+                        'sSortDescending' => __('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.sSortDescending'),
+                    ],
+                    'buttons' => [
+                        'create' => __('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.create'),
+                        'export' => __('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.export'),
+                        'print' => __('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.print'),
+                        'reset' => __('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.reset'),
+                        'reload' => __('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.reload'),
+                    ]
+                ]
             ]);
     }
 

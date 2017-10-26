@@ -1,6 +1,7 @@
 [
     {
         "name": "id",
+        "label": "ID",
         "dbType": "increments",
         "htmlType": "",
         "validations": "",
@@ -12,6 +13,7 @@
     },
     {
         "name": "title",
+        "label": "Title",
         "dbType": "string",
         "htmlType": "text",
         "validations": "required",
@@ -19,12 +21,14 @@
     },
     {
         "name": "post_date",
+        "label": "Post Date",
         "dbType": "dateTime",
         "htmlType": "date",
         "searchable": true
     },
     {
         "name": "body",
+        "label": "Some Custom Label",
         "dbType": "text",
         "htmlType": "textarea"
     },
@@ -46,6 +50,7 @@
     },
     {
         "name": "email",
+        "Label": "E-mail",
         "dbType": "string",
         "htmlType": "email",
         "searchable": true
