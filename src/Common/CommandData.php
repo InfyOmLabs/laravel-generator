@@ -128,7 +128,7 @@ class CommandData
         $this->addPrimaryKey();
 
         while (true) {
-            $fieldInputStr = $this->commandObj->ask('Field: (name db_type html_type options)', '');
+            $fieldInputStr = $this->commandObj->ask('Field: (name db_type label html_type options)', '');
 
             if (empty($fieldInputStr) || $fieldInputStr == false || $fieldInputStr == 'exit') {
                 break;

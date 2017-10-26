@@ -44,6 +44,8 @@ return [
         'templates_dir'     => base_path('resources/infyom/infyom-generator-templates/'),
 
         'modelJs'           => base_path('resources/assets/js/models/'),
+
+        'language'          => base_path('resources/lang/'),
     ],
 
     /*
@@ -69,6 +71,15 @@ return [
 
         'api_request'       => 'App\Http\Requests\API',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Locale
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    'locale'         => 'en',
 
     /*
     |--------------------------------------------------------------------------
@@ -129,6 +140,8 @@ return [
         'view' => '',  // using backend will create return view('backend.?.index') type the backend views directory
 
         'public' => '',
+
+        'language' => '', // using backend will create return __('backend.?.string') type the backend language directory
     ],
 
     /*
