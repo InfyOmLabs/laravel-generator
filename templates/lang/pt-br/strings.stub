@@ -1,0 +1,42 @@
+<?php
+
+return [
+    'action' =>         'Ação',
+    'addnew' =>         'Adicionar Novo',
+    'save' =>           'Salvar',
+    'cancel' =>         'Cancelar',
+    'delete' =>         'Deletar',
+    'back' =>           'Voltar',
+    'areyousure' =>     'Você tem certeza?',
+    'form' =>           'Formulário',
+
+    'store.success' =>  ':name salvo com sucesso.',
+    'update.success' => ':name atualizado com sucesso.',
+    'destroy.success'=> ':name deletado com sucesso.',
+    'notfound' =>       ':name não encontrado(a).',
+
+    'sEmptyTable' =>    'Nenhum registro encontrado',
+    'sInfo' =>          'Mostrando de _START_ até _END_ de _TOTAL_ registros',
+    'sInfoEmpty' =>     'Mostrando 0 até 0 de 0 registros',
+    'sInfoFiltered' =>  '(Filtrados de _MAX_ registros)',
+    'sInfoPostFix' =>   '',
+    'sInfoThousands' => '.',
+    'sLengthMenu' =>    '_MENU_ resultados por página',
+    'sLoadingRecords'=> 'Carregando...',
+    'sProcessing' =>    'Processando...',
+    'sZeroRecords' =>   'Nenhum registro encontrado',
+    'sSearch' =>        'Pesquisar',
+    'sFirst' =>         'Primeiro',
+    'sLast' =>          'Último',
+    'sNext' =>          'Próximo',
+    'sPrevious' =>      'Anterior',
+    'sSortAscending' => ': Ordenar colunas de forma ascendente',
+    'sSortDescending'=> ': Ordenar colunas de forma descendente',
+    'create' =>         'Criar',
+    'export' =>         'Exportar',
+    'print' =>          'Imprimir',
+    'reset' =>          'Reiniciar',
+    'reload' =>         'Recarregar',
+    
+    $FIELDS_NAME_LABEL$
+];
