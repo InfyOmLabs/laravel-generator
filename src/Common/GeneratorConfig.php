@@ -36,7 +36,11 @@ class GeneratorConfig
     public $pathRequest;
     public $pathRoutes;
     public $pathViews;
+    public $pathLanguage;
     public $modelJsPath;
+
+    /* Language Locale variable */
+    public $locale;
 
     /* Model Names */
     public $mName;
@@ -150,6 +154,14 @@ class GeneratorConfig
             $viewPrefix .= '/';
         }
 
+        $languagePrefix = $this->prefixes['language'];
+
+        $this->locale = config('infyom.laravel_generator.locale', 'en');
+
+        if (!empty($languagePrefix)) {
+            $languagePrefix .= '/';
+        }
+
         $this->pathRepository = config(
             'infyom.laravel_generator.path.repository',
             app_path('Repositories/')
@@ -191,6 +203,11 @@ class GeneratorConfig
             'infyom.laravel_generator.path.views',
             base_path('resources/views/')
         ).$viewPrefix.$this->mSnakePlural.'/';
+
+        $this->pathLanguage = config('infyom.laravel_generator.path.language', base_path('resources/lang/'))
+            .$this->locale
+            .'/'
+            .$languagePrefix;
 
         $this->modelJsPath = config(
                 'infyom.laravel_generator.path.modelsJs',
@@ -248,6 +265,12 @@ class GeneratorConfig
             $commandData->addDynamicVariable('$VIEW_PREFIX$', str_replace('/', '.', $this->prefixes['view']).'.');
         } else {
             $commandData->addDynamicVariable('$VIEW_PREFIX$', '');
+        }
+
+        if (!empty($this->prefixes['language'])) {
+            $commandData->addDynamicVariable('$LANGUAGE_PREFIX$', str_replace('/', '.', $this->prefixes['language']).'/');
+        } else {
+            $commandData->addDynamicVariable('$LANGUAGE_PREFIX$', '');
         }
 
         if (!empty($this->prefixes['public'])) {
@@ -335,6 +358,7 @@ class GeneratorConfig
         $this->prefixes['path'] = explode('/', config('infyom.laravel_generator.prefixes.path', ''));
         $this->prefixes['view'] = explode('.', config('infyom.laravel_generator.prefixes.view', ''));
         $this->prefixes['public'] = explode('/', config('infyom.laravel_generator.prefixes.public', ''));
+        $this->prefixes['language'] = explode('/', config('infyom.laravel_generator.prefixes.language', ''));
 
         if ($this->getOption('prefix')) {
             $multiplePrefixes = explode(',', $this->getOption('prefix'));
@@ -343,12 +367,14 @@ class GeneratorConfig
             $this->prefixes['path'] = array_merge($this->prefixes['path'], $multiplePrefixes);
             $this->prefixes['view'] = array_merge($this->prefixes['view'], $multiplePrefixes);
             $this->prefixes['public'] = array_merge($this->prefixes['public'], $multiplePrefixes);
+            $this->prefixes['language'] = array_merge($this->prefixes['language'], $multiplePrefixes);
         }
 
         $this->prefixes['route'] = array_diff($this->prefixes['route'], ['']);
         $this->prefixes['path'] = array_diff($this->prefixes['path'], ['']);
         $this->prefixes['view'] = array_diff($this->prefixes['view'], ['']);
         $this->prefixes['public'] = array_diff($this->prefixes['public'], ['']);
+        $this->prefixes['language'] = array_diff($this->prefixes['language'], ['']);
 
         $routePrefix = '';
 
@@ -409,6 +435,18 @@ class GeneratorConfig
         }
 
         $this->prefixes['public'] = $publicPrefix;
+
+        $languagePrefix = '';
+
+        foreach ($this->prefixes['language'] as $singlePrefix) {
+            $languagePrefix .= Str::camel($singlePrefix).'/';
+        }
+
+        if (!empty($languagePrefix)) {
+            $languagePrefix = substr($languagePrefix, 0, strlen($languagePrefix) - 1);
+        }
+
+        $this->prefixes['language'] = $languagePrefix;
     }
 
     public function overrideOptionsFromJsonFile($jsonData)

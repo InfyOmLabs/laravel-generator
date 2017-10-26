@@ -15,6 +15,7 @@ use InfyOm\Generator\Generators\RepositoryTestGenerator;
 use InfyOm\Generator\Generators\Scaffold\ControllerGenerator;
 use InfyOm\Generator\Generators\Scaffold\MenuGenerator;
 use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
+use InfyOm\Generator\Generators\Scaffold\LanguageGenerator;
 use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
 use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
 use InfyOm\Generator\Generators\TestTraitGenerator;
@@ -118,6 +119,11 @@ class BaseCommand extends Command
             $viewGenerator->generate();
         }
 
+        if (!$this->isSkip('language')) {
+            $languageGenerator = new LanguageGenerator($this->commandData);
+            $languageGenerator->generate();
+        }
+
         if (!$this->isSkip('routes') and !$this->isSkip('scaffold_routes')) {
             $routeGenerator = new RoutesGenerator($this->commandData);
             $routeGenerator->generate();
@@ -173,6 +179,7 @@ class BaseCommand extends Command
         foreach ($this->commandData->fields as $field) {
             $fileFields[] = [
                 'name'        => $field->name,
+                'label'       => $field->label,
                 'dbType'      => $field->dbInput,
                 'htmlType'    => $field->htmlInput,
                 'validations' => $field->validations,
