@@ -42,6 +42,8 @@ class LanguageGenerator extends BaseGenerator
 
     private function fill_template($templateData)
     {
+        $templateData = str_replace('$MODEL_NAME_HUMAN$', $this->commandData->dynamicVars['$MODEL_NAME_HUMAN$'], $templateData);
+
         $fields_name_label = '';
 
         foreach ($this->commandData->fields as $field) {

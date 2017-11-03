@@ -59,7 +59,7 @@ class $MODEL_NAME$Controller extends AppBaseController
 
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->create($input);
 
-        Flash::success(__('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.store.success', ['name' => '$MODEL_NAME_HUMAN$']));
+        Flash::success(__('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.store.success'));
 
         return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
     }
@@ -76,7 +76,7 @@ class $MODEL_NAME$Controller extends AppBaseController
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
-            Flash::error(__('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.notfound', ['name' => '$MODEL_NAME_HUMAN$']));
+            Flash::error(__('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.notfound'));
 
             return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
         }
@@ -96,7 +96,7 @@ class $MODEL_NAME$Controller extends AppBaseController
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
-            Flash::error(__('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.notfound', ['name' => '$MODEL_NAME_HUMAN$']));
+            Flash::error(__('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.notfound'));
 
             return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
         }
@@ -117,14 +117,14 @@ class $MODEL_NAME$Controller extends AppBaseController
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
-            Flash::error(__('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.notfound', ['name' => '$MODEL_NAME_HUMAN$']));
+            Flash::error(__('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.notfound'));
 
             return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
         }
 
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->update($request->all(), $id);
 
-        Flash::success(__('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.update.success', ['name' => '$MODEL_NAME_HUMAN$']));
+        Flash::success(__('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.update.success'));
 
         return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
     }
@@ -141,14 +141,14 @@ class $MODEL_NAME$Controller extends AppBaseController
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
-            Flash::error(__('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.notfound', ['name' => '$MODEL_NAME_HUMAN$']));
+            Flash::error(__('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.notfound'));
 
             return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
         }
 
         $this->$MODEL_NAME_CAMEL$Repository->delete($id);
 
-        Flash::success(__('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.destroy.success', ['name' => '$MODEL_NAME_HUMAN$']));
+        Flash::success(__('$LANGUAGE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.destroy.success'));
 
         return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
     }
