@@ -47,7 +47,7 @@ class LanguageGenerator extends BaseGenerator
         $fields_name_label = '';
 
         foreach ($this->commandData->fields as $field) {
-            $fields_name_label .= "'".$field->name."' => '".(isset($field->label) ? $field->label : $field->name)."',\n\t";
+            $fields_name_label .= "'field.".$field->name."' => '".(isset($field->label) ? $field->label : $field->name)."',\n\t";
         }
 
         $templateData = str_replace('$FIELDS_NAME_LABEL$', $fields_name_label, $templateData);
