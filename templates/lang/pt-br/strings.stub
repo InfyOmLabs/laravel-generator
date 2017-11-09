@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'model.name' =>     '[0,1] $MODEL_NAME_HUMAN$|[2,*] $MODEL_NAME_PLURAL_HUMAN$',
+    
     'action' =>         'Ação',
     'addnew' =>         'Adicionar Novo',
     'save' =>           'Salvar',
