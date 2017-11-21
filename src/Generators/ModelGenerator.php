@@ -173,14 +173,14 @@ class ModelGenerator extends BaseGenerator
     {
         $fieldTypes = SwaggerGenerator::generateTypes($this->commandData->fields);
 
-        $template = get_template('model.model', 'swagger-generator');
+        $template = get_template('model_docs.model', 'swagger-generator');
 
         $template = fill_template($this->commandData->dynamicVars, $template);
 
         $template = str_replace('$REQUIRED_FIELDS$',
             '"'.implode('"'.', '.'"', $this->generateRequiredFields()).'"', $template);
 
-        $propertyTemplate = get_template('model.property', 'swagger-generator');
+        $propertyTemplate = get_template('model_docs.property', 'swagger-generator');
 
         $properties = SwaggerGenerator::preparePropertyFields($propertyTemplate, $fieldTypes);
 
