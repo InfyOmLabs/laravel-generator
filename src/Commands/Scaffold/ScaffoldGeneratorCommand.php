@@ -40,11 +40,15 @@ class ScaffoldGeneratorCommand extends BaseCommand
     {
         parent::handle();
 
-        $this->generateCommonItems();
+        if ($this->checkIsThereAnyDataToGenerate()) {
+            $this->generateCommonItems();
 
-        $this->generateScaffoldItems();
+            $this->generateScaffoldItems();
 
-        $this->performPostActionsWithMigration();
+            $this->performPostActionsWithMigration();
+        } else {
+            $this->commandData->commandInfo('There isn not input fields to generate.');
+        }
     }
 
     /**
@@ -65,5 +69,17 @@ class ScaffoldGeneratorCommand extends BaseCommand
     protected function getArguments()
     {
         return array_merge(parent::getArguments(), []);
+    }
+
+    /**
+     * Check if there is anything to generate.
+     *
+     * @return bool
+     */
+    protected function checkIsThereAnyDataToGenerate()
+    {
+        if (count($this->commandData->fields) > 3) {
+            return true;
+        }
     }
 }

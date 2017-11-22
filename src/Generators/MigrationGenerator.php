@@ -6,8 +6,6 @@ use File;
 use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Utils\FileUtil;
-use InfyOm\Generator\Utils\SchemaUtil;
-use InfyOm\Generator\Utils\TemplateUtil;
 use SplFileInfo;
 
 class MigrationGenerator extends BaseGenerator
@@ -26,9 +24,9 @@ class MigrationGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = TemplateUtil::getTemplate('migration', 'laravel-generator');
+        $templateData = get_template('migration', 'laravel-generator');
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         $templateData = str_replace('$FIELDS$', $this->generateFields(), $templateData);
 
@@ -45,21 +43,43 @@ class MigrationGenerator extends BaseGenerator
     private function generateFields()
     {
         $fields = [];
+        $foreignKeys = [];
+        $createdAtField = null;
+        $updatedAtField = null;
 
-        foreach ($this->commandData->inputFields as $field) {
-            if ($field['fieldName'] == 'created_at' or $field['fieldName'] == 'updated_at') {
+        foreach ($this->commandData->fields as $field) {
+            if ($field->name == 'created_at') {
+                $createdAtField = $field;
                 continue;
+            } else {
+                if ($field->name == 'updated_at') {
+                    $updatedAtField = $field;
+                    continue;
+                }
             }
-            $fields[] = SchemaUtil::createField($field);
+
+            $fields[] = $field->migrationText;
+            if (!empty($field->foreignKeyText)) {
+                $foreignKeys[] = $field->foreignKeyText;
+            }
         }
 
-        $fields[] = '$table->timestamps();';
+        if ($createdAtField and $updatedAtField) {
+            $fields[] = '$table->timestamps();';
+        } else {
+            if ($createdAtField) {
+                $fields[] = $createdAtField->migrationText;
+            }
+            if ($updatedAtField) {
+                $fields[] = $updatedAtField->migrationText;
+            }
+        }
 
         if ($this->commandData->getOption('softDelete')) {
             $fields[] = '$table->softDeletes();';
         }
 
-        return implode(infy_nl_tab(1, 3), $fields);
+        return implode(infy_nl_tab(1, 3), array_merge($fields, $foreignKeys));
     }
 
     public function rollback()

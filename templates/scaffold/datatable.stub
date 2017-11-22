@@ -3,64 +3,56 @@
 namespace $NAMESPACE_DATATABLES$;
 
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
-use Form;
-use Yajra\Datatables\Services\DataTable;
+use Yajra\DataTables\Services\DataTable;
+use Yajra\DataTables\EloquentDataTable;
 
 class $MODEL_NAME$DataTable extends DataTable
 {
-
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * Build DataTable class.
+     *
+     * @param mixed $query Results from query() method.
+     * @return \Yajra\DataTables\DataTableAbstract
      */
-    public function ajax()
+    public function dataTable($query)
     {
-        return $this->datatables
-            ->eloquent($this->query())
-            ->addColumn('action', '$VIEW_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.datatables_actions')
-            ->make(true);
+        $dataTable = new EloquentDataTable($query);
+
+        return $dataTable->addColumn('action', '$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.datatables_actions');
     }
 
     /**
-     * Get the query object to be processed by datatables.
+     * Get query source of dataTable.
      *
-     * @return \Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder
+     * @param \App\Models\Post $model
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query()
+    public function query($MODEL_NAME$ $model)
     {
-        $$MODEL_NAME_PLURAL_CAMEL$ = $MODEL_NAME$::query();
-
-        return $this->applyScopes($$MODEL_NAME_PLURAL_CAMEL$);
+        return $model->newQuery();
     }
 
     /**
      * Optional method if you want to use html builder.
      *
-     * @return \Yajra\Datatables\Html\Builder
+     * @return \Yajra\DataTables\Html\Builder
      */
     public function html()
     {
         return $this->builder()
             ->columns($this->getColumns())
-            ->addAction(['width' => '10%'])
-            ->ajax('')
+            ->minifiedAjax()
+            ->addAction(['width' => '80px'])
             ->parameters([
-                'dom' => 'Bfrtip',
-                'scrollX' => false,
+                'dom'     => 'Bfrtip',
+                'order'   => [[0, 'desc']],
                 'buttons' => [
                     'create',
+                    'export',
                     'print',
                     'reset',
                     'reload',
-                    [
-                         'extend'  => 'collection',
-                         'text'    => '<i class="fa fa-download"></i> Export',
-                         'buttons' => [
-                             'csv',
-                             'excel',
-                             'pdf',
-                         ],
-                    ]
-                ]
+                ],
             ]);
     }
 
@@ -69,7 +61,7 @@ class $MODEL_NAME$DataTable extends DataTable
      *
      * @return array
      */
-    private function getColumns()
+    protected function getColumns()
     {
         return [
             $DATATABLE_COLUMNS$
@@ -83,6 +75,6 @@ class $MODEL_NAME$DataTable extends DataTable
      */
     protected function filename()
     {
-        return '$MODEL_NAME_PLURAL_CAMEL$';
+        return '$MODEL_NAME_PLURAL_SNAKE$datatable_' . time();
     }
 }

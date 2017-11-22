@@ -1,6 +1,7 @@
 [
     {
-        "fieldInput": "id:increments",
+        "name": "id",
+        "dbType": "increments",
         "htmlType": "",
         "validations": "",
         "searchable": false,
@@ -10,95 +11,112 @@
         "inIndex": false
     },
     {
-        "fieldInput": "title:string,20",
+        "name": "title",
+        "dbType": "string",
         "htmlType": "text",
         "validations": "required",
-        "searchable": true,
-        "inForm": true,
-        "inIndex": true
+        "searchable": true
     },
     {
-        "fieldInput": "email:string",
+        "name": "post_date",
+        "dbType": "dateTime",
+        "htmlType": "date",
+        "searchable": true
+    },
+    {
+        "name": "body",
+        "dbType": "text",
+        "htmlType": "textarea"
+    },
+    {
+        "name": "password",
+        "dbType": "string",
+        "htmlType": "password",
+        "searchable": false,
+        "inForm": false,
+        "inIndex": false
+    },
+    {
+        "name": "token",
+        "dbType": "string",
+        "htmlType": "hidden",
+        "searchable": false,
+        "inForm": false,
+        "inIndex": false
+    },
+    {
+        "name": "email",
+        "dbType": "string",
         "htmlType": "email",
         "searchable": true
     },
     {
-        "fieldInput": "post_date:dateTime",
-        "htmlType": "date"
+        "name": "author_gender",
+        "dbType": "integer",
+        "htmlType": "radio,Male:1,Female:0"
     },
     {
-        "fieldInput": "words:integer",
+        "name": "post_type",
+        "dbType": "string",
+        "htmlType": "radio,Public,Private",
+        "searchable": true
+    },
+    {
+        "name": "post_visits",
+        "dbType": "integer",
         "htmlType": "number"
     },
     {
-        "fieldInput": "attachment:string",
-        "htmlType": "file"
-    },
-    {
-        "fieldInput": "password:string",
-        "htmlType": "password",
-        "inIndex": false
-    },
-    {
-        "fieldInput": "post_type:string",
-        "htmlType": "select:Type1,Type2,Type3,Type4",
-        "validations": "",
+        "name": "category",
+        "dbType": "string",
+        "htmlType": "select,Technology,LifeStyle,Education,Games",
         "searchable": true
     },
     {
-        "fieldInput": "post_day:enum",
-        "htmlType": "enum:Mon,Tue,Wed,Thu,Fri,Sat,Sun",
-        "validations": "",
-        "searchable": true
+        "name": "category_short",
+        "dbType": "string",
+        "htmlType": "select,Technology:tech,LifeStyle:ls,Education:edu,Games:game"
     },
     {
-        "fieldInput": "post_author_gender:string",
-        "htmlType": "radio:Male,Female",
+        "name": "is_private",
+        "dbType": "boolean",
+        "htmlType": "checkbox:1"
+    },
+    {
+        "name": "writer_id",
+        "dbType": "integer:unsigned:foreign,writers,id",
+        "htmlType": "text",
+        "relation": "mt1,Writer,writer_id,id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,Comment"
+    },
+    {
+        "name": "users",
+        "type": "relation",
+        "relation": "mtm,Role,user_roles,user_id,role_id"
+    },
+    {
+        "name": "created_at",
+        "dbType": "timestamp",
+        "htmlType": "",
         "validations": "",
         "searchable": false,
-        "fillable": true,
+        "fillable": false,
         "primary": false,
-        "inForm": true,
+        "inForm": false,
         "inIndex": false
     },
     {
-        "fieldInput": "body:text",
-        "htmlType": "textarea",
+        "name": "updated_at",
+        "dbType": "timestamp",
+        "htmlType": "",
         "validations": "",
         "searchable": false,
-        "fillable": true,
+        "fillable": false,
         "primary": false,
-        "inForm": true,
+        "inForm": false,
         "inIndex": false
-    },
-    {
-        "fieldInput": "private_post:string",
-        "htmlType": "checkbox:Yes",
-        "validations": "",
-        "searchable": true,
-        "fillable": true,
-        "primary": false,
-        "inForm": true,
-        "inIndex": false
-    },
-    {
-        "fieldInput": "is_active:boolean",
-        "htmlType": "bool-checkbox:checked",
-        "validations": "",
-        "searchable": true,
-        "fillable": true,
-        "primary": false,
-        "inForm": true,
-        "inIndex": false
-    },
-    {
-        "fieldInput": "is_published:boolean",
-        "htmlType": "toggle-switch",
-        "validations": "",
-        "searchable": true,
-        "fillable": true,
-        "primary": false,
-        "inForm": true,
-        "inIndex": false
-    },
+    }
 ]
