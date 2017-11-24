@@ -54,6 +54,6 @@ class $MODEL_NAME$ApiTest extends TestCase
         $this->assertApiSuccess();
         $this->response = $this->json('GET', '/api/v1/$MODEL_NAME_PLURAL_CAMEL$/'.$$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
 
-        $this->assertResponseStatus(404);
+        $this->response->assertStatus(404);
     }
 }
