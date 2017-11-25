@@ -85,14 +85,19 @@ if (!function_exists('get_template_file_path')) {
     function get_template_file_path($templateName, $templateType)
     {
         $templateName = str_replace('.', '/', $templateName);
-
-        $templatesPath = config(
-            'infyom.laravel_generator.path.templates_dir',
-            base_path('resources/infyom/infyom-generator-templates/')
-        );
+        if ($templateType == 'laravel-generator') {
+            $templatesPath = config(
+                'infyom.laravel_generator.path.templates_dir',
+                base_path('resources/infyom/infyom-generator-templates/')
+            );
+        } else {
+            $templatesPath = config(
+                'infyom.'. $templateType .'.path.templates_dir',
+                base_path('resources/infyom/'. $templateType .'/')
+            );
+        }
 
         $path = $templatesPath.$templateName.'.stub';
-
         if (file_exists($path)) {
             return $path;
         }
