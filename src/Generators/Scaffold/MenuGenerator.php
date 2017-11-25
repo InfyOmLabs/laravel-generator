@@ -31,7 +31,7 @@ class MenuGenerator extends BaseGenerator
                 base_path('resources/views/'
                 )
             ).$commandData->getAddOn('menu.menu_file');
-        $this->templateType = config('infyom.laravel_generator.templates', 'core-templates');
+        $this->templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
 
         $this->menuContents = file_get_contents($this->path);
 
