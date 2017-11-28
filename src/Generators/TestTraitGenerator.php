@@ -55,6 +55,10 @@ class TestTraitGenerator extends BaseGenerator
                 continue;
             }
 
+            if ($field->fieldType === 'timestamp') {
+                continue;
+            }
+
             $fieldData = "'".$field->name."' => ".'$fake->';
 
             switch ($field->fieldType) {
@@ -69,7 +73,6 @@ class TestTraitGenerator extends BaseGenerator
                     $fakerData = 'text';
                     break;
                 case 'dateTime':
-                case 'timestamp':
                     $fakerData = "date('Y-m-d H:i:s')";
                     break;
                 case 'enum':
