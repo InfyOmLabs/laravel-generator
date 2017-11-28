@@ -1,8 +1,12 @@
 <?php
 
+namespace Tests\Feature\API;
+
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\ApiTestTrait;
 use Tests\TestCase;
+use Tests\Traits\Make$MODEL_NAME$Trait;
 
 class $MODEL_NAME$ApiTest extends TestCase
 {
