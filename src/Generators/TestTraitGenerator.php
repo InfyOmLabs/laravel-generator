@@ -69,6 +69,7 @@ class TestTraitGenerator extends BaseGenerator
                     $fakerData = 'text';
                     break;
                 case 'dateTime':
+                case 'timestamp':
                     $fakerData = "date('Y-m-d H:i:s')";
                     break;
                 case 'enum':
