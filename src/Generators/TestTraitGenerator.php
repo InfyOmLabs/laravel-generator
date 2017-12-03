@@ -59,6 +59,10 @@ class TestTraitGenerator extends BaseGenerator
                 continue;
             }
 
+            if (!$field->isFillable) {
+                continue;
+            }
+
             $fieldData = "'".$field->name."' => ".'$fake->';
 
             switch ($field->fieldType) {
