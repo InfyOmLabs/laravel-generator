@@ -17,6 +17,12 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
 
     public function create(array $attributes)
     {
+        foreach ( $this->model->getCasts() as $key => $castType ) {
+            if ($castType == 'boolean' && !isset($attributes[$key])) {
+                $attributes[$key] = false;
+            }
+        }
+        
         // Have to skip presenter to get a model not some data
         $temporarySkipPresenter = $this->skipPresenter;
         $this->skipPresenter(true);
@@ -31,6 +37,12 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
 
     public function update(array $attributes, $id)
     {
+        foreach ( $this->model->getCasts() as $key => $castType ) {
+            if ($castType == 'boolean' && !isset($attributes[$key])) {
+                $attributes[$key] = false;
+            }
+        }
+        
         // Have to skip presenter to get a model not some data
         $temporarySkipPresenter = $this->skipPresenter;
         $this->skipPresenter(true);
