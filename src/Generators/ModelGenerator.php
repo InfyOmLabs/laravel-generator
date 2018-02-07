@@ -230,9 +230,14 @@ class ModelGenerator extends BaseGenerator
 
     private function generateRules()
     {
+        $dont_require_fields = config('infyom.laravel_generator.options.hidden_fields', [])
+                + config('infyom.laravel_generator.options.excluded_fields', []);
+
         $rules = [];
 
         foreach ($this->commandData->fields as $field) {
+            if ($field->isNotNull && empty($field->validations) && !in_array($field->name, $dont_require_fields))
+                $field->validations = 'required';
             if (!empty($field->validations)) {
                 $rule = "'".$field->name."' => '".$field->validations."'";
                 $rules[] = $rule;
