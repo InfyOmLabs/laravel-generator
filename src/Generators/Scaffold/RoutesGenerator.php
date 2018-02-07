@@ -23,6 +23,12 @@ class RoutesGenerator
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathRoutes;
+        if (!is_dir(dirname($this->path))) {
+            mkdir(dirname($this->path), 755, true);
+        }
+        if (!file_exists($this->path)) {
+            touch($this->path);
+        }
         $this->routeContents = file_get_contents($this->path);
         if (!empty($this->commandData->config->prefixes['route'])) {
             $this->routesTemplate = get_template('scaffold.routes.prefix_routes', 'laravel-generator');
@@ -34,9 +40,12 @@ class RoutesGenerator
 
     public function generate()
     {
-        $this->routeContents .= "\n\n".$this->routesTemplate;
+        if (strpos($this->routeContents, $this->routesTemplate) === false) {
+            $this->routeContents .= "\n\n".$this->routesTemplate;
 
-        file_put_contents($this->path, $this->routeContents);
+            file_put_contents($this->path, $this->routeContents);
+        }
+
         $this->commandData->commandComment("\n".$this->commandData->config->mCamelPlural.' routes added.');
     }
 
