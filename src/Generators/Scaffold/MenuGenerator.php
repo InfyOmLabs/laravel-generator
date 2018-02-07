@@ -43,8 +43,8 @@ class MenuGenerator extends BaseGenerator
     public function generate()
     {
         $this->menuContents .= $this->menuTemplate.infy_nl();
-
-        file_put_contents($this->path, $this->menuContents);
+        if (strpos(file_get_contents($this->path), $this->menuContents) !== FALSE)
+            file_put_contents($this->path, $this->menuContents);
         $this->commandData->commandComment("\n".$this->commandData->config->mCamelPlural.' menu added.');
     }
 
