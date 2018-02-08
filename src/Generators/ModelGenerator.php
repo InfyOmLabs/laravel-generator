@@ -237,7 +237,7 @@ class ModelGenerator extends BaseGenerator
 
         foreach ($this->commandData->fields as $field) {
             if ($field->isNotNull && empty($field->validations) && !in_array($field->name, $dont_require_fields)) {
-                 $field->validations = 'required';
+                $field->validations = 'required';
             }
             if (!empty($field->validations)) {
                 $rule = "'".$field->name."' => '".$field->validations."'";
