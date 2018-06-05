@@ -84,11 +84,11 @@ class SwaggerGenerator
                     'format' => $fieldFormat,
                 ];
 
-//                if (isset($field['description'])) {
-//                    $fieldType['description'] = $field['description'];
-//                } else {
+                //                if (isset($field['description'])) {
+                //                    $fieldType['description'] = $field['description'];
+                //                } else {
                 $fieldType['description'] = '';
-//                }
+                //                }
 
                 $fieldTypes[] = $fieldType;
             }
@@ -101,13 +101,13 @@ class SwaggerGenerator
 
     public static function generateSwagger($fields, $fillables, $variables)
     {
-        $template = get_template('model.model', 'swagger-generator');
+        $template = get_template('model_docs.model', 'swagger-generator');
 
         $templateData = fill_template($variables, $template);
 
         $templateData = str_replace('$REQUIRED_FIELDS$', '"'.implode('", "', $fillables).'"', $templateData);
 
-        $propertyTemplate = get_template('model.property', 'swagger-generator');
+        $propertyTemplate = get_template('model_docs.property', 'swagger-generator');
 
         $properties = self::preparePropertyFields($propertyTemplate, $fields);
 

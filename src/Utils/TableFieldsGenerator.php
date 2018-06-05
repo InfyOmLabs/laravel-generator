@@ -57,6 +57,8 @@ class TableFieldsGenerator
         $this->schemaManager = DB::getDoctrineSchemaManager();
         $platform = $this->schemaManager->getDatabasePlatform();
         $platform->registerDoctrineTypeMapping('enum', 'string');
+        $platform->registerDoctrineTypeMapping('json', 'text');
+        $platform->registerDoctrineTypeMapping('bit', 'boolean');
 
         $this->columns = $this->schemaManager->listTableColumns($tableName);
 
@@ -85,7 +87,7 @@ class TableFieldsGenerator
                     break;
                 case 'boolean':
                     $name = title_case(str_replace('_', ' ', $column->getName()));
-                    $field = $this->generateField($column, 'bigInteger', 'checkbox,'.$name.',1');
+                    $field = $this->generateField($column, 'boolean', 'checkbox,1');
                     break;
                 case 'datetime':
                     $field = $this->generateField($column, 'datetime', 'date');
@@ -109,7 +111,7 @@ class TableFieldsGenerator
                     $field = $this->generateField($column, 'string', 'text');
                     break;
                 case 'text':
-                    $field = $this->generateField($column, 'text', 'textarea`');
+                    $field = $this->generateField($column, 'text', 'textarea');
                     break;
                 default:
                     $field = $this->generateField($column, 'string', 'text');
@@ -226,7 +228,7 @@ class TableFieldsGenerator
         $field = new GeneratorField();
         $field->name = $column->getName();
         $field->parseDBType($dbType);
-        $field->htmlType = $htmlType;
+        $field->parseHtmlInput($htmlType);
 
         return $this->checkForPrimary($field);
     }
@@ -487,6 +489,10 @@ class TableFieldsGenerator
         foreach ($foreignKeys as $foreignKey) {
             $foreignTable = $foreignKey->foreignTable;
             $foreignField = $foreignKey->foreignField;
+
+            if (!isset($tables[$foreignTable])) {
+                continue;
+            }
 
             if ($foreignField == $tables[$foreignTable]->primaryKey) {
                 $modelName = model_name_from_table_name($foreignTable);

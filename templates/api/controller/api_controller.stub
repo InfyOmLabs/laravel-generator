@@ -47,7 +47,7 @@ class $MODEL_NAME$APIController extends AppBaseController
     public function show($id)
     {
         /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
+        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
             return $this->sendError('$MODEL_NAME_HUMAN$ not found');
@@ -62,7 +62,7 @@ class $MODEL_NAME$APIController extends AppBaseController
         $input = $request->all();
 
         /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
+        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
             return $this->sendError('$MODEL_NAME_HUMAN$ not found');
@@ -77,7 +77,7 @@ class $MODEL_NAME$APIController extends AppBaseController
     public function destroy($id)
     {
         /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
+        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
             return $this->sendError('$MODEL_NAME_HUMAN$ not found');

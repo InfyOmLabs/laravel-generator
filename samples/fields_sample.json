@@ -84,7 +84,7 @@
     },
     {
         "name": "writer_id",
-        "dbType": "integer:unsigned:foreign,writers,id",
+        "dbType": "integer:unsigned:default,0:foreign,writers,id",
         "htmlType": "text",
         "relation": "mt1,Writer,writer_id,id"
     },

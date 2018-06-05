@@ -139,7 +139,9 @@ class BaseCommand extends Command
             if ($this->commandData->config->forceMigrate) {
                 $this->call('migrate');
             } elseif (!$this->commandData->getOption('fromTable') and !$this->isSkip('migration')) {
-                if ($this->confirm("\nDo you want to migrate database? [y|N]", false)) {
+                if ($this->commandData->getOption('jsonFromGUI')) {
+                    $this->call('migrate');
+                } elseif ($this->confirm("\nDo you want to migrate database? [y|N]", false)) {
                     $this->call('migrate');
                 }
             }
@@ -170,14 +172,22 @@ class BaseCommand extends Command
 
         foreach ($this->commandData->fields as $field) {
             $fileFields[] = [
-                'fieldInput'  => $field['fieldInput'],
-                'htmlType'    => $field['htmlType'],
-                'validations' => $field['validations'],
-                'searchable'  => $field['searchable'],
-                'fillable'    => $field['fillable'],
-                'primary'     => $field['primary'],
-                'inForm'      => $field['inForm'],
-                'inIndex'     => $field['inIndex'],
+                'name'        => $field->name,
+                'dbType'      => $field->dbInput,
+                'htmlType'    => $field->htmlInput,
+                'validations' => $field->validations,
+                'searchable'  => $field->isSearchable,
+                'fillable'    => $field->isFillable,
+                'primary'     => $field->isPrimary,
+                'inForm'      => $field->inForm,
+                'inIndex'     => $field->inIndex,
+            ];
+        }
+
+        foreach ($this->commandData->relations as $relation) {
+            $fileFields[] = [
+                'type'     => 'relation',
+                'relation' => $relation->type.','.implode(',', $relation->inputs),
             ];
         }
 
