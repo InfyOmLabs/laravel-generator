@@ -76,7 +76,7 @@ class GeneratorFieldsInputUtilTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNull($res->htmlType);
 
-        // name, db_type and html_type
+        // name, db_type and html_type if,s
         $input = 'title string text if,s';
         $validations = 'required';
 
@@ -95,5 +95,42 @@ class GeneratorFieldsInputUtilTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($res->isPrimary);
         $this->assertFalse($res->inForm);
         $this->assertTrue($res->inIndex);
+    }
+
+    public function testPrepareKeyValueArrayStr()
+    {
+        $arr = ['a' => 'A', 'b' => 'B'];
+
+        $res = GeneratorFieldsInputUtil::prepareKeyValueArrayStr($arr);
+        $expected = '[\'A\' => \'a\', \'B\' => \'b\']';
+
+        $this->assertEquals($expected, $res);
+    }
+
+    public function testPrepareValuesArrayStr()
+    {
+        $arr = ['A', 'B', 'C'];
+
+        $res = GeneratorFieldsInputUtil::prepareValuesArrayStr($arr);
+        $expected = '[\'A\', \'B\', \'C\']';
+
+        $this->assertEquals($expected, $res);
+    }
+
+    public function testKeyValueArrFromLabelValueStr()
+    {
+        $arr = ['A', 'B', 'C'];
+
+        $res = GeneratorFieldsInputUtil::prepareKeyValueArrFromLabelValueStr($arr);
+        $expected = ['A' => 'A', 'B' => 'B', 'C' => 'C'];
+
+        $this->assertEquals($expected, $res);
+
+        $arr = ['A:aa', 'B:bb', 'C:cc'];
+
+        $res = GeneratorFieldsInputUtil::prepareKeyValueArrFromLabelValueStr($arr);
+        $expected = ['A' => 'aa', 'B' => 'bb', 'C' => 'cc'];
+
+        $this->assertEquals($expected, $res);
     }
 }
