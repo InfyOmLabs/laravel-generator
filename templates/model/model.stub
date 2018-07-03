@@ -8,6 +8,9 @@ $DOCS$
 class $MODEL_NAME$ extends Model
 {
 $SOFT_DELETE$
+
+    const NAME = "$MODEL_NAME_HUMAN$";
+
     public $table = '$TABLE_NAME$';
     $TIMESTAMPS$
 $SOFT_DELETE_DATES$
