@@ -41,7 +41,7 @@ class $MODEL_NAME$DataTable extends DataTable
     {
         return $this->builder()
             ->columns($this->getColumns())
-            ->addAction(['width' => '10%'])
+            ->addAction(['width' => '120px'])
             ->ajax('')
             ->parameters([
                 'dom' => 'Bfrtip',
