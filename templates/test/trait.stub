@@ -1,5 +1,5 @@
 <?php
-
+namespace Tests;
 use Faker\Factory as Faker;
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
 use $NAMESPACE_REPOSITORY$\$MODEL_NAME$Repository;
