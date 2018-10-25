@@ -7,65 +7,66 @@ use App;
 
 class $MODEL_NAME$RepositoryTest extends TestCase
 {
-    use Make$MODEL_NAME$Trait, ApiTestTrait, DatabaseTransactions;
+  use AuthenticateApiTestTrait, Make$MODEL_NAME$Trait, ApiTestTrait, DatabaseTransactions;
 
-    /**
-     * @var $MODEL_NAME$Repository
-     */
-    protected $$MODEL_NAME_CAMEL$Repo;
+  /**
+   * @var $MODEL_NAME$Repository
+   */
+  protected $$MODEL_NAME_CAMEL$Repo;
 
-    public function setUp()
-    {
-        parent::setUp();
-        $this->$MODEL_NAME_CAMEL$Repo = App::make($MODEL_NAME$Repository::class);
-    }
+  public function setUp()
+  {
+    parent::setUp();
+    $this->authenticate();
+    $this->$MODEL_NAME_CAMEL$Repo = App::make($MODEL_NAME$Repository::class);
+  }
 
-    /**
-     * @test create
-     */
-    public function testCreate$MODEL_NAME$()
-    {
-        $$MODEL_NAME_CAMEL$ = $this->fake$MODEL_NAME$Data();
-        $created$MODEL_NAME$ = $this->$MODEL_NAME_CAMEL$Repo->create($$MODEL_NAME_CAMEL$);
-        $created$MODEL_NAME$ = $created$MODEL_NAME$->toArray();
-        $this->assertArrayHasKey('id', $created$MODEL_NAME$);
-        $this->assertNotNull($created$MODEL_NAME$['id'], 'Created $MODEL_NAME$ must have id specified');
-        $this->assertNotNull($MODEL_NAME$::find($created$MODEL_NAME$['id']), '$MODEL_NAME$ with given id must be in DB');
-        $this->assertModelData($$MODEL_NAME_CAMEL$, $created$MODEL_NAME$);
-    }
+  /**
+   * @test create
+   */
+  public function testCreate$MODEL_NAME$()
+  {
+    $$MODEL_NAME_CAMEL$ = $this->fake$MODEL_NAME$Data();
+    $created$MODEL_NAME$ = $this->$MODEL_NAME_CAMEL$Repo->create($$MODEL_NAME_CAMEL$);
+    $created$MODEL_NAME$ = $created$MODEL_NAME$->toArray();
+    $this->assertArrayHasKey('id', $created$MODEL_NAME$);
+    $this->assertNotNull($created$MODEL_NAME$['id'], 'Created $MODEL_NAME$ must have id specified');
+    $this->assertNotNull($MODEL_NAME$::find($created$MODEL_NAME$['id']), '$MODEL_NAME$ with given id must be in DB');
+    $this->assertModelData($$MODEL_NAME_CAMEL$, $created$MODEL_NAME$);
+  }
 
-    /**
-     * @test read
-     */
-    public function testRead$MODEL_NAME$()
-    {
-        $$MODEL_NAME_CAMEL$ = $this->make$MODEL_NAME$();
-        $db$MODEL_NAME$ = $this->$MODEL_NAME_CAMEL$Repo->find($$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
-        $db$MODEL_NAME$ = $db$MODEL_NAME$->toArray();
-        $this->assertModelData($$MODEL_NAME_CAMEL$->toArray(), $db$MODEL_NAME$);
-    }
+  /**
+   * @test read
+   */
+  public function testRead$MODEL_NAME$()
+  {
+    $$MODEL_NAME_CAMEL$ = $this->make$MODEL_NAME$();
+    $db$MODEL_NAME$ = $this->$MODEL_NAME_CAMEL$Repo->find($$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
+    $db$MODEL_NAME$ = $db$MODEL_NAME$->toArray();
+    $this->assertModelData($$MODEL_NAME_CAMEL$->toArray(), $db$MODEL_NAME$);
+  }
 
-    /**
-     * @test update
-     */
-    public function testUpdate$MODEL_NAME$()
-    {
-        $$MODEL_NAME_CAMEL$ = $this->make$MODEL_NAME$();
-        $fake$MODEL_NAME$ = $this->fake$MODEL_NAME$Data();
-        $updated$MODEL_NAME$ = $this->$MODEL_NAME_CAMEL$Repo->update($fake$MODEL_NAME$, $$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
-        $this->assertModelData($fake$MODEL_NAME$, $updated$MODEL_NAME$->toArray());
-        $db$MODEL_NAME$ = $this->$MODEL_NAME_CAMEL$Repo->find($$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
-        $this->assertModelData($fake$MODEL_NAME$, $db$MODEL_NAME$->toArray());
-    }
+  /**
+   * @test update
+   */
+  public function testUpdate$MODEL_NAME$()
+  {
+    $$MODEL_NAME_CAMEL$ = $this->make$MODEL_NAME$();
+    $fake$MODEL_NAME$ = $this->fake$MODEL_NAME$Data();
+    $updated$MODEL_NAME$ = $this->$MODEL_NAME_CAMEL$Repo->update($fake$MODEL_NAME$, $$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
+    $this->assertModelData($fake$MODEL_NAME$, $updated$MODEL_NAME$->toArray());
+    $db$MODEL_NAME$ = $this->$MODEL_NAME_CAMEL$Repo->find($$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
+    $this->assertModelData($fake$MODEL_NAME$, $db$MODEL_NAME$->toArray());
+  }
 
-    /**
-     * @test delete
-     */
-    public function testDelete$MODEL_NAME$()
-    {
-        $$MODEL_NAME_CAMEL$ = $this->make$MODEL_NAME$();
-        $resp = $this->$MODEL_NAME_CAMEL$Repo->delete($$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
-        $this->assertTrue($resp);
-        $this->assertNull($MODEL_NAME$::find($$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$), '$MODEL_NAME$ should not exist in DB');
-    }
+  /**
+   * @test delete
+   */
+  public function testDelete$MODEL_NAME$()
+  {
+    $$MODEL_NAME_CAMEL$ = $this->make$MODEL_NAME$();
+    $resp = $this->$MODEL_NAME_CAMEL$Repo->delete($$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
+    $this->assertTrue($resp);
+    $this->assertNull($MODEL_NAME$::find($$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$), '$MODEL_NAME$ should not exist in DB');
+  }
 }
