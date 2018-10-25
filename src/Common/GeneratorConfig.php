@@ -266,6 +266,11 @@ class GeneratorConfig
             config('infyom.laravel_generator.api_version', 'v1')
         );
 
+        $commandData->addDynamicVariable(
+            '$API_PREFIX_AND_VERSION$',
+            '/' . trim('/' . config('infyom.laravel_generator.api_prefix', 'api') . '/' . config('infyom.laravel_generator.api_version', 'v1'),'/')
+        );
+
         return $commandData;
     }
 
