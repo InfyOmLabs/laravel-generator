@@ -3,6 +3,7 @@ namespace Tests;
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
 use $NAMESPACE_REPOSITORY$\$MODEL_NAME$Repository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use App;
 
 class $MODEL_NAME$RepositoryTest extends TestCase
 {
