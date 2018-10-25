@@ -4,6 +4,16 @@ namespace $NAMESPACE_API_REQUEST$;
 
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
 use InfyOm\Generator\Request\APIRequest;
+/**
+ * Class Update$MODEL_NAME$APIRequest
+ *
+ * @OA\RequestBody(
+ *   request="Update$MODEL_NAME$",
+ *   description="Update the specified $MODEL_NAME$ in storage",
+ *   required=true,
+ *   @OA\JsonContent(ref="#/components/schemas/$MODEL_NAME$")
+ * )
+ */
 
 class Update$MODEL_NAME$APIRequest extends APIRequest
 {

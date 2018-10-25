@@ -4,7 +4,16 @@ namespace $NAMESPACE_API_REQUEST$;
 
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
 use InfyOm\Generator\Request\APIRequest;
-
+/**
+ * Class Create$MODEL_NAME$APIRequest
+ *
+ * @OA\RequestBody(
+ *   request="Create$MODEL_NAME$",
+ *   description="Store a newly created $MODEL_NAME$ in storage",
+ *   required=true,
+ *   @OA\JsonContent(ref="#/components/schemas/$MODEL_NAME$")
+ * )
+ */
 class Create$MODEL_NAME$APIRequest extends APIRequest
 {
     /**
