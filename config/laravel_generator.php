@@ -180,4 +180,14 @@ return [
     */
     'ignore_model_prefix' => false,
 
+    'classes' => [
+        'Generators' => [
+            'migration' => \InfyOm\Generator\Generators\MigrationGenerator::class,
+            'model' => \InfyOm\Generator\Generators\ModelGenerator::class,
+            'repository' => \InfyOm\Generator\Generators\RepositoryGenerator::class,
+            'repository_test' => \InfyOm\Generator\Generators\RepositoryTestGenerator::class,
+            'swagger' => \InfyOm\Generator\Generators\SwaggerGenerator::class,
+            'test_trait' => \InfyOm\Generator\Generators\TestTraitGenerator::class
+        ]
+    ]
 ];
