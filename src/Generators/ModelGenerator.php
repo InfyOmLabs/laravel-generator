@@ -214,9 +214,16 @@ class ModelGenerator extends BaseGenerator
         return $requiredFields;
     }
 
+    /**
+     * @param $templateData
+     * @return mixed
+     * @throws \Exception
+     */
     protected function fillTimestamps($templateData)
     {
-        $timestamps = TableFieldsGenerator::getTimestampFieldNames();
+        /** @var TableFieldsGenerator $tableFieldsGeneratorClass */
+        $tableFieldsGeneratorClass = ClassInjectionConfig::getClassByConfigPath('Utils.table_field_generator');
+        $timestamps = $tableFieldsGeneratorClass::getTimestampFieldNames();
 
         $replace = '';
 
@@ -250,11 +257,17 @@ class ModelGenerator extends BaseGenerator
         return $rules;
     }
 
+    /**
+     * @return array
+     * @throws \Exception
+     */
     public function generateCasts()
     {
         $casts = [];
 
-        $timestamps = TableFieldsGenerator::getTimestampFieldNames();
+        /** @var TableFieldsGenerator $tableFieldsGeneratorClass */
+        $tableFieldsGeneratorClass = ClassInjectionConfig::getClassByConfigPath('Utils.table_field_generator');
+        $timestamps = $tableFieldsGeneratorClass::getTimestampFieldNames();
 
         foreach ($this->commandData->fields as $field) {
             if (in_array($field->name, $timestamps)) {

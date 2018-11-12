@@ -51,6 +51,9 @@ class ClassInjectionConfig
             'repository_test' => \InfyOm\Generator\Generators\RepositoryTestGenerator::class,
             'swagger' => \InfyOm\Generator\Generators\SwaggerGenerator::class,
             'test_trait' => \InfyOm\Generator\Generators\TestTraitGenerator::class
+        ],
+        'Utils' => [
+            'table_field_generator' => \InfyOm\Generator\Utils\TableFieldsGenerator::class
         ]
     ];
 

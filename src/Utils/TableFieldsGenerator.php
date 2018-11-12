@@ -7,26 +7,6 @@ use InfyOm\Generator\Common\ClassInjectionConfig;
 use InfyOm\Generator\Common\GeneratorField;
 use InfyOm\Generator\Common\GeneratorFieldRelation;
 
-class GeneratorForeignKey
-{
-    /** @var string */
-    public $name;
-    public $localField;
-    public $foreignField;
-    public $foreignTable;
-    public $onUpdate;
-    public $onDelete;
-}
-
-class GeneratorTable
-{
-    /** @var string */
-    public $primaryKey;
-
-    /** @var GeneratorForeignKey[] */
-    public $foreignKeys;
-}
-
 class TableFieldsGenerator
 {
     /** @var string */
@@ -40,10 +20,10 @@ class TableFieldsGenerator
     public $timestamps;
 
     /** @var \Doctrine\DBAL\Schema\AbstractSchemaManager */
-    private $schemaManager;
+    protected $schemaManager;
 
     /** @var \Doctrine\DBAL\Schema\Column[] */
-    private $columns;
+    protected $columns;
 
     /** @var GeneratorField[] */
     public $fields;
@@ -176,7 +156,7 @@ class TableFieldsGenerator
      * @return GeneratorField
      * @throws \ReflectionException
      */
-    private function generateIntFieldInput($column, $dbType)
+    protected function generateIntFieldInput($column, $dbType)
     {
         /** @var GeneratorField $field */
         $field = ClassInjectionConfig::createClassByConfigPath('Common.generator_field');
@@ -204,7 +184,7 @@ class TableFieldsGenerator
      *
      * @return GeneratorField
      */
-    private function checkForPrimary(GeneratorField $field)
+    protected function checkForPrimary(GeneratorField $field)
     {
         if ($field->name == $this->primaryKey) {
             $field->isPrimary = true;
@@ -227,7 +207,7 @@ class TableFieldsGenerator
      * @return GeneratorField
      * @throws \ReflectionException
      */
-    private function generateField($column, $dbType, $htmlType)
+    protected function generateField($column, $dbType, $htmlType)
     {
         /** @var GeneratorField $field */
         $field = ClassInjectionConfig::createClassByConfigPath('Common.generator_field');
@@ -247,7 +227,7 @@ class TableFieldsGenerator
      * @return GeneratorField
      * @throws \ReflectionException
      */
-    private function generateNumberInput($column, $dbType)
+    protected function generateNumberInput($column, $dbType)
     {
         /** @var GeneratorField $field */
         $field = ClassInjectionConfig::createClassByConfigPath('Common.generator_field');
@@ -313,7 +293,7 @@ class TableFieldsGenerator
      * @param GeneratorTable[] $tables
      * @throws \Exception
      */
-    private function checkForRelations($tables)
+    protected function checkForRelations($tables)
     {
 
         /** @var GeneratorFieldRelation $generatorFieldRelationClass */
@@ -385,7 +365,7 @@ class TableFieldsGenerator
      * @return bool|GeneratorFieldRelation
      * @throws \Exception
      */
-    private function isManyToMany($tables, $tableName, $modelTable, $modelTableName)
+    protected function isManyToMany($tables, $tableName, $modelTable, $modelTableName)
     {
         // get table details
         $table = $tables[$tableName];
@@ -453,7 +433,7 @@ class TableFieldsGenerator
      *
      * @return bool
      */
-    private function isOneToOne($primaryKey, $foreignKey, $modelTablePrimary)
+    protected function isOneToOne($primaryKey, $foreignKey, $modelTablePrimary)
     {
         if ($foreignKey->foreignField == $modelTablePrimary) {
             if ($foreignKey->localField == $primaryKey) {
@@ -475,7 +455,7 @@ class TableFieldsGenerator
      *
      * @return bool
      */
-    private function isOneToMany($primaryKey, $foreignKey, $modelTablePrimary)
+    protected function isOneToMany($primaryKey, $foreignKey, $modelTablePrimary)
     {
         if ($foreignKey->foreignField == $modelTablePrimary) {
             if ($foreignKey->localField != $primaryKey) {
@@ -496,7 +476,7 @@ class TableFieldsGenerator
      * @return array
      * @throws \Exception
      */
-    private function detectManyToOne($tables, $modelTable)
+    protected function detectManyToOne($tables, $modelTable)
     {
         /** @var GeneratorFieldRelation $generatorFieldRelationClass */
         $generatorFieldRelationClass = ClassInjectionConfig::getClassByConfigPath('Common.generator_field_relation');

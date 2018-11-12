@@ -264,11 +264,16 @@ class CommandData
         }
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     protected function getInputFromTable()
     {
         $tableName = $this->dynamicVars['$TABLE_NAME$'];
 
-        $tableFieldsGenerator = new TableFieldsGenerator($tableName);
+
+        /** @var TableFieldsGenerator $tableFieldsGenerator */
+        $tableFieldsGenerator = ClassInjectionConfig::createClassByConfigPath('Utils.table_field_generator', [$tableName]);
         $tableFieldsGenerator->prepareFieldsFromTable();
         $tableFieldsGenerator->prepareRelations();
 
