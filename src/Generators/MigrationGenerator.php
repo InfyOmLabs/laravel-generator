@@ -11,10 +11,10 @@ use SplFileInfo;
 class MigrationGenerator extends BaseGenerator
 {
     /** @var CommandData */
-    private $commandData;
+    protected $commandData;
 
     /** @var string */
-    private $path;
+    protected $path;
 
     public function __construct($commandData)
     {
@@ -40,7 +40,7 @@ class MigrationGenerator extends BaseGenerator
         $this->commandData->commandInfo($fileName);
     }
 
-    private function generateFields()
+    protected function generateFields()
     {
         $fields = [];
         $foreignKeys = [];

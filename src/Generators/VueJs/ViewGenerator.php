@@ -10,16 +10,16 @@ use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
 class ViewGenerator extends BaseGenerator
 {
     /** @var CommandData */
-    private $commandData;
+    protected $commandData;
 
     /** @var string */
-    private $path;
+    protected $path;
 
     /** @var string */
-    private $templateType;
+    protected $templateType;
 
     /** @var array */
-    private $htmlFields;
+    protected $htmlFields;
 
     public function __construct(CommandData $commandData)
     {
@@ -44,7 +44,7 @@ class ViewGenerator extends BaseGenerator
         $this->commandData->commandComment('Views created: ');
     }
 
-    private function generateTable()
+    protected function generateTable()
     {
         $templateData = $this->generateBladeTableBody();
 
@@ -53,7 +53,7 @@ class ViewGenerator extends BaseGenerator
         $this->commandData->commandInfo('table.blade.php created');
     }
 
-    private function generateBladeTableBody()
+    protected function generateBladeTableBody()
     {
         $templateData = get_template('vuejs.views.blade_table_body', $this->templateType);
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
@@ -61,7 +61,7 @@ class ViewGenerator extends BaseGenerator
         return $templateData;
     }
 
-    private function generateIndex()
+    protected function generateIndex()
     {
         $templateData = get_template('vuejs.views.index', $this->templateType);
 
@@ -88,7 +88,7 @@ class ViewGenerator extends BaseGenerator
         $this->commandData->commandInfo('index.blade.php created');
     }
 
-    private function generateFields()
+    protected function generateFields()
     {
         $this->htmlFields = [];
         foreach ($this->commandData->fields as $field) {
@@ -208,7 +208,7 @@ class ViewGenerator extends BaseGenerator
         $this->commandData->commandInfo('fields.blade.php created');
     }
 
-    private function generateForm()
+    protected function generateForm()
     {
         $templateData = get_template('vuejs.views.form', $this->templateType);
 
@@ -218,7 +218,7 @@ class ViewGenerator extends BaseGenerator
         $this->commandData->commandInfo('form.blade.php created');
     }
 
-    private function generateShow()
+    protected function generateShow()
     {
         $templateData = get_template('vuejs.views.show', $this->templateType);
 
@@ -228,7 +228,7 @@ class ViewGenerator extends BaseGenerator
         $this->commandData->commandInfo('show.blade.php created');
     }
 
-    private function generateDelete()
+    protected function generateDelete()
     {
         $templateData = get_template('vuejs.views.delete', $this->templateType);
 

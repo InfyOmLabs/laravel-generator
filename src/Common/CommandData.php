@@ -123,7 +123,7 @@ class CommandData
      * @throws \ReflectionException
      * @throws Exception
      */
-    private function getInputFromConsole()
+    protected function getInputFromConsole()
     {
         $this->commandInfo('Specify fields for the model (skip id & timestamp fields, we will add it automatically)');
         $this->commandInfo('Read docs carefully to specify field inputs)');
@@ -171,7 +171,7 @@ class CommandData
     /**
      * @throws \ReflectionException
      */
-    private function addPrimaryKey()
+    protected function addPrimaryKey()
     {
         /** @var GeneratorField $primaryKey */
         $primaryKey = ClassInjectionConfig::createClassByConfigPath('Common.generator_field');
@@ -189,7 +189,7 @@ class CommandData
     /**
      * @throws \ReflectionException
      */
-    private function addTimestamps()
+    protected function addTimestamps()
     {
         /** @var GeneratorField $createdAt */
         $createdAt = ClassInjectionConfig::createClassByConfigPath('Common.generator_field');
@@ -206,7 +206,7 @@ class CommandData
         $this->fields[] = $updatedAt;
     }
 
-    private function getInputFromFileOrJson()
+    protected function getInputFromFileOrJson()
     {
         // fieldsFile option will get high priority than json option if both options are passed
         try {
@@ -264,7 +264,7 @@ class CommandData
         }
     }
 
-    private function getInputFromTable()
+    protected function getInputFromTable()
     {
         $tableName = $this->dynamicVars['$TABLE_NAME$'];
 

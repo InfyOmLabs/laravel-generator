@@ -8,13 +8,13 @@ use InfyOm\Generator\Utils\FileUtil;
 class RepositoryTestGenerator extends BaseGenerator
 {
     /** @var CommandData */
-    private $commandData;
+    protected $commandData;
 
     /** @var string */
-    private $path;
+    protected $path;
 
     /** @var string */
-    private $fileName;
+    protected $fileName;
 
     public function __construct($commandData)
     {
@@ -35,7 +35,7 @@ class RepositoryTestGenerator extends BaseGenerator
         $this->commandData->commandObj->info($this->fileName);
     }
 
-    private function fillTemplate($templateData)
+    protected function fillTemplate($templateData)
     {
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 

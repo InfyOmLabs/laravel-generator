@@ -9,13 +9,13 @@ use InfyOm\Generator\Utils\FileUtil;
 class TestGenerator extends BaseGenerator
 {
     /** @var CommandData */
-    private $commandData;
+    protected $commandData;
 
     /** @var string */
-    private $path;
+    protected $path;
 
     /** @var string */
-    private $fileName;
+    protected $fileName;
 
     public function __construct(CommandData $commandData)
     {

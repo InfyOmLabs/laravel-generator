@@ -80,7 +80,7 @@ class GeneratorField
         }
     }
 
-    private function prepareMigrationText()
+    protected function prepareMigrationText()
     {
         $inputsArr = explode(':', $this->dbInput);
         $this->migrationText = '$table->';

@@ -9,13 +9,13 @@ use InfyOm\Generator\Utils\FileUtil;
 class APIControllerGenerator extends BaseGenerator
 {
     /** @var CommandData */
-    private $commandData;
+    protected $commandData;
 
     /** @var string */
-    private $path;
+    protected $path;
 
     /** @var string */
-    private $fileName;
+    protected $fileName;
 
     public function __construct(CommandData $commandData)
     {
@@ -37,7 +37,7 @@ class APIControllerGenerator extends BaseGenerator
         $this->commandData->commandInfo($this->fileName);
     }
 
-    private function fillDocs($templateData)
+    protected function fillDocs($templateData)
     {
         $methods = ['controller', 'index', 'store', 'show', 'update', 'destroy'];
 

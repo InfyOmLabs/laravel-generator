@@ -9,13 +9,13 @@ use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
 class TestTraitGenerator extends BaseGenerator
 {
     /** @var CommandData */
-    private $commandData;
+    protected $commandData;
 
     /** @var string */
-    private $path;
+    protected $path;
 
     /** @var string */
-    private $fileName;
+    protected $fileName;
 
     public function __construct(CommandData $commandData)
     {
@@ -36,7 +36,7 @@ class TestTraitGenerator extends BaseGenerator
         $this->commandData->commandObj->info($this->fileName);
     }
 
-    private function fillTemplate($templateData)
+    protected function fillTemplate($templateData)
     {
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
@@ -46,7 +46,7 @@ class TestTraitGenerator extends BaseGenerator
         return $templateData;
     }
 
-    private function generateFields()
+    protected function generateFields()
     {
         $fields = [];
 

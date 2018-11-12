@@ -21,12 +21,12 @@ class ModelGenerator extends BaseGenerator
     ];
 
     /** @var CommandData */
-    private $commandData;
+    protected $commandData;
 
     /** @var string */
-    private $path;
-    private $fileName;
-    private $table;
+    protected $path;
+    protected $fileName;
+    protected $table;
 
     /**
      * ModelGenerator constructor.
@@ -53,7 +53,7 @@ class ModelGenerator extends BaseGenerator
         $this->commandData->commandInfo($this->fileName);
     }
 
-    private function fillTemplate($templateData)
+    protected function fillTemplate($templateData)
     {
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
@@ -96,7 +96,7 @@ class ModelGenerator extends BaseGenerator
         return $templateData;
     }
 
-    private function fillSoftDeletes($templateData)
+    protected function fillSoftDeletes($templateData)
     {
         if (!$this->commandData->getOption('softDelete')) {
             $templateData = str_replace('$SOFT_DELETE_IMPORT$', '', $templateData);
@@ -118,7 +118,7 @@ class ModelGenerator extends BaseGenerator
         return $templateData;
     }
 
-    private function fillDocs($templateData)
+    protected function fillDocs($templateData)
     {
         if ($this->commandData->getAddOn('swagger')) {
             $templateData = $this->generateSwagger($templateData);
@@ -150,7 +150,7 @@ class ModelGenerator extends BaseGenerator
      *
      * @return string
      */
-    private function getPHPDocType($db_type, $relation = null)
+    protected function getPHPDocType($db_type, $relation = null)
     {
         switch ($db_type) {
             case 'datetime':
@@ -199,7 +199,7 @@ class ModelGenerator extends BaseGenerator
         return $templateData;
     }
 
-    private function generateRequiredFields()
+    protected function generateRequiredFields()
     {
         $requiredFields = [];
 
@@ -214,7 +214,7 @@ class ModelGenerator extends BaseGenerator
         return $requiredFields;
     }
 
-    private function fillTimestamps($templateData)
+    protected function fillTimestamps($templateData)
     {
         $timestamps = TableFieldsGenerator::getTimestampFieldNames();
 
@@ -236,7 +236,7 @@ class ModelGenerator extends BaseGenerator
         return str_replace('$TIMESTAMPS$', $replace, $templateData);
     }
 
-    private function generateRules()
+    protected function generateRules()
     {
         $rules = [];
 
@@ -302,7 +302,7 @@ class ModelGenerator extends BaseGenerator
         return $casts;
     }
 
-    private function generateRelations()
+    protected function generateRelations()
     {
         $relations = [];
 
