@@ -12,7 +12,7 @@ class GeneratorFieldRelation
     {
         $inputs = explode(',', $relationInput);
 
-        $relation = new self();
+        $relation = new static();
         $relation->type = array_shift($inputs);
         $relation->inputs = $inputs;
 

@@ -124,7 +124,7 @@ class GeneratorField
 
     public static function parseFieldFromFile($fieldInput)
     {
-        $field = new self();
+        $field = new static();
         $field->name = $fieldInput['name'];
         $field->parseDBType($fieldInput['dbType']);
         $field->parseHtmlInput(isset($fieldInput['htmlType']) ? $fieldInput['htmlType'] : '');
