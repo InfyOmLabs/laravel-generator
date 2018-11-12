@@ -117,30 +117,38 @@ class BaseCommand extends Command
         }
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function generateScaffoldItems()
     {
         if (!$this->isSkip('requests') and !$this->isSkip('scaffold_requests')) {
-            $requestGenerator = new RequestGenerator($this->commandData);
+            /** @var RequestGenerator $requestGenerator */
+            $requestGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.request', [$this->commandData]);
             $requestGenerator->generate();
         }
 
         if (!$this->isSkip('controllers') and !$this->isSkip('scaffold_controller')) {
-            $controllerGenerator = new ControllerGenerator($this->commandData);
+            /** @var ControllerGenerator $controllerGenerator */
+            $controllerGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.controller', [$this->commandData]);
             $controllerGenerator->generate();
         }
 
         if (!$this->isSkip('views')) {
-            $viewGenerator = new ViewGenerator($this->commandData);
+            /** @var ViewGenerator $viewGenerator */
+            $viewGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.view', [$this->commandData]);
             $viewGenerator->generate();
         }
 
         if (!$this->isSkip('routes') and !$this->isSkip('scaffold_routes')) {
-            $routeGenerator = new RoutesGenerator($this->commandData);
+            /** @var RoutesGenerator $routeGenerator */
+            $routeGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.routes', [$this->commandData]);
             $routeGenerator->generate();
         }
 
         if (!$this->isSkip('menu') and $this->commandData->config->getAddOn('menu.enabled')) {
-            $menuGenerator = new MenuGenerator($this->commandData);
+            /** @var MenuGenerator $menuGenerator */
+            $menuGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.menu', [$this->commandData]);
             $menuGenerator->generate();
         }
     }

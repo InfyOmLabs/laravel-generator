@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Commands\Scaffold;
 
 use InfyOm\Generator\Commands\BaseCommand;
+use InfyOm\Generator\Common\ClassInjectionConfig;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\Scaffold\ControllerGenerator;
 
@@ -36,12 +37,14 @@ class ControllerGeneratorCommand extends BaseCommand
      * Execute the command.
      *
      * @return void
+     * @throws \ReflectionException
      */
     public function handle()
     {
         parent::handle();
 
-        $controllerGenerator = new ControllerGenerator($this->commandData);
+        /** @var ControllerGenerator $controllerGenerator */
+        $controllerGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.controller', [$this->commandData]);
         $controllerGenerator->generate();
 
         $this->performPostActions();

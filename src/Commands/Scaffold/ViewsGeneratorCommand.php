@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Commands\Scaffold;
 
 use InfyOm\Generator\Commands\BaseCommand;
+use InfyOm\Generator\Common\ClassInjectionConfig;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
 
@@ -36,12 +37,14 @@ class ViewsGeneratorCommand extends BaseCommand
      * Execute the command.
      *
      * @return void
+     * @throws \ReflectionException
      */
     public function handle()
     {
         parent::handle();
 
-        $viewGenerator = new ViewGenerator($this->commandData);
+        /** @var ViewGenerator $viewGenerator */
+        $viewGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.view', [$this->commandData]);
         $viewGenerator->generate();
 
         $this->performPostActions();

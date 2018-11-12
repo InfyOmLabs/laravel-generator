@@ -20,6 +20,13 @@ class ClassInjectionConfig
                 'api_routes' => \InfyOm\Generator\Generators\API\APIRoutesGenerator::class,
                 'api_test' => \InfyOm\Generator\Generators\API\APITestGenerator::class,
             ],
+            'Scaffold' => [
+                'controller' =>  \InfyOm\Generator\Generators\Scaffold\ControllerGenerator::class,
+                'menu' =>  \InfyOm\Generator\Generators\Scaffold\MenuGenerator::class,
+                'request' =>  \InfyOm\Generator\Generators\Scaffold\RequestGenerator::class,
+                'routes' =>  \InfyOm\Generator\Generators\Scaffold\RoutesGenerator::class,
+                'view' =>  \InfyOm\Generator\Generators\Scaffold\ViewGenerator::class,
+            ],
             'migration' => \InfyOm\Generator\Generators\MigrationGenerator::class,
             'model' => \InfyOm\Generator\Generators\ModelGenerator::class,
             'repository' => \InfyOm\Generator\Generators\RepositoryGenerator::class,

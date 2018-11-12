@@ -108,16 +108,20 @@ class RollbackGeneratorCommand extends Command
         $routesGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.API.api_routes', [$this->commandData]);
         $routesGenerator->rollback();
 
-        $requestGenerator = new RequestGenerator($this->commandData);
+        /** @var RequestGenerator $requestGenerator */
+        $requestGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.request', [$this->commandData]);
         $requestGenerator->rollback();
 
-        $controllerGenerator = new ControllerGenerator($this->commandData);
+        /** @var ControllerGenerator $controllerGenerator */
+        $controllerGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.controller', [$this->commandData]);
         $controllerGenerator->rollback();
 
-        $viewGenerator = new ViewGenerator($this->commandData);
+        /** @var ViewGenerator $viewGenerator */
+        $viewGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.view', [$this->commandData]);
         $viewGenerator->rollback();
 
-        $routeGenerator = new RoutesGenerator($this->commandData);
+        /** @var RoutesGenerator $routeGenerator */
+        $routeGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.routes', [$this->commandData]);
         $routeGenerator->rollback();
 
         $controllerGenerator = new VueJsControllerGenerator($this->commandData);
@@ -147,7 +151,8 @@ class RollbackGeneratorCommand extends Command
         }
 
         if ($this->commandData->config->getAddOn('menu.enabled')) {
-            $menuGenerator = new MenuGenerator($this->commandData);
+            /** @var MenuGenerator $menuGenerator */
+            $menuGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.menu', [$this->commandData]);
             $menuGenerator->rollback();
         }
 
