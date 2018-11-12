@@ -181,7 +181,35 @@ return [
     'ignore_model_prefix' => false,
 
     'classes' => [
+        'Common' => [
+            'command_data' => \InfyOm\Generator\Common\CommandData::class,
+            'generator_config' => \InfyOm\Generator\Common\GeneratorConfig::class,
+            'generator_field' => \InfyOm\Generator\Common\GeneratorField::class,
+            'generator_field_relation' => \InfyOm\Generator\Common\GeneratorFieldRelation::class,
+        ],
         'Generators' => [
+            'API' => [
+                'api_controller' => \InfyOm\Generator\Generators\API\APIControllerGenerator::class,
+                'api_request' => \InfyOm\Generator\Generators\API\APIRequestGenerator::class,
+                'api_routes' => \InfyOm\Generator\Generators\API\APIRoutesGenerator::class,
+                'api_test' => \InfyOm\Generator\Generators\API\APITestGenerator::class,
+            ],
+            'Scaffold' => [
+                'controller' =>  \InfyOm\Generator\Generators\Scaffold\ControllerGenerator::class,
+                'menu' =>  \InfyOm\Generator\Generators\Scaffold\MenuGenerator::class,
+                'request' =>  \InfyOm\Generator\Generators\Scaffold\RequestGenerator::class,
+                'routes' =>  \InfyOm\Generator\Generators\Scaffold\RoutesGenerator::class,
+                'view' =>  \InfyOm\Generator\Generators\Scaffold\ViewGenerator::class,
+            ],
+            'VueJs' => [
+                'api_request' => \InfyOm\Generator\Generators\VueJs\APIRequestGenerator::class,
+                'controller' => \InfyOm\Generator\Generators\VueJs\ControllerGenerator::class,
+                'model_js_config' => \InfyOm\Generator\Generators\VueJs\ModelJsConfigGenerator::class,
+                'routes' => \InfyOm\Generator\Generators\Vuejs\RoutesGenerator::class,
+                'test' => \InfyOm\Generator\Generators\API\TestGenerator::class,
+                'view' => \InfyOm\Generator\Generators\VueJs\ViewGenerator::class,
+
+            ],
             'migration' => \InfyOm\Generator\Generators\MigrationGenerator::class,
             'model' => \InfyOm\Generator\Generators\ModelGenerator::class,
             'repository' => \InfyOm\Generator\Generators\RepositoryGenerator::class,
