@@ -66,22 +66,24 @@ class VueJsGeneratorCommand extends BaseCommand
         $repositoryGenerator->generate();
 
         /** @var APIRequestGenerator $requestGenerator */
-        $requestGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.API.api_request', [$this->commandData]);
+        $requestGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.VueJs.api_request', [$this->commandData]);
         $requestGenerator->generate();
 
         /** @var ControllerGenerator $controllerGenerator */
-        $controllerGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.controller', [$this->commandData]);
+        $controllerGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.VueJs.controller', [$this->commandData]);
         $controllerGenerator->generate();
 
         /** @var ViewGenerator $viewGenerator */
-        $viewGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.view', [$this->commandData]);
+        $viewGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.VueJs.view', [$this->commandData]);
         $viewGenerator->generate();
 
-        $modelJsConfigGenerator = new ModelJsConfigGenerator($this->commandData);
+
+        /** @var ModelJsConfigGenerator $modelJsConfigGenerator */
+        $modelJsConfigGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.VueJs.model_js_config', [$this->commandData]);
         $modelJsConfigGenerator->generate();
 
         /** @var RoutesGenerator $routeGenerator */
-        $routeGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.routes', [$this->commandData]);
+        $routeGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.VueJs.routes', [$this->commandData]);
         $routeGenerator->generate();
 
         if ($this->commandData->config->getAddOn('menu.enabled')) {

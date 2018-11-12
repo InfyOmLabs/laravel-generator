@@ -124,16 +124,20 @@ class RollbackGeneratorCommand extends Command
         $routeGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.routes', [$this->commandData]);
         $routeGenerator->rollback();
 
-        $controllerGenerator = new VueJsControllerGenerator($this->commandData);
+        /** @var VueJsControllerGenerator $controllerGenerator */
+        $controllerGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.VueJs.controller', [$this->commandData]);
         $controllerGenerator->rollback();
 
-        $routesGenerator = new VueJsRoutesGenerator($this->commandData);
+        /** @var VueJsRoutesGenerator $routesGenerator */
+        $routesGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.VueJs.routes', [$this->commandData]);
         $routesGenerator->rollback();
 
-        $viewGenerator = new VueJsViewGenerator($this->commandData);
+        /** @var VueJsViewGenerator $routesGenerator */
+        $viewGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.VueJs.view', [$this->commandData]);
         $viewGenerator->rollback();
 
-        $modelJsConfigGenerator = new ModelJsConfigGenerator($this->commandData);
+        /** @var ModelJsConfigGenerator $modelJsConfigGenerator */
+        $modelJsConfigGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.VueJs.model_js_config', [$this->commandData]);
         $modelJsConfigGenerator->rollback();
 
         if ($this->commandData->getAddOn('tests')) {

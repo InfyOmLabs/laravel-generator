@@ -27,6 +27,15 @@ class ClassInjectionConfig
                 'routes' =>  \InfyOm\Generator\Generators\Scaffold\RoutesGenerator::class,
                 'view' =>  \InfyOm\Generator\Generators\Scaffold\ViewGenerator::class,
             ],
+            'VueJs' => [
+                'api_request' => \InfyOm\Generator\Generators\VueJs\APIRequestGenerator::class,
+                'controller' => \InfyOm\Generator\Generators\VueJs\ControllerGenerator::class,
+                'model_js_config' => \InfyOm\Generator\Generators\VueJs\ModelJsConfigGenerator::class,
+                'routes' => \InfyOm\Generator\Generators\Vuejs\RoutesGenerator::class,
+                'test' => \InfyOm\Generator\Generators\API\TestGenerator::class,
+                'view' => \InfyOm\Generator\Generators\VueJs\ViewGenerator::class,
+
+            ],
             'migration' => \InfyOm\Generator\Generators\MigrationGenerator::class,
             'model' => \InfyOm\Generator\Generators\ModelGenerator::class,
             'repository' => \InfyOm\Generator\Generators\RepositoryGenerator::class,
