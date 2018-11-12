@@ -6,6 +6,9 @@ namespace InfyOm\Generator\Common;
 /**
  * Class ClassInjectionConfig
  * @package InfyOm\Generator\Common
+ *
+ * This class handles all class injections for this library, and provides a mechanism for developers extend & inject
+ * their own classes into this library.  This class is designed to make this code base much more configurable.
  */
 class ClassInjectionConfig
 {
