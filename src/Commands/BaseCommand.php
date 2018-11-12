@@ -85,17 +85,20 @@ class BaseCommand extends Command
     public function generateAPIItems()
     {
         if (!$this->isSkip('requests') and !$this->isSkip('api_requests')) {
-            $requestGenerator = new APIRequestGenerator($this->commandData);
+            /** @var APIRequestGenerator $requestGenerator */
+            $requestGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.API.api_request', [$this->commandData]);
             $requestGenerator->generate();
         }
 
         if (!$this->isSkip('controllers') and !$this->isSkip('api_controller')) {
-            $controllerGenerator = new APIControllerGenerator($this->commandData);
+            /** @var APIControllerGenerator $controllerGenerator */
+            $controllerGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.API.api_controller', [$this->commandData]);
             $controllerGenerator->generate();
         }
 
         if (!$this->isSkip('routes') and !$this->isSkip('api_routes')) {
-            $routesGenerator = new APIRoutesGenerator($this->commandData);
+            /** @var APIRoutesGenerator $routesGenerator */
+            $routesGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.API.api_routes', [$this->commandData]);
             $routesGenerator->generate();
         }
 
@@ -108,7 +111,8 @@ class BaseCommand extends Command
             $testTraitGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.test_trait', [$this->commandData]);
             $testTraitGenerator->generate();
 
-            $apiTestGenerator = new APITestGenerator($this->commandData);
+            /** @var APITestGenerator $apiTestGenerator */
+            $apiTestGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.API.api_test', [$this->commandData]);
             $apiTestGenerator->generate();
         }
     }

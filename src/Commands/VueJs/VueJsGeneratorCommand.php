@@ -65,7 +65,8 @@ class VueJsGeneratorCommand extends BaseCommand
         $repositoryGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.repository', [$this->commandData]);
         $repositoryGenerator->generate();
 
-        $requestGenerator = new APIRequestGenerator($this->commandData);
+        /** @var APIRequestGenerator $requestGenerator */
+        $requestGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.API.api_request', [$this->commandData]);
         $requestGenerator->generate();
 
         $controllerGenerator = new ControllerGenerator($this->commandData);

@@ -53,7 +53,8 @@ class TestsGeneratorCommand extends BaseCommand
         $testTraitGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.test_trait', [$this->commandData]);
         $testTraitGenerator->generate();
 
-        $apiTestGenerator = new APITestGenerator($this->commandData);
+        /** @var APITestGenerator $apiTestGenerator */
+        $apiTestGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.API.api_test', [$this->commandData]);
         $apiTestGenerator->generate();
 
         $this->performPostActions();

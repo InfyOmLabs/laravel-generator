@@ -96,13 +96,16 @@ class RollbackGeneratorCommand extends Command
         $repositoryGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.repository', [$this->commandData]);
         $repositoryGenerator->rollback();
 
-        $requestGenerator = new APIRequestGenerator($this->commandData);
+        /** @var APIRequestGenerator $requestGenerator */
+        $requestGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.API.api_request', [$this->commandData]);
         $requestGenerator->rollback();
 
-        $controllerGenerator = new APIControllerGenerator($this->commandData);
+        /** @var APIControllerGenerator $controllerGenerator */
+        $controllerGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.API.api_controller', [$this->commandData]);
         $controllerGenerator->rollback();
 
-        $routesGenerator = new APIRoutesGenerator($this->commandData);
+        /** @var APIRoutesGenerator $routesGenerator */
+        $routesGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.API.api_routes', [$this->commandData]);
         $routesGenerator->rollback();
 
         $requestGenerator = new RequestGenerator($this->commandData);
@@ -138,7 +141,8 @@ class RollbackGeneratorCommand extends Command
             $testTraitGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.test_trait', [$this->commandData]);
             $testTraitGenerator->rollback();
 
-            $apiTestGenerator = new APITestGenerator($this->commandData);
+            /** @var APITestGenerator $apiTestGenerator */
+            $apiTestGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.API.api_test', [$this->commandData]);
             $apiTestGenerator->rollback();
         }
 

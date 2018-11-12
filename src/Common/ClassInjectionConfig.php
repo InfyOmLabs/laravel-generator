@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Common;
 
+
 /**
  * Class ClassInjectionConfig
  * @package InfyOm\Generator\Common
@@ -13,6 +14,12 @@ class ClassInjectionConfig
      */
     private static $defaultClasses = [
         'Generators' => [
+            'API' => [
+                'api_controller' => \InfyOm\Generator\Generators\API\APIControllerGenerator::class,
+                'api_request' => \InfyOm\Generator\Generators\API\APIRequestGenerator::class,
+                'api_routes' => \InfyOm\Generator\Generators\API\APIRoutesGenerator::class,
+                'api_test' => \InfyOm\Generator\Generators\API\APITestGenerator::class,
+            ],
             'migration' => \InfyOm\Generator\Generators\MigrationGenerator::class,
             'model' => \InfyOm\Generator\Generators\ModelGenerator::class,
             'repository' => \InfyOm\Generator\Generators\RepositoryGenerator::class,

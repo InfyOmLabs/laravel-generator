@@ -41,7 +41,8 @@ class APIControllerGeneratorCommand extends BaseCommand
     {
         parent::handle();
 
-        $controllerGenerator = new APIControllerGenerator($this->commandData);
+        /** @var APIControllerGenerator $controllerGenerator */
+        $controllerGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.API.api_controller', [$this->commandData]);
         $controllerGenerator->generate();
 
         $this->performPostActions();
