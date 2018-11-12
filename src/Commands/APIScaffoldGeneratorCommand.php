@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Commands;
 
+use InfyOm\Generator\Common\ClassInjectionConfig;
 use InfyOm\Generator\Common\CommandData;
 
 class APIScaffoldGeneratorCommand extends BaseCommand
@@ -22,12 +23,12 @@ class APIScaffoldGeneratorCommand extends BaseCommand
 
     /**
      * Create a new command instance.
+     * @throws \ReflectionException
      */
     public function __construct()
     {
         parent::__construct();
-
-        $this->commandData = new CommandData($this, CommandData::$COMMAND_TYPE_API_SCAFFOLD);
+        $this->commandData = ClassInjectionConfig::createClassByConfigPath('Common.command_data', [$this, CommandData::$COMMAND_TYPE_API_SCAFFOLD]);
     }
 
     /**

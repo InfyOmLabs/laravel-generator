@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Utils;
 
+use InfyOm\Generator\Common\ClassInjectionConfig;
 use InfyOm\Generator\Common\GeneratorField;
 
 class GeneratorFieldsInputUtil
@@ -22,6 +23,7 @@ class GeneratorFieldsInputUtil
      * @param $validations
      *
      * @return GeneratorField
+     * @throws \ReflectionException
      */
     public static function processFieldInput($fieldInput, $validations)
     {
@@ -41,7 +43,8 @@ class GeneratorFieldsInputUtil
 
         $fieldInputsArr = explode(' ', $fieldInput);
 
-        $field = new GeneratorField();
+        /** @var GeneratorField $field */
+        $field = ClassInjectionConfig::createClassByConfigPath('Common.generator_field');
         $field->name = $fieldInputsArr[0];
         $field->parseDBType($fieldInputsArr[1]);
 

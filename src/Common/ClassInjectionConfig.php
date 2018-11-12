@@ -13,6 +13,12 @@ class ClassInjectionConfig
      * @var array The default classes we'll draw from if we have no overrides
      */
     private static $defaultClasses = [
+        'Common' => [
+            'command_data' => \InfyOm\Generator\Common\CommandData::class,
+            'generator_config' => \InfyOm\Generator\Common\GeneratorConfig::class,
+            'generator_field' => \InfyOm\Generator\Common\GeneratorField::class,
+            'generator_field_relation' => \InfyOm\Generator\Common\GeneratorFieldRelation::class,
+        ],
         'Generators' => [
             'API' => [
                 'api_controller' => \InfyOm\Generator\Generators\API\APIControllerGenerator::class,

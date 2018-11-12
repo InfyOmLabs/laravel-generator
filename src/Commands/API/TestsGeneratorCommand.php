@@ -32,7 +32,7 @@ class TestsGeneratorCommand extends BaseCommand
     {
         parent::__construct();
 
-        $this->commandData = new CommandData($this, CommandData::$COMMAND_TYPE_API);
+        $this->commandData = ClassInjectionConfig::createClassByConfigPath('Common.command_data', [$this, CommandData::$COMMAND_TYPE_API]);
     }
 
     /**

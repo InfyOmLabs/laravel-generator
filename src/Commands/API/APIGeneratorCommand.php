@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Commands\API;
 
 use InfyOm\Generator\Commands\BaseCommand;
+use InfyOm\Generator\Common\ClassInjectionConfig;
 use InfyOm\Generator\Common\CommandData;
 
 class APIGeneratorCommand extends BaseCommand
@@ -23,12 +24,13 @@ class APIGeneratorCommand extends BaseCommand
 
     /**
      * Create a new command instance.
+     * @throws \ReflectionException
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->commandData = new CommandData($this, CommandData::$COMMAND_TYPE_API);
+        $this->commandData = ClassInjectionConfig::createClassByConfigPath('Common.command_data', [$this, CommandData::$COMMAND_TYPE_API]);
     }
 
     /**

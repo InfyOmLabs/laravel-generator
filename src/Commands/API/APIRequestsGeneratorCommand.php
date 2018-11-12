@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Commands\API;
 
 use InfyOm\Generator\Commands\BaseCommand;
+use InfyOm\Generator\Common\ClassInjectionConfig;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\API\APIRequestGenerator;
 
@@ -24,25 +25,27 @@ class APIRequestsGeneratorCommand extends BaseCommand
 
     /**
      * Create a new command instance.
+     * @throws \ReflectionException
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->commandData = new CommandData($this, CommandData::$COMMAND_TYPE_API);
+        $this->commandData = ClassInjectionConfig::createClassByConfigPath('Common.command_data', [$this, CommandData::$COMMAND_TYPE_API]);
     }
 
     /**
      * Execute the command.
      *
      * @return void
+     * @throws \ReflectionException
      */
     public function handle()
     {
         parent::handle();
 
-        /** @var APIRequestGenerator $requestGenerator */
-        $requestGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.API.api_request', [$this->commandData]);
+        /** @var APIRequestGenerator $controllerGenerator */
+        $controllerGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.API.api_request', [$this->commandData]);
         $controllerGenerator->generate();
 
         $this->performPostActions();

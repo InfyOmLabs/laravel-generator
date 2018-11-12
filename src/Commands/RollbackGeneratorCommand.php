@@ -79,7 +79,7 @@ class RollbackGeneratorCommand extends Command
             $this->error('invalid rollback type');
         }
 
-        $this->commandData = new CommandData($this, $this->argument('type'));
+        $this->commandData = ClassInjectionConfig::createClassByConfigPath('Common.command_data', [$this, $this->argument('type')]);
         $this->commandData->config->mName = $this->commandData->modelName = $this->argument('model');
 
         $this->commandData->config->init($this->commandData, ['tableName', 'prefix']);
