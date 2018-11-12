@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Commands;
 
 use Illuminate\Console\Command;
+use InfyOm\Generator\Common\ClassInjectionConfig;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\API\APIControllerGenerator;
 use InfyOm\Generator\Generators\API\APIRequestGenerator;
@@ -65,6 +66,7 @@ class RollbackGeneratorCommand extends Command
      * Execute the command.
      *
      * @return void
+     * @throws \Exception
      */
     public function handle()
     {
@@ -82,13 +84,16 @@ class RollbackGeneratorCommand extends Command
 
         $this->commandData->config->init($this->commandData, ['tableName', 'prefix']);
 
-        $migrationGenerator = new MigrationGenerator($this->commandData);
+        /** @var MigrationGenerator $migrationGenerator */
+        $migrationGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.migration', [$this->commandData]);
         $migrationGenerator->rollback();
 
-        $modelGenerator = new ModelGenerator($this->commandData);
+        /** @var ModelGenerator $modelGenerator */
+        $modelGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.model', [$this->commandData]);
         $modelGenerator->rollback();
 
-        $repositoryGenerator = new RepositoryGenerator($this->commandData);
+        /** @var RepositoryGenerator $repositoryGenerator */
+        $repositoryGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.repository', [$this->commandData]);
         $repositoryGenerator->rollback();
 
         $requestGenerator = new APIRequestGenerator($this->commandData);
@@ -125,10 +130,12 @@ class RollbackGeneratorCommand extends Command
         $modelJsConfigGenerator->rollback();
 
         if ($this->commandData->getAddOn('tests')) {
-            $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);
+            /** @var RepositoryTestGenerator $repositoryGenerator */
+            $repositoryTestGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.repository_test', [$this->commandData]);
             $repositoryTestGenerator->rollback();
 
-            $testTraitGenerator = new TestTraitGenerator($this->commandData);
+            /** @var TestTraitGenerator $testTraitGenerator */
+            $testTraitGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.test_trait', [$this->commandData]);
             $testTraitGenerator->rollback();
 
             $apiTestGenerator = new APITestGenerator($this->commandData);

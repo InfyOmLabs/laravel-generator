@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Commands\Common;
 
 use InfyOm\Generator\Commands\BaseCommand;
+use InfyOm\Generator\Common\ClassInjectionConfig;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\MigrationGenerator;
 
@@ -36,6 +37,7 @@ class MigrationGeneratorCommand extends BaseCommand
      * Execute the command.
      *
      * @return void
+     * @throws \ReflectionException
      */
     public function handle()
     {
@@ -47,7 +49,8 @@ class MigrationGeneratorCommand extends BaseCommand
             return;
         }
 
-        $migrationGenerator = new MigrationGenerator($this->commandData);
+        /** @var MigrationGenerator $migrationGenerator */
+        $migrationGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.migration', [$this->commandData]);
         $migrationGenerator->generate();
 
         $this->performPostActionsWithMigration();

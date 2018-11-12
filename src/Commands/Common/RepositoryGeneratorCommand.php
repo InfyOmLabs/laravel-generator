@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Commands\Common;
 
 use InfyOm\Generator\Commands\BaseCommand;
+use InfyOm\Generator\Common\ClassInjectionConfig;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\RepositoryGenerator;
 
@@ -36,12 +37,14 @@ class RepositoryGeneratorCommand extends BaseCommand
      * Execute the command.
      *
      * @return void
+     * @throws \ReflectionException
      */
     public function handle()
     {
         parent::handle();
 
-        $repositoryGenerator = new RepositoryGenerator($this->commandData);
+        /** @var RepositoryGenerator $repositoryGenerator */
+        $repositoryGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.repository', [$this->commandData]);
         $repositoryGenerator->generate();
 
         $this->performPostActions();

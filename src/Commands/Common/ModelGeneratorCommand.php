@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Commands\Common;
 
 use InfyOm\Generator\Commands\BaseCommand;
+use InfyOm\Generator\Common\ClassInjectionConfig;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\ModelGenerator;
 
@@ -36,12 +37,14 @@ class ModelGeneratorCommand extends BaseCommand
      * Execute the command.
      *
      * @return void
+     * @throws \Exception
      */
     public function handle()
     {
         parent::handle();
 
-        $modelGenerator = new ModelGenerator($this->commandData);
+        /** @var ModelGenerator $modelGenerator */
+        $modelGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.model', [$this->commandData]);
         $modelGenerator->generate();
 
         $this->performPostActions();

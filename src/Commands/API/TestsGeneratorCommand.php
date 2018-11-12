@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Commands\API;
 
 use InfyOm\Generator\Commands\BaseCommand;
+use InfyOm\Generator\Common\ClassInjectionConfig;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\API\APITestGenerator;
 use InfyOm\Generator\Generators\RepositoryTestGenerator;
@@ -38,15 +39,18 @@ class TestsGeneratorCommand extends BaseCommand
      * Execute the command.
      *
      * @return void
+     * @throws \ReflectionException
      */
     public function handle()
     {
         parent::handle();
 
-        $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);
+        /** @var RepositoryTestGenerator $repositoryGenerator */
+        $repositoryTestGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.repository_test', [$this->commandData]);
         $repositoryTestGenerator->generate();
 
-        $testTraitGenerator = new TestTraitGenerator($this->commandData);
+        /** @var TestTraitGenerator $testTraitGenerator */
+        $testTraitGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.test_trait', [$this->commandData]);
         $testTraitGenerator->generate();
 
         $apiTestGenerator = new APITestGenerator($this->commandData);

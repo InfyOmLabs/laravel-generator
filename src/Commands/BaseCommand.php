@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Commands;
 
 use Illuminate\Console\Command;
+use InfyOm\Generator\Common\ClassInjectionConfig;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\API\APIControllerGenerator;
 use InfyOm\Generator\Generators\API\APIRequestGenerator;
@@ -54,24 +55,33 @@ class BaseCommand extends Command
         $this->commandData->getFields();
     }
 
+    /**
+     * @throws \Exception
+     */
     public function generateCommonItems()
     {
         if (!$this->commandData->getOption('fromTable') and !$this->isSkip('migration')) {
-            $migrationGenerator = new MigrationGenerator($this->commandData);
+            /** @var MigrationGenerator $migrationGenerator */
+            $migrationGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.migration', [$this->commandData]);
             $migrationGenerator->generate();
         }
 
         if (!$this->isSkip('model')) {
-            $modelGenerator = new ModelGenerator($this->commandData);
+            /** @var ModelGenerator $modelGenerator */
+            $modelGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.model', [$this->commandData]);
             $modelGenerator->generate();
         }
 
         if (!$this->isSkip('repository')) {
-            $repositoryGenerator = new RepositoryGenerator($this->commandData);
+            /** @var RepositoryGenerator $repositoryGenerator */
+            $repositoryGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.repository', [$this->commandData]);
             $repositoryGenerator->generate();
         }
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function generateAPIItems()
     {
         if (!$this->isSkip('requests') and !$this->isSkip('api_requests')) {
@@ -90,10 +100,12 @@ class BaseCommand extends Command
         }
 
         if (!$this->isSkip('tests') and $this->commandData->getAddOn('tests')) {
-            $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);
+            /** @var RepositoryTestGenerator $repositoryGenerator */
+            $repositoryTestGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.repository_test', [$this->commandData]);
             $repositoryTestGenerator->generate();
 
-            $testTraitGenerator = new TestTraitGenerator($this->commandData);
+            /** @var TestTraitGenerator $testTraitGenerator */
+            $testTraitGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.test_trait', [$this->commandData]);
             $testTraitGenerator->generate();
 
             $apiTestGenerator = new APITestGenerator($this->commandData);

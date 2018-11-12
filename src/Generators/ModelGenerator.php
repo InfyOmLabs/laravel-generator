@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Generators;
 
+use InfyOm\Generator\Common\ClassInjectionConfig;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Common\GeneratorFieldRelation;
 use InfyOm\Generator\Utils\FileUtil;
@@ -169,9 +170,16 @@ class ModelGenerator extends BaseGenerator
         }
     }
 
+    /**
+     * @param $templateData
+     * @return mixed
+     * @throws \Exception
+     */
     public function generateSwagger($templateData)
     {
-        $fieldTypes = SwaggerGenerator::generateTypes($this->commandData->fields);
+        /** @var SwaggerGenerator $swaggerGeneratorClass */
+        $swaggerGeneratorClass = ClassInjectionConfig::getClassByConfigPath('Generators.swagger');
+        $fieldTypes = $swaggerGeneratorClass::generateTypes($this->commandData->fields);
 
         $template = get_template('model_docs.model', 'swagger-generator');
 
@@ -182,7 +190,7 @@ class ModelGenerator extends BaseGenerator
 
         $propertyTemplate = get_template('model_docs.property', 'swagger-generator');
 
-        $properties = SwaggerGenerator::preparePropertyFields($propertyTemplate, $fieldTypes);
+        $properties = $swaggerGeneratorClass::preparePropertyFields($propertyTemplate, $fieldTypes);
 
         $template = str_replace('$PROPERTIES$', implode(",\n", $properties), $template);
 

@@ -41,7 +41,7 @@ class ClassInjectionConfig
 
         $class = array_get(static::$classes, $type);
         if(empty($class) || !class_exists($class)){
-            throw new \Exception('Classname for infyom.laravel_generator.classes.'.$type.' does not exist: '.$class);
+            throw new \RuntimeException('Classname for infyom.laravel_generator.classes.'.$type.' does not exist: '.$class);
         }
         return $class;
     }
