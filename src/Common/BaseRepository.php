@@ -76,21 +76,32 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
                         }
 
                         list($temp, $model_key) = explode('.', $model->$key($key)->getQualifiedForeignKeyName());
-
+                       
                         foreach ($model->$key as $rel) {
-                            if (!in_array($rel->id, $new_values)) {
-                                $rel->$model_key = null;
-                                $rel->save();
+
+                            if (!in_array($rel->id, array_column($new_values, 'id'))) {
+                                $rel->forceDelete();
                             }
-                            unset($new_values[array_search($rel->id, $new_values)]);
+
+                            foreach($new_values as $index => $values){
+                                if(isset($values['id']) && $values['id'] == $rel->id){
+                                    $update = $new_values[$index];
+                                    foreach($update as $key_update => $value_update){
+                                        $rel->$key_update = $value_update;
+                                    }
+                                    $rel->save();
+                                    unset($new_values[$index]);
+                                }
+
+                            }
                         }
 
                         if (count($new_values) > 0) {
                             $related = get_class($model->$key()->getRelated());
                             foreach ($new_values as $val) {
-                                $rel = $related::find($val);
-                                $rel->$model_key = $model->id;
-                                $rel->save();
+                                $val[$model_key] = $model->id;
+                                $rel = new $related();
+                                $rel->insert($val);
                             }
                         }
                         break;
