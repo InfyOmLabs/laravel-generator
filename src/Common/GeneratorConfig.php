@@ -172,7 +172,7 @@ class GeneratorConfig
             app_path('Http/Requests/API/')
         ).$prefix;
 
-        $this->pathApiRoutes = config('infyom.laravel_generator.path.api_routes', app_path('Http/api_routes.php'));
+        $this->pathApiRoutes = config('infyom.laravel_generator.path.api_routes', base_path('routes/api.php'));
 
         $this->pathApiTests = config('infyom.laravel_generator.path.api_test', base_path('tests/'));
 
@@ -185,7 +185,7 @@ class GeneratorConfig
 
         $this->pathRequest = config('infyom.laravel_generator.path.request', app_path('Http/Requests/')).$prefix;
 
-        $this->pathRoutes = config('infyom.laravel_generator.path.routes', app_path('Http/routes.php'));
+        $this->pathRoutes = config('infyom.laravel_generator.path.routes', base_path('routes/web.php'));
 
         $this->pathViews = config(
             'infyom.laravel_generator.path.views',
