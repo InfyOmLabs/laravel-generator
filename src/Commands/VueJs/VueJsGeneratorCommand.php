@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Commands\VueJs;
 
 use InfyOm\Generator\Commands\BaseCommand;
+use InfyOm\Generator\Common\ClassInjectionConfig;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\MigrationGenerator;
 use InfyOm\Generator\Generators\ModelGenerator;
@@ -32,51 +33,63 @@ class VueJsGeneratorCommand extends BaseCommand
 
     /**
      * Create a new command instance.
+     * @throws \ReflectionException
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->commandData = new CommandData($this, CommandData::$COMMAND_TYPE_VUEJS);
+        $this->commandData = ClassInjectionConfig::createClassByConfigPath('Common.command_data', [$this, CommandData::$COMMAND_TYPE_VUEJS]);
     }
 
     /**
      * Execute the command.
      *
      * @return void
+     * @throws \Exception
      */
     public function handle()
     {
         parent::handle();
 
         if (!$this->commandData->getOption('fromTable')) {
-            $migrationGenerator = new MigrationGenerator($this->commandData);
+            /** @var MigrationGenerator $migrationGenerator */
+            $migrationGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.migration', [$this->commandData]);
             $migrationGenerator->generate();
         }
 
-        $modelGenerator = new ModelGenerator($this->commandData);
+        /** @var ModelGenerator $modelGenerator */
+        $modelGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.model', [$this->commandData]);
         $modelGenerator->generate();
 
-        $repositoryGenerator = new RepositoryGenerator($this->commandData);
+        /** @var RepositoryGenerator $repositoryGenerator */
+        $repositoryGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.repository', [$this->commandData]);
         $repositoryGenerator->generate();
 
-        $requestGenerator = new APIRequestGenerator($this->commandData);
+        /** @var APIRequestGenerator $requestGenerator */
+        $requestGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.VueJs.api_request', [$this->commandData]);
         $requestGenerator->generate();
 
-        $controllerGenerator = new ControllerGenerator($this->commandData);
+        /** @var ControllerGenerator $controllerGenerator */
+        $controllerGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.VueJs.controller', [$this->commandData]);
         $controllerGenerator->generate();
 
-        $viewGenerator = new ViewGenerator($this->commandData);
+        /** @var ViewGenerator $viewGenerator */
+        $viewGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.VueJs.view', [$this->commandData]);
         $viewGenerator->generate();
 
-        $modelJsConfigGenerator = new ModelJsConfigGenerator($this->commandData);
+
+        /** @var ModelJsConfigGenerator $modelJsConfigGenerator */
+        $modelJsConfigGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.VueJs.model_js_config', [$this->commandData]);
         $modelJsConfigGenerator->generate();
 
-        $routeGenerator = new RoutesGenerator($this->commandData);
+        /** @var RoutesGenerator $routeGenerator */
+        $routeGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.VueJs.routes', [$this->commandData]);
         $routeGenerator->generate();
 
         if ($this->commandData->config->getAddOn('menu.enabled')) {
-            $menuGenerator = new MenuGenerator($this->commandData);
+            /** @var MenuGenerator $menuGenerator */
+            $menuGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.menu', [$this->commandData]);
             $menuGenerator->generate();
         }
 

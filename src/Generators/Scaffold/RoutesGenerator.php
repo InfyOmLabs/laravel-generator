@@ -8,16 +8,16 @@ use InfyOm\Generator\Common\CommandData;
 class RoutesGenerator
 {
     /** @var CommandData */
-    private $commandData;
+    protected $commandData;
 
     /** @var string */
-    private $path;
+    protected $path;
 
     /** @var string */
-    private $routeContents;
+    protected $routeContents;
 
     /** @var string */
-    private $routesTemplate;
+    protected $routesTemplate;
 
     public function __construct(CommandData $commandData)
     {

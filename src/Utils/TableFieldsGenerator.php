@@ -3,28 +3,9 @@
 namespace InfyOm\Generator\Utils;
 
 use DB;
+use InfyOm\Generator\Common\ClassInjectionConfig;
 use InfyOm\Generator\Common\GeneratorField;
 use InfyOm\Generator\Common\GeneratorFieldRelation;
-
-class GeneratorForeignKey
-{
-    /** @var string */
-    public $name;
-    public $localField;
-    public $foreignField;
-    public $foreignTable;
-    public $onUpdate;
-    public $onDelete;
-}
-
-class GeneratorTable
-{
-    /** @var string */
-    public $primaryKey;
-
-    /** @var GeneratorForeignKey[] */
-    public $foreignKeys;
-}
 
 class TableFieldsGenerator
 {
@@ -39,10 +20,10 @@ class TableFieldsGenerator
     public $timestamps;
 
     /** @var \Doctrine\DBAL\Schema\AbstractSchemaManager */
-    private $schemaManager;
+    protected $schemaManager;
 
     /** @var \Doctrine\DBAL\Schema\Column[] */
-    private $columns;
+    protected $columns;
 
     /** @var GeneratorField[] */
     public $fields;
@@ -169,14 +150,16 @@ class TableFieldsGenerator
     /**
      * Generates integer text field for database.
      *
-     * @param string                       $dbType
+     * @param string $dbType
      * @param \Doctrine\DBAL\Schema\Column $column
      *
      * @return GeneratorField
+     * @throws \ReflectionException
      */
-    private function generateIntFieldInput($column, $dbType)
+    protected function generateIntFieldInput($column, $dbType)
     {
-        $field = new GeneratorField();
+        /** @var GeneratorField $field */
+        $field = ClassInjectionConfig::createClassByConfigPath('Common.generator_field');
         $field->name = $column->getName();
         $field->parseDBType($dbType);
         $field->htmlType = 'number';
@@ -201,7 +184,7 @@ class TableFieldsGenerator
      *
      * @return GeneratorField
      */
-    private function checkForPrimary(GeneratorField $field)
+    protected function checkForPrimary(GeneratorField $field)
     {
         if ($field->name == $this->primaryKey) {
             $field->isPrimary = true;
@@ -222,10 +205,12 @@ class TableFieldsGenerator
      * @param $htmlType
      *
      * @return GeneratorField
+     * @throws \ReflectionException
      */
-    private function generateField($column, $dbType, $htmlType)
+    protected function generateField($column, $dbType, $htmlType)
     {
-        $field = new GeneratorField();
+        /** @var GeneratorField $field */
+        $field = ClassInjectionConfig::createClassByConfigPath('Common.generator_field');
         $field->name = $column->getName();
         $field->parseDBType($dbType);
         $field->parseHtmlInput($htmlType);
@@ -237,13 +222,15 @@ class TableFieldsGenerator
      * Generates number field.
      *
      * @param \Doctrine\DBAL\Schema\Column $column
-     * @param string                       $dbType
+     * @param string $dbType
      *
      * @return GeneratorField
+     * @throws \ReflectionException
      */
-    private function generateNumberInput($column, $dbType)
+    protected function generateNumberInput($column, $dbType)
     {
-        $field = new GeneratorField();
+        /** @var GeneratorField $field */
+        $field = ClassInjectionConfig::createClassByConfigPath('Common.generator_field');
         $field->name = $column->getName();
         $field->parseDBType($dbType.','.$column->getPrecision().','.$column->getScale());
         $field->htmlType = 'number';
@@ -304,9 +291,14 @@ class TableFieldsGenerator
      * Prepares relations array from table foreign keys.
      *
      * @param GeneratorTable[] $tables
+     * @throws \Exception
      */
-    private function checkForRelations($tables)
+    protected function checkForRelations($tables)
     {
+
+        /** @var GeneratorFieldRelation $generatorFieldRelationClass */
+        $generatorFieldRelationClass = ClassInjectionConfig::getClassByConfigPath('Common.generator_field_relation');
+
         // get Model table name and table details from tables list
         $modelTableName = $this->tableName;
         $modelTable = $tables[$modelTableName];
@@ -343,7 +335,7 @@ class TableFieldsGenerator
                     $isOneToOne = $this->isOneToOne($primary, $foreignKey, $modelTable->primaryKey);
                     if ($isOneToOne) {
                         $modelName = model_name_from_table_name($tableName);
-                        $this->relations[] = GeneratorFieldRelation::parseRelation('1t1,'.$modelName);
+                        $this->relations[] = $generatorFieldRelationClass::parseRelation('1t1,'.$modelName);
                         continue;
                     }
 
@@ -351,7 +343,7 @@ class TableFieldsGenerator
                     $isOneToMany = $this->isOneToMany($primary, $foreignKey, $modelTable->primaryKey);
                     if ($isOneToMany) {
                         $modelName = model_name_from_table_name($tableName);
-                        $this->relations[] = GeneratorFieldRelation::parseRelation('1tm,'.$modelName);
+                        $this->relations[] = $generatorFieldRelationClass::parseRelation('1tm,'.$modelName);
                         continue;
                     }
                 }
@@ -366,13 +358,14 @@ class TableFieldsGenerator
      * Also one is from model table and one is from diff table.
      *
      * @param GeneratorTable[] $tables
-     * @param string           $tableName
-     * @param GeneratorTable   $modelTable
-     * @param string           $modelTableName
+     * @param string $tableName
+     * @param GeneratorTable $modelTable
+     * @param string $modelTableName
      *
      * @return bool|GeneratorFieldRelation
+     * @throws \Exception
      */
-    private function isManyToMany($tables, $tableName, $modelTable, $modelTableName)
+    protected function isManyToMany($tables, $tableName, $modelTable, $modelTableName)
     {
         // get table details
         $table = $tables[$tableName];
@@ -424,7 +417,9 @@ class TableFieldsGenerator
 
         $modelName = model_name_from_table_name($manyToManyTable);
 
-        return GeneratorFieldRelation::parseRelation('mtm,'.$modelName.','.$tableName);
+        /** @var GeneratorFieldRelation $generatorFieldRelationClass */
+        $generatorFieldRelationClass = ClassInjectionConfig::getClassByConfigPath('Common.generator_field_relation');
+        return $generatorFieldRelationClass::parseRelation('mtm,'.$modelName.','.$tableName);
     }
 
     /**
@@ -438,7 +433,7 @@ class TableFieldsGenerator
      *
      * @return bool
      */
-    private function isOneToOne($primaryKey, $foreignKey, $modelTablePrimary)
+    protected function isOneToOne($primaryKey, $foreignKey, $modelTablePrimary)
     {
         if ($foreignKey->foreignField == $modelTablePrimary) {
             if ($foreignKey->localField == $primaryKey) {
@@ -460,7 +455,7 @@ class TableFieldsGenerator
      *
      * @return bool
      */
-    private function isOneToMany($primaryKey, $foreignKey, $modelTablePrimary)
+    protected function isOneToMany($primaryKey, $foreignKey, $modelTablePrimary)
     {
         if ($foreignKey->foreignField == $modelTablePrimary) {
             if ($foreignKey->localField != $primaryKey) {
@@ -476,12 +471,15 @@ class TableFieldsGenerator
      * If foreign key of model table is primary key of foreign table.
      *
      * @param GeneratorTable[] $tables
-     * @param GeneratorTable   $modelTable
+     * @param GeneratorTable $modelTable
      *
      * @return array
+     * @throws \Exception
      */
-    private function detectManyToOne($tables, $modelTable)
+    protected function detectManyToOne($tables, $modelTable)
     {
+        /** @var GeneratorFieldRelation $generatorFieldRelationClass */
+        $generatorFieldRelationClass = ClassInjectionConfig::getClassByConfigPath('Common.generator_field_relation');
         $manyToOneRelations = [];
 
         $foreignKeys = $modelTable->foreignKeys;
@@ -496,7 +494,7 @@ class TableFieldsGenerator
 
             if ($foreignField == $tables[$foreignTable]->primaryKey) {
                 $modelName = model_name_from_table_name($foreignTable);
-                $manyToOneRelations[] = GeneratorFieldRelation::parseRelation('mt1,'.$modelName);
+                $manyToOneRelations[] = $generatorFieldRelationClass::parseRelation('mt1,'.$modelName);
             }
         }
 

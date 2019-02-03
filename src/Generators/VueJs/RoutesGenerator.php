@@ -9,25 +9,25 @@ use InfyOm\Generator\Generators\BaseGenerator;
 class RoutesGenerator extends BaseGenerator
 {
     /** @var CommandData */
-    private $commandData;
+    protected $commandData;
 
     /** @var string */
-    private $path;
+    protected $path;
 
     /** @var string */
-    private $pathApi;
+    protected $pathApi;
 
     /** @var string */
-    private $routeContents;
+    protected $routeContents;
 
     /** @var string */
-    private $apiRouteContents;
+    protected $apiRouteContents;
 
     /** @var string */
-    private $routesTemplate;
+    protected $routesTemplate;
 
     /** @var string */
-    private $apiRoutesTemplate;
+    protected $apiRoutesTemplate;
 
     public function __construct(CommandData $commandData)
     {

@@ -9,19 +9,19 @@ use InfyOm\Generator\Utils\FileUtil;
 class ModelJsConfigGenerator extends BaseGenerator
 {
     /** @var CommandData */
-    private $commandData;
+    protected $commandData;
 
     /** @var string */
-    private $path;
+    protected $path;
 
     /** @var string */
-    private $fileName;
+    protected $fileName;
 
     /** @var string */
-    private $templateType;
+    protected $templateType;
 
     /** @var array */
-    private $htmlFields;
+    protected $htmlFields;
 
     public function __construct(CommandData $commandData)
     {
@@ -40,7 +40,7 @@ class ModelJsConfigGenerator extends BaseGenerator
         $this->commandData->commandComment('ModelJsConfig created.');
     }
 
-    private function generateModelJs()
+    protected function generateModelJs()
     {
         $templateData = get_template('vuejs.js.model-config', 'laravel-generator');
         $fieldsRow = '';

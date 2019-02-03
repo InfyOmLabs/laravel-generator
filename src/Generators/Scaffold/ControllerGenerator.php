@@ -9,16 +9,16 @@ use InfyOm\Generator\Utils\FileUtil;
 class ControllerGenerator extends BaseGenerator
 {
     /** @var CommandData */
-    private $commandData;
+    protected $commandData;
 
     /** @var string */
-    private $path;
+    protected $path;
 
     /** @var string */
-    private $templateType;
+    protected $templateType;
 
     /** @var string */
-    private $fileName;
+    protected $fileName;
 
     public function __construct(CommandData $commandData)
     {
@@ -54,7 +54,7 @@ class ControllerGenerator extends BaseGenerator
         $this->commandData->commandInfo($this->fileName);
     }
 
-    private function generateDataTable()
+    protected function generateDataTable()
     {
         $templateData = get_template('scaffold.datatable', 'laravel-generator');
 

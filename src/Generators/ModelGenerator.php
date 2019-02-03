@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Generators;
 
+use InfyOm\Generator\Common\ClassInjectionConfig;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Common\GeneratorFieldRelation;
 use InfyOm\Generator\Utils\FileUtil;
@@ -20,12 +21,12 @@ class ModelGenerator extends BaseGenerator
     ];
 
     /** @var CommandData */
-    private $commandData;
+    protected $commandData;
 
     /** @var string */
-    private $path;
-    private $fileName;
-    private $table;
+    protected $path;
+    protected $fileName;
+    protected $table;
 
     /**
      * ModelGenerator constructor.
@@ -52,7 +53,7 @@ class ModelGenerator extends BaseGenerator
         $this->commandData->commandInfo($this->fileName);
     }
 
-    private function fillTemplate($templateData)
+    protected function fillTemplate($templateData)
     {
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
@@ -95,7 +96,7 @@ class ModelGenerator extends BaseGenerator
         return $templateData;
     }
 
-    private function fillSoftDeletes($templateData)
+    protected function fillSoftDeletes($templateData)
     {
         if (!$this->commandData->getOption('softDelete')) {
             $templateData = str_replace('$SOFT_DELETE_IMPORT$', '', $templateData);
@@ -117,7 +118,7 @@ class ModelGenerator extends BaseGenerator
         return $templateData;
     }
 
-    private function fillDocs($templateData)
+    protected function fillDocs($templateData)
     {
         if ($this->commandData->getAddOn('swagger')) {
             $templateData = $this->generateSwagger($templateData);
@@ -149,7 +150,7 @@ class ModelGenerator extends BaseGenerator
      *
      * @return string
      */
-    private function getPHPDocType($db_type, $relation = null)
+    protected function getPHPDocType($db_type, $relation = null)
     {
         switch ($db_type) {
             case 'datetime':
@@ -169,9 +170,16 @@ class ModelGenerator extends BaseGenerator
         }
     }
 
+    /**
+     * @param $templateData
+     * @return mixed
+     * @throws \Exception
+     */
     public function generateSwagger($templateData)
     {
-        $fieldTypes = SwaggerGenerator::generateTypes($this->commandData->fields);
+        /** @var SwaggerGenerator $swaggerGeneratorClass */
+        $swaggerGeneratorClass = ClassInjectionConfig::getClassByConfigPath('Generators.swagger');
+        $fieldTypes = $swaggerGeneratorClass::generateTypes($this->commandData->fields);
 
         $template = get_template('model_docs.model', 'swagger-generator');
 
@@ -182,7 +190,7 @@ class ModelGenerator extends BaseGenerator
 
         $propertyTemplate = get_template('model_docs.property', 'swagger-generator');
 
-        $properties = SwaggerGenerator::preparePropertyFields($propertyTemplate, $fieldTypes);
+        $properties = $swaggerGeneratorClass::preparePropertyFields($propertyTemplate, $fieldTypes);
 
         $template = str_replace('$PROPERTIES$', implode(",\n", $properties), $template);
 
@@ -191,7 +199,7 @@ class ModelGenerator extends BaseGenerator
         return $templateData;
     }
 
-    private function generateRequiredFields()
+    protected function generateRequiredFields()
     {
         $requiredFields = [];
 
@@ -206,9 +214,16 @@ class ModelGenerator extends BaseGenerator
         return $requiredFields;
     }
 
-    private function fillTimestamps($templateData)
+    /**
+     * @param $templateData
+     * @return mixed
+     * @throws \Exception
+     */
+    protected function fillTimestamps($templateData)
     {
-        $timestamps = TableFieldsGenerator::getTimestampFieldNames();
+        /** @var TableFieldsGenerator $tableFieldsGeneratorClass */
+        $tableFieldsGeneratorClass = ClassInjectionConfig::getClassByConfigPath('Utils.table_field_generator');
+        $timestamps = $tableFieldsGeneratorClass::getTimestampFieldNames();
 
         $replace = '';
 
@@ -228,7 +243,7 @@ class ModelGenerator extends BaseGenerator
         return str_replace('$TIMESTAMPS$', $replace, $templateData);
     }
 
-    private function generateRules()
+    protected function generateRules()
     {
         $rules = [];
 
@@ -242,11 +257,17 @@ class ModelGenerator extends BaseGenerator
         return $rules;
     }
 
+    /**
+     * @return array
+     * @throws \Exception
+     */
     public function generateCasts()
     {
         $casts = [];
 
-        $timestamps = TableFieldsGenerator::getTimestampFieldNames();
+        /** @var TableFieldsGenerator $tableFieldsGeneratorClass */
+        $tableFieldsGeneratorClass = ClassInjectionConfig::getClassByConfigPath('Utils.table_field_generator');
+        $timestamps = $tableFieldsGeneratorClass::getTimestampFieldNames();
 
         foreach ($this->commandData->fields as $field) {
             if (in_array($field->name, $timestamps)) {
@@ -294,7 +315,7 @@ class ModelGenerator extends BaseGenerator
         return $casts;
     }
 
-    private function generateRelations()
+    protected function generateRelations()
     {
         $relations = [];
 

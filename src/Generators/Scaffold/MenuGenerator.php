@@ -9,19 +9,19 @@ use InfyOm\Generator\Generators\BaseGenerator;
 class MenuGenerator extends BaseGenerator
 {
     /** @var CommandData */
-    private $commandData;
+    protected $commandData;
 
     /** @var string */
-    private $path;
+    protected $path;
 
     /** @var string */
-    private $templateType;
+    protected $templateType;
 
     /** @var string */
-    private $menuContents;
+    protected $menuContents;
 
     /** @var string */
-    private $menuTemplate;
+    protected $menuTemplate;
 
     public function __construct(CommandData $commandData)
     {

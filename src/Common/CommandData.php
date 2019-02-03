@@ -44,9 +44,9 @@ class CommandData
 
     /**
      * @param Command $commandObj
-     * @param string  $commandType
+     * @param string $commandType
      *
-     * @return CommandData
+     * @throws Exception
      */
     public function __construct(Command $commandObj, $commandType)
     {
@@ -58,7 +58,7 @@ class CommandData
             '$FIELD_NAME$'       => 'name',
         ];
 
-        $this->config = new GeneratorConfig();
+        $this->config = ClassInjectionConfig::createClassByConfigPath('Common.generator_config');
     }
 
     public function commandError($error)
@@ -119,7 +119,11 @@ class CommandData
         }
     }
 
-    private function getInputFromConsole()
+    /**
+     * @throws \ReflectionException
+     * @throws Exception
+     */
+    protected function getInputFromConsole()
     {
         $this->commandInfo('Specify fields for the model (skip id & timestamp fields, we will add it automatically)');
         $this->commandInfo('Read docs carefully to specify field inputs)');
@@ -154,16 +158,23 @@ class CommandData
             );
 
             if (!empty($relation)) {
-                $this->relations[] = GeneratorFieldRelation::parseRelation($relation);
+
+                /** @var GeneratorFieldRelation $generatorFieldRelationClass */
+                $generatorFieldRelationClass = ClassInjectionConfig::getClassByConfigPath('Common.generator_field_relation');
+                $this->relations[] = $generatorFieldRelationClass::parseRelation($relation);
             }
         }
 
         $this->addTimestamps();
     }
 
-    private function addPrimaryKey()
+    /**
+     * @throws \ReflectionException
+     */
+    protected function addPrimaryKey()
     {
-        $primaryKey = new GeneratorField();
+        /** @var GeneratorField $primaryKey */
+        $primaryKey = ClassInjectionConfig::createClassByConfigPath('Common.generator_field');
         if ($this->getOption('primary')) {
             $primaryKey->name = $this->getOption('primary');
         } else {
@@ -175,25 +186,35 @@ class CommandData
         $this->fields[] = $primaryKey;
     }
 
-    private function addTimestamps()
+    /**
+     * @throws \ReflectionException
+     */
+    protected function addTimestamps()
     {
-        $createdAt = new GeneratorField();
+        /** @var GeneratorField $createdAt */
+        $createdAt = ClassInjectionConfig::createClassByConfigPath('Common.generator_field');
         $createdAt->name = 'created_at';
         $createdAt->parseDBType('timestamp');
         $createdAt->parseOptions('s,f,if,ii');
         $this->fields[] = $createdAt;
 
-        $updatedAt = new GeneratorField();
+        /** @var GeneratorField $updatedAt */
+        $updatedAt = ClassInjectionConfig::createClassByConfigPath('Common.generator_field');
         $updatedAt->name = 'updated_at';
         $updatedAt->parseDBType('timestamp');
         $updatedAt->parseOptions('s,f,if,ii');
         $this->fields[] = $updatedAt;
     }
 
-    private function getInputFromFileOrJson()
+    protected function getInputFromFileOrJson()
     {
         // fieldsFile option will get high priority than json option if both options are passed
         try {
+            /** @var GeneratorFieldRelation $generatorFieldRelationClass */
+            $generatorFieldRelationClass = ClassInjectionConfig::getClassByConfigPath('Common.generator_field_relation');
+            /** @var GeneratorField $generatorFieldClass */
+            $generatorFieldClass = ClassInjectionConfig::getClassByConfigPath('Common.generator_field');
+
             if ($this->getOption('fieldsFile')) {
                 $fieldsFileValue = $this->getOption('fieldsFile');
                 if (file_exists($fieldsFileValue)) {
@@ -215,11 +236,11 @@ class CommandData
                 $this->fields = [];
                 foreach ($jsonData as $field) {
                     if (isset($field['type']) && $field['relation']) {
-                        $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
+                        $this->relations[] = $generatorFieldRelationClass::parseRelation($field['relation']);
                     } else {
-                        $this->fields[] = GeneratorField::parseFieldFromFile($field);
+                        $this->fields[] = $generatorFieldClass::parseFieldFromFile($field);
                         if (isset($field['relation'])) {
-                            $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
+                            $this->relations[] = $generatorFieldRelationClass::parseRelation($field['relation']);
                         }
                     }
                 }
@@ -228,11 +249,11 @@ class CommandData
                 $jsonData = json_decode($fileContents, true);
                 foreach ($jsonData['fields'] as $field) {
                     if (isset($field['type']) && $field['relation']) {
-                        $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
+                        $this->relations[] = $generatorFieldRelationClass::parseRelation($field['relation']);
                     } else {
-                        $this->fields[] = GeneratorField::parseFieldFromFile($field);
+                        $this->fields[] = $generatorFieldClass::parseFieldFromFile($field);
                         if (isset($field['relation'])) {
-                            $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
+                            $this->relations[] = $generatorFieldRelationClass::parseRelation($field['relation']);
                         }
                     }
                 }
@@ -243,11 +264,16 @@ class CommandData
         }
     }
 
-    private function getInputFromTable()
+    /**
+     * @throws \ReflectionException
+     */
+    protected function getInputFromTable()
     {
         $tableName = $this->dynamicVars['$TABLE_NAME$'];
 
-        $tableFieldsGenerator = new TableFieldsGenerator($tableName);
+
+        /** @var TableFieldsGenerator $tableFieldsGenerator */
+        $tableFieldsGenerator = ClassInjectionConfig::createClassByConfigPath('Utils.table_field_generator', [$tableName]);
         $tableFieldsGenerator->prepareFieldsFromTable();
         $tableFieldsGenerator->prepareRelations();
 

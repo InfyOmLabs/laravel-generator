@@ -9,16 +9,16 @@ use InfyOm\Generator\Utils\FileUtil;
 class RequestGenerator extends BaseGenerator
 {
     /** @var CommandData */
-    private $commandData;
+    protected $commandData;
 
     /** @var string */
-    private $path;
+    protected $path;
 
     /** @var string */
-    private $createFileName;
+    protected $createFileName;
 
     /** @var string */
-    private $updateFileName;
+    protected $updateFileName;
 
     public function __construct(CommandData $commandData)
     {
@@ -34,7 +34,7 @@ class RequestGenerator extends BaseGenerator
         $this->generateUpdateRequest();
     }
 
-    private function generateCreateRequest()
+    protected function generateCreateRequest()
     {
         $templateData = get_template('scaffold.request.create_request', 'laravel-generator');
 
@@ -46,7 +46,7 @@ class RequestGenerator extends BaseGenerator
         $this->commandData->commandInfo($this->createFileName);
     }
 
-    private function generateUpdateRequest()
+    protected function generateUpdateRequest()
     {
         $templateData = get_template('scaffold.request.update_request', 'laravel-generator');
 

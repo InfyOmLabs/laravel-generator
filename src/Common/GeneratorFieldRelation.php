@@ -12,7 +12,7 @@ class GeneratorFieldRelation
     {
         $inputs = explode(',', $relationInput);
 
-        $relation = new self();
+        $relation = new static();
         $relation->type = array_shift($inputs);
         $relation->inputs = $inputs;
 
@@ -62,7 +62,7 @@ class GeneratorFieldRelation
         return '';
     }
 
-    private function generateRelation($functionName, $relation, $relationClass)
+    protected function generateRelation($functionName, $relation, $relationClass)
     {
         $inputs = $this->inputs;
         $modelName = array_shift($inputs);

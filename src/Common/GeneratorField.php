@@ -80,7 +80,7 @@ class GeneratorField
         }
     }
 
-    private function prepareMigrationText()
+    protected function prepareMigrationText()
     {
         $inputsArr = explode(':', $this->dbInput);
         $this->migrationText = '$table->';
@@ -124,7 +124,7 @@ class GeneratorField
 
     public static function parseFieldFromFile($fieldInput)
     {
-        $field = new self();
+        $field = new static();
         $field->name = $fieldInput['name'];
         $field->parseDBType($fieldInput['dbType']);
         $field->parseHtmlInput(isset($fieldInput['htmlType']) ? $fieldInput['htmlType'] : '');

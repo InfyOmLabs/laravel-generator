@@ -180,4 +180,13 @@ return [
     */
     'ignore_model_prefix' => false,
 
+    /**
+     * @see \InfyOm\Generator\Common\ClassInjectionConfig::$defaultClasses
+     *
+     * You may override InfyOm code generation classes with your own here.
+     * Please see ClassInjectionConfig::$defaultClasses for classes to override.
+     * Following the same array structure and providing classes which extend those which you want to replace will work best
+     */
+    'classes' => [
+    ]
 ];

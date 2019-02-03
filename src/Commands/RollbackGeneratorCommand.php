@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Commands;
 
 use Illuminate\Console\Command;
+use InfyOm\Generator\Common\ClassInjectionConfig;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\API\APIControllerGenerator;
 use InfyOm\Generator\Generators\API\APIRequestGenerator;
@@ -65,6 +66,7 @@ class RollbackGeneratorCommand extends Command
      * Execute the command.
      *
      * @return void
+     * @throws \Exception
      */
     public function handle()
     {
@@ -77,66 +79,84 @@ class RollbackGeneratorCommand extends Command
             $this->error('invalid rollback type');
         }
 
-        $this->commandData = new CommandData($this, $this->argument('type'));
+        $this->commandData = ClassInjectionConfig::createClassByConfigPath('Common.command_data', [$this, $this->argument('type')]);
         $this->commandData->config->mName = $this->commandData->modelName = $this->argument('model');
 
         $this->commandData->config->init($this->commandData, ['tableName', 'prefix']);
 
-        $migrationGenerator = new MigrationGenerator($this->commandData);
+        /** @var MigrationGenerator $migrationGenerator */
+        $migrationGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.migration', [$this->commandData]);
         $migrationGenerator->rollback();
 
-        $modelGenerator = new ModelGenerator($this->commandData);
+        /** @var ModelGenerator $modelGenerator */
+        $modelGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.model', [$this->commandData]);
         $modelGenerator->rollback();
 
-        $repositoryGenerator = new RepositoryGenerator($this->commandData);
+        /** @var RepositoryGenerator $repositoryGenerator */
+        $repositoryGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.repository', [$this->commandData]);
         $repositoryGenerator->rollback();
 
-        $requestGenerator = new APIRequestGenerator($this->commandData);
+        /** @var APIRequestGenerator $requestGenerator */
+        $requestGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.API.api_request', [$this->commandData]);
         $requestGenerator->rollback();
 
-        $controllerGenerator = new APIControllerGenerator($this->commandData);
+        /** @var APIControllerGenerator $controllerGenerator */
+        $controllerGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.API.api_controller', [$this->commandData]);
         $controllerGenerator->rollback();
 
-        $routesGenerator = new APIRoutesGenerator($this->commandData);
+        /** @var APIRoutesGenerator $routesGenerator */
+        $routesGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.API.api_routes', [$this->commandData]);
         $routesGenerator->rollback();
 
-        $requestGenerator = new RequestGenerator($this->commandData);
+        /** @var RequestGenerator $requestGenerator */
+        $requestGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.request', [$this->commandData]);
         $requestGenerator->rollback();
 
-        $controllerGenerator = new ControllerGenerator($this->commandData);
+        /** @var ControllerGenerator $controllerGenerator */
+        $controllerGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.controller', [$this->commandData]);
         $controllerGenerator->rollback();
 
-        $viewGenerator = new ViewGenerator($this->commandData);
+        /** @var ViewGenerator $viewGenerator */
+        $viewGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.view', [$this->commandData]);
         $viewGenerator->rollback();
 
-        $routeGenerator = new RoutesGenerator($this->commandData);
+        /** @var RoutesGenerator $routeGenerator */
+        $routeGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.routes', [$this->commandData]);
         $routeGenerator->rollback();
 
-        $controllerGenerator = new VueJsControllerGenerator($this->commandData);
+        /** @var VueJsControllerGenerator $controllerGenerator */
+        $controllerGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.VueJs.controller', [$this->commandData]);
         $controllerGenerator->rollback();
 
-        $routesGenerator = new VueJsRoutesGenerator($this->commandData);
+        /** @var VueJsRoutesGenerator $routesGenerator */
+        $routesGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.VueJs.routes', [$this->commandData]);
         $routesGenerator->rollback();
 
-        $viewGenerator = new VueJsViewGenerator($this->commandData);
+        /** @var VueJsViewGenerator $routesGenerator */
+        $viewGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.VueJs.view', [$this->commandData]);
         $viewGenerator->rollback();
 
-        $modelJsConfigGenerator = new ModelJsConfigGenerator($this->commandData);
+        /** @var ModelJsConfigGenerator $modelJsConfigGenerator */
+        $modelJsConfigGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.VueJs.model_js_config', [$this->commandData]);
         $modelJsConfigGenerator->rollback();
 
         if ($this->commandData->getAddOn('tests')) {
-            $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);
+            /** @var RepositoryTestGenerator $repositoryGenerator */
+            $repositoryTestGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.repository_test', [$this->commandData]);
             $repositoryTestGenerator->rollback();
 
-            $testTraitGenerator = new TestTraitGenerator($this->commandData);
+            /** @var TestTraitGenerator $testTraitGenerator */
+            $testTraitGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.test_trait', [$this->commandData]);
             $testTraitGenerator->rollback();
 
-            $apiTestGenerator = new APITestGenerator($this->commandData);
+            /** @var APITestGenerator $apiTestGenerator */
+            $apiTestGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.API.api_test', [$this->commandData]);
             $apiTestGenerator->rollback();
         }
 
         if ($this->commandData->config->getAddOn('menu.enabled')) {
-            $menuGenerator = new MenuGenerator($this->commandData);
+            /** @var MenuGenerator $menuGenerator */
+            $menuGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.menu', [$this->commandData]);
             $menuGenerator->rollback();
         }
 

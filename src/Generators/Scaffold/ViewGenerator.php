@@ -12,16 +12,16 @@ use InfyOm\Generator\Utils\HTMLFieldGenerator;
 class ViewGenerator extends BaseGenerator
 {
     /** @var CommandData */
-    private $commandData;
+    protected $commandData;
 
     /** @var string */
-    private $path;
+    protected $path;
 
     /** @var string */
-    private $templateType;
+    protected $templateType;
 
     /** @var array */
-    private $htmlFields;
+    protected $htmlFields;
 
     public function __construct(CommandData $commandData)
     {
@@ -75,7 +75,7 @@ class ViewGenerator extends BaseGenerator
         $this->commandData->commandComment('Views created: ');
     }
 
-    private function generateTable()
+    protected function generateTable()
     {
         if ($this->commandData->getAddOn('datatables')) {
             $templateData = $this->generateDataTableBody();
@@ -89,14 +89,14 @@ class ViewGenerator extends BaseGenerator
         $this->commandData->commandInfo('table.blade.php created');
     }
 
-    private function generateDataTableBody()
+    protected function generateDataTableBody()
     {
         $templateData = get_template('scaffold.views.datatable_body', $this->templateType);
 
         return fill_template($this->commandData->dynamicVars, $templateData);
     }
 
-    private function generateDataTableActions()
+    protected function generateDataTableActions()
     {
         $templateData = get_template('scaffold.views.datatables_actions', $this->templateType);
 
@@ -107,7 +107,7 @@ class ViewGenerator extends BaseGenerator
         $this->commandData->commandInfo('datatables_actions.blade.php created');
     }
 
-    private function generateBladeTableBody()
+    protected function generateBladeTableBody()
     {
         $templateData = get_template('scaffold.views.blade_table_body', $this->templateType);
 
@@ -137,7 +137,7 @@ class ViewGenerator extends BaseGenerator
         return str_replace('$FIELD_BODY$', $tableBodyFields, $templateData);
     }
 
-    private function generateTableHeaderFields()
+    protected function generateTableHeaderFields()
     {
         $headerFieldTemplate = get_template('scaffold.views.table_header', $this->templateType);
 
@@ -158,7 +158,7 @@ class ViewGenerator extends BaseGenerator
         return implode(infy_nl_tab(1, 2), $headerFields);
     }
 
-    private function generateIndex()
+    protected function generateIndex()
     {
         $templateData = get_template('scaffold.views.index', $this->templateType);
 
@@ -185,7 +185,7 @@ class ViewGenerator extends BaseGenerator
         $this->commandData->commandInfo('index.blade.php created');
     }
 
-    private function generateFields()
+    protected function generateFields()
     {
         $this->htmlFields = [];
 
@@ -321,7 +321,7 @@ class ViewGenerator extends BaseGenerator
         $this->commandData->commandInfo('field.blade.php created');
     }
 
-    private function generateCreate()
+    protected function generateCreate()
     {
         $templateData = get_template('scaffold.views.create', $this->templateType);
 
@@ -331,7 +331,7 @@ class ViewGenerator extends BaseGenerator
         $this->commandData->commandInfo('create.blade.php created');
     }
 
-    private function generateUpdate()
+    protected function generateUpdate()
     {
         $templateData = get_template('scaffold.views.edit', $this->templateType);
 
@@ -341,7 +341,7 @@ class ViewGenerator extends BaseGenerator
         $this->commandData->commandInfo('edit.blade.php created');
     }
 
-    private function generateShowFields()
+    protected function generateShowFields()
     {
         $fieldTemplate = get_template('scaffold.views.show_field', $this->templateType);
 
@@ -360,7 +360,7 @@ class ViewGenerator extends BaseGenerator
         $this->commandData->commandInfo('show_fields.blade.php created');
     }
 
-    private function generateShow()
+    protected function generateShow()
     {
         $templateData = get_template('scaffold.views.show', $this->templateType);
 

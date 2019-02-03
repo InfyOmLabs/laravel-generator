@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Commands;
 
 use Illuminate\Console\Command;
+use InfyOm\Generator\Common\ClassInjectionConfig;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\API\APIControllerGenerator;
 use InfyOm\Generator\Generators\API\APIRequestGenerator;
@@ -54,77 +55,100 @@ class BaseCommand extends Command
         $this->commandData->getFields();
     }
 
+    /**
+     * @throws \Exception
+     */
     public function generateCommonItems()
     {
         if (!$this->commandData->getOption('fromTable') and !$this->isSkip('migration')) {
-            $migrationGenerator = new MigrationGenerator($this->commandData);
+            /** @var MigrationGenerator $migrationGenerator */
+            $migrationGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.migration', [$this->commandData]);
             $migrationGenerator->generate();
         }
 
         if (!$this->isSkip('model')) {
-            $modelGenerator = new ModelGenerator($this->commandData);
+            /** @var ModelGenerator $modelGenerator */
+            $modelGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.model', [$this->commandData]);
             $modelGenerator->generate();
         }
 
         if (!$this->isSkip('repository')) {
-            $repositoryGenerator = new RepositoryGenerator($this->commandData);
+            /** @var RepositoryGenerator $repositoryGenerator */
+            $repositoryGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.repository', [$this->commandData]);
             $repositoryGenerator->generate();
         }
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function generateAPIItems()
     {
         if (!$this->isSkip('requests') and !$this->isSkip('api_requests')) {
-            $requestGenerator = new APIRequestGenerator($this->commandData);
+            /** @var APIRequestGenerator $requestGenerator */
+            $requestGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.API.api_request', [$this->commandData]);
             $requestGenerator->generate();
         }
 
         if (!$this->isSkip('controllers') and !$this->isSkip('api_controller')) {
-            $controllerGenerator = new APIControllerGenerator($this->commandData);
+            /** @var APIControllerGenerator $controllerGenerator */
+            $controllerGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.API.api_controller', [$this->commandData]);
             $controllerGenerator->generate();
         }
 
         if (!$this->isSkip('routes') and !$this->isSkip('api_routes')) {
-            $routesGenerator = new APIRoutesGenerator($this->commandData);
+            /** @var APIRoutesGenerator $routesGenerator */
+            $routesGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.API.api_routes', [$this->commandData]);
             $routesGenerator->generate();
         }
 
         if (!$this->isSkip('tests') and $this->commandData->getAddOn('tests')) {
-            $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);
+            /** @var RepositoryTestGenerator $repositoryGenerator */
+            $repositoryTestGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.repository_test', [$this->commandData]);
             $repositoryTestGenerator->generate();
 
-            $testTraitGenerator = new TestTraitGenerator($this->commandData);
+            /** @var TestTraitGenerator $testTraitGenerator */
+            $testTraitGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.test_trait', [$this->commandData]);
             $testTraitGenerator->generate();
 
-            $apiTestGenerator = new APITestGenerator($this->commandData);
+            /** @var APITestGenerator $apiTestGenerator */
+            $apiTestGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.API.api_test', [$this->commandData]);
             $apiTestGenerator->generate();
         }
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function generateScaffoldItems()
     {
         if (!$this->isSkip('requests') and !$this->isSkip('scaffold_requests')) {
-            $requestGenerator = new RequestGenerator($this->commandData);
+            /** @var RequestGenerator $requestGenerator */
+            $requestGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.request', [$this->commandData]);
             $requestGenerator->generate();
         }
 
         if (!$this->isSkip('controllers') and !$this->isSkip('scaffold_controller')) {
-            $controllerGenerator = new ControllerGenerator($this->commandData);
+            /** @var ControllerGenerator $controllerGenerator */
+            $controllerGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.controller', [$this->commandData]);
             $controllerGenerator->generate();
         }
 
         if (!$this->isSkip('views')) {
-            $viewGenerator = new ViewGenerator($this->commandData);
+            /** @var ViewGenerator $viewGenerator */
+            $viewGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.view', [$this->commandData]);
             $viewGenerator->generate();
         }
 
         if (!$this->isSkip('routes') and !$this->isSkip('scaffold_routes')) {
-            $routeGenerator = new RoutesGenerator($this->commandData);
+            /** @var RoutesGenerator $routeGenerator */
+            $routeGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.routes', [$this->commandData]);
             $routeGenerator->generate();
         }
 
         if (!$this->isSkip('menu') and $this->commandData->config->getAddOn('menu.enabled')) {
-            $menuGenerator = new MenuGenerator($this->commandData);
+            /** @var MenuGenerator $menuGenerator */
+            $menuGenerator = ClassInjectionConfig::createClassByConfigPath('Generators.Scaffold.menu', [$this->commandData]);
             $menuGenerator->generate();
         }
     }
