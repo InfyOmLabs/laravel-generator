@@ -8,6 +8,7 @@ $DOCS$
 class $MODEL_NAME$ extends Model
 {
 $SOFT_DELETE$
+    public $connection = '$CONNECTION_NAME$';
     public $table = '$TABLE_NAME$';
     $TIMESTAMPS$
 $SOFT_DELETE_DATES$

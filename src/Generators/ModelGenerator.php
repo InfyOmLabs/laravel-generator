@@ -26,6 +26,7 @@ class ModelGenerator extends BaseGenerator
     private $path;
     private $fileName;
     private $table;
+    private $connection;
 
     /**
      * ModelGenerator constructor.
@@ -38,6 +39,7 @@ class ModelGenerator extends BaseGenerator
         $this->path = $commandData->config->pathModel;
         $this->fileName = $this->commandData->modelName.'.php';
         $this->table = $this->commandData->dynamicVars['$TABLE_NAME$'];
+        $this->connection = $this->commandData->dynamicVars['$CONNECTION_NAME'];
     }
 
     public function generate()

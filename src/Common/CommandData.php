@@ -246,8 +246,9 @@ class CommandData
     private function getInputFromTable()
     {
         $tableName = $this->dynamicVars['$TABLE_NAME$'];
+        $connectionName = $this->dynamicVars['$CONNECTION_NAME$'];
 
-        $tableFieldsGenerator = new TableFieldsGenerator($tableName);
+        $tableFieldsGenerator = new TableFieldsGenerator($tableName, $connectionName);
         $tableFieldsGenerator->prepareFieldsFromTable();
         $tableFieldsGenerator->prepareRelations();
 

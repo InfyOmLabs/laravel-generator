@@ -32,6 +32,8 @@ class TableFieldsGenerator
     public $tableName;
     public $primaryKey;
 
+    public static $connectionName;
+
     /** @var bool */
     public $defaultSearchable;
 
@@ -50,11 +52,12 @@ class TableFieldsGenerator
     /** @var GeneratorFieldRelation[] */
     public $relations;
 
-    public function __construct($tableName)
+    public function __construct($tableName, $connectionName)
     {
+        self::$connectionName = $connectionName;
         $this->tableName = $tableName;
 
-        $this->schemaManager = DB::getDoctrineSchemaManager();
+        $this->schemaManager = DB::connection(self::$connectionName)->getDoctrineSchemaManager();
         $platform = $this->schemaManager->getDatabasePlatform();
         $platform->registerDoctrineTypeMapping('enum', 'string');
         $platform->registerDoctrineTypeMapping('json', 'text');
@@ -142,7 +145,7 @@ class TableFieldsGenerator
      */
     public static function getPrimaryKeyOfTable($tableName)
     {
-        $schema = DB::getDoctrineSchemaManager();
+        $schema = DB::connection(self::$connectionName)->getDoctrineSchemaManager();
         $column = $schema->listTableDetails($tableName)->getPrimaryKey();
 
         return $column ? $column->getColumns()[0] : '';

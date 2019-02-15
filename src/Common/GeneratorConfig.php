@@ -74,9 +74,13 @@ class GeneratorConfig
         'datatables',
         'views',
         'relations',
+        'connectionName',
     ];
 
     public $tableName;
+
+    /** @var string */
+    public $connectionName;
 
     /** @var string */
     protected $primaryName;
@@ -98,6 +102,7 @@ class GeneratorConfig
         $this->preparePrefixes();
         $this->loadPaths();
         $this->prepareTableName();
+        $this->prepareConnectionName();
         $this->preparePrimaryName();
         $this->loadNamespaces($commandData);
         $commandData = $this->loadDynamicVariables($commandData);
@@ -229,6 +234,8 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$MODEL_NAME_PLURAL_SLASH$', $this->mSlashPlural);
         $commandData->addDynamicVariable('$MODEL_NAME_HUMAN$', $this->mHuman);
         $commandData->addDynamicVariable('$MODEL_NAME_PLURAL_HUMAN$', $this->mHumanPlural);
+
+        $commandData->addDynamicVariable('$CONNECTION_NAME$', $this->connectionName);
 
         if (!empty($this->prefixes['route'])) {
             $commandData->addDynamicVariable('$ROUTE_NAMED_PREFIX$', $this->prefixes['route'].'.');
@@ -460,5 +467,13 @@ class GeneratorConfig
         $this->addOns['datatables'] = config('infyom.laravel_generator.add_on.datatables', false);
         $this->addOns['menu.enabled'] = config('infyom.laravel_generator.add_on.menu.enabled', false);
         $this->addOns['menu.menu_file'] = config('infyom.laravel_generator.add_on.menu.menu_file', 'layouts.menu');
+    }
+
+    public function prepareConnectionName() {
+        if ($this->getOption('connectionName')) {
+            $this->connectionName = $this->getOption('connectionName');
+        } else {
+            $this->connectionName = DB::getDefaultConnection();
+        }
     }
 }
