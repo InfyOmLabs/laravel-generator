@@ -469,7 +469,8 @@ class GeneratorConfig
         $this->addOns['menu.menu_file'] = config('infyom.laravel_generator.add_on.menu.menu_file', 'layouts.menu');
     }
 
-    public function prepareConnectionName() {
+    public function prepareConnectionName()
+    {
         if ($this->getOption('connectionName')) {
             $this->connectionName = $this->getOption('connectionName');
         } else {
