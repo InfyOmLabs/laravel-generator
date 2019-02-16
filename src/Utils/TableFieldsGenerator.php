@@ -128,6 +128,7 @@ class TableFieldsGenerator
                 $field->inForm = false;
                 $field->inIndex = false;
             }
+            $field->isNotNull = (bool) $column->getNotNull();
 
             $this->fields[] = $field;
         }
