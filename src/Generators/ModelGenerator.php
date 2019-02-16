@@ -232,10 +232,58 @@ class ModelGenerator extends BaseGenerator
     {
         $rules = [];
 
-        foreach ($this->commandData->fields as $field) {
-            if (!empty($field->validations)) {
-                $rule = "'".$field->name."' => '".$field->validations."'";
-                $rules[] = $rule;
+        if($this->commandData->getOption('fromTable')){
+
+            $timestamps = TableFieldsGenerator::getTimestampFieldNames();
+
+            foreach ($this->commandData->fields as $field) {
+                if (in_array($field->name, $timestamps) || !$field->isFillable ) {
+                    continue;
+                }
+
+                $rule = "'".$field->name."' => ";
+
+                switch ($field->fieldType) {
+                    case 'integer':
+                        $rule .= "'required|integer'";
+                        break;
+                    case 'decimal':
+                    case 'double':
+                    case 'float':
+                        $rule .= "'required|numeric'";
+                        break;
+                    case 'boolean':
+                        $rule .= "'required|boolean'";
+                        break;
+                    case 'dateTime':
+                    case 'dateTimeTz':
+                        $rule .= "'required|datetime'";
+                        break;
+                    case 'date':
+                        $rule .= "'required|date'";
+                        break;
+                    case 'enum':
+                    case 'string':
+                    case 'char':
+                    case 'text':
+                        $rule .= "'required|max:45'";
+                        break;
+                    default:
+                        $rule = '';
+                        break;
+                }
+
+                if (!empty($rule)) {
+                    $rules[] = $rule;
+                }
+            }
+
+        }else{
+            foreach ($this->commandData->fields as $field) {
+                if (!empty($field->validations)) {
+                    $rule = "'".$field->name."' => '".$field->validations."'";
+                    $rules[] = $rule;
+                }
             }
         }
 
