@@ -47,7 +47,7 @@ class ScaffoldGeneratorCommand extends BaseCommand
 
             $this->performPostActionsWithMigration();
         } else {
-            $this->commandData->commandInfo('There isn not input fields to generate.');
+            $this->commandData->commandInfo('There are not enough input fields for scaffold generation.');
         }
     }
 
@@ -78,7 +78,7 @@ class ScaffoldGeneratorCommand extends BaseCommand
      */
     protected function checkIsThereAnyDataToGenerate()
     {
-        if (count($this->commandData->fields) > 3) {
+        if (count($this->commandData->fields) > 1) {
             return true;
         }
     }
