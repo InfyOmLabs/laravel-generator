@@ -2,8 +2,4 @@
  * Class $MODEL_NAME$Repository
  * @package $NAMESPACE_REPOSITORY$
  * @version $GENERATE_DATE$
- *
- * @method $MODEL_NAME$ findWithoutFail($id, $columns = ['*'])
- * @method $MODEL_NAME$ find($id, $columns = ['*'])
- * @method $MODEL_NAME$ first($columns = ['*'])
 */

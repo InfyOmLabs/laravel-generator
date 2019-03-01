@@ -8,8 +8,6 @@ use $NAMESPACE_MODEL$\$MODEL_NAME$;
 use $NAMESPACE_REPOSITORY$\$MODEL_NAME$Repository;
 use Illuminate\Http\Request;
 use $NAMESPACE_APP$\Http\Controllers\AppBaseController;
-use InfyOm\Generator\Criteria\LimitOffsetCriteria;
-use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
 
 $DOC_CONTROLLER$
@@ -26,9 +24,11 @@ class $MODEL_NAME$APIController extends AppBaseController
     $DOC_INDEX$
     public function index(Request $request)
     {
-        $this->$MODEL_NAME_CAMEL$Repository->pushCriteria(new RequestCriteria($request));
-        $this->$MODEL_NAME_CAMEL$Repository->pushCriteria(new LimitOffsetCriteria($request));
-        $$MODEL_NAME_PLURAL_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->all();
+        $$MODEL_NAME_PLURAL_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->all(
+            $request->except(['skip', 'limit']),
+            $request->get('skip'),
+            $request->get('limit')
+        );
 
         return $this->sendResponse($$MODEL_NAME_PLURAL_CAMEL$->toArray(), '$MODEL_NAME_PLURAL_HUMAN$ retrieved successfully');
     }
@@ -47,7 +47,7 @@ class $MODEL_NAME$APIController extends AppBaseController
     public function show($id)
     {
         /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
+        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
             return $this->sendError('$MODEL_NAME_HUMAN$ not found');
@@ -62,7 +62,7 @@ class $MODEL_NAME$APIController extends AppBaseController
         $input = $request->all();
 
         /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
+        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
             return $this->sendError('$MODEL_NAME_HUMAN$ not found');
@@ -77,7 +77,7 @@ class $MODEL_NAME$APIController extends AppBaseController
     public function destroy($id)
     {
         /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->findWithoutFail($id);
+        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
             return $this->sendError('$MODEL_NAME_HUMAN$ not found');

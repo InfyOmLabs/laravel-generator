@@ -29,6 +29,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
     {
         $this->publishTestCases();
         $this->publishBaseController();
+        $this->publishBaseRepository();
     }
 
     /**
@@ -83,6 +84,27 @@ class GeneratorPublishCommand extends PublishBaseCommand
         FileUtil::createFile($controllerPath, $fileName, $templateData);
 
         $this->info('AppBaseController created');
+    }
+
+    private function publishBaseRepository()
+    {
+        $templateData = get_template('base_repository', 'laravel-generator');
+
+        $templateData = $this->fillTemplate($templateData);
+
+        $repositoryPath = app_path('Repositories/');
+
+        FileUtil::createDirectoryIfNotExist($repositoryPath);
+
+        $fileName = 'BaseRepository.php';
+
+        if (file_exists($repositoryPath.$fileName) && !$this->confirmOverwrite($fileName)) {
+            return;
+        }
+
+        FileUtil::createFile($repositoryPath, $fileName, $templateData);
+
+        $this->info('BaseRepository created');
     }
 
     /**
