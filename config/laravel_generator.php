@@ -191,8 +191,8 @@ return [
         'doctrine_mappings' => [
             'enum' => 'string',
             'json' => 'text',
-            'bit' => 'boolean'
-        ]
+            'bit'  => 'boolean',
+        ],
     ],
 
 ];
