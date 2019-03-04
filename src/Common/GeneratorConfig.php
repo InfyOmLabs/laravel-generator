@@ -66,6 +66,7 @@ class GeneratorConfig
         'jsonFromGUI',
         'tableName',
         'fromTable',
+        'ignoreFields',
         'save',
         'primary',
         'prefix',

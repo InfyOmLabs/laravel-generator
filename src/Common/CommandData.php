@@ -247,7 +247,15 @@ class CommandData
     {
         $tableName = $this->dynamicVars['$TABLE_NAME$'];
 
-        $tableFieldsGenerator = new TableFieldsGenerator($tableName);
+        $ignoredFields = $this->getOption('ignoreFields');
+        print_r($ignoredFields);
+        if (!empty($ignoredFields)) {
+            $ignoredFields = explode(',', trim($ignoredFields));
+        } else {
+            $ignoredFields = [];
+        }
+
+        $tableFieldsGenerator = new TableFieldsGenerator($tableName, $ignoredFields);
         $tableFieldsGenerator->prepareFieldsFromTable();
         $tableFieldsGenerator->prepareRelations();
 

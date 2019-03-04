@@ -180,4 +180,19 @@ return [
     */
     'ignore_model_prefix' => false,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Specify doctrine mappings as per your need
+    |--------------------------------------------------------------------------
+    |
+    */
+    'from_table' => [
+
+        'doctrine_mappings' => [
+            'enum' => 'string',
+            'json' => 'text',
+            'bit' => 'boolean'
+        ]
+    ],
+
 ];
