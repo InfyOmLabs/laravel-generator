@@ -36,14 +36,14 @@ class ControllerGenerator extends BaseGenerator
         $filter = '';
         $searchableCount = 0;
         foreach ($fields as $field) {
-            if ($field['searchable']) {
+            if ($field->isSearchable) {
                 $searchableCount++;
             }
         }
         foreach ($fields as $field) {
-            if ($field['searchable']) {
+            if ($field->isSearchable) {
                 if ($i == 0) {
-                    $filter .= '$q->where("'.$field['fieldName'].'", "like", $value)';
+                    $filter .= '$q->where("'.$field->name.'", "like", $value)';
                     if ($searchableCount == 1) {
                         $filter .= ';';
                     } else {
@@ -51,9 +51,9 @@ class ControllerGenerator extends BaseGenerator
                     }
                 } else {
                     if ($i == $searchableCount - 1) {
-                        $filter .= '                  ->orWhere("'.$field['fieldName'].'", "like", $value);';
+                        $filter .= '                  ->orWhere("'.$field->name.'", "like", $value);';
                     } else {
-                        $filter .= '                  ->orWhere("'.$field['fieldName'].'", "like", $value)'."\n";
+                        $filter .= '                  ->orWhere("'.$field->name.'", "like", $value)'."\n";
                     }
                 }
                 $i++;
