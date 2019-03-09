@@ -180,4 +180,15 @@ return [
     */
     'ignore_model_prefix' => false,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Specify custom doctrine mappings as per your need
+    |--------------------------------------------------------------------------
+    |
+    */
+    'from_table' => [
+
+        'doctrine_mappings' => [],
+    ],
+
 ];
