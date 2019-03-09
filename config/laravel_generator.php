@@ -188,11 +188,7 @@ return [
     */
     'from_table' => [
 
-        'doctrine_mappings' => [
-            'enum' => 'string',
-            'json' => 'text',
-            'bit'  => 'boolean',
-        ],
+        'doctrine_mappings' => []
     ],
 
 ];

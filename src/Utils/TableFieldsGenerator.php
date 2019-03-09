@@ -60,8 +60,14 @@ class TableFieldsGenerator
 
         $this->schemaManager = DB::getDoctrineSchemaManager();
         $platform = $this->schemaManager->getDatabasePlatform();
+        $defaultMappings = [
+            'enum' => 'string',
+            'json' => 'text',
+            'bit' => 'boolean'
+        ];
 
         $mappings = config('infyom.laravel_generator.from_table.doctrine_mappings', []);
+        $mappings = array_merge($mappings, $defaultMappings);
         foreach ($mappings as $dbType => $doctrineType) {
             $platform->registerDoctrineTypeMapping($dbType, $doctrineType);
         }
