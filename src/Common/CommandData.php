@@ -248,7 +248,6 @@ class CommandData
         $tableName = $this->dynamicVars['$TABLE_NAME$'];
 
         $ignoredFields = $this->getOption('ignoreFields');
-        print_r($ignoredFields);
         if (!empty($ignoredFields)) {
             $ignoredFields = explode(',', trim($ignoredFields));
         } else {

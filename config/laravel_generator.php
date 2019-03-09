@@ -182,7 +182,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Specify doctrine mappings as per your need
+    | Specify custom doctrine mappings as per your need
     |--------------------------------------------------------------------------
     |
     */
