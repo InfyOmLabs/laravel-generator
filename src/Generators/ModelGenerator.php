@@ -167,6 +167,7 @@ class ModelGenerator extends BaseGenerator
                 if (!empty($fieldData['fieldType'])) {
                     return $fieldData['fieldType'];
                 }
+
                 return $db_type;
         }
     }
