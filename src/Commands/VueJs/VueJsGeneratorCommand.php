@@ -66,7 +66,6 @@ class VueJsGeneratorCommand extends BaseCommand
         $controllerGenerator = new ControllerGenerator($this->commandData);
         $controllerGenerator->generate();
 
-		
         $modelJsConfigGenerator = new ModelJsConfigGenerator($this->commandData);
         $modelJsConfigGenerator->generate();
 
@@ -76,12 +75,10 @@ class VueJsGeneratorCommand extends BaseCommand
         $viewGenerator = new ViewGenerator($this->commandData);
         $viewGenerator->generate();
 
-
         if ($this->commandData->config->getAddOn('menu.enabled')) {
             $menuGenerator = new MenuGenerator($this->commandData);
             $menuGenerator->generate();
         }
-
 
         $this->performPostActionsWithMigration();
     }
