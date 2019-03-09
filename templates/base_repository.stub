@@ -62,16 +62,28 @@ abstract class BaseRepository
     }
 
     /**
-     * Retrieve all records with given filter criteria
+     * Paginate records for scaffold.
+     *
+     * @param int $perPage
+     * @param array $columns
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function paginate($perPage, $columns = ['*'])
+    {
+        $query = $this->allQuery();
+
+        return $query->paginate($perPage, $columns);
+    }
+
+    /**
+     * Build a query for retrieving all records.
      *
      * @param array $search
      * @param int|null $skip
      * @param int|null $limit
-     * @param array $columns
-     *
-     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function all($search = [], $skip = null, $limit = null, $columns = ['*'])
+    public function allQuery($search = [], $skip = null, $limit = null)
     {
         $query = $this->model->newQuery();
 
@@ -90,6 +102,23 @@ abstract class BaseRepository
         if (!is_null($limit)) {
             $query->skip($limit);
         }
+
+        return $query;
+    }
+
+    /**
+     * Retrieve all records with given filter criteria
+     *
+     * @param array $search
+     * @param int|null $skip
+     * @param int|null $limit
+     * @param array $columns
+     *
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function all($search = [], $skip = null, $limit = null, $columns = ['*'])
+    {
+        $query = $this->allQuery($search, $skip, $limit);
 
         return $query->get($columns);
     }
