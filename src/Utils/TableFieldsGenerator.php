@@ -63,7 +63,7 @@ class TableFieldsGenerator
         $defaultMappings = [
             'enum' => 'string',
             'json' => 'text',
-            'bit' => 'boolean'
+            'bit'  => 'boolean',
         ];
 
         $mappings = config('infyom.laravel_generator.from_table.doctrine_mappings', []);
