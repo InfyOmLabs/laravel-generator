@@ -166,7 +166,7 @@ class RollbackGeneratorCommand extends Command
     {
         return [
             ['model', InputArgument::REQUIRED, 'Singular Model name'],
-            ['type', InputArgument::REQUIRED, 'Rollback type: (api / scaffold / scaffold_api)'],
+            ['type', InputArgument::REQUIRED, 'Rollback type: (api / scaffold / api_scaffold)'],
         ];
     }
 }
