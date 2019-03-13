@@ -17,8 +17,6 @@ class HTMLFieldGenerator
             case 'file':
             case 'email':
             case 'password':
-                $fieldTemplate = get_template('scaffold.fields.'.$field->htmlType, $templateType);
-                break;
             case 'number':
                 $fieldTemplate = get_template('scaffold.fields.'.$field->htmlType, $templateType);
                 break;
