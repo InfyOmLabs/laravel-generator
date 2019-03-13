@@ -264,12 +264,12 @@ class ModelGenerator extends BaseGenerator
 
             $rule = "'".$field->name."' => ";
 
-            switch ($field->fieldType) {
+            switch (strtolower($field->fieldType)) {
                 case 'integer':
                 case 'increments':
                 case 'smallinteger':
                 case 'long':
-                case 'bigint':
+                case 'biginteger':
                     $rule .= "'integer'";
                     break;
                 case 'double':
