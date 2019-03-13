@@ -57,17 +57,15 @@ class SwaggerGenerator
             case 'increments':
             case 'smallinteger':
             case 'long':
-            case 'bigint':
+            case 'biginteger':
                 $fieldType = 'integer';
                 $fieldFormat = 'int32';
                 break;
             case 'double':
-                $fieldType = 'number';
-                $fieldFormat = 'double';
-                break;
             case 'float':
+            case 'real':
             case 'decimal':
-                $fieldType = 'number';
+                $fieldType = 'float';
                 $fieldFormat = 'float';
                 break;
             case 'boolean':
