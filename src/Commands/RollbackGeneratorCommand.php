@@ -154,6 +154,7 @@ class RollbackGeneratorCommand extends Command
         return [
             ['tableName', null, InputOption::VALUE_REQUIRED, 'Table Name'],
             ['prefix', null, InputOption::VALUE_REQUIRED, 'Prefix for all files'],
+            ['plural', null, InputOption::VALUE_REQUIRED, 'Plural Model name'],
         ];
     }
 

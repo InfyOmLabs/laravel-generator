@@ -75,7 +75,7 @@ class GeneratorConfig
         'datatables',
         'views',
         'relations',
-        'plural'
+        'plural',
     ];
 
     public $tableName;
