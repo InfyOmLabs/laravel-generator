@@ -75,6 +75,7 @@ class GeneratorConfig
         'datatables',
         'views',
         'relations',
+        'plural',
     ];
 
     public $tableName;
@@ -290,7 +291,11 @@ class GeneratorConfig
 
     public function prepareModelNames()
     {
-        $this->mPlural = Str::plural($this->mName);
+        if ($this->getOption('plural')) {
+            $this->mPlural = $this->getOption('plural');
+        } else {
+            $this->mPlural = Str::plural($this->mName);
+        }
         $this->mCamel = Str::camel($this->mName);
         $this->mCamelPlural = Str::camel($this->mPlural);
         $this->mSnake = Str::snake($this->mName);
