@@ -148,6 +148,7 @@ class TableFieldsGenerator
                 $field->inIndex = false;
             }
             $field->isNotNull = (bool) $column->getNotNull();
+            $field->description = $column->getComment(); // get comments from table
 
             $this->fields[] = $field;
         }
