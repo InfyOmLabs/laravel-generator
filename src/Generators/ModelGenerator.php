@@ -167,6 +167,7 @@ class ModelGenerator extends BaseGenerator
             case '1t1':
             case 'mt1':
             $relationName = !empty($relationName) ? $relationName : $relation->inputs[0];
+
             return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.camel_case($relationName);
             case '1tm':
                 return '\Illuminate\Database\Eloquent\Collection'.' '.$relation->inputs[0];
