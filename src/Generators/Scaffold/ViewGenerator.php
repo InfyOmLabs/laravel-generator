@@ -302,6 +302,9 @@ class ViewGenerator extends BaseGenerator
             $fieldTemplate = HTMLFieldGenerator::generateHTML($field, $this->templateType);
 
             if (!empty($fieldTemplate)) {
+                if ($field->isNotNull) {
+                    $fieldTemplate = str_replace('$FIELD_NAME_TITLE$', '$FIELD_NAME_TITLE$'.($field->isNotNull ? ' <span class="required">*</span>' : ''), $fieldTemplate);
+                }
                 $fieldTemplate = fill_template_with_field_data(
                     $this->commandData->dynamicVars,
                     $this->commandData->fieldNamesMapping,
