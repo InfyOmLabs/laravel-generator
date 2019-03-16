@@ -12,6 +12,7 @@ class GeneratorField
     public $htmlInput;
     public $htmlType;
     public $fieldType;
+    public $description;
 
     /** @var array */
     public $htmlValues;
