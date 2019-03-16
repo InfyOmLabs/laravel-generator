@@ -62,7 +62,7 @@ class GeneratorFieldRelation
     public function getRelationFunctionText($modelName = null)
     {
         $modelName = (!empty($modelName)) ? $modelName : $this->inputs[0];
-        list ($functionName, $relation, $relationClass) = $this->generateFunctionNameFromModel($modelName);
+        list($functionName, $relation, $relationClass) = $this->generateFunctionNameFromModel($modelName);
 
         if (!empty($functionName) and !empty($relation)) {
             return $this->generateRelation($functionName, $relation, $relationClass);
