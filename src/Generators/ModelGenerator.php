@@ -126,8 +126,15 @@ class ModelGenerator extends BaseGenerator
             $docsTemplate = fill_template($this->commandData->dynamicVars, $docsTemplate);
 
             $fillables = '';
+            $relationShipsArr = [];
             foreach ($this->commandData->relations as $relation) {
-                $fillables .= ' * @property '.$this->getPHPDocType($relation->type, $relation).PHP_EOL;
+                $relationName = null;
+                if (in_array($relation->inputs[0], $relationShipsArr)) {
+                    $relationName = $relation->localField;
+                } else {
+                    $relationShipsArr[] = $relation->inputs[0];
+                }
+                $fillables .= ' * @property '.$this->getPHPDocType($relation->type, $relation, $relationName).PHP_EOL;
             }
             foreach ($this->commandData->fields as $field) {
                 if ($field->isFillable) {
@@ -144,12 +151,13 @@ class ModelGenerator extends BaseGenerator
     }
 
     /**
-     * @param $db_type
+     * @param string $db_type
      * @param GeneratorFieldRelation|null $relation
+     * @param string $relationName
      *
      * @return string
      */
-    private function getPHPDocType($db_type, $relation = null)
+    private function getPHPDocType($db_type, $relation = null, $relationName = null)
     {
         switch ($db_type) {
             case 'datetime':
@@ -158,7 +166,8 @@ class ModelGenerator extends BaseGenerator
                 return 'string';
             case '1t1':
             case 'mt1':
-                return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.camel_case($relation->inputs[0]);
+            $relationName = !empty($relationName) ? $relationName : $relation->inputs[0];
+            return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.camel_case($relationName);
             case '1tm':
                 return '\Illuminate\Database\Eloquent\Collection'.' '.$relation->inputs[0];
             case 'mtm':
@@ -305,18 +314,16 @@ class ModelGenerator extends BaseGenerator
         $relations = $relationshipsArray = [];
 
         foreach ($this->commandData->relations as $relation) {
-            $relationText = $relation->getRelationFunctionText();
+            $modelName = null;
+            $relationName = $relation->generateFunctionNameFromModel($relation->inputs[0])[0]; // get relation name
+            if (in_array($relationName, $relationshipsArray)) { // check is duplicated
+                $modelName = $relation->localField;
+            } else {
+                $relationshipsArray[] = $relationName;
+            }
 
+            $relationText = $relation->getRelationFunctionText($modelName);
             if (!empty($relationText)) {
-                $functionName = $relation->generateFunctionNameFromModel($relation->inputs[0]);
-
-                // check if relationship name is duplicated, if yes then make new relationship name from its foreign key
-                if (in_array($functionName, $relationshipsArray)) {
-                    $relationText = $relation->getRelationFunctionText($relation->localField);
-                } else {
-                    $relationshipsArray[] = $functionName;
-                }
-
                 $relations[] = $relationText;
             }
         }
