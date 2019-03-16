@@ -87,7 +87,7 @@ class SwaggerGenerator
                 //                if (isset($field['description'])) {
                 //                    $fieldType['description'] = $field['description'];
                 //                } else {
-                $fieldType['description'] = '';
+                $fieldType['description'] = (!empty($field->description)) ? $field->description : '';
                 //                }
 
                 $fieldTypes[] = $fieldType;
