@@ -7,21 +7,22 @@ class GeneratorFieldRelation
     /** @var string */
     public $type;
     public $inputs;
+    public $localField;
 
-    public static function parseRelation($relationInput)
+    public static function parseRelation($relationInput, $localField = null)
     {
         $inputs = explode(',', $relationInput);
 
         $relation = new self();
         $relation->type = array_shift($inputs);
         $relation->inputs = $inputs;
+        $relation->localField = $localField;
 
         return $relation;
     }
 
-    public function getRelationFunctionText()
+    public function generateFunctionNameFromModel($modelName)
     {
-        $modelName = $this->inputs[0];
         switch ($this->type) {
             case '1t1':
                 $functionName = camel_case($modelName);
@@ -54,6 +55,14 @@ class GeneratorFieldRelation
                 $relationClass = '';
                 break;
         }
+
+        return [$functionName, $relation, $relationClass];
+    }
+
+    public function getRelationFunctionText($modelName = null)
+    {
+        $modelName = (!empty($modelName)) ? $modelName : $this->inputs[0];
+        list ($functionName, $relation, $relationClass) = $this->generateFunctionNameFromModel($modelName);
 
         if (!empty($functionName) and !empty($relation)) {
             return $this->generateRelation($functionName, $relation, $relationClass);

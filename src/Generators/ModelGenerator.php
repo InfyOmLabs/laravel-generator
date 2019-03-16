@@ -302,12 +302,21 @@ class ModelGenerator extends BaseGenerator
 
     private function generateRelations()
     {
-        $relations = [];
+        $relations = $relationshipsArray = [];
 
         foreach ($this->commandData->relations as $relation) {
             $relationText = $relation->getRelationFunctionText();
 
             if (!empty($relationText)) {
+                $functionName = $relation->generateFunctionNameFromModel($relation->inputs[0]);
+
+                // check if relationship name is duplicated, if yes then make new relationship name from its foreign key
+                if (in_array($functionName, $relationshipsArray)) {
+                    $relationText = $relation->getRelationFunctionText($relation->localField);
+                } else {
+                    $relationshipsArray[] = $functionName;
+                }
+
                 $relations[] = $relationText;
             }
         }

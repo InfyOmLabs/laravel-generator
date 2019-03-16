@@ -364,7 +364,9 @@ class TableFieldsGenerator
                     $isOneToOne = $this->isOneToOne($primary, $foreignKey, $modelTable->primaryKey);
                     if ($isOneToOne) {
                         $modelName = model_name_from_table_name($tableName);
-                        $this->relations[] = GeneratorFieldRelation::parseRelation('1t1,'.$modelName);
+                        $this->relations[] = GeneratorFieldRelation::parseRelation(
+                            '1t1,'.$modelName, $foreignKey->localField
+                        );
                         continue;
                     }
 
@@ -372,7 +374,9 @@ class TableFieldsGenerator
                     $isOneToMany = $this->isOneToMany($primary, $foreignKey, $modelTable->primaryKey);
                     if ($isOneToMany) {
                         $modelName = model_name_from_table_name($tableName);
-                        $this->relations[] = GeneratorFieldRelation::parseRelation('1tm,'.$modelName);
+                        $this->relations[] = GeneratorFieldRelation::parseRelation(
+                            '1tm,'.$modelName, $foreignKey->localField
+                        );
                         continue;
                     }
                 }
@@ -401,7 +405,7 @@ class TableFieldsGenerator
         $isAnyKeyOnModelTable = false;
 
         // many to many model table name
-        $manyToManyTable = '';
+        $manyToManyTable = $localField = '';
 
         $foreignKeys = $table->foreignKeys;
         $primary = $table->primaryKey;
@@ -426,6 +430,7 @@ class TableFieldsGenerator
                     $foreignTable = $tables[$foreignTableName];
                     // get the many to many model table name
                     $manyToManyTable = $foreignTableName;
+                    $localField = $foreignKey->localField;
                 }
 
                 // if foreign field is not primary key of foreign table
@@ -445,7 +450,7 @@ class TableFieldsGenerator
 
         $modelName = model_name_from_table_name($manyToManyTable);
 
-        return GeneratorFieldRelation::parseRelation('mtm,'.$modelName.','.$tableName);
+        return GeneratorFieldRelation::parseRelation('mtm,'.$modelName.','.$tableName, $localField);
     }
 
     /**
@@ -517,7 +522,9 @@ class TableFieldsGenerator
 
             if ($foreignField == $tables[$foreignTable]->primaryKey) {
                 $modelName = model_name_from_table_name($foreignTable);
-                $manyToOneRelations[] = GeneratorFieldRelation::parseRelation('mt1,'.$modelName);
+                $manyToOneRelations[] = GeneratorFieldRelation::parseRelation(
+                    'mt1,'.$modelName.','.$foreignKey->localField, $foreignKey->localField
+                );
             }
         }
 
