@@ -158,7 +158,11 @@ class ModelGenerator extends BaseGenerator
                 return 'string';
             case '1t1':
             case 'mt1':
-                $relationName = str_replace('_id', '', strtolower($relation->inputs[1]));
+                if (isset($relation->inputs[1])) {
+                    $relationName = str_replace('_id', '', strtolower($relation->inputs[1]));
+                } else {
+                    $relationName = $relation->inputs[0];
+                }
 
                 return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.camel_case($relationName);
             case '1tm':
