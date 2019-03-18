@@ -158,7 +158,7 @@ class ModelGenerator extends BaseGenerator
                 return 'string';
             case '1t1':
             case 'mt1':
-                $relationName = str_replace(['_id', '_Id', '_ID', 'ID', 'Id'], "", $relation->inputs[1]);
+                $relationName = str_replace(['_id', '_Id', '_ID', 'ID', 'Id'], '', $relation->inputs[1]);
 
                 return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.camel_case($relationName);
             case '1tm':
@@ -309,7 +309,7 @@ class ModelGenerator extends BaseGenerator
         foreach ($this->commandData->relations as $relation) {
             $modelName = null;
             if (isset($relation->inputs[1])) {
-                $modelName = str_replace(['_id', '_Id', '_ID', 'ID', 'Id'], "", $relation->inputs[1]);
+                $modelName = str_replace(['_id', '_Id', '_ID', 'ID', 'Id'], '', $relation->inputs[1]);
             }
             $relationText = $relation->getRelationFunctionText($modelName);
             if (!empty($relationText)) {
