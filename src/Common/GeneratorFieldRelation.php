@@ -19,11 +19,14 @@ class GeneratorFieldRelation
         return $relation;
     }
 
-    public function getRelationFunctionText($modelName = null)
+    public function getRelationFunctionText()
     {
-        $modelName = (!empty($modelName)) ? $modelName : $this->inputs[0];
+        $modelName = $this->inputs[0];
         switch ($this->type) {
             case '1t1':
+                if (isset($this->inputs[1])) {
+                    $modelName = str_replace('_id', '', strtolower($this->inputs[1]));
+                }
                 $functionName = camel_case($modelName);
                 $relation = 'hasOne';
                 $relationClass = 'HasOne';
@@ -34,6 +37,9 @@ class GeneratorFieldRelation
                 $relationClass = 'HasMany';
                 break;
             case 'mt1':
+                if (isset($this->inputs[1])) {
+                    $modelName = str_replace('_id', '', strtolower($this->inputs[1]));
+                }
                 $functionName = camel_case($modelName);
                 $relation = 'belongsTo';
                 $relationClass = 'BelongsTo';

@@ -166,10 +166,9 @@ class ModelGenerator extends BaseGenerator
 
                 return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.camel_case($relationName);
             case '1tm':
-                return '\Illuminate\Database\Eloquent\Collection'.' '.$relation->inputs[0];
             case 'mtm':
             case 'hmt':
-                return '\Illuminate\Database\Eloquent\Collection'.' '.camel_case($relation->inputs[1]);
+                return '\Illuminate\Database\Eloquent\Collection'.' '.camel_case(str_plural($relation->inputs[0]));
             default:
                 return $db_type;
         }
@@ -311,11 +310,7 @@ class ModelGenerator extends BaseGenerator
         $relations = [];
 
         foreach ($this->commandData->relations as $relation) {
-            $modelName = null;
-            if (isset($relation->inputs[1])) {
-                $modelName = str_replace('_id', '', strtolower($relation->inputs[1]));
-            }
-            $relationText = $relation->getRelationFunctionText($modelName);
+            $relationText = $relation->getRelationFunctionText();
             if (!empty($relationText)) {
                 $relations[] = $relationText;
             }
