@@ -19,9 +19,9 @@ class GeneratorFieldRelation
         return $relation;
     }
 
-    public function getRelationFunctionText()
+    public function getRelationFunctionText($modelName = null)
     {
-        $modelName = $this->inputs[0];
+        $modelName = (!empty($modelName)) ? $modelName : $this->inputs[0];
         switch ($this->type) {
             case '1t1':
                 $functionName = camel_case($modelName);
