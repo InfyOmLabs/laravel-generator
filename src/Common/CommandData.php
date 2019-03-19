@@ -246,7 +246,7 @@ class CommandData
                     }
                 }
             }
-            $this->foreignKeys = $foreignKeys;
+            $this->config->foreignKeys = $foreignKeys;
         } catch (Exception $e) {
             $this->commandError($e->getMessage());
             exit;
