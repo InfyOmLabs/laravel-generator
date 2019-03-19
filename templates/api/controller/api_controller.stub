@@ -37,7 +37,7 @@ class $MODEL_NAME$APIController extends AppBaseController
     public function store(Create$MODEL_NAME$APIRequest $request)
     {
         $input = $request->all();
-
+        $MODEL_VALIDATIONS$
         $$MODEL_NAME_PLURAL_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->create($input);
 
         return $this->sendResponse($$MODEL_NAME_PLURAL_CAMEL$->toArray(), '$MODEL_NAME_HUMAN$ saved successfully');

@@ -60,6 +60,9 @@ class GeneratorConfig
     /* Prefixes */
     public $prefixes;
 
+    /** @var array $foreignKeys */
+    public $foreignKeys = [];
+
     /* Command Options */
     public static $availableOptions = [
         'fieldsFile',

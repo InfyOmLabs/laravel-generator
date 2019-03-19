@@ -44,6 +44,9 @@ class TableFieldsGenerator
     /** @var \Doctrine\DBAL\Schema\Column[] */
     private $columns;
 
+    /** @var array $tables */
+    public $tables;
+
     /** @var GeneratorField[] */
     public $fields;
 
@@ -278,6 +281,7 @@ class TableFieldsGenerator
     public function prepareRelations()
     {
         $foreignKeys = $this->prepareForeignKeys();
+        $this->tables = $foreignKeys;
         $this->checkForRelations($foreignKeys);
     }
 

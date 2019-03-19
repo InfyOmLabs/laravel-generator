@@ -1,0 +1,5 @@
+
+        $$MODEL_EXIST$ = $FULL_MODEL_PATH::find($input['$FOREIGN_KEY']);
+        if (empty($$MODEL_EXIST$)) {
+            return $this->sendError('$MODEL_EXIST$ not found');
+        }

@@ -16,6 +16,7 @@ class GeneratorField
 
     /** @var array */
     public $htmlValues;
+    public $foreignKeys = [];
 
     /** @var string */
     public $migrationText;
@@ -113,6 +114,7 @@ class GeneratorField
                 $foreignTable = array_shift($inputParams);
                 $foreignField = array_shift($inputParams);
                 $this->foreignKeyText .= "\$table->foreign('".$this->name."')->references('".$foreignField."')->on('".$foreignTable."');";
+                $this->foreignKeys[$foreignTable][] = $this->name;
             } else {
                 $this->migrationText .= '->'.$functionName;
                 $this->migrationText .= '(';
