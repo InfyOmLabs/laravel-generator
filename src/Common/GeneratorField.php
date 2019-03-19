@@ -123,7 +123,7 @@ class GeneratorField
                     $this->validateAction($deleteAction, $updateAction);
                     $this->foreignKeyText .= $foreignKeyText."->onDelete('".$deleteAction."')->onUpdate('".$updateAction."');";
                 } else {
-                    $this->foreignKeyText .= $foreignKeyText.";";
+                    $this->foreignKeyText .= $foreignKeyText.';';
                 }
             } else {
                 $this->migrationText .= '->'.$functionName;
