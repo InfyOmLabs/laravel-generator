@@ -112,7 +112,10 @@ class GeneratorField
             if ($functionName == 'foreign') {
                 $foreignTable = array_shift($inputParams);
                 $foreignField = array_shift($inputParams);
-                $this->foreignKeyText .= "\$table->foreign('".$this->name."')->references('".$foreignField."')->on('".$foreignTable."');";
+                $deleteAction = array_shift($inputParams);
+                $updateAction = array_shift($inputParams);
+                $this->validateAction($deleteAction,$updateAction);
+                $this->foreignKeyText .= "\$table->foreign('".$this->name."')->references('".$foreignField."')->on('".$foreignTable."')->onDelete('".$deleteAction."')->onUpdate('".$updateAction."');";
             } else {
                 $this->migrationText .= '->'.$functionName;
                 $this->migrationText .= '(';
@@ -147,5 +150,23 @@ class GeneratorField
         }
 
         return $this->$key;
+    }
+
+    public function validateAction($deleteAction,$updateAction)
+    {
+        $deleteAction = isset($deleteAction) ? strtolower($deleteAction) : '';
+        $updateAction = isset($updateAction) ? strtolower($updateAction) : '';
+
+        if (!empty($deleteAction) and (!empty($updateAction))) {
+            $action = ['cascade','set null','no action','restrict'];
+
+            if (!in_array($deleteAction, $action) || !in_array($updateAction, $action)) {
+                echo 'Set valid constraint';
+                exit;
+            }
+            return true;
+        }
+        echo 'Set action required';
+        exit;
     }
 }
