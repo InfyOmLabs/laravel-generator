@@ -161,7 +161,7 @@ class CommandData
                 $this->relations[] = GeneratorFieldRelation::parseRelation($relation);
             }
         }
-        $this->foreignKeys = $foreignKeys;
+        $this->config->foreignKeys = $foreignKeys;
         $this->addTimestamps();
     }
 
