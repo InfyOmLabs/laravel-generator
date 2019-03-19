@@ -27,15 +27,13 @@ class MenuGenerator extends BaseGenerator
     {
         $this->commandData = $commandData;
         $this->path = config(
-            'infyom.laravel_generator.path.menu_views',
+            'infyom.laravel_generator.path.views',
             base_path('resources/views/'
             )
         ).$commandData->getAddOn('menu.menu_file');
         $this->templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
 
-        if (!is_dir(dirname($this->path))) {
-            mkdir(dirname($this->path), 755, true);
-        }
+        FileUtil::createDirectoryIfNotExist(dirname($this->path));
         if (!file_exists($this->path)) {
             touch($this->path);
         }
