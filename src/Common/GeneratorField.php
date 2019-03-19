@@ -114,8 +114,17 @@ class GeneratorField
                 $foreignField = array_shift($inputParams);
                 $deleteAction = array_shift($inputParams);
                 $updateAction = array_shift($inputParams);
-                $this->validateAction($deleteAction, $updateAction);
-                $this->foreignKeyText .= "\$table->foreign('".$this->name."')->references('".$foreignField."')->on('".$foreignTable."')->onDelete('".$deleteAction."')->onUpdate('".$updateAction."');";
+
+                $deleteAction = isset($deleteAction) ? strtolower($deleteAction) : '';
+                $updateAction = isset($updateAction) ? strtolower($updateAction) : '';
+                $foreignKeyText = "\$table->foreign('".$this->name."')->references('".$foreignField."')->on('".$foreignTable."')";
+
+                if (!empty($deleteAction) and (!empty($updateAction))) {
+                    $this->validateAction($deleteAction, $updateAction);
+                    $this->foreignKeyText .= $foreignKeyText."->onDelete('".$deleteAction."')->onUpdate('".$updateAction."');";
+                } else {
+                    $this->foreignKeyText .= $foreignKeyText.";";
+                }
             } else {
                 $this->migrationText .= '->'.$functionName;
                 $this->migrationText .= '(';
@@ -154,20 +163,10 @@ class GeneratorField
 
     public function validateAction($deleteAction, $updateAction)
     {
-        $deleteAction = isset($deleteAction) ? strtolower($deleteAction) : '';
-        $updateAction = isset($updateAction) ? strtolower($updateAction) : '';
-
-        if (!empty($deleteAction) and (!empty($updateAction))) {
-            $action = ['cascade', 'set null', 'no action', 'restrict'];
-
-            if (!in_array($deleteAction, $action) || !in_array($updateAction, $action)) {
-                echo 'Set valid constraint';
-                exit;
-            }
-
-            return true;
+        $action = ['cascade', 'set null', 'no action', 'restrict'];
+        if (!in_array($deleteAction, $action) || !in_array($updateAction, $action)) {
+            echo 'Set valid constraint';
+            exit;
         }
-        echo 'Set action required';
-        exit;
     }
 }
