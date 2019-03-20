@@ -30,17 +30,20 @@ class APIControllerGenerator extends BaseGenerator
         $templateData = get_template('api.controller.api_controller', 'laravel-generator');
         $validationData = get_template('api.controller.validations', 'laravel-generator');
 
-        foreach ($this->commandData->config->foreignKeys as $tableName => $foreignKey) {
-            $modelName = model_name_from_table_name($tableName);
-            foreach ($foreignKey as $keyName) {
-                $fullModelPath = '\\'.$this->commandData->config->nsModel.'\\'.$modelName;
-                $this->commandData->addDynamicVariable('$MODEL_EXIST$', snake_case($modelName));
-                $this->commandData->addDynamicVariable('$FOREIGN_KEY', $keyName);
-                $this->commandData->addDynamicVariable('$FULL_MODEL_PATH', $fullModelPath);
+        $foreignFields = array_filter($this->commandData->fields, function ($val) {
+            return !empty($val->foreignTable);
+        });
 
-                $filledData = fill_template($this->commandData->dynamicVars, $validationData);
-                $validatedData .= $filledData;
-            }
+        foreach ($foreignFields as $foreignField) {
+            $modelName = model_name_from_table_name($foreignField->foreignTable);
+            $keyName = $foreignField->name;
+
+            $fullModelPath = '\\'.$this->commandData->config->nsModel.'\\'.$modelName;
+            $this->commandData->addDynamicVariable('$MODEL_EXIST$', snake_case($modelName));
+            $this->commandData->addDynamicVariable('$FOREIGN_KEY', $keyName);
+            $this->commandData->addDynamicVariable('$FULL_MODEL_PATH', $fullModelPath);
+            $filledData = fill_template($this->commandData->dynamicVars, $validationData);
+            $validatedData .= $filledData;
         }
 
         $this->commandData->addDynamicVariable('$MODEL_VALIDATIONS$', $validatedData);

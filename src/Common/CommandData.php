@@ -127,7 +127,6 @@ class CommandData
 
         $this->addPrimaryKey();
 
-        $foreignKeys = [];
         while (true) {
             $fieldInputStr = $this->commandObj->ask('Field: (name db_type html_type options)', '');
 
@@ -149,18 +148,16 @@ class CommandData
                 $relation = '';
             }
 
-            $field = GeneratorFieldsInputUtil::processFieldInput(
+            $this->fields[] = GeneratorFieldsInputUtil::processFieldInput(
                 $fieldInputStr,
                 $validations
             );
-            $this->fields[] = $field;
-            $foreignKeys = array_merge_recursive($foreignKeys, $field->foreignKeys);
 
             if (!empty($relation)) {
                 $this->relations[] = GeneratorFieldRelation::parseRelation($relation);
             }
         }
-        $this->config->foreignKeys = $foreignKeys;
+
         $this->addTimestamps();
     }
 
@@ -197,7 +194,6 @@ class CommandData
     {
         // fieldsFile option will get high priority than json option if both options are passed
         try {
-            $foreignKeys = [];
             if ($this->getOption('fieldsFile')) {
                 $fieldsFileValue = $this->getOption('fieldsFile');
                 if (file_exists($fieldsFileValue)) {
@@ -221,9 +217,7 @@ class CommandData
                     if (isset($field['type']) && $field['relation']) {
                         $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
                     } else {
-                        $result = GeneratorField::parseFieldFromFile($field);
-                        $this->fields[] = $result;
-                        $foreignKeys = array_merge_recursive($foreignKeys, $result->foreignKeys);
+                        $this->fields[] = GeneratorField::parseFieldFromFile($field);
                         if (isset($field['relation'])) {
                             $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
                         }
@@ -236,16 +230,13 @@ class CommandData
                     if (isset($field['type']) && $field['relation']) {
                         $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
                     } else {
-                        $result = GeneratorField::parseFieldFromFile($field);
-                        $this->fields[] = $result;
-                        $foreignKeys = array_merge_recursive($foreignKeys, $result->foreignKeys);
+                        $this->fields[] = GeneratorField::parseFieldFromFile($field);
                         if (isset($field['relation'])) {
                             $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
                         }
                     }
                 }
             }
-            $this->config->foreignKeys = $foreignKeys;
         } catch (Exception $e) {
             $this->commandError($e->getMessage());
             exit;
@@ -266,12 +257,6 @@ class CommandData
         $tableFieldsGenerator = new TableFieldsGenerator($tableName, $ignoredFields);
         $tableFieldsGenerator->prepareFieldsFromTable();
         $tableFieldsGenerator->prepareRelations();
-        // prepare foreign keys array from tables
-        foreach ($tableFieldsGenerator->tables as $tables) {
-            foreach ($tables->foreignKeys as $foreignKey) {
-                $this->config->foreignKeys[$foreignKey->foreignTable][] = $foreignKey->localField;
-            }
-        }
 
         $this->fields = $tableFieldsGenerator->fields;
         $this->relations = $tableFieldsGenerator->relations;

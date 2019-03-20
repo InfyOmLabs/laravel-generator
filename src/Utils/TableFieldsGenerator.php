@@ -44,9 +44,6 @@ class TableFieldsGenerator
     /** @var \Doctrine\DBAL\Schema\Column[] */
     private $columns;
 
-    /** @var array $tables */
-    public $tables;
-
     /** @var GeneratorField[] */
     public $fields;
 
@@ -94,6 +91,13 @@ class TableFieldsGenerator
      */
     public function prepareFieldsFromTable()
     {
+        $foreignKeys = $this->schemaManager->listTableForeignKeys($this->tableName);
+        $foreignFields = [];
+        foreach ($foreignKeys as $foreignKey) {
+            $foreignField = $foreignKey->getColumns()[0];
+            $foreignFields[$foreignField] = $foreignKey->getForeignTableName();
+        }
+
         foreach ($this->columns as $column) {
             $type = $column->getType()->getName();
 
@@ -152,6 +156,7 @@ class TableFieldsGenerator
             }
             $field->isNotNull = (bool) $column->getNotNull();
             $field->description = $column->getComment(); // get comments from table
+            $field->foreignTable = (isset($foreignFields[$field->name])) ? $foreignFields[$field->name] : null;
 
             $this->fields[] = $field;
         }
@@ -281,7 +286,6 @@ class TableFieldsGenerator
     public function prepareRelations()
     {
         $foreignKeys = $this->prepareForeignKeys();
-        $this->tables = $foreignKeys;
         $this->checkForRelations($foreignKeys);
     }
 
