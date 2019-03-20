@@ -33,7 +33,6 @@ class CommandData
     /** @var array */
     public $dynamicVars = [];
     public $fieldNamesMapping = [];
-    public $foreignKeys = [];
 
     /** @var CommandData */
     protected static $instance = null;
