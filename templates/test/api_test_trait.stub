@@ -7,8 +7,8 @@ trait ApiTestTrait
     {
         $this->assertApiSuccess();
 
-        $api_response = json_decode($this->response->getContent(), true);
-        $responseData = $api_response['data'];
+        $response = json_decode($this->response->getContent(), true);
+        $responseData = $response['data'];
 
         $this->assertNotEmpty($responseData['id']);
         $this->assertModelData($actualData, $responseData);
