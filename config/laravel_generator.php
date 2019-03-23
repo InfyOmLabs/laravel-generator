@@ -77,7 +77,7 @@ return [
 
         'api_test'          => 'Tests\API',
 
-        'tests'          => 'Tests',
+        'tests'             => 'Tests',
     ],
 
     /*
