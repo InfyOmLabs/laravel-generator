@@ -13,7 +13,7 @@ class $MODEL_NAME$ApiTest extends TestCase
     public function test_create_$MODEL_NAME_SNAKE$()
     {
         $$MODEL_NAME_CAMEL$ = $this->fake$MODEL_NAME$Data();
-        $this->json('POST', '/$API_PREFIX$/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$', $$MODEL_NAME_CAMEL$);
+        $this->response = $this->json('POST', '/$API_PREFIX$/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$', $$MODEL_NAME_CAMEL$);
 
         $this->assertApiResponse($$MODEL_NAME_CAMEL$);
     }
@@ -24,7 +24,7 @@ class $MODEL_NAME$ApiTest extends TestCase
     public function test_read_$MODEL_NAME_SNAKE$()
     {
         $$MODEL_NAME_CAMEL$ = $this->make$MODEL_NAME$();
-        $this->json('GET', '/$API_PREFIX$/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$/'.$$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
+        $this->response = $this->json('GET', '/$API_PREFIX$/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$/'.$$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
 
         $this->assertApiResponse($$MODEL_NAME_CAMEL$->toArray());
     }
@@ -37,7 +37,7 @@ class $MODEL_NAME$ApiTest extends TestCase
         $$MODEL_NAME_CAMEL$ = $this->make$MODEL_NAME$();
         $edited$MODEL_NAME$ = $this->fake$MODEL_NAME$Data();
 
-        $this->json('PUT', '/$API_PREFIX$/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$/'.$$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$, $edited$MODEL_NAME$);
+        $this->response = $this->json('PUT', '/$API_PREFIX$/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$/'.$$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$, $edited$MODEL_NAME$);
 
         $this->assertApiResponse($edited$MODEL_NAME$);
     }
@@ -48,10 +48,10 @@ class $MODEL_NAME$ApiTest extends TestCase
     public function test_delete_$MODEL_NAME_SNAKE$()
     {
         $$MODEL_NAME_CAMEL$ = $this->make$MODEL_NAME$();
-        $this->json('DELETE', '/$API_PREFIX$/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$/'.$$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
+        $this->response = $this->json('DELETE', '/$API_PREFIX$/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$/'.$$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
 
         $this->assertApiSuccess();
-        $this->json('GET', '/$API_PREFIX$/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$/'.$$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
+        $this->response = $this->json('GET', '/$API_PREFIX$/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_CAMEL$/'.$$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
 
         $this->assertResponseStatus(404);
     }
