@@ -5,7 +5,7 @@ use $NAMESPACE_REPOSITORY$\$MODEL_NAME$Repository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use $NAMESPACE_TEST_TRAITS$\Make$MODEL_NAME$Trait;
-use Tests\ApiTestTrait;.
+use Tests\ApiTestTrait;
 use Illuminate\Support\Facades\App;
 
 class $MODEL_NAME$RepositoryTest extends TestCase
@@ -17,7 +17,7 @@ class $MODEL_NAME$RepositoryTest extends TestCase
      */
     protected $$MODEL_NAME_CAMEL$Repo;
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
         $this->$MODEL_NAME_CAMEL$Repo = App::make($MODEL_NAME$Repository::class);
