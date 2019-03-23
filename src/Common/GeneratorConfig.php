@@ -202,6 +202,10 @@ class GeneratorConfig
                 'infyom.laravel_generator.path.modelsJs',
                 base_path('resources/assets/js/models/')
         );
+
+        $this->nsTestTraits = config('infyom.laravel_generator.namespace.test_trait', app_path('tests/Traits/'));
+        $this->nsApiTests = config('infyom.laravel_generator.namespace.api_test', app_path('tests/API/'));
+        $this->nsRepositoryTests = config('infyom.laravel_generator.namespace.repository_test', app_path('tests/Repositories/'));
     }
 
     public function loadDynamicVariables(CommandData &$commandData)
