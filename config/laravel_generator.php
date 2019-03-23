@@ -69,7 +69,7 @@ return [
 
         'api_request'       => 'App\Http\Requests\API',
 
-        'test_trait'        => 'Tests',
+        'test_trait'        => 'Tests\Traits',
 
         'repository_test'   => 'Tests\Repositories',
 
