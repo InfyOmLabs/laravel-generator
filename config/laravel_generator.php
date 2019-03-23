@@ -37,6 +37,8 @@ return [
 
         'api_test'          => base_path('tests/API/'),
 
+        'tests'             => base_path('tests/'),
+
         'views'             => base_path('resources/views/'),
 
         'schema_files'      => base_path('resources/model_schemas/'),
@@ -74,6 +76,8 @@ return [
         'repository_test'   => 'Tests\Repositories',
 
         'api_test'          => 'Tests\API',
+
+        'tests'          => 'Tests',
     ],
 
     /*

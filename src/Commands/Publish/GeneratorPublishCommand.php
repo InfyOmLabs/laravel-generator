@@ -57,7 +57,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
     {
         $traitPath = __DIR__.'/../../../templates/test/api_test_trait.stub';
 
-        $testsPath = config('infyom.laravel_generator.path.api_test', base_path('tests/'));
+        $testsPath = config('infyom.laravel_generator.path.tests', base_path('tests/'));
 
         $this->publishFile($traitPath, $testsPath.'ApiTestTrait.php', 'ApiTestTrait.php');
 
