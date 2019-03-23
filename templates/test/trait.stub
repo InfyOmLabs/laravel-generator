@@ -1,8 +1,9 @@
-<?php
+<?php namespace $NAMESPACE_TEST_TRAITS$;
 
 use Faker\Factory as Faker;
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
 use $NAMESPACE_REPOSITORY$\$MODEL_NAME$Repository;
+use Illuminate\Support\Facades\App;
 
 trait Make$MODEL_NAME$Trait
 {

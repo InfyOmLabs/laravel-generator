@@ -61,9 +61,9 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
         $this->publishFile($traitPath, $testsPath.'ApiTestTrait.php', 'ApiTestTrait.php');
 
-        if (!file_exists($testsPath.'traits/')) {
-            mkdir($testsPath.'traits/');
-            $this->info('traits directory created');
+        if (!file_exists($testsPath.'Traits/')) {
+            mkdir($testsPath.'Traits/');
+            $this->info('Traits directory created');
         }
     }
 

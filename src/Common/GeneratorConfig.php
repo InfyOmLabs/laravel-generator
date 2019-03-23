@@ -21,6 +21,10 @@ class GeneratorConfig
     public $nsController;
     public $nsBaseController;
 
+    public $nsApiTests;
+    public $nsRepositoryTests;
+    public $nsTestTraits;
+
     /* Path variables */
     public $pathRepository;
     public $pathModel;
@@ -178,7 +182,7 @@ class GeneratorConfig
 
         $this->pathApiTests = config('infyom.laravel_generator.path.api_test', base_path('tests/'));
 
-        $this->pathApiTestTraits = config('infyom.laravel_generator.path.test_trait', base_path('tests/traits/'));
+        $this->pathApiTestTraits = config('infyom.laravel_generator.path.test_trait', base_path('tests/Traits/'));
 
         $this->pathController = config(
             'infyom.laravel_generator.path.controller',
@@ -215,6 +219,10 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$NAMESPACE_CONTROLLER$', $this->nsController);
         $commandData->addDynamicVariable('$NAMESPACE_REQUEST$', $this->nsRequest);
         $commandData->addDynamicVariable('$NAMESPACE_REQUEST_BASE$', $this->nsRequestBase);
+
+        $commandData->addDynamicVariable('$NAMESPACE_API_TESTS$', $this->nsApiTests);
+        $commandData->addDynamicVariable('$NAMESPACE_TEST_TRAITS$', $this->nsTestTraits);
+        $commandData->addDynamicVariable('$NAMESPACE_REPOSITORIES_TESTS$', $this->nsRepositoryTests);
 
         $commandData->addDynamicVariable('$TABLE_NAME$', $this->tableName);
         $commandData->addDynamicVariable('$PRIMARY_KEY_NAME$', $this->primaryName);
