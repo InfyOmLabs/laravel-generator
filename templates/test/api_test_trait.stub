@@ -22,12 +22,10 @@ trait ApiTestTrait
 
     public function assertModelData(Array $actualData, Array $expectedData)
     {
-        $timestamps = $TIMESTAMPS$;
-        foreach ($timestamps as $timestamp) {
-            unset($actualData[$timestamp]);
-            unset($expectedData[$timestamp]);
-        }
         foreach ($actualData as $key => $value) {
+            if (in_array($key, $TIMESTAMPS$)) {
+                continue;
+            }
             $this->assertEquals($actualData[$key], $expectedData[$key]);
         }
     }
