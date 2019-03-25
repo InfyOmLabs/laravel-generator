@@ -34,7 +34,7 @@ trait Make$MODEL_NAME$Trait
     /**
      * Get fake data of $MODEL_NAME$
      *
-     * @param array $postFields
+     * @param array $$MODEL_NAME_CAMEL$Fields
      * @return array
      */
     public function fake$MODEL_NAME$Data($$MODEL_NAME_CAMEL$Fields = [])
