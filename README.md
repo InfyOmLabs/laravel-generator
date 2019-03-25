@@ -12,3 +12,5 @@ InfyOm Laravel Generator
 [![License](https://poser.pugx.org/infyomlabs/laravel-generator/license)](https://packagist.org/packages/infyomlabs/laravel-generator)
 
 Documentation is located [here](http://labs.infyom.com/laravelgenerator)
+
+Add your website to [Made with InfyOm Generator](https://github.com/InfyOmLabs/laravel-generator/blob/develop/made-with-generator.md) list.
