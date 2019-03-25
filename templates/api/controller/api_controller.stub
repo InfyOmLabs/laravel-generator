@@ -38,9 +38,9 @@ class $MODEL_NAME$APIController extends AppBaseController
     {
         $input = $request->all();
 
-        $$MODEL_NAME_PLURAL_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->create($input);
+        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->create($input);
 
-        return $this->sendResponse($$MODEL_NAME_PLURAL_CAMEL$->toArray(), '$MODEL_NAME_HUMAN$ saved successfully');
+        return $this->sendResponse($$MODEL_NAME_CAMEL$->toArray(), '$MODEL_NAME_HUMAN$ saved successfully');
     }
 
     $DOC_SHOW$
