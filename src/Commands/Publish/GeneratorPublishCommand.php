@@ -54,15 +54,38 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
     private function publishTestCases()
     {
-        $traitPath = __DIR__.'/../../../templates/test/api_test_trait.stub';
+        $testsPath = config('infyom.laravel_generator.path.tests', base_path('tests/'));
+        $testsNameSpace = config('infyom.laravel_generator.namespace.tests', 'Tests');
 
-        $testsPath = config('infyom.laravel_generator.path.api_test', base_path('tests/'));
+        $templateData = get_template('test.api_test_trait', 'laravel-generator');
 
-        $this->publishFile($traitPath, $testsPath.'ApiTestTrait.php', 'ApiTestTrait.php');
+        $templateData = str_replace('$NAMESPACE_TESTS$', $testsNameSpace, $templateData);
 
-        if (!file_exists($testsPath.'traits/')) {
-            mkdir($testsPath.'traits/');
-            $this->info('traits directory created');
+        $fileName = 'ApiTestTrait.php';
+
+        if (file_exists($testsPath.$fileName) && !$this->confirmOverwrite($fileName)) {
+            return;
+        }
+
+        FileUtil::createFile($testsPath, $fileName, $templateData);
+        $this->info('ApiTestTrait created');
+
+        $testTraitPath = config('infyom.laravel_generator.path.test_trait', base_path('tests/Traits/'));
+        if (!file_exists($testTraitPath)) {
+            FileUtil::createDirectoryIfNotExist($testTraitPath);
+            $this->info('Test Traits directory created');
+        }
+
+        $testAPIsPath = config('infyom.laravel_generator.path.api_test', base_path('tests/APIs/'));
+        if (!file_exists($testAPIsPath)) {
+            FileUtil::createDirectoryIfNotExist($testAPIsPath);
+            $this->info('APIs Tests directory created');
+        }
+
+        $testRepositoriesPath = config('infyom.laravel_generator.path.repository_test', base_path('tests/Repositories/'));
+        if (!file_exists($testRepositoriesPath)) {
+            FileUtil::createDirectoryIfNotExist($testRepositoriesPath);
+            $this->info('Repositories Tests directory created');
         }
     }
 
