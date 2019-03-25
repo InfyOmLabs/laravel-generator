@@ -204,7 +204,7 @@ class GeneratorConfig
         );
 
         $this->nsTestTraits = config('infyom.laravel_generator.namespace.test_trait', app_path('tests/Traits/'));
-        $this->nsApiTests = config('infyom.laravel_generator.namespace.api_test', app_path('tests/API/'));
+        $this->nsApiTests = config('infyom.laravel_generator.namespace.api_test', app_path('tests/APIs/'));
         $this->nsRepositoryTests = config('infyom.laravel_generator.namespace.repository_test', app_path('tests/Repositories/'));
     }
 
