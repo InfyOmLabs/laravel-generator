@@ -55,11 +55,22 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
     private function publishTestCases()
     {
-        $traitPath = __DIR__.'/../../../templates/test/api_test_trait.stub';
+        $testsPath = config('infyom.laravel_generator.path.test', base_path('tests/'));
+        $createdAtField = config('infyom.laravel_generator.timestamps.created_at', 'created_at');
+        $updateAtField = config('infyom.laravel_generator.timestamps.updated_at', 'updated_at');
 
-        $testsPath = config('infyom.laravel_generator.path.api_test', base_path('tests/'));
+        $templateData = get_template('test.api_test_trait', 'laravel-generator');
 
-        $this->publishFile($traitPath, $testsPath.'ApiTestTrait.php', 'ApiTestTrait.php');
+        $templateData = str_replace('$TIMESTAMPS$', "['$createdAtField', '$updateAtField']", $templateData);
+
+        $fileName = 'ApiTestTrait.php';
+
+        if (file_exists($testsPath.$fileName) && !$this->confirmOverwrite($fileName)) {
+            return;
+        }
+
+        FileUtil::createFile($testsPath, $fileName, $templateData);
+        $this->info('ApiTestTrait created');
 
         if (!file_exists($testsPath.'traits/')) {
             mkdir($testsPath.'traits/');
