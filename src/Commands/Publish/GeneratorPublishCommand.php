@@ -57,11 +57,11 @@ class GeneratorPublishCommand extends PublishBaseCommand
     {
         $testsPath = config('infyom.laravel_generator.path.test', base_path('tests/'));
         $createdAtField = config('infyom.laravel_generator.timestamps.created_at', 'created_at');
-        $updateAtField = config('infyom.laravel_generator.timestamps.updated_at', 'updated_at');
+        $updatedAtField = config('infyom.laravel_generator.timestamps.updated_at', 'updated_at');
 
         $templateData = get_template('test.api_test_trait', 'laravel-generator');
 
-        $templateData = str_replace('$TIMESTAMPS$', "['$createdAtField', '$updateAtField']", $templateData);
+        $templateData = str_replace('$TIMESTAMPS$', "['$createdAtField', '$updatedAtField']", $templateData);
 
         $fileName = 'ApiTestTrait.php';
 
@@ -72,9 +72,22 @@ class GeneratorPublishCommand extends PublishBaseCommand
         FileUtil::createFile($testsPath, $fileName, $templateData);
         $this->info('ApiTestTrait created');
 
-        if (!file_exists($testsPath.'traits/')) {
-            mkdir($testsPath.'traits/');
-            $this->info('traits directory created');
+        $testTraitPath = config('infyom.laravel_generator.path.test_trait', base_path('tests/Traits/'));
+        if (!file_exists($testTraitPath)) {
+            FileUtil::createDirectoryIfNotExist($testTraitPath);
+            $this->info('Test Traits directory created');
+        }
+
+        $testAPIsPath = config('infyom.laravel_generator.path.api_test', base_path('tests/APIs/'));
+        if (!file_exists($testAPIsPath)) {
+            FileUtil::createDirectoryIfNotExist($testAPIsPath);
+            $this->info('APIs Tests directory created');
+        }
+
+        $testRepositoriesPath = config('infyom.laravel_generator.path.repository_test', base_path('tests/Repositories/'));
+        if (!file_exists($testRepositoriesPath)) {
+            FileUtil::createDirectoryIfNotExist($testRepositoriesPath);
+            $this->info('Repositories Tests directory created');
         }
     }
 
