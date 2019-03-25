@@ -21,6 +21,11 @@ class GeneratorConfig
     public $nsController;
     public $nsBaseController;
 
+    public $nsApiTests;
+    public $nsRepositoryTests;
+    public $nsTestTraits;
+    public $nsTests;
+
     /* Path variables */
     public $pathRepository;
     public $pathModel;
@@ -136,6 +141,11 @@ class GeneratorConfig
         $this->nsRequestBase = config('infyom.laravel_generator.namespace.request', 'App\Http\Requests');
         $this->nsBaseController = config('infyom.laravel_generator.namespace.controller', 'App\Http\Controllers');
         $this->nsController = config('infyom.laravel_generator.namespace.controller', 'App\Http\Controllers').$prefix;
+
+        $this->nsTestTraits = config('infyom.laravel_generator.namespace.test_trait', 'Tests\Traits');
+        $this->nsApiTests = config('infyom.laravel_generator.namespace.api_test', 'Tests\APIs');
+        $this->nsRepositoryTests = config('infyom.laravel_generator.namespace.repository_test', 'Tests\Repositories');
+        $this->nsTests = config('infyom.laravel_generator.namespace.tests', 'Tests');
     }
 
     public function loadPaths()
@@ -176,9 +186,9 @@ class GeneratorConfig
 
         $this->pathApiRoutes = config('infyom.laravel_generator.path.api_routes', base_path('routes/api.php'));
 
-        $this->pathApiTests = config('infyom.laravel_generator.path.api_test', base_path('tests/'));
+        $this->pathApiTests = config('infyom.laravel_generator.path.api_test', base_path('tests/APIs/'));
 
-        $this->pathApiTestTraits = config('infyom.laravel_generator.path.test_trait', base_path('tests/traits/'));
+        $this->pathApiTestTraits = config('infyom.laravel_generator.path.test_trait', base_path('tests/Traits/'));
 
         $this->pathController = config(
             'infyom.laravel_generator.path.controller',
@@ -215,6 +225,11 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$NAMESPACE_CONTROLLER$', $this->nsController);
         $commandData->addDynamicVariable('$NAMESPACE_REQUEST$', $this->nsRequest);
         $commandData->addDynamicVariable('$NAMESPACE_REQUEST_BASE$', $this->nsRequestBase);
+
+        $commandData->addDynamicVariable('$NAMESPACE_API_TESTS$', $this->nsApiTests);
+        $commandData->addDynamicVariable('$NAMESPACE_TEST_TRAITS$', $this->nsTestTraits);
+        $commandData->addDynamicVariable('$NAMESPACE_REPOSITORIES_TESTS$', $this->nsRepositoryTests);
+        $commandData->addDynamicVariable('$NAMESPACE_TESTS$', $this->nsTests);
 
         $commandData->addDynamicVariable('$TABLE_NAME$', $this->tableName);
         $commandData->addDynamicVariable('$PRIMARY_KEY_NAME$', $this->primaryName);
