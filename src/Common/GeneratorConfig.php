@@ -24,6 +24,7 @@ class GeneratorConfig
     public $nsApiTests;
     public $nsRepositoryTests;
     public $nsTestTraits;
+    public $nsTests;
 
     /* Path variables */
     public $pathRepository;
@@ -140,6 +141,11 @@ class GeneratorConfig
         $this->nsRequestBase = config('infyom.laravel_generator.namespace.request', 'App\Http\Requests');
         $this->nsBaseController = config('infyom.laravel_generator.namespace.controller', 'App\Http\Controllers');
         $this->nsController = config('infyom.laravel_generator.namespace.controller', 'App\Http\Controllers').$prefix;
+
+        $this->nsTestTraits = config('infyom.laravel_generator.namespace.test_trait', 'Tests\Traits');
+        $this->nsApiTests = config('infyom.laravel_generator.namespace.api_test', 'Tests\APIs');
+        $this->nsRepositoryTests = config('infyom.laravel_generator.namespace.repository_test', 'Tests\Repositories');
+        $this->nsTests = config('infyom.laravel_generator.namespace.tests', 'Tests');
     }
 
     public function loadPaths()
@@ -202,10 +208,6 @@ class GeneratorConfig
                 'infyom.laravel_generator.path.modelsJs',
                 base_path('resources/assets/js/models/')
         );
-
-        $this->nsTestTraits = config('infyom.laravel_generator.namespace.test_trait', app_path('tests/Traits/'));
-        $this->nsApiTests = config('infyom.laravel_generator.namespace.api_test', app_path('tests/APIs/'));
-        $this->nsRepositoryTests = config('infyom.laravel_generator.namespace.repository_test', app_path('tests/Repositories/'));
     }
 
     public function loadDynamicVariables(CommandData &$commandData)
@@ -227,6 +229,7 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$NAMESPACE_API_TESTS$', $this->nsApiTests);
         $commandData->addDynamicVariable('$NAMESPACE_TEST_TRAITS$', $this->nsTestTraits);
         $commandData->addDynamicVariable('$NAMESPACE_REPOSITORIES_TESTS$', $this->nsRepositoryTests);
+        $commandData->addDynamicVariable('$NAMESPACE_TESTS$', $this->nsTests);
 
         $commandData->addDynamicVariable('$TABLE_NAME$', $this->tableName);
         $commandData->addDynamicVariable('$PRIMARY_KEY_NAME$', $this->primaryName);

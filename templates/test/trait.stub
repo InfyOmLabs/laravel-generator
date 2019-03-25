@@ -3,7 +3,6 @@
 use Faker\Factory as Faker;
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
 use $NAMESPACE_REPOSITORY$\$MODEL_NAME$Repository;
-use Illuminate\Support\Facades\App;
 
 trait Make$MODEL_NAME$Trait
 {
@@ -16,7 +15,7 @@ trait Make$MODEL_NAME$Trait
     public function make$MODEL_NAME$($$MODEL_NAME_CAMEL$Fields = [])
     {
         /** @var $MODEL_NAME$Repository $$MODEL_NAME_CAMEL$Repo */
-        $$MODEL_NAME_CAMEL$Repo = App::make($MODEL_NAME$Repository::class);
+        $$MODEL_NAME_CAMEL$Repo = \App::make($MODEL_NAME$Repository::class);
         $theme = $this->fake$MODEL_NAME$Data($$MODEL_NAME_CAMEL$Fields);
         return $$MODEL_NAME_CAMEL$Repo->create($theme);
     }

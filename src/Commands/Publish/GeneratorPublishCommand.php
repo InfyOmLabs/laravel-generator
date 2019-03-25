@@ -61,9 +61,22 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
         $this->publishFile($traitPath, $testsPath.'ApiTestTrait.php', 'ApiTestTrait.php');
 
-        if (!file_exists($testsPath.'Traits/')) {
-            mkdir($testsPath.'Traits/');
+        $testTraitPath = config('infyom.laravel_generator.path.test_trait', base_path('tests/Traits/'));
+        if (!file_exists($testTraitPath)) {
+            FileUtil::createDirectoryIfNotExist($testTraitPath);
             $this->info('Traits directory created');
+        }
+
+        $testAPIsPath = config('infyom.laravel_generator.path.api_test', base_path('tests/APIs/'));
+        if (!file_exists($testAPIsPath)) {
+            FileUtil::createDirectoryIfNotExist($testAPIsPath);
+            $this->info('APIs directory created');
+        }
+
+        $testRepositoriesPath = config('infyom.laravel_generator.path.repository_test', base_path('tests/Repositories/'));
+        if (!file_exists($testRepositoriesPath)) {
+            FileUtil::createDirectoryIfNotExist($testRepositoriesPath);
+            $this->info('Repositories directory created');
         }
     }
 
