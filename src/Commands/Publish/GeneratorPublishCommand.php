@@ -57,10 +57,13 @@ class GeneratorPublishCommand extends PublishBaseCommand
     {
         $testsPath = config('infyom.laravel_generator.path.tests', base_path('tests/'));
         $testsNameSpace = config('infyom.laravel_generator.namespace.tests', 'Tests');
+        $createdAtField = config('infyom.laravel_generator.timestamps.created_at', 'created_at');
+        $updatedAtField = config('infyom.laravel_generator.timestamps.updated_at', 'updated_at');
 
         $templateData = get_template('test.api_test_trait', 'laravel-generator');
 
         $templateData = str_replace('$NAMESPACE_TESTS$', $testsNameSpace, $templateData);
+        $templateData = str_replace('$TIMESTAMPS$', "['$createdAtField', '$updatedAtField']", $templateData);
 
         $fileName = 'ApiTestTrait.php';
 
