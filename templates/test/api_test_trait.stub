@@ -1,4 +1,4 @@
-<?php namespace Tests;
+<?php namespace $NAMESPACE_API_TESTS$;
 
 trait ApiTestTrait
 {
