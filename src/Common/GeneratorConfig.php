@@ -186,7 +186,7 @@ class GeneratorConfig
 
         $this->pathApiRoutes = config('infyom.laravel_generator.path.api_routes', base_path('routes/api.php'));
 
-        $this->pathApiTests = config('infyom.laravel_generator.path.api_test', base_path('tests/'));
+        $this->pathApiTests = config('infyom.laravel_generator.path.api_test', base_path('tests/APIs/'));
 
         $this->pathApiTestTraits = config('infyom.laravel_generator.path.test_trait', base_path('tests/Traits/'));
 
