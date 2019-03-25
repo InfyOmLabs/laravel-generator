@@ -60,7 +60,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
         $templateData = get_template('test.api_test_trait', 'laravel-generator');
 
-        $templateData = str_replace('$NAMESPACE_API_TESTS$', $testsNameSpace, $templateData);
+        $templateData = str_replace('$NAMESPACE_TESTS$', $testsNameSpace, $templateData);
 
         $fileName = 'ApiTestTrait.php';
 
