@@ -56,7 +56,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
     private function publishTestCases()
     {
         $testsPath = config('infyom.laravel_generator.path.tests', base_path('tests/'));
-        $testsNameSpace = config('infyom.laravel_generator.namespace.tests', base_path('Tests/'));
+        $testsNameSpace = config('infyom.laravel_generator.namespace.tests', 'Tests');
 
         $templateData = get_template('test.api_test_trait', 'laravel-generator');
 
