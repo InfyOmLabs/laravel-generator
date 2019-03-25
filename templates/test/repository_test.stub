@@ -3,7 +3,7 @@
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
 use $NAMESPACE_REPOSITORY$\$MODEL_NAME$Repository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
+use $NAMESPACE_TESTS$\TestCase;
 use $NAMESPACE_TEST_TRAITS$\Make$MODEL_NAME$Trait;
 use $NAMESPACE_TESTS$\ApiTestTrait;
 

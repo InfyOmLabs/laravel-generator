@@ -2,7 +2,7 @@
 
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
+use $NAMESPACE_TESTS$\TestCase;
 use $NAMESPACE_TEST_TRAITS$\Make$MODEL_NAME$Trait;
 use $NAMESPACE_TESTS$\ApiTestTrait;
 
