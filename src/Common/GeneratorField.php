@@ -119,12 +119,16 @@ class GeneratorField
                 $updateAction = isset($updateAction) ? strtolower($updateAction) : '';
                 $foreignKeyText = "\$table->foreign('".$this->name."')->references('".$foreignField."')->on('".$foreignTable."')";
 
-                if (!empty($deleteAction) and (!empty($updateAction))) {
-                    $this->validateAction($deleteAction, $updateAction);
-                    $this->foreignKeyText .= $foreignKeyText."->onDelete('".$deleteAction."')->onUpdate('".$updateAction."');";
-                } else {
-                    $this->foreignKeyText .= $foreignKeyText.';';
+                if (!empty($deleteAction)) {
+                    $this->validateAction($deleteAction);
+                    $foreignKeyText .= "->onDelete('".$deleteAction."')";
                 }
+
+                if (!empty($updateAction)) {
+                    $this->validateAction($updateAction);
+                    $foreignKeyText .= "->onUpdate('".$updateAction."')";
+                }
+                $this->foreignKeyText .= $foreignKeyText.';';
             } else {
                 $this->migrationText .= '->'.$functionName;
                 $this->migrationText .= '(';
@@ -161,11 +165,12 @@ class GeneratorField
         return $this->$key;
     }
 
-    public function validateAction($deleteAction, $updateAction)
+    public function validateAction($action)
     {
-        $action = ['cascade', 'set null', 'no action', 'restrict'];
-        if (!in_array($deleteAction, $action) || !in_array($updateAction, $action)) {
-            echo 'Set valid constraint';
+        $actions = ['cascade', 'set null', 'no action', 'restrict'];
+
+        if (!in_array($action, $actions)) {
+            echo 'Invalid constraint';
             exit;
         }
     }
