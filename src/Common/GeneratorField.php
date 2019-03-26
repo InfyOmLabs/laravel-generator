@@ -112,21 +112,21 @@ class GeneratorField
             if ($functionName == 'foreign') {
                 $foreignTable = array_shift($inputParams);
                 $foreignField = array_shift($inputParams);
-                $deleteAction = array_shift($inputParams);
                 $updateAction = array_shift($inputParams);
+                $deleteAction = array_shift($inputParams);
 
-                $deleteAction = isset($deleteAction) ? strtolower($deleteAction) : '';
                 $updateAction = isset($updateAction) ? strtolower($updateAction) : '';
+                $deleteAction = isset($deleteAction) ? strtolower($deleteAction) : '';
                 $foreignKeyText = "\$table->foreign('".$this->name."')->references('".$foreignField."')->on('".$foreignTable."')";
 
-                if (!empty($deleteAction)) {
-                    $this->validateAction($deleteAction);
-                    $foreignKeyText .= "->onDelete('".$deleteAction."')";
+                if (!empty($updateAction)) {
+                    $this->validateAction($updateAction, 'update');
+                    $foreignKeyText .= "->onUpdate('".$updateAction."')";
                 }
 
-                if (!empty($updateAction)) {
-                    $this->validateAction($updateAction);
-                    $foreignKeyText .= "->onUpdate('".$updateAction."')";
+                if (!empty($deleteAction)) {
+                    $this->validateAction($deleteAction, 'delete');
+                    $foreignKeyText .= "->onDelete('".$deleteAction."')";
                 }
                 $this->foreignKeyText .= $foreignKeyText.';';
             } else {
@@ -165,12 +165,12 @@ class GeneratorField
         return $this->$key;
     }
 
-    public function validateAction($action)
+    public function validateAction($action, $column)
     {
         $actions = ['cascade', 'set null', 'no action', 'restrict'];
 
         if (!in_array($action, $actions)) {
-            echo 'Invalid constraint';
+            echo 'Invalid constraint given for column: '.$column;
             exit;
         }
     }
