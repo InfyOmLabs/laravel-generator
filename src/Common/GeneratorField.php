@@ -120,12 +120,12 @@ class GeneratorField
                 $foreignKeyText = "\$table->foreign('".$this->name."')->references('".$foreignField."')->on('".$foreignTable."')";
 
                 if (!empty($updateAction)) {
-                    $this->validateAction($updateAction, 'update');
+                    $this->validateAction($updateAction);
                     $foreignKeyText .= "->onUpdate('".$updateAction."')";
                 }
 
                 if (!empty($deleteAction)) {
-                    $this->validateAction($deleteAction, 'delete');
+                    $this->validateAction($deleteAction);
                     $foreignKeyText .= "->onDelete('".$deleteAction."')";
                 }
                 $this->foreignKeyText .= $foreignKeyText.';';
@@ -165,12 +165,12 @@ class GeneratorField
         return $this->$key;
     }
 
-    public function validateAction($action, $column)
+    public function validateAction($action)
     {
         $actions = ['cascade', 'set null', 'no action', 'restrict'];
 
         if (!in_array($action, $actions)) {
-            echo 'Invalid constraint given for column: '.$column;
+            echo 'Invalid constraint given for column: '.$this->name;
             exit;
         }
     }
