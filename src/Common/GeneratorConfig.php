@@ -250,6 +250,7 @@ class GeneratorConfig
         if (!empty($this->prefixes['route'])) {
             $commandData->addDynamicVariable('$ROUTE_NAMED_PREFIX$', $this->prefixes['route'].'.');
             $commandData->addDynamicVariable('$ROUTE_PREFIX$', str_replace('.', '/', $this->prefixes['route']).'/');
+            $commandData->addDynamicVariable('$ONLY_ROUTE_PREFIX$', $this->prefixes['route']);
         } else {
             $commandData->addDynamicVariable('$ROUTE_PREFIX$', '');
             $commandData->addDynamicVariable('$ROUTE_NAMED_PREFIX$', '');
