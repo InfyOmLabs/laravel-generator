@@ -1,4 +1,4 @@
-<?php
+<?php namespace $NAMESPACE_TEST_TRAITS$;
 
 use Faker\Factory as Faker;
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
@@ -15,7 +15,7 @@ trait Make$MODEL_NAME$Trait
     public function make$MODEL_NAME$($$MODEL_NAME_CAMEL$Fields = [])
     {
         /** @var $MODEL_NAME$Repository $$MODEL_NAME_CAMEL$Repo */
-        $$MODEL_NAME_CAMEL$Repo = App::make($MODEL_NAME$Repository::class);
+        $$MODEL_NAME_CAMEL$Repo = \App::make($MODEL_NAME$Repository::class);
         $theme = $this->fake$MODEL_NAME$Data($$MODEL_NAME_CAMEL$Fields);
         return $$MODEL_NAME_CAMEL$Repo->create($theme);
     }
@@ -34,7 +34,7 @@ trait Make$MODEL_NAME$Trait
     /**
      * Get fake data of $MODEL_NAME$
      *
-     * @param array $postFields
+     * @param array $$MODEL_NAME_CAMEL$Fields
      * @return array
      */
     public function fake$MODEL_NAME$Data($$MODEL_NAME_CAMEL$Fields = [])
