@@ -115,17 +115,17 @@ class GeneratorField
                 $updateAction = array_shift($inputParams);
                 $deleteAction = array_shift($inputParams);
 
-                $updateAction = isset($updateAction) ? strtolower($updateAction) : '';
-                $deleteAction = isset($deleteAction) ? strtolower($deleteAction) : '';
                 $foreignKeyText = "\$table->foreign('".$this->name."')->references('".$foreignField."')->on('".$foreignTable."')";
 
-                if (!empty($updateAction)) {
-                    $this->validateAction($updateAction);
+                if (isset($updateAction) and !empty($updateAction)) {
+                    $updateAction = strtolower($updateAction);
+                    $this->validateForeignKeyConstraint($updateAction);
                     $foreignKeyText .= "->onUpdate('".$updateAction."')";
                 }
 
-                if (!empty($deleteAction)) {
-                    $this->validateAction($deleteAction);
+                if (isset($deleteAction) and !empty($deleteAction)) {
+                    $deleteAction =  strtolower($deleteAction);
+                    $this->validateForeignKeyConstraint($deleteAction);
                     $foreignKeyText .= "->onDelete('".$deleteAction."')";
                 }
                 $this->foreignKeyText .= $foreignKeyText.';';
@@ -165,7 +165,7 @@ class GeneratorField
         return $this->$key;
     }
 
-    public function validateAction($action)
+    public function validateForeignKeyConstraint($action)
     {
         $actions = ['cascade', 'set null', 'no action', 'restrict'];
 
