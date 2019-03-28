@@ -124,7 +124,7 @@ class GeneratorField
                 }
 
                 if (isset($deleteAction) and !empty($deleteAction)) {
-                    $deleteAction =  strtolower($deleteAction);
+                    $deleteAction = strtolower($deleteAction);
                     $this->validateForeignKeyConstraint($deleteAction);
                     $foreignKeyText .= "->onDelete('".$deleteAction."')";
                 }
