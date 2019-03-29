@@ -6,7 +6,6 @@ use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\FileUtil;
-use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
 use InfyOm\Generator\Utils\HTMLFieldGenerator;
 
 class ViewGenerator extends BaseGenerator
