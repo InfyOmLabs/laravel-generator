@@ -80,7 +80,7 @@ class RollbackGeneratorCommand extends Command
         $this->commandData = new CommandData($this, $this->argument('type'));
         $this->commandData->config->mName = $this->commandData->modelName = $this->argument('model');
 
-        $this->commandData->config->init($this->commandData, ['tableName', 'prefix']);
+        $this->commandData->config->init($this->commandData, ['tableName', 'prefix', 'plural']);
 
         $migrationGenerator = new MigrationGenerator($this->commandData);
         $migrationGenerator->rollback();
@@ -154,6 +154,7 @@ class RollbackGeneratorCommand extends Command
         return [
             ['tableName', null, InputOption::VALUE_REQUIRED, 'Table Name'],
             ['prefix', null, InputOption::VALUE_REQUIRED, 'Prefix for all files'],
+            ['plural', null, InputOption::VALUE_REQUIRED, 'Plural Model name'],
         ];
     }
 
@@ -166,7 +167,7 @@ class RollbackGeneratorCommand extends Command
     {
         return [
             ['model', InputArgument::REQUIRED, 'Singular Model name'],
-            ['type', InputArgument::REQUIRED, 'Rollback type: (api / scaffold / scaffold_api)'],
+            ['type', InputArgument::REQUIRED, 'Rollback type: (api / scaffold / api_scaffold)'],
         ];
     }
 }

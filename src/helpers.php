@@ -176,25 +176,6 @@ if (!function_exists('fill_template_with_field_data')) {
     }
 }
 
-if (!function_exists('fill_template_with_field_data')) {
-    /**
-     * fill template with field data.
-     *
-     * @param array                                   $variables
-     * @param array                                   $fieldVariables
-     * @param string                                  $template
-     * @param \InfyOm\Generator\Common\GeneratorField $field
-     *
-     * @return string
-     */
-    function fill_template_with_field_data($variables, $fieldVariables, $template, $field)
-    {
-        $template = fill_template($variables, $template);
-
-        return fill_field_template($fieldVariables, $template, $field);
-    }
-}
-
 if (!function_exists('model_name_from_table_name')) {
     /**
      * generates model name from table name.

@@ -34,6 +34,7 @@ class PublishTemplateCommand extends PublishBaseCommand
 
         if ($this->publishGeneratorTemplates()) {
             $this->publishScaffoldTemplates();
+            $this->publishSwaggerTemplates();
         }
     }
 
@@ -48,7 +49,7 @@ class PublishTemplateCommand extends PublishBaseCommand
     }
 
     /**
-     * Publishes templates.
+     * Publishes scaffold stemplates.
      */
     public function publishScaffoldTemplates()
     {
@@ -57,6 +58,16 @@ class PublishTemplateCommand extends PublishBaseCommand
         $templatesPath = base_path('vendor/infyomlabs/'.$templateType.'/templates/scaffold');
 
         return $this->publishDirectory($templatesPath, $this->templatesDir.'/scaffold', 'infyom-generator-templates/scaffold', true);
+    }
+
+    /**
+     * Publishes swagger stemplates.
+     */
+    public function publishSwaggerTemplates()
+    {
+        $templatesPath = base_path('vendor/infyomlabs/swagger-generator/templates');
+
+        return $this->publishDirectory($templatesPath, $this->templatesDir, 'swagger-generator', true);
     }
 
     /**

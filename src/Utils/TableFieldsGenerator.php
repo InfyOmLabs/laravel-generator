@@ -50,17 +50,36 @@ class TableFieldsGenerator
     /** @var GeneratorFieldRelation[] */
     public $relations;
 
-    public function __construct($tableName)
+    /** @var array */
+    public $ignoredFields;
+
+    public function __construct($tableName, $ignoredFields)
     {
         $this->tableName = $tableName;
+        $this->ignoredFields = $ignoredFields;
 
         $this->schemaManager = DB::getDoctrineSchemaManager();
         $platform = $this->schemaManager->getDatabasePlatform();
-        $platform->registerDoctrineTypeMapping('enum', 'string');
-        $platform->registerDoctrineTypeMapping('json', 'text');
-        $platform->registerDoctrineTypeMapping('bit', 'boolean');
+        $defaultMappings = [
+            'enum' => 'string',
+            'json' => 'text',
+            'bit'  => 'boolean',
+        ];
 
-        $this->columns = $this->schemaManager->listTableColumns($tableName);
+        $mappings = config('infyom.laravel_generator.from_table.doctrine_mappings', []);
+        $mappings = array_merge($mappings, $defaultMappings);
+        foreach ($mappings as $dbType => $doctrineType) {
+            $platform->registerDoctrineTypeMapping($dbType, $doctrineType);
+        }
+
+        $columns = $this->schemaManager->listTableColumns($tableName);
+
+        $this->columns = [];
+        foreach ($columns as $column) {
+            if (!in_array($column->getName(), $ignoredFields)) {
+                $this->columns[] = $column;
+            }
+        }
 
         $this->primaryKey = static::getPrimaryKeyOfTable($tableName);
         $this->timestamps = static::getTimestampFieldNames();
@@ -128,6 +147,8 @@ class TableFieldsGenerator
                 $field->inForm = false;
                 $field->inIndex = false;
             }
+            $field->isNotNull = (bool) $column->getNotNull();
+            $field->description = $column->getComment(); // get comments from table
 
             $this->fields[] = $field;
         }
@@ -496,7 +517,9 @@ class TableFieldsGenerator
 
             if ($foreignField == $tables[$foreignTable]->primaryKey) {
                 $modelName = model_name_from_table_name($foreignTable);
-                $manyToOneRelations[] = GeneratorFieldRelation::parseRelation('mt1,'.$modelName);
+                $manyToOneRelations[] = GeneratorFieldRelation::parseRelation(
+                    'mt1,'.$modelName.','.$foreignKey->localField
+                );
             }
         }
 

@@ -158,12 +158,17 @@ class ModelGenerator extends BaseGenerator
                 return 'string';
             case '1t1':
             case 'mt1':
-                return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.camel_case($relation->inputs[0]);
+                if (isset($relation->inputs[1])) {
+                    $relationName = str_replace('_id', '', strtolower($relation->inputs[1]));
+                } else {
+                    $relationName = $relation->inputs[0];
+                }
+
+                return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.camel_case($relationName);
             case '1tm':
-                return '\Illuminate\Database\Eloquent\Collection'.' '.$relation->inputs[0];
             case 'mtm':
             case 'hmt':
-                return '\Illuminate\Database\Eloquent\Collection'.' '.camel_case($relation->inputs[1]);
+                return '\Illuminate\Database\Eloquent\Collection'.' '.camel_case(str_plural($relation->inputs[0]));
             default:
                 return $db_type;
         }
@@ -230,9 +235,15 @@ class ModelGenerator extends BaseGenerator
 
     private function generateRules()
     {
+        $dont_require_fields = config('infyom.laravel_generator.options.hidden_fields', [])
+                + config('infyom.laravel_generator.options.excluded_fields', []);
+
         $rules = [];
 
         foreach ($this->commandData->fields as $field) {
+            if ($field->isNotNull && empty($field->validations) && !in_array($field->name, $dont_require_fields)) {
+                $field->validations = 'required';
+            }
             if (!empty($field->validations)) {
                 $rule = "'".$field->name."' => '".$field->validations."'";
                 $rules[] = $rule;
@@ -300,7 +311,6 @@ class ModelGenerator extends BaseGenerator
 
         foreach ($this->commandData->relations as $relation) {
             $relationText = $relation->getRelationFunctionText();
-
             if (!empty($relationText)) {
                 $relations[] = $relationText;
             }

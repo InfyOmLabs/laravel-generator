@@ -12,6 +12,7 @@ class GeneratorField
     public $htmlInput;
     public $htmlType;
     public $fieldType;
+    public $description;
 
     /** @var array */
     public $htmlValues;
@@ -27,6 +28,7 @@ class GeneratorField
     public $isPrimary = false;
     public $inForm = true;
     public $inIndex = true;
+    public $isNotNull = false;
 
     public function parseDBType($dbInput)
     {
