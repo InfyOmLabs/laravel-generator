@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Helpers;
-
 
 class HelpersTest extends \PHPUnit_Framework_TestCase
 {
