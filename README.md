@@ -8,6 +8,7 @@ InfyOm Laravel Generator
 [![Monthly Downloads](https://poser.pugx.org/infyomlabs/laravel-generator/d/monthly)](https://packagist.org/packages/infyomlabs/laravel-generator)
 [![Daily Downloads](https://poser.pugx.org/infyomlabs/laravel-generator/d/daily)](https://packagist.org/packages/infyomlabs/laravel-generator)
 [![License](https://poser.pugx.org/infyomlabs/laravel-generator/license)](https://packagist.org/packages/infyomlabs/laravel-generator)
+[![Build Status](https://travis-ci.org/InfyOmLabs/laravel-generator.svg?branch=test-cases)](https://travis-ci.org/InfyOmLabs/laravel-generator)
 
 Documentation is located [here](http://labs.infyom.com/laravelgenerator)
 
