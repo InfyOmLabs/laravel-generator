@@ -1,4 +1,6 @@
-<?php namespace Tests\Utils;
+<?php
+
+namespace Tests\Utils;
 
 use InfyOm\Generator\Utils\ResponseUtil;
 use PHPUnit_Framework_TestCase;
