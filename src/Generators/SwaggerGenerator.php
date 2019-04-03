@@ -22,60 +22,9 @@ class SwaggerGenerator
         $fieldTypes = [];
 
         foreach ($inputFields as $field) {
-            $fieldFormat = '';
-            switch (strtolower($field->fieldType)) {
-                case 'integer':
-                case 'increments':
-                case 'smallinteger':
-                case 'long':
-                case 'bigint':
-                    $fieldType = 'integer';
-                    $fieldFormat = 'int32';
-                    break;
-                case 'double':
-                    $fieldType = 'number';
-                    $fieldFormat = 'double';
-                    break;
-                case 'float':
-                case 'decimal':
-                    $fieldType = 'number';
-                    $fieldFormat = 'float';
-                    break;
-                case 'boolean':
-                    $fieldType = 'boolean';
-                    break;
-                case 'string':
-                case 'char':
-                case 'text':
-                case 'enum':
-                    $fieldType = 'string';
-                    break;
-                case 'byte':
-                    $fieldType = 'string';
-                    $fieldFormat = 'byte';
-                    break;
-                case 'binary':
-                    $fieldType = 'string';
-                    $fieldFormat = 'binary';
-                    break;
-                case 'password':
-                    $fieldType = 'string';
-                    $fieldFormat = 'password';
-                    break;
-                case 'date':
-                    $fieldType = 'string';
-                    $fieldFormat = 'date';
-                    break;
-                case 'dateTime':
-                case 'timestamp':
-                    $fieldType = 'string';
-                    $fieldFormat = 'date-time';
-                    break;
-                default:
-                    $fieldType = null;
-                    $fieldFormat = null;
-                    break;
-            }
+            $fieldData = self::getFieldType($field->fieldType);
+            $fieldType = $fieldData['fieldType'];
+            $fieldFormat = $fieldData['fieldFormat'];
 
             if (!empty($fieldType)) {
                 $fieldType = [
@@ -93,6 +42,63 @@ class SwaggerGenerator
         self::$swaggerTypes = $fieldTypes;
 
         return self::$swaggerTypes;
+    }
+
+    public static function getFieldType($type)
+    {
+        $fieldType = null;
+        $fieldFormat = null;
+        switch (strtolower($type)) {
+            case 'increments':
+            case 'integer':
+            case 'smallinteger':
+            case 'long':
+            case 'biginteger':
+                $fieldType = 'integer';
+                $fieldFormat = 'int32';
+                break;
+            case 'double':
+            case 'float':
+            case 'real':
+            case 'decimal':
+                $fieldType = 'float';
+                $fieldFormat = 'float';
+                break;
+            case 'boolean':
+                $fieldType = 'boolean';
+                break;
+            case 'string':
+            case 'char':
+            case 'text':
+            case 'mediumtext':
+            case 'longtext':
+            case 'enum':
+                $fieldType = 'string';
+                break;
+            case 'byte':
+                $fieldType = 'string';
+                $fieldFormat = 'byte';
+                break;
+            case 'binary':
+                $fieldType = 'string';
+                $fieldFormat = 'binary';
+                break;
+            case 'password':
+                $fieldType = 'string';
+                $fieldFormat = 'password';
+                break;
+            case 'date':
+                $fieldType = 'string';
+                $fieldFormat = 'date';
+                break;
+            case 'dateTime':
+            case 'timestamp':
+                $fieldType = 'string';
+                $fieldFormat = 'date-time';
+                break;
+        }
+
+        return ['fieldType' => $fieldType, 'fieldFormat' => $fieldFormat];
     }
 
     public static function generateSwagger($fields, $fillables, $variables)
