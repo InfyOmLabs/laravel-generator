@@ -18,8 +18,8 @@ class GeneratorFieldsInputUtil
     }
 
     /**
-     * @param $fieldInput
-     * @param $validations
+     * @param string $fieldInput
+     * @param string $validations
      *
      * @return GeneratorField
      */

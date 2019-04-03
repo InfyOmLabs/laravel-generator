@@ -41,7 +41,7 @@ class ViewGenerator extends BaseGenerator
         $this->generateForm();
         $this->generateShow();
         $this->generateDelete();
-        $this->commandData->commandComment('Views created: ');
+        $this->commandData->commandComment('Views created.');
     }
 
     private function generateTable()
@@ -67,7 +67,7 @@ class ViewGenerator extends BaseGenerator
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
-        if ($this->commandData->getOption('datatables')) {
+        if ($this->commandData->getAddOn('datatables')) {
             $templateData = str_replace('$PAGINATE$', '', $templateData);
         } else {
             $paginate = $this->commandData->getOption('paginate');
@@ -91,6 +91,7 @@ class ViewGenerator extends BaseGenerator
     private function generateFields()
     {
         $this->htmlFields = [];
+
         foreach ($this->commandData->fields as $field) {
             if (!$field->inForm) {
                 continue;
@@ -165,10 +166,11 @@ class ViewGenerator extends BaseGenerator
                     $fieldTemplate = '';
                     break;
             }
+            //$this->commandData->commandComment($fieldTemplate);
 
             if (!empty($fieldTemplate)) {
-                if (isset($field['validations']) && !empty($field['validations'])) {
-                    $rules = explode('|', $field['validations']);
+                if (isset($field->validations) && !empty($field->validations)) {
+                    $rules = explode('|', $field->validations);
                     foreach ($rules as $key => $rule) {
                         if ($rule == 'required') {
                             $rule .= ': true';

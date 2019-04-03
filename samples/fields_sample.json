@@ -80,7 +80,7 @@
     {
         "name": "is_private",
         "dbType": "boolean",
-        "htmlType": "checkbox:1"
+        "htmlType": "checkbox,1"
     },
     {
         "name": "writer_id",

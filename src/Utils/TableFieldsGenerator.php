@@ -148,6 +148,7 @@ class TableFieldsGenerator
                 $field->inIndex = false;
             }
             $field->isNotNull = (bool) $column->getNotNull();
+            $field->description = $column->getComment(); // get comments from table
 
             $this->fields[] = $field;
         }
@@ -516,7 +517,9 @@ class TableFieldsGenerator
 
             if ($foreignField == $tables[$foreignTable]->primaryKey) {
                 $modelName = model_name_from_table_name($foreignTable);
-                $manyToOneRelations[] = GeneratorFieldRelation::parseRelation('mt1,'.$modelName);
+                $manyToOneRelations[] = GeneratorFieldRelation::parseRelation(
+                    'mt1,'.$modelName.','.$foreignKey->localField
+                );
             }
         }
 

@@ -66,14 +66,14 @@ class VueJsGeneratorCommand extends BaseCommand
         $controllerGenerator = new ControllerGenerator($this->commandData);
         $controllerGenerator->generate();
 
-        $viewGenerator = new ViewGenerator($this->commandData);
-        $viewGenerator->generate();
-
         $modelJsConfigGenerator = new ModelJsConfigGenerator($this->commandData);
         $modelJsConfigGenerator->generate();
 
         $routeGenerator = new RoutesGenerator($this->commandData);
         $routeGenerator->generate();
+
+        $viewGenerator = new ViewGenerator($this->commandData);
+        $viewGenerator->generate();
 
         if ($this->commandData->config->getAddOn('menu.enabled')) {
             $menuGenerator = new MenuGenerator($this->commandData);
