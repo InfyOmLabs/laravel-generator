@@ -22,7 +22,7 @@
     "dbType": "boolean",
     "htmlType": "text",
     "relation": ""
-  }   ,
+  },
   {
     "name": "created_at",
     "dbType": "timestamp",
