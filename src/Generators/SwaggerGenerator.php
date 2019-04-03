@@ -53,8 +53,8 @@ class SwaggerGenerator
         $fieldType = null;
         $fieldFormat = null;
         switch (strtolower($type)) {
-            case 'integer':
             case 'increments':
+            case 'integer':
             case 'smallinteger':
             case 'long':
             case 'biginteger':
@@ -74,6 +74,8 @@ class SwaggerGenerator
             case 'string':
             case 'char':
             case 'text':
+            case 'mediumtext':
+            case 'longtext':
             case 'enum':
                 $fieldType = 'string';
                 break;
