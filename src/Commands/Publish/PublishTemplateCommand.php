@@ -57,7 +57,7 @@ class PublishTemplateCommand extends PublishBaseCommand
 
         $templatesPath = base_path('vendor/infyomlabs/'.$templateType.'/templates/scaffold');
 
-        return $this->publishDirectory($templatesPath, $this->templatesDir.'/scaffold', 'infyom-generator-templates/scaffold', true);
+        return $this->publishDirectory($templatesPath, $this->templatesDir.'scaffold', 'infyom-generator-templates/scaffold', true);
     }
 
     /**
