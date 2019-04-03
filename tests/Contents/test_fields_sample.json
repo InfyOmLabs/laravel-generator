@@ -1,0 +1,48 @@
+[
+  {
+    "name": "id",
+    "dbType": "increments",
+    "htmlType": "text",
+    "validations": "",
+    "searchable": false,
+    "fillable": false,
+    "primary": true,
+    "inForm": false,
+    "inIndex": false,
+    "description": "Prime"
+  },
+  {
+    "name": "name",
+    "dbType": "string",
+    "htmlType": "text",
+    "relation": ""
+  },
+  {
+    "name": "is_active",
+    "dbType": "boolean",
+    "htmlType": "text",
+    "relation": ""
+  }   ,
+  {
+    "name": "created_at",
+    "dbType": "timestamp",
+    "htmlType": "",
+    "validations": "",
+    "searchable": false,
+    "fillable": false,
+    "primary": false,
+    "inForm": false,
+    "inIndex": false
+  },
+  {
+    "name": "updated_at",
+    "dbType": "timestamp",
+    "htmlType": "",
+    "validations": "",
+    "searchable": false,
+    "fillable": false,
+    "primary": false,
+    "inForm": false,
+    "inIndex": false
+  }
+]

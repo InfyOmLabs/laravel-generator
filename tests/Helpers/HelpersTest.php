@@ -2,7 +2,8 @@
 
 namespace Tests\Helpers;
 
-class HelpersTest extends \PHPUnit_Framework_TestCase
+use Tests\TestCase;
+class HelpersTest extends TestCase
 {
     public function test_model_name_from_table_name()
     {

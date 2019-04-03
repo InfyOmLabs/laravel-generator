@@ -48,8 +48,11 @@ class ResponseUtilTest extends TestCase
         $root = vfsStream::setup();
 
         $expectedFile = __DIR__.'/../Contents/migration.php';
+        $fieldFile = __DIR__.'/../Contents/test_fields_sample.json';
 
-        $this->artisan('infyom:scaffold', ['model' => 'Test', '--fieldsFile' => 'C:\sample.json']);
+        $this->artisan(
+            'infyom:scaffold', ['model' => 'Test', '--fieldsFile' => $fieldFile]
+        );
 
         $migrationsDir = $root->getChild('Migrations');
         $generatedMigrationFileName = $migrationsDir->getChildren()[0]->getName();
