@@ -3,9 +3,10 @@
 namespace Tests\Utils;
 
 use InfyOm\Generator\Utils\ResponseUtil;
-use PHPUnit_Framework_TestCase;
+use org\bovigo\vfs\vfsStream;
+use Tests\TestCase;
 
-class ResponseUtilTest extends PHPUnit_Framework_TestCase
+class ResponseUtilTest extends TestCase
 {
     public function testMakeResponse()
     {
@@ -40,5 +41,22 @@ class ResponseUtilTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($response['success']);
         $this->assertEquals($message, $response['message']);
         $this->assertEquals($data, $response['data']);
+    }
+
+    public function testCreateMigrationFile()
+    {
+        $root = vfsStream::setup();
+
+        $expectedFile = __DIR__.'/../Contents/migration.php';
+
+        $this->artisan('infyom:scaffold', ['model' => 'Test', '--fieldsFile' => 'C:\sample.json']);
+
+        $migrationsDir = $root->getChild('Migrations');
+        $generatedMigrationFileName = $migrationsDir->getChildren()[0]->getName();
+
+        $generatedFileContents = file_get_contents(vfsStream::url('root/Migrations/'.$generatedMigrationFileName));
+        $expectedFileContents = file_get_contents($expectedFile);
+
+        $this->assertEquals($expectedFileContents, $generatedFileContents);
     }
 }

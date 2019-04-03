@@ -43,9 +43,9 @@ class ScaffoldGeneratorCommand extends BaseCommand
         if ($this->checkIsThereAnyDataToGenerate()) {
             $this->generateCommonItems();
 
-            $this->generateScaffoldItems();
-
-            $this->performPostActionsWithMigration();
+            //            $this->generateScaffoldItems();
+            //
+            //            $this->performPostActionsWithMigration();
         } else {
             $this->commandData->commandInfo('There are not enough input fields for scaffold generation.');
         }
