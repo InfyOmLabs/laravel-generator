@@ -1,8 +1,11 @@
-<?php namespace Tests\Generators;
+<?php
+
+namespace Tests\Generators;
 
 use InfyOm\Generator\Generators\TestTraitGenerator;
 use PHPUnit_Framework_TestCase;
 use Tests\Traits\CommonTrait;
+
 class TestTraitGeneratorTest extends PHPUnit_Framework_TestCase
 {
     use CommonTrait;
