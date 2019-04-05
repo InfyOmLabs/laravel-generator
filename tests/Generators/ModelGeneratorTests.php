@@ -5,9 +5,12 @@ namespace Tests\Generators;
 use InfyOm\Generator\Generators\ModelGenerator;
 use PHPUnit_Framework_TestCase;
 use stdClass;
+use Tests\Traits\CommonTrait;
 
 class ModelGeneratorTests extends PHPUnit_Framework_TestCase
 {
+    use CommonTrait;
+
     public function testGetPhpDocType()
     {
         // prepare properties to set into model
@@ -75,30 +78,5 @@ class ModelGeneratorTests extends PHPUnit_Framework_TestCase
 
         $response = $modelGenerator->generateRequiredFields();
         $this->assertEmpty($response);
-    }
-
-    public function mockClassExceptMethods($className, $methods)
-    {
-        return $this->getMockBuilder($className)
-            ->setMethodsExcept($methods)
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
-
-    public function prepareFields($fields)
-    {
-        $objects = [];
-        foreach ($fields as $field) {
-            $object = new stdClass();
-            foreach ($field as $key => $value) {
-                $object->$key = $value;
-            }
-            $objects[] = $object;
-        }
-
-        $fields = new stdClass();
-        $fields->fields = $objects;
-
-        return $fields;
     }
 }

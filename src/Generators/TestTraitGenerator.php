@@ -9,7 +9,7 @@ use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
 class TestTraitGenerator extends BaseGenerator
 {
     /** @var CommandData */
-    private $commandData;
+    public $commandData;
 
     /** @var string */
     private $path;
@@ -46,7 +46,7 @@ class TestTraitGenerator extends BaseGenerator
         return $templateData;
     }
 
-    private function generateFields()
+    public function generateFields()
     {
         $fields = [];
 
