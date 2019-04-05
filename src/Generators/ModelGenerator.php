@@ -20,7 +20,7 @@ class ModelGenerator extends BaseGenerator
     ];
 
     /** @var CommandData */
-    private $commandData;
+    public $commandData;
 
     /** @var string */
     private $path;
@@ -30,7 +30,7 @@ class ModelGenerator extends BaseGenerator
     /**
      * ModelGenerator constructor.
      *
-     * @param \InfyOm\Generator\Common\CommandData $commandData
+     * @param CommandData $commandData
      */
     public function __construct(CommandData $commandData)
     {
@@ -149,7 +149,7 @@ class ModelGenerator extends BaseGenerator
      *
      * @return string
      */
-    private function getPHPDocType($db_type, $relation = null)
+    public function getPHPDocType($db_type, $relation = null)
     {
         switch ($db_type) {
             case 'datetime':
