@@ -65,8 +65,8 @@ class ModelGeneratorTests extends PHPUnit_Framework_TestCase
     public function testReturnEmptyWhenAllFieldAreNonRequired()
     {
         $fields = $this->prepareFields([
-            ['name' => 'non_required_field', 'validations' => ''],
-            ['name' => 'required_field', 'validations' => ''],
+            ['name' => 'non_required_field_1', 'validations' => ''],
+            ['name' => 'non_required_field_2', 'validations' => ''],
         ]);
 
         $modelGenerator = $this->mockClassExceptMethods(ModelGenerator::class, ['generateRequiredFields']);
