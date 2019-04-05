@@ -196,7 +196,7 @@ class ModelGenerator extends BaseGenerator
         return $templateData;
     }
 
-    private function generateRequiredFields()
+    public function generateRequiredFields()
     {
         $requiredFields = [];
 

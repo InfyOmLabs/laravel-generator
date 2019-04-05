@@ -1,6 +1,7 @@
 <?php namespace Tests\Generators;
 
 use InfyOm\Generator\Generators\ModelGenerator;
+use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
 use stdClass;
 
@@ -14,16 +15,13 @@ class ModelGeneratorTests extends PHPUnit_Framework_TestCase
         $object->config->nsModel = 'App\Models';
 
         // mock model and set properties
-        $modelGenerator = $this->getMockBuilder(ModelGenerator::class)
-            ->setMethodsExcept(['getPHPDocType'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $modelGenerator = $this->mockClassExceptMethods(ModelGenerator::class, ['getPHPDocType']);
         $modelGenerator->commandData = $object;
 
         $inputs = ['datetime' => 'string|\Carbon\Carbon', 'string' => 'string'];
         foreach ($inputs as $dbType => $input) {
-            $actualOutput = $modelGenerator->getPHPDocType($dbType);
-            $this->assertEquals($input, $actualOutput);
+            $response = $modelGenerator->getPHPDocType($dbType);
+            $this->assertEquals($input, $response);
         }
 
         $relationObj = new stdClass();
@@ -36,20 +34,70 @@ class ModelGeneratorTests extends PHPUnit_Framework_TestCase
         ];
         foreach ($inputs as $expected => $dbTypes) {
             foreach ($dbTypes as $dbType) {
-                $actualOutput = $modelGenerator->getPHPDocType($dbType, $relationObj);
-                $this->assertEquals($expected, $actualOutput);
+                $response = $modelGenerator->getPHPDocType($dbType, $relationObj);
+                $this->assertEquals($expected, $response);
             }
         }
     }
 
     public function testReturnGivenTypeItSelfWhenNoMatchingTypesFound()
     {
-        $modelGenerator = $this->getMockBuilder(ModelGenerator::class)
-            ->setMethodsExcept(['getPHPDocType'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $modelGenerator = $this->mockClassExceptMethods(ModelGenerator::class, ['getPHPDocType']);
 
         $response = $modelGenerator->getPHPDocType('integer');
         $this->assertEquals('integer', $response);
+    }
+
+    public function testGenerateRequireFields()
+    {
+        $fields = $this->prepareFields([
+            ['name' => 'non_required_field', 'validations' => ''],
+            ['name' => 'required_field', 'validations' => 'required'],
+        ]);
+
+        $modelGenerator = $this->mockClassExceptMethods(ModelGenerator::class, ['generateRequiredFields']);
+        $modelGenerator->commandData = $fields;
+
+        $response = $modelGenerator->generateRequiredFields();
+        $this->assertContains('required_field', $response);
+    }
+
+    public function testReturnEmptyWhenAllFieldAreNonRequired()
+    {
+        $fields = $this->prepareFields([
+            ['name' => 'non_required_field', 'validations' => ''],
+            ['name' => 'required_field', 'validations' => ''],
+        ]);
+
+        $modelGenerator = $this->mockClassExceptMethods(ModelGenerator::class, ['generateRequiredFields']);
+        $modelGenerator->commandData = $fields;
+
+        $response = $modelGenerator->generateRequiredFields();
+        $this->assertEmpty($response);
+    }
+
+    public function mockClassExceptMethods($className, $methods)
+    {
+        return $this->getMockBuilder($className)
+            ->setMethodsExcept($methods)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    public function prepareFields($fields)
+    {
+        $objects = [];
+        foreach ($fields as $field) {
+            $object = new stdClass();
+            foreach ($field as $key => $value) {
+                $object->$key = $value;
+            }
+            $objects[] = $object;
+        }
+
+        $fields = new stdClass();
+        $fields->fields = $objects;
+
+        return $fields;
     }
 }
