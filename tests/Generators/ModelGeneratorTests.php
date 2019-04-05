@@ -1,7 +1,8 @@
-<?php namespace Tests\Generators;
+<?php
+
+namespace Tests\Generators;
 
 use InfyOm\Generator\Generators\ModelGenerator;
-use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
 use stdClass;
 
