@@ -226,6 +226,12 @@ class CommandData
             } else {
                 $fileContents = $this->getOption('jsonFromGUI');
                 $jsonData = json_decode($fileContents, true);
+
+                // override config options from jsonFromGUI
+                foreach ($jsonData['options'] as $option => $value) {
+                    $this->config->options[$option] = $value;
+                }
+
                 foreach ($jsonData['fields'] as $field) {
                     if (isset($field['type']) && $field['relation']) {
                         $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
