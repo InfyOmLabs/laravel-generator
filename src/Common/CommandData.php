@@ -228,9 +228,7 @@ class CommandData
                 $jsonData = json_decode($fileContents, true);
 
                 // override config options from jsonFromGUI
-                foreach ($jsonData['options'] as $option => $value) {
-                    $this->config->options[$option] = $value;
-                }
+                $this->config->overrideOptionsFromJsonFile($jsonData);
 
                 foreach ($jsonData['fields'] as $field) {
                     if (isset($field['type']) && $field['relation']) {
