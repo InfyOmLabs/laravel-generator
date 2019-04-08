@@ -476,6 +476,11 @@ class GeneratorConfig
         $this->options[$option] = $value;
     }
 
+    public function setAddOn($addOn, $value)
+    {
+        $this->addOns[$addOn] = $value;
+    }
+
     public function prepareAddOns()
     {
         $this->addOns['swagger'] = config('infyom.laravel_generator.add_on.swagger', false);

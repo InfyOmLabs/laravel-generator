@@ -228,11 +228,17 @@ class CommandData
                 $fileContents = $this->getOption('jsonFromGUI');
                 $jsonData = json_decode($fileContents, true);
 
+                // Manage custom table name option
                 if (isset($jsonData['tableName']) and !empty($jsonData['tableName'])) {
                     $tableName = $jsonData['tableName'];
                     $this->config->tableName = $tableName;
                     $this->addDynamicVariable('$TABLE_NAME$', $tableName);
                     $this->addDynamicVariable('$TABLE_NAME_PLURAL$', Str::title($tableName));
+                }
+
+                // Manage datatables option
+                if (isset($jsonData['options']['datatables']) && $jsonData['options']['datatables'] == true) {
+                    $this->config->setAddOn('datatables', $jsonData['options']['datatables']);
                 }
 
                 foreach ($jsonData['fields'] as $field) {
