@@ -236,9 +236,9 @@ class CommandData
                     $this->addDynamicVariable('$TABLE_NAME_PLURAL$', Str::title($tableName));
                 }
 
-                // Manage datatables option
-                if (isset($jsonData['options']['datatables']) && $jsonData['options']['datatables'] == true) {
-                    $this->config->setAddOn('datatables', $jsonData['options']['datatables']);
+                // override config add ons from jsonFromGUI
+                foreach ($jsonData['addOns'] as $addOn => $value) {
+                    $this->config->addOns[$addOn] = $value;
                 }
 
                 foreach ($jsonData['fields'] as $field) {
