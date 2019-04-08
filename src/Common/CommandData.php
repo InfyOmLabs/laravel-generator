@@ -236,11 +236,6 @@ class CommandData
                     $this->addDynamicVariable('$TABLE_NAME_PLURAL$', Str::title($tableName));
                 }
 
-                // override config add ons from jsonFromGUI
-                foreach ($jsonData['addOns'] as $addOn => $value) {
-                    $this->config->addOns[$addOn] = $value;
-                }
-
                 foreach ($jsonData['fields'] as $field) {
                     if (isset($field['type']) && $field['relation']) {
                         $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
