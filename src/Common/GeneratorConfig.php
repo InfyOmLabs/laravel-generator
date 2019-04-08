@@ -81,7 +81,7 @@ class GeneratorConfig
         'views',
         'relations',
         'plural',
-        'softDelete'
+        'softDelete',
     ];
 
     public $tableName;
