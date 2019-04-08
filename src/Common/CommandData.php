@@ -229,11 +229,16 @@ class CommandData
                 $jsonData = json_decode($fileContents, true);
 
                 // Manage custom table name option
-                if (isset($jsonData['tableName']) and !empty($jsonData['tableName'])) {
+                if (isset($jsonData['tableName'])) {
                     $tableName = $jsonData['tableName'];
                     $this->config->tableName = $tableName;
                     $this->addDynamicVariable('$TABLE_NAME$', $tableName);
                     $this->addDynamicVariable('$TABLE_NAME_PLURAL$', Str::title($tableName));
+                }
+
+                // Manage migrate option
+                if (isset($jsonData['migrate'])) {
+                    $this->config->forceMigrate = $jsonData['migrate'];
                 }
 
                 foreach ($jsonData['fields'] as $field) {
