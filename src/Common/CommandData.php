@@ -237,8 +237,8 @@ class CommandData
                 }
 
                 // Manage migrate option
-                if (isset($jsonData['migrate'])) {
-                    $this->config->forceMigrate = $jsonData['migrate'];
+                if (isset($jsonData['migrate']) && $jsonData['migrate'] == false) {
+                    $this->config->options['skip'][] = 'migration';
                 }
 
                 foreach ($jsonData['fields'] as $field) {
