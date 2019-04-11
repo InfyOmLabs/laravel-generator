@@ -233,7 +233,7 @@ class CommandData
                     $tableName = $jsonData['tableName'];
                     $this->config->tableName = $tableName;
                     $this->addDynamicVariable('$TABLE_NAME$', $tableName);
-                    $this->addDynamicVariable('$TABLE_NAME_TITLE$', Str::title($tableName));
+                    $this->addDynamicVariable('$TABLE_NAME_TITLE$', Str::studly($tableName));
                 }
 
                 // Manage migrate option
