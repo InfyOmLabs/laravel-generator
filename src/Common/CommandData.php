@@ -4,6 +4,7 @@ namespace InfyOm\Generator\Common;
 
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
 use InfyOm\Generator\Utils\TableFieldsGenerator;
 
@@ -226,6 +227,20 @@ class CommandData
             } else {
                 $fileContents = $this->getOption('jsonFromGUI');
                 $jsonData = json_decode($fileContents, true);
+
+                // Manage custom table name option
+                if (isset($jsonData['tableName'])) {
+                    $tableName = $jsonData['tableName'];
+                    $this->config->tableName = $tableName;
+                    $this->addDynamicVariable('$TABLE_NAME$', $tableName);
+                    $this->addDynamicVariable('$TABLE_NAME_TITLE$', Str::studly($tableName));
+                }
+
+                // Manage migrate option
+                if (isset($jsonData['migrate']) && $jsonData['migrate'] == false) {
+                    $this->config->options['skip'][] = 'migration';
+                }
+
                 foreach ($jsonData['fields'] as $field) {
                     if (isset($field['type']) && $field['relation']) {
                         $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);

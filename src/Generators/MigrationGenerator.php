@@ -32,7 +32,7 @@ class MigrationGenerator extends BaseGenerator
 
         $tableName = $this->commandData->dynamicVars['$TABLE_NAME$'];
 
-        $fileName = date('Y_m_d_His').'_'.'create_'.$tableName.'_table.php';
+        $fileName = date('Y_m_d_His').'_'.'create_'.strtolower($tableName).'_table.php';
 
         FileUtil::createFile($this->path, $fileName, $templateData);
 
