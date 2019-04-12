@@ -91,7 +91,7 @@ class SwaggerGenerator
                 $fieldType = 'string';
                 $fieldFormat = 'date';
                 break;
-            case 'dateTime':
+            case 'datetime':
             case 'timestamp':
                 $fieldType = 'string';
                 $fieldFormat = 'date-time';
