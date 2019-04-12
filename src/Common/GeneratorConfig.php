@@ -57,8 +57,6 @@ class GeneratorConfig
     public $mHuman;
     public $mHumanPlural;
 
-    public $forceMigrate;
-
     /* Generator Options */
     public $options;
 
@@ -81,6 +79,7 @@ class GeneratorConfig
         'views',
         'relations',
         'plural',
+        'forceMigrate',
     ];
 
     public $tableName;
