@@ -57,8 +57,6 @@ class GeneratorConfig
     public $mHuman;
     public $mHumanPlural;
 
-    public $forceMigrate;
-
     /* Generator Options */
     public $options;
 
@@ -82,6 +80,7 @@ class GeneratorConfig
         'relations',
         'plural',
         'softDelete',
+        'forceMigrate',
     ];
 
     public $tableName;
