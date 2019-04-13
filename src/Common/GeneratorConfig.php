@@ -63,6 +63,8 @@ class GeneratorConfig
     /* Prefixes */
     public $prefixes;
 
+    private $commandData;
+
     /* Command Options */
     public static $availableOptions = [
         'fieldsFile',
@@ -108,6 +110,7 @@ class GeneratorConfig
         $this->preparePrimaryName();
         $this->loadNamespaces($commandData);
         $commandData = $this->loadDynamicVariables($commandData);
+        $this->commandData = &$commandData;
     }
 
     public function loadNamespaces(CommandData &$commandData)
@@ -442,6 +445,14 @@ class GeneratorConfig
             if (isset($jsonData['options'][$option])) {
                 $this->setOption($option, $jsonData['options'][$option]);
             }
+        }
+
+        // prepare prefixes than reload namespaces, paths and dynamic variables
+        if (!empty($this->getOption('prefix'))) {
+            $this->preparePrefixes();
+            $this->loadPaths();
+            $this->loadNamespaces($this->commandData);
+            $this->loadDynamicVariables($this->commandData);
         }
 
         $addOns = ['swagger', 'tests', 'datatables'];
