@@ -79,6 +79,7 @@ class GeneratorConfig
         'views',
         'relations',
         'plural',
+        'softDelete',
         'forceMigrate',
     ];
 
