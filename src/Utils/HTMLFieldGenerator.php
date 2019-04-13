@@ -54,6 +54,9 @@ class HTMLFieldGenerator
                 }
                 $fieldTemplate = str_replace('$RADIO_BUTTONS$', implode("\n", $radioButtons), $fieldTemplate);
                 break;
+            case 'toggle-switch':
+                $fieldTemplate = get_template('scaffold.fields.toggle-switch', $templateType);
+                break;
         }
 
         return $fieldTemplate;
