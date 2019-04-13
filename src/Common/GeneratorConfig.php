@@ -57,8 +57,6 @@ class GeneratorConfig
     public $mHuman;
     public $mHumanPlural;
 
-    public $forceMigrate;
-
     /* Generator Options */
     public $options;
 
@@ -83,6 +81,8 @@ class GeneratorConfig
         'views',
         'relations',
         'plural',
+        'softDelete',
+        'forceMigrate',
     ];
 
     public $tableName;
@@ -235,6 +235,7 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$NAMESPACE_TESTS$', $this->nsTests);
 
         $commandData->addDynamicVariable('$TABLE_NAME$', $this->tableName);
+        $commandData->addDynamicVariable('$TABLE_NAME_TITLE$', Str::studly($this->tableName));
         $commandData->addDynamicVariable('$PRIMARY_KEY_NAME$', $this->primaryName);
 
         $commandData->addDynamicVariable('$MODEL_NAME$', $this->mName);
