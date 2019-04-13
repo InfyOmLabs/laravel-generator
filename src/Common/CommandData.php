@@ -228,6 +228,9 @@ class CommandData
                 $fileContents = $this->getOption('jsonFromGUI');
                 $jsonData = json_decode($fileContents, true);
 
+                // override config options from jsonFromGUI
+                $this->config->overrideOptionsFromJsonFile($jsonData);
+
                 // Manage custom table name option
                 if (isset($jsonData['tableName'])) {
                     $tableName = $jsonData['tableName'];
