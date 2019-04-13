@@ -135,7 +135,7 @@ class BaseCommand extends Command
             $this->saveSchemaFile();
         }
 
-        if ($runMigration) {
+        if ($runMigration && !$this->isSkip('forceMigrate')) {
             if ($this->commandData->getOption('forceMigrate')) {
                 $this->call('migrate');
             } elseif (!$this->commandData->getOption('fromTable') and !$this->isSkip('migration')) {
