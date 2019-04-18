@@ -154,8 +154,6 @@ class ModelGenerator extends BaseGenerator
         switch ($db_type) {
             case 'datetime':
                 return 'string|\Carbon\Carbon';
-            case 'text':
-                return 'string';
             case '1t1':
             case 'mt1':
                 if (isset($relation->inputs[1])) {
@@ -170,6 +168,11 @@ class ModelGenerator extends BaseGenerator
             case 'hmt':
                 return '\Illuminate\Database\Eloquent\Collection'.' '.camel_case(str_plural($relation->inputs[0]));
             default:
+                $fieldData = SwaggerGenerator::getFieldType($db_type);
+                if (!empty($fieldData['fieldType'])) {
+                    return $fieldData['fieldType'];
+                }
+
                 return $db_type;
         }
     }
@@ -266,21 +269,26 @@ class ModelGenerator extends BaseGenerator
 
             $rule = "'".$field->name."' => ";
 
-            switch ($field->fieldType) {
+            switch (strtolower($field->fieldType)) {
                 case 'integer':
+                case 'increments':
+                case 'smallinteger':
+                case 'long':
+                case 'biginteger':
                     $rule .= "'integer'";
                     break;
                 case 'double':
                     $rule .= "'double'";
                     break;
                 case 'float':
+                case 'decimal':
                     $rule .= "'float'";
                     break;
                 case 'boolean':
                     $rule .= "'boolean'";
                     break;
-                case 'dateTime':
-                case 'dateTimeTz':
+                case 'datetime':
+                case 'datetimetz':
                     $rule .= "'datetime'";
                     break;
                 case 'date':

@@ -3,7 +3,7 @@
 namespace $NAMESPACE_REPOSITORY$;
 
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
-use $NAMESPACE_REPOSITORY$\BaseRepository;
+use $NAMESPACE_APP$\Repositories\BaseRepository;
 
 $DOCS$
 class $MODEL_NAME$Repository extends BaseRepository

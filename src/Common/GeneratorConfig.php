@@ -57,13 +57,13 @@ class GeneratorConfig
     public $mHuman;
     public $mHumanPlural;
 
-    public $forceMigrate;
-
     /* Generator Options */
     public $options;
 
     /* Prefixes */
     public $prefixes;
+
+    private $commandData;
 
     /* Command Options */
     public static $availableOptions = [
@@ -81,6 +81,8 @@ class GeneratorConfig
         'views',
         'relations',
         'plural',
+        'softDelete',
+        'forceMigrate',
     ];
 
     public $tableName;
@@ -108,6 +110,7 @@ class GeneratorConfig
         $this->preparePrimaryName();
         $this->loadNamespaces($commandData);
         $commandData = $this->loadDynamicVariables($commandData);
+        $this->commandData = &$commandData;
     }
 
     public function loadNamespaces(CommandData &$commandData)
@@ -232,6 +235,7 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$NAMESPACE_TESTS$', $this->nsTests);
 
         $commandData->addDynamicVariable('$TABLE_NAME$', $this->tableName);
+        $commandData->addDynamicVariable('$TABLE_NAME_TITLE$', Str::studly($this->tableName));
         $commandData->addDynamicVariable('$PRIMARY_KEY_NAME$', $this->primaryName);
 
         $commandData->addDynamicVariable('$MODEL_NAME$', $this->mName);
@@ -441,6 +445,14 @@ class GeneratorConfig
             if (isset($jsonData['options'][$option])) {
                 $this->setOption($option, $jsonData['options'][$option]);
             }
+        }
+
+        // prepare prefixes than reload namespaces, paths and dynamic variables
+        if (!empty($this->getOption('prefix'))) {
+            $this->preparePrefixes();
+            $this->loadPaths();
+            $this->loadNamespaces($this->commandData);
+            $this->loadDynamicVariables($this->commandData);
         }
 
         $addOns = ['swagger', 'tests', 'datatables'];
