@@ -19,22 +19,23 @@ class ModelGeneratorTests extends PHPUnit_Framework_TestCase
         $object->config->nsModel = 'App\Models';
 
         // mock model and set properties
+        /** @var ModelGenerator $modelGenerator */
         $modelGenerator = $this->mockClassExceptMethods(ModelGenerator::class, ['getPHPDocType']);
         $modelGenerator->commandData = $object;
 
         $inputs = ['datetime' => 'string|\Carbon\Carbon', 'string' => 'string'];
-        foreach ($inputs as $dbType => $input) {
+        foreach ($inputs as $dbType => $expected) {
             $response = $modelGenerator->getPHPDocType($dbType);
-            $this->assertEquals($input, $response);
+            $this->assertEquals($expected, $response);
         }
 
         $relationObj = new stdClass();
-        $relationObj->inputs[0] = 'ModelName';
-        $relationObj->inputs[1] = 'relation_id';
+        $relationObj->inputs[0] = 'Business'; // model name
+        $relationObj->inputs[1] = 'business_id'; // foreign key
 
         $inputs = [
-            '\App\Models\ModelName relation'                      => ['1t1', 'mt1'],
-            '\Illuminate\Database\Eloquent\Collection modelNames' => ['1tm', 'mtm', 'hmt'],
+            '\App\Models\Business business'                       => ['1t1', 'mt1'],
+            '\Illuminate\Database\Eloquent\Collection businesses' => ['1tm', 'mtm', 'hmt'],
         ];
         foreach ($inputs as $expected => $dbTypes) {
             foreach ($dbTypes as $dbType) {
@@ -46,6 +47,7 @@ class ModelGeneratorTests extends PHPUnit_Framework_TestCase
 
     public function testReturnGivenTypeItSelfWhenNoMatchingTypesFound()
     {
+        /** @var ModelGenerator $modelGenerator */
         $modelGenerator = $this->mockClassExceptMethods(ModelGenerator::class, ['getPHPDocType']);
 
         $response = $modelGenerator->getPHPDocType('integer');
@@ -55,24 +57,27 @@ class ModelGeneratorTests extends PHPUnit_Framework_TestCase
     public function testGenerateRequireFields()
     {
         $fields = $this->prepareFields([
-            ['name' => 'non_required_field', 'validations' => ''],
-            ['name' => 'required_field', 'validations' => 'required'],
+            ['name' => 'business_id', 'validations' => ''], // optional field
+            ['name' => 'location_id', 'validations' => 'required'], // required field should return
         ]);
 
+        /** @var ModelGenerator $modelGenerator */
         $modelGenerator = $this->mockClassExceptMethods(ModelGenerator::class, ['generateRequiredFields']);
         $modelGenerator->commandData = $fields;
 
         $response = $modelGenerator->generateRequiredFields();
-        $this->assertContains('required_field', $response);
+        $this->assertContains('location_id', $response);
     }
 
     public function testReturnEmptyWhenAllFieldAreNonRequired()
     {
+        // both fields are optional
         $fields = $this->prepareFields([
-            ['name' => 'non_required_field_1', 'validations' => ''],
-            ['name' => 'non_required_field_2', 'validations' => ''],
+            ['name' => 'business_id', 'validations' => ''],
+            ['name' => 'location_id', 'validations' => ''],
         ]);
 
+        /** @var ModelGenerator $modelGenerator */
         $modelGenerator = $this->mockClassExceptMethods(ModelGenerator::class, ['generateRequiredFields']);
         $modelGenerator->commandData = $fields;
 

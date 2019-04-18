@@ -17,12 +17,8 @@ trait CommonTrait
     public function prepareFields($fields)
     {
         $objects = [];
-        foreach ($fields as $field) {
-            $object = new stdClass();
-            foreach ($field as $key => $value) {
-                $object->$key = $value;
-            }
-            $objects[] = $object;
+        foreach ($fields as $field) { // $field should contain array e.g [property1 => value, property2 => value, ....]
+            $objects[] = (object) $field; // convert array to object
         }
 
         $fields = new stdClass();
