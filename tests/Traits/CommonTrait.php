@@ -1,4 +1,6 @@
-<?php namespace Tests\Traits;
+<?php
+
+namespace Tests\Traits;
 
 use stdClass;
 
