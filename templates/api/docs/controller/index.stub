@@ -3,5 +3,9 @@
      * GET|HEAD /$MODEL_NAME_PLURAL_CAMEL$
      *
      * @param Request $request
+     * @param $page page number, value could be 'none' to remove pagination or page number
+     * @param $offset number of items per page, value numeric
+     * @param $limit limits of number of items, value numeric , when page equal 'none' to make custom pagination
+     * @param $skip number of skips, value numeric, when page equal 'none' to make custom pagination
      * @return Response
      */
