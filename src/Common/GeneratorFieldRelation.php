@@ -28,7 +28,7 @@ class GeneratorFieldRelation
     public function getRelationFunctionText()
     {
         $singularRelation = (!empty($this->relationName)) ? $this->relationName : camel_case($this->inputs[0]);
-        $pluralRelation = (!empty($singularRelation)) ? $this->relationName : camel_case(str_plural($this->inputs[0]));
+        $pluralRelation = (!empty($this->relationName)) ? $this->relationName : camel_case(str_plural($this->inputs[0]));
 
         switch ($this->type) {
             case '1t1':
