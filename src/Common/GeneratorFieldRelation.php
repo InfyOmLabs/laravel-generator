@@ -44,7 +44,7 @@ class GeneratorFieldRelation
             case 'mt1':
                 if (!empty($this->relationName)) {
                     $singularRelation = $this->relationName;
-                } else if (isset($this->inputs[1])) {
+                } elseif (isset($this->inputs[1])) {
                     $singularRelation = camel_case(str_replace('_id', '', strtolower($this->inputs[1])));
                 }
                 $functionName = $singularRelation;
