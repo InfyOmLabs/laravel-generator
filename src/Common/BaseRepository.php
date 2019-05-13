@@ -24,8 +24,9 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
         $this->skipPresenter($temporarySkipPresenter);
 
         $model = $this->updateRelations($model, $attributes);
-        $model->save();
-
+        $model->withoutEvents(function () use ($model) {
+            $model->save();
+        });
         return $this->parserResult($model);
     }
 
@@ -38,7 +39,9 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
         $this->skipPresenter($temporarySkipPresenter);
 
         $model = $this->updateRelations($model, $attributes);
-        $model->save();
+        $model->withoutEvents(function () use ($model) {
+            $model->save();
+        });
 
         return $this->parserResult($model);
     }
