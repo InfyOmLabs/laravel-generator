@@ -139,9 +139,10 @@ class BaseCommand extends Command
             if ($this->commandData->getOption('forceMigrate')) {
                 $this->call('migrate');
             } elseif (!$this->commandData->getOption('fromTable') and !$this->isSkip('migration')) {
-                if ($this->commandData->getOption('jsonFromGUI')) {
+                $requestFromConsole = (php_sapi_name() == 'cli') ? true : false;
+                if ($this->commandData->getOption('jsonFromGUI') && $requestFromConsole) {
                     $this->call('migrate');
-                } elseif ($this->confirm("\nDo you want to migrate database? [y|N]", false)) {
+                } elseif ($requestFromConsole && $this->confirm("\nDo you want to migrate database? [y|N]", false)) {
                     $this->call('migrate');
                 }
             }
