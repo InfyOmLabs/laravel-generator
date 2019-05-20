@@ -7,6 +7,7 @@ class GeneratorFieldRelation
     /** @var string */
     public $type;
     public $inputs;
+    public $relationName;
 
     public static function parseRelation($relationInput)
     {
@@ -14,40 +15,49 @@ class GeneratorFieldRelation
 
         $relation = new self();
         $relation->type = array_shift($inputs);
-        $relation->inputs = $inputs;
+        $modelWithRelation = explode(':', array_shift($inputs)); //e.g ModelName:relationName
+        if (count($modelWithRelation) == 2) {
+            $relation->relationName = $modelWithRelation[1];
+            unset($modelWithRelation[1]);
+        }
+        $relation->inputs = array_merge($modelWithRelation, $inputs);
 
         return $relation;
     }
 
     public function getRelationFunctionText()
     {
-        $modelName = $this->inputs[0];
+        $singularRelation = (!empty($this->relationName)) ? $this->relationName : camel_case($this->inputs[0]);
+        $pluralRelation = (!empty($this->relationName)) ? $this->relationName : camel_case(str_plural($this->inputs[0]));
+
         switch ($this->type) {
             case '1t1':
-                $functionName = camel_case($modelName);
+                $functionName = $singularRelation;
                 $relation = 'hasOne';
                 $relationClass = 'HasOne';
                 break;
             case '1tm':
-                $functionName = camel_case(str_plural($modelName));
+                $functionName = $pluralRelation;
                 $relation = 'hasMany';
                 $relationClass = 'HasMany';
                 break;
             case 'mt1':
-                if (isset($this->inputs[1])) {
-                    $modelName = str_replace('_id', '', strtolower($this->inputs[1]));
+                if (!empty($this->relationName)) {
+                    $singularRelation = $this->relationName;
+                } elseif (isset($this->inputs[1])) {
+                    $singularRelation = camel_case(str_replace('_id', '', strtolower($this->inputs[1])));
                 }
-                $functionName = camel_case($modelName);
+                $functionName = $singularRelation;
                 $relation = 'belongsTo';
                 $relationClass = 'BelongsTo';
                 break;
             case 'mtm':
-                $functionName = camel_case(str_plural($modelName));
+                $functionName = $pluralRelation;
                 $relation = 'belongsToMany';
                 $relationClass = 'BelongsToMany';
                 break;
             case 'hmt':
-                $functionName = camel_case(str_plural($modelName));
+                $functionName = $pluralRelation;
                 $relation = 'hasManyThrough';
                 $relationClass = 'HasManyThrough';
                 break;
