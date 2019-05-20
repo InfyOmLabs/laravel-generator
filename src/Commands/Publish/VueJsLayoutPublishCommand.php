@@ -2,8 +2,8 @@
 
 namespace InfyOm\Generator\Commands\Publish;
 
-use InfyOm\Generator\Utils\FileUtil;
 use Illuminate\Support\Str;
+use InfyOm\Generator\Utils\FileUtil;
 
 class VueJsLayoutPublishCommand extends PublishBaseCommand
 {
