@@ -21,6 +21,7 @@ use InfyOm\Generator\Generators\TestTraitGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
+use Illuminate\Support\Str;
 
 class BaseCommand extends Command
 {
@@ -137,13 +138,13 @@ class BaseCommand extends Command
 
         if ($runMigration) {
             if ($this->commandData->getOption('forceMigrate')) {
-                $this->call('migrate');
+                $this->runMigration();
             } elseif (!$this->commandData->getOption('fromTable') and !$this->isSkip('migration')) {
                 $requestFromConsole = (php_sapi_name() == 'cli') ? true : false;
                 if ($this->commandData->getOption('jsonFromGUI') && $requestFromConsole) {
-                    $this->call('migrate');
+                    $this->runMigration();
                 } elseif ($requestFromConsole && $this->confirm("\nDo you want to migrate database? [y|N]", false)) {
-                    $this->call('migrate');
+                    $this->runMigration();
                 }
             }
         }
@@ -151,6 +152,15 @@ class BaseCommand extends Command
             $this->info('Generating autoload files');
             $this->composer->dumpOptimized();
         }
+    }
+
+    public function runMigration()
+    {
+        $migrationPath = config('infyom.laravel_generator.path.migration', 'database/migrations/');
+        $path = Str::after($migrationPath, base_path()); // get path after base_path
+        $this->call('migrate', ['--path' => $path, '--force' => true]);
+
+        return true;
     }
 
     public function isSkip($skip)
