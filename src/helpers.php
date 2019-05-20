@@ -1,4 +1,6 @@
 <?php
+use Illuminate\Support\Str;
+use InfyOm\Generator\Common\GeneratorField;
 
 if (!function_exists('infy_tab')) {
     /**
@@ -143,7 +145,7 @@ if (!function_exists('fill_field_template')) {
      *
      * @param array                                   $variables
      * @param string                                  $template
-     * @param \InfyOm\Generator\Common\GeneratorField $field
+     * @param GeneratorField $field
      *
      * @return string
      */
@@ -164,7 +166,7 @@ if (!function_exists('fill_template_with_field_data')) {
      * @param array                                   $variables
      * @param array                                   $fieldVariables
      * @param string                                  $template
-     * @param \InfyOm\Generator\Common\GeneratorField $field
+     * @param GeneratorField $field
      *
      * @return string
      */
@@ -186,6 +188,6 @@ if (!function_exists('model_name_from_table_name')) {
      */
     function model_name_from_table_name($tableName)
     {
-        return ucfirst(camel_case(str_singular($tableName)));
+        return Str::ucfirst(Str::camel(Str::singular($tableName)));
     }
 }

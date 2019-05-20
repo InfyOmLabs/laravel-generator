@@ -5,6 +5,7 @@ namespace InfyOm\Generator\Request;
 use Illuminate\Foundation\Http\FormRequest;
 use InfyOm\Generator\Utils\ResponseUtil;
 use Response;
+use Illuminate\Support\Arr;
 
 class APIRequest extends FormRequest
 {
@@ -17,7 +18,7 @@ class APIRequest extends FormRequest
      */
     public function response(array $errors)
     {
-        $messages = implode(' ', array_flatten($errors));
+        $messages = implode(' ', Arr::flatten($errors));
 
         return Response::json(ResponseUtil::makeError($messages), 400);
     }

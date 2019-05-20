@@ -324,8 +324,8 @@ class GeneratorConfig
         $this->mDashedPlural = str_replace('_', '-', Str::snake($this->mSnakePlural));
         $this->mSlash = str_replace('_', '/', Str::snake($this->mSnake));
         $this->mSlashPlural = str_replace('_', '/', Str::snake($this->mSnakePlural));
-        $this->mHuman = title_case(str_replace('_', ' ', Str::snake($this->mSnake)));
-        $this->mHumanPlural = title_case(str_replace('_', ' ', Str::snake($this->mSnakePlural)));
+        $this->mHuman = Str::title(str_replace('_', ' ', Str::snake($this->mSnake)));
+        $this->mHumanPlural = Str::title(str_replace('_', ' ', Str::snake($this->mSnakePlural)));
     }
 
     public function prepareOptions(CommandData &$commandData)

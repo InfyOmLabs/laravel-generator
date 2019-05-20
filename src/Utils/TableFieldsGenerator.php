@@ -3,8 +3,11 @@
 namespace InfyOm\Generator\Utils;
 
 use DB;
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use Doctrine\DBAL\Schema\Column;
 use InfyOm\Generator\Common\GeneratorField;
 use InfyOm\Generator\Common\GeneratorFieldRelation;
+use Illuminate\Support\Str;
 
 class GeneratorForeignKey
 {
@@ -38,10 +41,10 @@ class TableFieldsGenerator
     /** @var array */
     public $timestamps;
 
-    /** @var \Doctrine\DBAL\Schema\AbstractSchemaManager */
+    /** @var AbstractSchemaManager */
     private $schemaManager;
 
-    /** @var \Doctrine\DBAL\Schema\Column[] */
+    /** @var Column[] */
     private $columns;
 
     /** @var GeneratorField[] */
@@ -105,7 +108,7 @@ class TableFieldsGenerator
                     $field = $this->generateIntFieldInput($column, 'bigInteger');
                     break;
                 case 'boolean':
-                    $name = title_case(str_replace('_', ' ', $column->getName()));
+                    $name = Str::title(str_replace('_', ' ', $column->getName()));
                     $field = $this->generateField($column, 'boolean', 'checkbox,1');
                     break;
                 case 'datetime':
@@ -191,7 +194,7 @@ class TableFieldsGenerator
      * Generates integer text field for database.
      *
      * @param string                       $dbType
-     * @param \Doctrine\DBAL\Schema\Column $column
+     * @param Column $column
      *
      * @return GeneratorField
      */
@@ -238,7 +241,7 @@ class TableFieldsGenerator
     /**
      * Generates field.
      *
-     * @param \Doctrine\DBAL\Schema\Column $column
+     * @param Column $column
      * @param $dbType
      * @param $htmlType
      *
@@ -257,7 +260,7 @@ class TableFieldsGenerator
     /**
      * Generates number field.
      *
-     * @param \Doctrine\DBAL\Schema\Column $column
+     * @param Column $column
      * @param string                       $dbType
      *
      * @return GeneratorField
