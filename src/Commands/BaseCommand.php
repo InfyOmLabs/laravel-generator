@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\API\APIControllerGenerator;
 use InfyOm\Generator\Generators\API\APIRequestGenerator;
@@ -21,7 +22,6 @@ use InfyOm\Generator\Generators\TestTraitGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use Illuminate\Support\Str;
 
 class BaseCommand extends Command
 {
