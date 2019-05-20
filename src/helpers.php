@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Str;
 use InfyOm\Generator\Common\GeneratorField;
 
@@ -124,7 +125,7 @@ if (!function_exists('fill_template')) {
     /**
      * fill template with variable values.
      *
-     * @param array $variables
+     * @param array  $variables
      * @param string $template
      *
      * @return string
@@ -143,8 +144,8 @@ if (!function_exists('fill_field_template')) {
     /**
      * fill field template with variable values.
      *
-     * @param array $variables
-     * @param string $template
+     * @param array          $variables
+     * @param string         $template
      * @param GeneratorField $field
      *
      * @return string
@@ -163,9 +164,9 @@ if (!function_exists('fill_template_with_field_data')) {
     /**
      * fill template with field data.
      *
-     * @param array $variables
-     * @param array $fieldVariables
-     * @param string $template
+     * @param array          $variables
+     * @param array          $fieldVariables
+     * @param string         $template
      * @param GeneratorField $field
      *
      * @return string

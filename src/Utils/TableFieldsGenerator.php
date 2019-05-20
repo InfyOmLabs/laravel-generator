@@ -5,9 +5,9 @@ namespace InfyOm\Generator\Utils;
 use DB;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Column;
+use Illuminate\Support\Str;
 use InfyOm\Generator\Common\GeneratorField;
 use InfyOm\Generator\Common\GeneratorFieldRelation;
-use Illuminate\Support\Str;
 
 class GeneratorForeignKey
 {
@@ -390,9 +390,9 @@ class TableFieldsGenerator
      * Also one is from model table and one is from diff table.
      *
      * @param GeneratorTable[] $tables
-     * @param string $tableName
-     * @param GeneratorTable $modelTable
-     * @param string $modelTableName
+     * @param string           $tableName
+     * @param GeneratorTable   $modelTable
+     * @param string           $modelTableName
      *
      * @return bool|GeneratorFieldRelation
      */
@@ -456,9 +456,9 @@ class TableFieldsGenerator
      * If foreign key of table is primary key of foreign table
      * Also foreign key field is primary key of this table.
      *
-     * @param string $primaryKey
+     * @param string              $primaryKey
      * @param GeneratorForeignKey $foreignKey
-     * @param string $modelTablePrimary
+     * @param string              $modelTablePrimary
      *
      * @return bool
      */
@@ -478,9 +478,9 @@ class TableFieldsGenerator
      * If foreign key of table is primary key of foreign table
      * Also foreign key field is not primary key of this table.
      *
-     * @param string $primaryKey
+     * @param string              $primaryKey
      * @param GeneratorForeignKey $foreignKey
-     * @param string $modelTablePrimary
+     * @param string              $modelTablePrimary
      *
      * @return bool
      */
@@ -500,7 +500,7 @@ class TableFieldsGenerator
      * If foreign key of model table is primary key of foreign table.
      *
      * @param GeneratorTable[] $tables
-     * @param GeneratorTable $modelTable
+     * @param GeneratorTable   $modelTable
      *
      * @return array
      */
