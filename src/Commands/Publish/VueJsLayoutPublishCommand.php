@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Commands\Publish;
 
+use Illuminate\Support\Str;
 use InfyOm\Generator\Utils\FileUtil;
 
 class VueJsLayoutPublishCommand extends PublishBaseCommand
@@ -35,7 +36,7 @@ class VueJsLayoutPublishCommand extends PublishBaseCommand
     public function handle()
     {
         $version = $this->getApplication()->getVersion();
-        if (str_contains($version, '5.1')) {
+        if (Str::contains($version, '5.1')) {
             $this->laravelVersion = '5.1';
         } else {
             $this->laravelVersion = '5.2';

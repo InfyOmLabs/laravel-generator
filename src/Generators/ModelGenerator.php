@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Generators;
 
+use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Common\GeneratorFieldRelation;
 use InfyOm\Generator\Utils\FileUtil;
@@ -30,7 +31,7 @@ class ModelGenerator extends BaseGenerator
     /**
      * ModelGenerator constructor.
      *
-     * @param \InfyOm\Generator\Common\CommandData $commandData
+     * @param CommandData $commandData
      */
     public function __construct(CommandData $commandData)
     {
@@ -155,7 +156,7 @@ class ModelGenerator extends BaseGenerator
             case 'datetime':
                 return 'string|\Carbon\Carbon';
             case '1t1':
-                return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.camel_case($relation->inputs[0]);
+                return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.Str::camel($relation->inputs[0]);
             case 'mt1':
                 if (isset($relation->inputs[1])) {
                     $relationName = str_replace('_id', '', strtolower($relation->inputs[1]));
@@ -163,11 +164,11 @@ class ModelGenerator extends BaseGenerator
                     $relationName = $relation->inputs[0];
                 }
 
-                return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.camel_case($relationName);
+                return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.Str::camel($relationName);
             case '1tm':
             case 'mtm':
             case 'hmt':
-                return '\Illuminate\Database\Eloquent\Collection'.' '.camel_case(str_plural($relation->inputs[0]));
+                return '\Illuminate\Database\Eloquent\Collection'.' '.Str::camel(Str::plural($relation->inputs[0]));
             default:
                 $fieldData = SwaggerGenerator::getFieldType($db_type);
                 if (!empty($fieldData['fieldType'])) {
@@ -206,7 +207,7 @@ class ModelGenerator extends BaseGenerator
 
         foreach ($this->commandData->fields as $field) {
             if (!empty($field->validations)) {
-                if (str_contains($field->validations, 'required')) {
+                if (Str::contains($field->validations, 'required')) {
                     $requiredFields[] = $field->name;
                 }
             }
