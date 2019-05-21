@@ -2,6 +2,8 @@
 
 namespace InfyOm\Generator\Common;
 
+use Illuminate\Support\Str;
+
 class GeneratorFieldRelation
 {
     /** @var string */
@@ -27,8 +29,8 @@ class GeneratorFieldRelation
 
     public function getRelationFunctionText()
     {
-        $singularRelation = (!empty($this->relationName)) ? $this->relationName : camel_case($this->inputs[0]);
-        $pluralRelation = (!empty($this->relationName)) ? $this->relationName : camel_case(str_plural($this->inputs[0]));
+        $singularRelation = (!empty($this->relationName)) ? $this->relationName : Str::camel($this->inputs[0]);
+        $pluralRelation = (!empty($this->relationName)) ? $this->relationName : Str::camel(Str::plural($this->inputs[0]));
 
         switch ($this->type) {
             case '1t1':
@@ -45,7 +47,7 @@ class GeneratorFieldRelation
                 if (!empty($this->relationName)) {
                     $singularRelation = $this->relationName;
                 } elseif (isset($this->inputs[1])) {
-                    $singularRelation = camel_case(str_replace('_id', '', strtolower($this->inputs[1])));
+                    $singularRelation = Str::camel(str_replace('_id', '', strtolower($this->inputs[1])));
                 }
                 $functionName = $singularRelation;
                 $relation = 'belongsTo';
