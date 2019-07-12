@@ -210,7 +210,7 @@ class BaseCommand extends Command
         if (file_exists($path.$fileName) && !$this->confirmOverwrite($fileName)) {
             return;
         }
-        FileUtil::createFile($path, $fileName, json_encode($fileFields, JSON_PRETTY_PRINT));
+        FileUtil::createFile($path, $fileName, json_encode($fileFields, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
         $this->commandData->commandComment("\nSchema File saved: ");
         $this->commandData->commandInfo($fileName);
     }
