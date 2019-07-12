@@ -15,7 +15,7 @@ use InfyOm\Generator\Generators\RepositoryGenerator;
 use InfyOm\Generator\Generators\RepositoryTestGenerator;
 use InfyOm\Generator\Generators\Scaffold\ControllerGenerator;
 use InfyOm\Generator\Generators\Scaffold\MenuGenerator;
-use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
+use InfyOm\Generator\Generators\Scaffold\RequestMergeGenerator;
 use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
 use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
 use InfyOm\Generator\Generators\TestTraitGenerator;
@@ -105,7 +105,7 @@ class BaseCommand extends Command
     public function generateScaffoldItems()
     {
         if (!$this->isSkip('requests') and !$this->isSkip('scaffold_requests')) {
-            $requestGenerator = new RequestGenerator($this->commandData);
+            $requestGenerator = new RequestMergeGenerator($this->commandData);
             $requestGenerator->generate();
         }
 
