@@ -205,7 +205,7 @@ class BaseCommand extends Command
 
         $path = config('infyom.laravel_generator.path.schema_files', base_path('resources/model_schemas/'));
 
-        $fileName = $this->commandData->modelName.'.json';
+        $fileName = $this->commandData->getOption('tableName').'.json';
 
         if (file_exists($path.$fileName) && !$this->confirmOverwrite($fileName)) {
             return;
