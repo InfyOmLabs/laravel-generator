@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Generators;
 
 use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Common\GeneratorFieldRelation;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\TableFieldsGenerator;
 
@@ -123,7 +124,18 @@ class ModelGenerator extends BaseGenerator
         } else {
             $docsTemplate = get_template('docs.model', 'laravel-generator');
             $docsTemplate = fill_template($this->commandData->dynamicVars, $docsTemplate);
+
+            $fillables = '';
+            foreach ($this->commandData->relations as $relation) {
+                $fillables .= ' * @property '.$this->getPHPDocType($relation->type, $relation).PHP_EOL;
+            }
+            foreach ($this->commandData->fields as $field) {
+                if ($field->isFillable) {
+                    $fillables .= ' * @property '.$this->getPHPDocType($field->fieldType).' '.$field->name.PHP_EOL;
+                }
+            }
             $docsTemplate = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $docsTemplate);
+            $docsTemplate = str_replace('$PHPDOC$', $fillables, $docsTemplate);
 
             $templateData = str_replace('$DOCS$', $docsTemplate, $templateData);
         }
@@ -131,18 +143,44 @@ class ModelGenerator extends BaseGenerator
         return $templateData;
     }
 
+    /**
+     * @param $db_type
+     * @param GeneratorFieldRelation|null $relation
+     *
+     * @return string
+     */
+    private function getPHPDocType($db_type, $relation = null)
+    {
+        switch ($db_type) {
+            case 'datetime':
+                return 'string|\Carbon\Carbon';
+            case 'text':
+                return 'string';
+            case '1t1':
+            case 'mt1':
+                return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.camel_case($relation->inputs[0]);
+            case '1tm':
+                return '\Illuminate\Database\Eloquent\Collection'.' '.$relation->inputs[0];
+            case 'mtm':
+            case 'hmt':
+                return '\Illuminate\Database\Eloquent\Collection'.' '.camel_case($relation->inputs[1]);
+            default:
+                return $db_type;
+        }
+    }
+
     public function generateSwagger($templateData)
     {
         $fieldTypes = SwaggerGenerator::generateTypes($this->commandData->fields);
 
-        $template = get_template('model.model', 'swagger-generator');
+        $template = get_template('model_docs.model', 'swagger-generator');
 
         $template = fill_template($this->commandData->dynamicVars, $template);
 
         $template = str_replace('$REQUIRED_FIELDS$',
             '"'.implode('"'.', '.'"', $this->generateRequiredFields()).'"', $template);
 
-        $propertyTemplate = get_template('model.property', 'swagger-generator');
+        $propertyTemplate = get_template('model_docs.property', 'swagger-generator');
 
         $properties = SwaggerGenerator::preparePropertyFields($propertyTemplate, $fieldTypes);
 

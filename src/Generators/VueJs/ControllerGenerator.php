@@ -71,7 +71,7 @@ class ControllerGenerator extends BaseGenerator
         $methods = ['controller', 'index', 'store', 'show', 'update', 'destroy'];
 
         if ($this->commandData->getAddOn('swagger')) {
-            $templatePrefix = 'controller';
+            $templatePrefix = 'controller_docs';
             $templateType = 'swagger-generator';
         } else {
             $templatePrefix = 'api.docs.controller';

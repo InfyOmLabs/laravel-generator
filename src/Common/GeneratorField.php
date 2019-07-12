@@ -89,8 +89,17 @@ class GeneratorField
         $this->fieldType = array_shift($fieldTypeParams);
         $this->migrationText .= $this->fieldType."('".$this->name."'";
 
-        foreach ($fieldTypeParams as $param) {
-            $this->migrationText .= ', '.$param;
+        if ($this->fieldType == 'enum') {
+            $this->migrationText .= ', [';
+            foreach ($fieldTypeParams as $param) {
+                $this->migrationText .= "'".$param."',";
+            }
+            $this->migrationText = substr($this->migrationText, 0, strlen($this->migrationText) - 1);
+            $this->migrationText .= ']';
+        } else {
+            foreach ($fieldTypeParams as $param) {
+                $this->migrationText .= ', '.$param;
+            }
         }
 
         $this->migrationText .= ')';

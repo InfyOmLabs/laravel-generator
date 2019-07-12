@@ -39,6 +39,12 @@ class RepositoryGenerator extends BaseGenerator
 
         $templateData = str_replace('$FIELDS$', implode(','.infy_nl_tab(1, 2), $searchables), $templateData);
 
+        $docsTemplate = get_template('docs.repository', 'laravel-generator');
+        $docsTemplate = fill_template($this->commandData->dynamicVars, $docsTemplate);
+        $docsTemplate = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $docsTemplate);
+
+        $templateData = str_replace('$DOCS$', $docsTemplate, $templateData);
+
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
         $this->commandData->commandComment("\nRepository created: ");

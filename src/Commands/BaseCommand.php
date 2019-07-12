@@ -185,7 +185,7 @@ class BaseCommand extends Command
         foreach ($this->commandData->relations as $relation) {
             $fileFields[] = [
                 'type'     => 'relation',
-                'relation' => $relation->type.','.implode(','.$relation->inputs),
+                'relation' => $relation->type.','.implode(',', $relation->inputs),
             ];
         }
 

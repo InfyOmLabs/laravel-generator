@@ -35,7 +35,7 @@ class LayoutPublishCommand extends PublishBaseCommand
     private function copyView()
     {
         $viewsPath = config('infyom.laravel_generator.path.views', base_path('resources/views/'));
-        $templateType = config('infyom.laravel_generator.templates', 'core-templates');
+        $templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
 
         $this->createDirectories($viewsPath);
 
@@ -54,25 +54,29 @@ class LayoutPublishCommand extends PublishBaseCommand
         FileUtil::createDirectoryIfNotExist($viewsPath.'auth');
 
         FileUtil::createDirectoryIfNotExist($viewsPath.'auth/passwords');
+        FileUtil::createDirectoryIfNotExist($viewsPath.'auth/emails');
     }
 
     private function getViews()
     {
         return [
-            'layouts/app'     => 'layouts/app.blade.php',
-            'layouts/sidebar' => 'layouts/sidebar.blade.php',
-            'layouts/menu'    => 'layouts/menu.blade.php',
-            'layouts/home'    => 'home.blade.php',
-            'auth/login'      => 'auth/login.blade.php',
-            'auth/register'   => 'auth/register.blade.php',
-            'auth/email'      => 'auth/passwords/email.blade.php',
-            'auth/reset'      => 'auth/passwords/reset.blade.php',
+            'layouts/app'               => 'layouts/app.blade.php',
+            'layouts/sidebar'           => 'layouts/sidebar.blade.php',
+            'layouts/datatables_css'    => 'layouts/datatables_css.blade.php',
+            'layouts/datatables_js'     => 'layouts/datatables_js.blade.php',
+            'layouts/menu'              => 'layouts/menu.blade.php',
+            'layouts/home'              => 'home.blade.php',
+            'auth/login'                => 'auth/login.blade.php',
+            'auth/register'             => 'auth/register.blade.php',
+            'auth/email'                => 'auth/passwords/email.blade.php',
+            'auth/reset'                => 'auth/passwords/reset.blade.php',
+            'emails/password'           => 'auth/emails/password.blade.php',
         ];
     }
 
     private function updateRoutes()
     {
-        $path = config('infyom.laravel_generator.path.routes', app_path('routes/web.php'));
+        $path = config('infyom.laravel_generator.path.routes', base_path('routes/web.php'));
 
         $prompt = 'Existing routes web.php file detected. Should we add standard auth routes? (y|N) :';
         if (file_exists($path) && !$this->confirmOverwrite($path, $prompt)) {

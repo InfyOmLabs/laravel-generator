@@ -77,7 +77,7 @@ return [
     |
     */
 
-    'templates'         => 'core-templates',
+    'templates'         => 'adminlte-templates',
 
     /*
     |--------------------------------------------------------------------------
@@ -148,7 +148,7 @@ return [
 
         'menu'          => [
 
-            'enabled'       => false,
+            'enabled'       => true,
 
             'menu_file'     => 'layouts/menu.blade.php',
         ],
@@ -171,5 +171,13 @@ return [
 
         'deleted_at'    => 'deleted_at',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Save model files to `App/Models` when use `--prefix`. see #208
+    |--------------------------------------------------------------------------
+    |
+    */
+    'ignore_model_prefix' => false,
 
 ];

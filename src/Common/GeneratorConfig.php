@@ -47,6 +47,8 @@ class GeneratorConfig
     public $mSnakePlural;
     public $mDashed;
     public $mDashedPlural;
+    public $mSlash;
+    public $mSlashPlural;
     public $mHuman;
     public $mHumanPlural;
 
@@ -113,6 +115,9 @@ class GeneratorConfig
         $this->nsApp = substr($this->nsApp, 0, strlen($this->nsApp) - 1);
         $this->nsRepository = config('infyom.laravel_generator.namespace.repository', 'App\Repositories').$prefix;
         $this->nsModel = config('infyom.laravel_generator.namespace.model', 'App\Models').$prefix;
+        if (config('infyom.laravel_generator.ignore_model_prefix', false)) {
+            $this->nsModel = config('infyom.laravel_generator.namespace.model', 'App\Models');
+        }
         $this->nsDataTables = config('infyom.laravel_generator.namespace.datatables', 'App\DataTables').$prefix;
         $this->nsModelExtend = config(
             'infyom.laravel_generator.model_extend_class',
@@ -151,6 +156,9 @@ class GeneratorConfig
         ).$prefix;
 
         $this->pathModel = config('infyom.laravel_generator.path.model', app_path('Models/')).$prefix;
+        if (config('infyom.laravel_generator.ignore_model_prefix', false)) {
+            $this->pathModel = config('infyom.laravel_generator.path.model', app_path('Models/'));
+        }
 
         $this->pathDataTables = config('infyom.laravel_generator.path.datatables', app_path('DataTables/')).$prefix;
 
@@ -164,7 +172,7 @@ class GeneratorConfig
             app_path('Http/Requests/API/')
         ).$prefix;
 
-        $this->pathApiRoutes = config('infyom.laravel_generator.path.api_routes', app_path('Http/api_routes.php'));
+        $this->pathApiRoutes = config('infyom.laravel_generator.path.api_routes', base_path('routes/api.php'));
 
         $this->pathApiTests = config('infyom.laravel_generator.path.api_test', base_path('tests/'));
 
@@ -177,7 +185,7 @@ class GeneratorConfig
 
         $this->pathRequest = config('infyom.laravel_generator.path.request', app_path('Http/Requests/')).$prefix;
 
-        $this->pathRoutes = config('infyom.laravel_generator.path.routes', app_path('Http/routes.php'));
+        $this->pathRoutes = config('infyom.laravel_generator.path.routes', base_path('routes/web.php'));
 
         $this->pathViews = config(
             'infyom.laravel_generator.path.views',
@@ -217,6 +225,8 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$MODEL_NAME_PLURAL_SNAKE$', $this->mSnakePlural);
         $commandData->addDynamicVariable('$MODEL_NAME_DASHED$', $this->mDashed);
         $commandData->addDynamicVariable('$MODEL_NAME_PLURAL_DASHED$', $this->mDashedPlural);
+        $commandData->addDynamicVariable('$MODEL_NAME_SLASH$', $this->mSlash);
+        $commandData->addDynamicVariable('$MODEL_NAME_PLURAL_SLASH$', $this->mSlashPlural);
         $commandData->addDynamicVariable('$MODEL_NAME_HUMAN$', $this->mHuman);
         $commandData->addDynamicVariable('$MODEL_NAME_PLURAL_HUMAN$', $this->mHumanPlural);
 
@@ -286,6 +296,8 @@ class GeneratorConfig
         $this->mSnakePlural = Str::snake($this->mPlural);
         $this->mDashed = str_replace('_', '-', Str::snake($this->mSnake));
         $this->mDashedPlural = str_replace('_', '-', Str::snake($this->mSnakePlural));
+        $this->mSlash = str_replace('_', '/', Str::snake($this->mSnake));
+        $this->mSlashPlural = str_replace('_', '/', Str::snake($this->mSnakePlural));
         $this->mHuman = title_case(str_replace('_', ' ', Str::snake($this->mSnake)));
         $this->mHumanPlural = title_case(str_replace('_', ' ', Str::snake($this->mSnakePlural)));
     }
