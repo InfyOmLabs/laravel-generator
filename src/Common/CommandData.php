@@ -57,6 +57,7 @@ class CommandData
         $this->fieldNamesMapping = [
             '$FIELD_NAME_TITLE$' => 'fieldTitle',
             '$FIELD_NAME$'       => 'name',
+            '$FIELD_LABEL$'      => 'description'
         ];
 
         $this->config = new GeneratorConfig();
