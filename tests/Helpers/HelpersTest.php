@@ -1,11 +1,11 @@
 <?php
 
 namespace Tests\Helpers;
+
 use Tests\TestCase;
 
 /**
- * Class HelpersTest
- * @package Tests\Helpers
+ * Class HelpersTest.
  */
 class HelpersTest extends TestCase
 {

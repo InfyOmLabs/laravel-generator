@@ -12,8 +12,7 @@ namespace Tests\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class User
- * @package Tests\Models
+ * Class User.
  */
 class MyTable extends Model
 {

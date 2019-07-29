@@ -11,13 +11,13 @@ namespace Tests\Controllers;
 
 use Illuminate\Http\Request;
 use Tests\Repositories\MyTableNameRepository;
+
 /**
- * Class MyModelAPIController
- * @package Tests\Controllers
+ * Class MyModelAPIController.
  */
 class MyTableAPIController extends AppBaseController
 {
-    /** @var  MyTableNameRepository */
+    /** @var MyTableNameRepository */
     private $myTableRepo;
 
     public function __construct(MyTableNameRepository $myTableNameRepository)

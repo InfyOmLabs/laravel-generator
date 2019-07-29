@@ -10,9 +10,9 @@
 namespace Tests\Providers;
 
 use Illuminate\Support\ServiceProvider;
+
 /**
- * Class RouteServiceProvider
- * @package Tests\Providers
+ * Class RouteServiceProvider.
  */
 class RouteServiceProvider extends ServiceProvider
 {

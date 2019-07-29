@@ -9,12 +9,11 @@
 
 namespace Tests\Integration;
 
-
 use Tests\Models\MyTable;
 use Tests\TestCase;
+
 /**
- * Class TestAPITest
- * @package Tests\Integration
+ * Class TestAPITest.
  */
 class MyTableAPIControllerTest extends TestCase
 {
