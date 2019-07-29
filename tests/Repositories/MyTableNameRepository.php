@@ -3,9 +3,9 @@
 namespace Tests\Repositories;
 
 use Tests\Models\MyTable;
+
 /**
- * Class MyTableNameRepository
- * @package Tests\Repositories
+ * Class MyTableNameRepository.
  */
 class MyTableNameRepository extends BaseRepository
 {
@@ -15,11 +15,11 @@ class MyTableNameRepository extends BaseRepository
     protected $fieldSearchable = [
         'field1_id',
         'field2_id',
-        'field3_id'
+        'field3_id',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -29,7 +29,7 @@ class MyTableNameRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
+     * Configure the Model.
      **/
     public function model()
     {

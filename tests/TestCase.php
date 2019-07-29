@@ -3,17 +3,17 @@
 namespace Tests;
 
 use Tests\Providers\RouteServiceProvider;
+
 /**
- * Class TestCase
- * @package Tests
+ * Class TestCase.
  */
 class TestCase extends \Orchestra\Testbench\TestCase
 {
     public function setUp() : void
     {
-        $aa= __DIR__.'/../databased/factories';
+        $aa = __DIR__.'/../databased/factories';
         parent::setUp();
-        $this->loadMigrationsFrom(__DIR__ . '/Migrations');
+        $this->loadMigrationsFrom(__DIR__.'/Migrations');
         $this->withFactories(__DIR__.'/../database/factories');
     }
 

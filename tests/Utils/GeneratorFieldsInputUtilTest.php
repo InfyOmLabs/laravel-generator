@@ -5,8 +5,7 @@ namespace Tests;
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
 
 /**
- * Class GeneratorFieldsInputUtilTest
- * @package Tests
+ * Class GeneratorFieldsInputUtilTest.
  */
 class GeneratorFieldsInputUtilTest extends TestCase
 {

@@ -31,7 +31,7 @@ abstract class BaseRepository
     }
 
     /**
-     * Make Model instance
+     * Make Model instance.
      *
      * @throws \Exception
      *
@@ -49,7 +49,7 @@ abstract class BaseRepository
     }
 
     /**
-     * Configure the Model
+     * Configure the Model.
      *
      * @return string
      */
@@ -58,8 +58,9 @@ abstract class BaseRepository
     /**
      * Paginate records for scaffold.
      *
-     * @param int $perPage
+     * @param int   $perPage
      * @param array $columns
+     *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public function paginate($perPage, $columns = ['*'])
@@ -72,9 +73,10 @@ abstract class BaseRepository
     /**
      * Build a query for retrieving all records.
      *
-     * @param array $search
+     * @param array    $search
      * @param int|null $skip
      * @param int|null $limit
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function allQuery($search = [], $skip = null, $limit = null)
@@ -101,19 +103,19 @@ abstract class BaseRepository
     }
 
     /**
-     * Get searchable fields array
+     * Get searchable fields array.
      *
      * @return array
      */
     abstract public function getFieldsSearchable();
 
     /**
-     * Retrieve all records with given filter criteria
+     * Retrieve all records with given filter criteria.
      *
-     * @param array $search
+     * @param array    $search
      * @param int|null $skip
      * @param int|null $limit
-     * @param array $columns
+     * @param array    $columns
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
@@ -125,7 +127,7 @@ abstract class BaseRepository
     }
 
     /**
-     * Create model record
+     * Create model record.
      *
      * @param array $input
      *
@@ -141,9 +143,9 @@ abstract class BaseRepository
     }
 
     /**
-     * Find model record for given id
+     * Find model record for given id.
      *
-     * @param int $id
+     * @param int   $id
      * @param array $columns
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Model|null
@@ -156,10 +158,10 @@ abstract class BaseRepository
     }
 
     /**
-     * Update model record for given id
+     * Update model record for given id.
      *
      * @param array $input
-     * @param int $id
+     * @param int   $id
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Model
      */
@@ -193,8 +195,9 @@ abstract class BaseRepository
     }
 
     /**
-     * @param int $id
+     * @param int   $id
      * @param array $with
+     *
      * @return mixed
      */
     public function findOrFail($id, $with = [])
@@ -205,7 +208,7 @@ abstract class BaseRepository
             $record = $this->model::find($id);
         }
         if (empty($record)) {
-            throw new ModelNotFoundException(class_basename($this->model)." not found.");
+            throw new ModelNotFoundException(class_basename($this->model).' not found.');
         }
 
         return $record;
@@ -214,8 +217,8 @@ abstract class BaseRepository
     /**
      * @param $request
      * @param $rules
-     *
      * @param array $ruleMessage
+     *
      * @return string
      */
     public function validateRules($request, $rules, $ruleMessage = [])
@@ -224,7 +227,5 @@ abstract class BaseRepository
         if ($validator->fails()) {
             return $validator->messages()->first();
         }
-
-        return null;
     }
 }
