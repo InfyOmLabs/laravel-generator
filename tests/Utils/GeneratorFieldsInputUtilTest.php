@@ -4,8 +4,13 @@ namespace Tests;
 
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
 
-class GeneratorFieldsInputUtilTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class GeneratorFieldsInputUtilTest
+ * @package Tests
+ */
+class GeneratorFieldsInputUtilTest extends TestCase
 {
+    /** @test */
     public function testValidateFieldInput()
     {
         // invalid, only name, without database type
@@ -21,6 +26,7 @@ class GeneratorFieldsInputUtilTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($res);
     }
 
+    /** @test */
     public function testProcessFieldInput()
     {
         // name, db_type and html_type
@@ -97,6 +103,7 @@ class GeneratorFieldsInputUtilTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($res->inIndex);
     }
 
+    /** @test */
     public function testPrepareKeyValueArrayStr()
     {
         $arr = ['a' => 'A', 'b' => 'B'];
@@ -107,6 +114,7 @@ class GeneratorFieldsInputUtilTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $res);
     }
 
+    /** @test */
     public function testPrepareValuesArrayStr()
     {
         $arr = ['A', 'B', 'C'];
@@ -117,6 +125,7 @@ class GeneratorFieldsInputUtilTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $res);
     }
 
+    /** @test */
     public function testKeyValueArrFromLabelValueStr()
     {
         $arr = ['A', 'B', 'C'];

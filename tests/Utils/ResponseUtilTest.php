@@ -3,10 +3,11 @@
 namespace Tests\Utils;
 
 use InfyOm\Generator\Utils\ResponseUtil;
-use PHPUnit_Framework_TestCase;
+use Tests\TestCase;
 
-class ResponseUtilTest extends PHPUnit_Framework_TestCase
+class ResponseUtilTest extends TestCase
 {
+    /** @test */
     public function testMakeResponse()
     {
         $message = 'Data Received';
@@ -19,6 +20,7 @@ class ResponseUtilTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($data, $response['data']);
     }
 
+    /** @test */
     public function testMakeError()
     {
         $message = 'Error Occurred';
@@ -30,6 +32,7 @@ class ResponseUtilTest extends PHPUnit_Framework_TestCase
         $this->assertArrayNotHasKey('data', $response);
     }
 
+    /** @test */
     public function testMakeErrorWithGivenData()
     {
         $message = 'Error Occurred';
