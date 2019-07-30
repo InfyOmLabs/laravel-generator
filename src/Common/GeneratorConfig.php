@@ -73,6 +73,7 @@ class GeneratorConfig
         'fromTable',
         'ignoreFields',
         'save',
+        'localized',
         'primary',
         'prefix',
         'paginate',

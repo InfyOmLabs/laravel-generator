@@ -148,6 +148,11 @@ class BaseCommand extends Command
                 }
             }
         }
+
+        if ($this->commandData->getOption('localized')) {
+            $this->saveLocaleFile();
+        }
+
         if (!$this->isSkip('dump-autoload')) {
             $this->info('Generating autoload files');
             $this->composer->dumpOptimized();
@@ -214,6 +219,33 @@ class BaseCommand extends Command
         $this->commandData->commandInfo($fileName);
     }
 
+    private function saveLocaleFile()
+    {
+        $locales = [
+            'singular' => $this->commandData->modelName,
+            'plural' => $this->commandData->config->mPlural,
+            'fields' => [],
+        ];
+
+        foreach ($this->commandData->fields as $field) {
+            if (!in_array($field->name, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
+                $locales['fields'][$field->name] = Str::title(str_replace('_', ' ', $field->name));
+            }
+        }
+
+        $path = config('infyom.laravel_generator.path.models_locale_files', base_path('resources/lang/en/models/'));
+
+        $fileName = $this->commandData->config->mCamelPlural.'.php';
+
+        if (file_exists($path.$fileName) && !$this->confirmOverwrite($fileName)) {
+            return;
+        }
+        $content = "<?php\n\nreturn " . var_export( $locales, true ) . ";" . \PHP_EOL;
+        FileUtil::createFile($path, $fileName, $content);
+        $this->commandData->commandComment("\nModel Locale File saved: ");
+        $this->commandData->commandInfo($fileName);
+    }
+
     /**
      * @param $fileName
      * @param string $prompt
@@ -244,6 +276,7 @@ class BaseCommand extends Command
             ['fromTable', null, InputOption::VALUE_NONE, 'Generate from existing table'],
             ['ignoreFields', null, InputOption::VALUE_REQUIRED, 'Ignore fields while generating from table'],
             ['save', null, InputOption::VALUE_NONE, 'Save model schema to file'],
+            ['localized', null, InputOption::VALUE_NONE, 'Localize files.'],
             ['primary', null, InputOption::VALUE_REQUIRED, 'Custom primary key'],
             ['prefix', null, InputOption::VALUE_REQUIRED, 'Prefix for all files'],
             ['paginate', null, InputOption::VALUE_REQUIRED, 'Pagination for index.blade.php'],

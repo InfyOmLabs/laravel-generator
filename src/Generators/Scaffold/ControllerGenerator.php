@@ -35,7 +35,13 @@ class ControllerGenerator extends BaseGenerator
 
             $this->generateDataTable();
         } else {
-            $templateData = get_template('scaffold.controller.controller', 'laravel-generator');
+            $templateName = 'scaffold.controller.controller';
+
+            if ($this->commandData->config->getOption('localized')) {
+                $templateName .= '_locale';
+            }
+
+            $templateData = get_template($templateName, 'laravel-generator');
 
             $paginate = $this->commandData->getOption('paginate');
 

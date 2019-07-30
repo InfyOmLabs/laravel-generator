@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Commands\Publish;
 
 use InfyOm\Generator\Utils\FileUtil;
+use Symfony\Component\Console\Input\InputOption;
 
 class GeneratorPublishCommand extends PublishBaseCommand
 {
@@ -133,6 +134,15 @@ class GeneratorPublishCommand extends PublishBaseCommand
         $this->info('BaseRepository created');
     }
 
+    private function publishLocaleFiles()
+    {
+        $localesDir = __DIR__.'/../../../locale/';
+
+        $this->publishDirectory($localesDir, resource_path('lang'), 'lang', true);
+
+        $this->comment('Locale files published');
+    }
+
     /**
      * Get the console command options.
      *
@@ -140,7 +150,9 @@ class GeneratorPublishCommand extends PublishBaseCommand
      */
     public function getOptions()
     {
-        return [];
+        return [
+            ['locale', null, InputOption::VALUE_NONE, 'Publish locale files'],
+        ];
     }
 
     /**
