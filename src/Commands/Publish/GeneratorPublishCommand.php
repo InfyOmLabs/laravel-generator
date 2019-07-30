@@ -31,6 +31,9 @@ class GeneratorPublishCommand extends PublishBaseCommand
         $this->publishTestCases();
         $this->publishBaseController();
         $this->publishBaseRepository();
+        if ($this->option('locale')) {
+            $this->publishLocaleFiles();
+        }
     }
 
     /**
