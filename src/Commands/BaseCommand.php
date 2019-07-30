@@ -253,6 +253,7 @@ class BaseCommand extends Command
             ['relations', null, InputOption::VALUE_NONE, 'Specify if you want to pass relationships for fields'],
             ['softDelete', null, InputOption::VALUE_NONE, 'Soft Delete Option'],
             ['forceMigrate', null, InputOption::VALUE_NONE, 'Specify if you want to run migration or not'],
+            ['moduleName', null, InputOption::VALUE_REQUIRED, 'Generate files to this module & namespace (eg. Admin)'],
         ];
     }
 

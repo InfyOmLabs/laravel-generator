@@ -77,10 +77,11 @@ class RollbackGeneratorCommand extends Command
             $this->error('invalid rollback type');
         }
 
+
         $this->commandData = new CommandData($this, $this->argument('type'));
         $this->commandData->config->mName = $this->commandData->modelName = $this->argument('model');
 
-        $this->commandData->config->init($this->commandData, ['tableName', 'prefix', 'plural']);
+        $this->commandData->config->init($this->commandData, ['tableName', 'prefix', 'plural', 'moduleName']);
 
         $migrationGenerator = new MigrationGenerator($this->commandData);
         $migrationGenerator->rollback();
@@ -155,6 +156,7 @@ class RollbackGeneratorCommand extends Command
             ['tableName', null, InputOption::VALUE_REQUIRED, 'Table Name'],
             ['prefix', null, InputOption::VALUE_REQUIRED, 'Prefix for all files'],
             ['plural', null, InputOption::VALUE_REQUIRED, 'Plural Model name'],
+            ['moduleName', null, InputOption::VALUE_REQUIRED, 'Generate files to this module & namespace (eg. Admin)'],
         ];
     }
 
