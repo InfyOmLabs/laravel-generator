@@ -362,15 +362,16 @@ class GeneratorConfig
             $this->modules_path = config('modules.paths.modules', base_path('Modules')).'/'.$this->options['moduleName'];
             $config_paths = config('infyom.laravel_generator.path');
             $new_config_paths = [];
-            foreach($config_paths as $key => $path) {
-                if (preg_match('/migrations/', $path))
+            foreach ($config_paths as $key => $path) {
+                if (preg_match('/migrations/', $path)) {
                     $path = str_replace('migrations', 'Migrations', $path);
+                }
                 if (strpos($path, app_path()) === 0) {
                     $new_config_paths[$key] = str_replace(app_path(), $this->modules_path, $path);
                 } else {
                     $new_config_paths[$key] = str_replace(base_path(), $this->modules_path, $path);
                 }
-                $new_config_paths[$key][strlen($this->modules_path)+1] = strtoupper($new_config_paths[$key][strlen($this->modules_path)+1]);
+                $new_config_paths[$key][strlen($this->modules_path) + 1] = strtoupper($new_config_paths[$key][strlen($this->modules_path) + 1]);
             }
             config(['infyom.laravel_generator.path' => $new_config_paths]);
 
@@ -378,10 +379,10 @@ class GeneratorConfig
             $this->module_namespace = config('modules.namespace', 'Modules').'\\'.$this->options['moduleName'].'\\';
             $config_namespaces = config('infyom.laravel_generator.namespace');
             $new_config_namespaces = [];
-            foreach($config_namespaces as $key => $namespace)
-            {
-                if (strpos($namespace, 'App\\') === 0)
+            foreach ($config_namespaces as $key => $namespace) {
+                if (strpos($namespace, 'App\\') === 0) {
                     $namespace = str_replace('App\\', '', $namespace);
+                }
                 $new_config_namespaces[$key] = $this->module_namespace.$namespace;
             }
             config(['infyom.laravel_generator.namespace' => $new_config_namespaces]);
