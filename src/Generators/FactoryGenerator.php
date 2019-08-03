@@ -58,8 +58,11 @@ class FactoryGenerator extends BaseGenerator
     {
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
-        $templateData = str_replace('$FIELDS$', implode(','.infy_nl_tab(1, 3), $this->generateFields()),
-            $templateData);
+        $templateData = str_replace(
+            '$FIELDS$',
+            implode(','.infy_nl_tab(1, 2), $this->generateFields()),
+            $templateData
+        );
 
         return $templateData;
     }
