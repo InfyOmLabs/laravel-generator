@@ -48,15 +48,16 @@ class SeederGenerator extends BaseGenerator
         $newSeederStatement = "\$this->call('".$this->commandData->config->mPlural."TableSchema');";
 
         if (strpos($mainSeederContent, $newSeederStatement) != false) {
-            $this->commandData->commandObj->info($this->commandData->mPlural."Seeder entry found in DatabaseSeeder. Skipping Adjustment.");
+            $this->commandData->commandObj->info($this->commandData->mPlural.'Seeder entry found in DatabaseSeeder. Skipping Adjustment.');
+
             return;
         }
 
         $newSeederStatement = infy_tabs(2).$newSeederStatement.infy_nl();
 
-        preg_match_all("/\\\$this->call\\((.*);/", $mainSeederContent, $matches);
+        preg_match_all('/\\$this->call\\((.*);/', $mainSeederContent, $matches);
 
-        $totalMatches = sizeof($matches[0]);
+        $totalMatches = count($matches[0]);
         $lastSeederStatement = $matches[0][$totalMatches - 1];
 
         $replacePosition = strpos($mainSeederContent, $lastSeederStatement);
