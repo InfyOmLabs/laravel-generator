@@ -5,4 +5,4 @@ sudo: false
 install: travis_retry composer install --no-interaction --prefer-dist
 script: vendor/bin/phpunit --verbose
 notifications:
-  slack: "infyom:$SLACK_TOKEN"
+  slack: "$SLACK_TOKEN"

@@ -46,6 +46,8 @@ return [
         'templates_dir'     => base_path('resources/infyom/infyom-generator-templates/'),
 
         'modelJs'           => base_path('resources/assets/js/models/'),
+
+        'factory'           => database_path('factories/'),
     ],
 
     /*
