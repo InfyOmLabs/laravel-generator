@@ -9,15 +9,12 @@
 
 namespace InfyOm\Generator\Generators;
 
-
-use InfyOm\Generator\Commands\BaseCommand;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
 
 /**
- * Class FactoryGenerator
- * @package InfyOm\Generator\Generators
+ * Class FactoryGenerator.
  */
 class FactoryGenerator extends BaseGenerator
 {
