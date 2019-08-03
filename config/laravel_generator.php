@@ -43,7 +43,9 @@ return [
 
         'schema_files'      => base_path('resources/model_schemas/'),
 
-        'seeder'            => base_path('database/seeds/'),
+        'seeder'            => database_path('seeds/'),
+
+        'database_seeder'   => database_path('seeds/DatabaseSeeder.php'),
 
         'templates_dir'     => base_path('resources/infyom/infyom-generator-templates/'),
 

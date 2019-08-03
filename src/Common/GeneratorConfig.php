@@ -31,6 +31,7 @@ class GeneratorConfig
     public $pathModel;
     public $pathDataTables;
     public $pathSeeder;
+    public $pathDatabaseSeeder;
 
     public $pathApiController;
     public $pathApiRequest;
@@ -209,7 +210,8 @@ class GeneratorConfig
             base_path('resources/views/')
         ).$viewPrefix.$this->mSnakePlural.'/';
 
-        $this->pathSeeder = config('infyom.laravel_generator.path.seeder', base_path('database/seeds/'));
+        $this->pathSeeder = config('infyom.laravel_generator.path.seeder', database_path('seeds/'));
+        $this->pathDatabaseSeeder = config('infyom.laravel_generator.path.database_seeder', database_path('seeds/DatabaseSeeder.php'));
 
         $this->modelJsPath = config(
                 'infyom.laravel_generator.path.modelsJs',
