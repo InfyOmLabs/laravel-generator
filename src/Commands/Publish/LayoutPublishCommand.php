@@ -34,7 +34,7 @@ class LayoutPublishCommand extends PublishBaseCommand
 
     private function copyView()
     {
-        $viewsPath = config('infyom.laravel_generator.path.views', base_path('resources/views/'));
+        $viewsPath = config('infyom.laravel_generator.path.views', resource_path('views/'));
         $templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
 
         $this->createDirectories($viewsPath);

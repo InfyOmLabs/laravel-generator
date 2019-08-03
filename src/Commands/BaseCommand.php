@@ -162,7 +162,7 @@ class BaseCommand extends Command
 
     public function runMigration()
     {
-        $migrationPath = config('infyom.laravel_generator.path.migration', 'database/migrations/');
+        $migrationPath = config('infyom.laravel_generator.path.migration', database_path('migrations/'));
         $path = Str::after($migrationPath, base_path()); // get path after base_path
         $this->call('migrate', ['--path' => $path, '--force' => true]);
 
@@ -208,7 +208,7 @@ class BaseCommand extends Command
             ];
         }
 
-        $path = config('infyom.laravel_generator.path.schema_files', base_path('resources/model_schemas/'));
+        $path = config('infyom.laravel_generator.path.schema_files', resource_path('model_schemas/'));
 
         $fileName = $this->commandData->modelName.'.json';
 
