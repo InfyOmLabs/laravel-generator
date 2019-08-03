@@ -6,8 +6,7 @@ use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Utils\FileUtil;
 
 /**
- * Class SeederGenerator
- * @package InfyOm\Generator\Generators
+ * Class SeederGenerator.
  */
 class SeederGenerator extends BaseGenerator
 {
