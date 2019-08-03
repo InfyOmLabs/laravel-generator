@@ -73,7 +73,7 @@ class BaseCommand extends Command
             $repositoryGenerator->generate();
         }
 
-        if ($this->commandData->getOption('factory') ) {
+        if ($this->commandData->getOption('factory')) {
             $factoryGenerator = new FactoryGenerator($this->commandData);
             $factoryGenerator->generate();
         }
