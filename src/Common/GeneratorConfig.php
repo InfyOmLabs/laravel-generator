@@ -207,12 +207,12 @@ class GeneratorConfig
 
         $this->pathViews = config(
             'infyom.laravel_generator.path.views',
-            base_path('resources/views/')
+            resource_path('views/')
         ).$viewPrefix.$this->mSnakePlural.'/';
 
         $this->modelJsPath = config(
                 'infyom.laravel_generator.path.modelsJs',
-                base_path('resources/assets/js/models/')
+                resource_path('assets/js/models/')
         );
     }
 
