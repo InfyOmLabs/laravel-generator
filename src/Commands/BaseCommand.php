@@ -259,7 +259,7 @@ class BaseCommand extends Command
             ['relations', null, InputOption::VALUE_NONE, 'Specify if you want to pass relationships for fields'],
             ['softDelete', null, InputOption::VALUE_NONE, 'Soft Delete Option'],
             ['forceMigrate', null, InputOption::VALUE_NONE, 'Specify if you want to run migration or not'],
-            ['factory', null, InputOption::VALUE_NONE, 'To generate factory'],
+            ['factory', 'f', InputOption::VALUE_NONE, 'To generate factory'],
         ];
     }
 
