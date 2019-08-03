@@ -209,7 +209,7 @@ class GeneratorConfig
             base_path('resources/views/')
         ).$viewPrefix.$this->mSnakePlural.'/';
 
-        $this->pathSeeder = config('infyom.laravel_generator.path.seeder', database_path('seeds'));
+        $this->pathSeeder = config('infyom.laravel_generator.path.seeder', base_path('database/seeds'));
 
         $this->modelJsPath = config(
                 'infyom.laravel_generator.path.modelsJs',
