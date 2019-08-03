@@ -120,6 +120,8 @@ return [
 
         'softDelete' => true,
 
+        'saveSchema' => true,
+
         'tables_searchable_default' => false,
 
         'excluded_fields' => ['id'], // Array of columns that doesn't required while creating module
