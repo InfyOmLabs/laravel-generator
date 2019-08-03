@@ -120,7 +120,7 @@ return [
 
         'softDelete' => true,
 
-        'saveSchema' => true,
+        'save_schema_file' => true,
 
         'tables_searchable_default' => false,
 

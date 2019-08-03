@@ -83,7 +83,6 @@ class GeneratorConfig
         'plural',
         'softDelete',
         'forceMigrate',
-        'saveSchema',
     ];
 
     public $tableName;
@@ -342,10 +341,8 @@ class GeneratorConfig
             }
         }
 
-        if (!empty($this->options['saveSchema'])) {
-            $this->options['saveSchema'] = $this->options['saveSchema'] == 'true' ? true : false;
-        } else {
-            $this->options['saveSchema'] = config('infyom.laravel_generator.options.saveSchema', true);
+        if (empty($this->options['save'])) {
+            $this->options['save'] = config('infyom.laravel_generator.options.save_schema_file', true);
         }
 
         $this->options['softDelete'] = config('infyom.laravel_generator.options.softDelete', false);
