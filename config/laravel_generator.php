@@ -11,7 +11,7 @@ return [
 
     'path' => [
 
-        'migration'         => base_path('database/migrations/'),
+        'migration'         => database_path('migrations/'),
 
         'model'             => app_path('Models/'),
 
@@ -39,17 +39,19 @@ return [
 
         'tests'             => base_path('tests/'),
 
-        'views'             => base_path('resources/views/'),
+        'views'             => resource_path('views/'),
 
-        'schema_files'      => base_path('resources/model_schemas/'),
+        'schema_files'      => resource_path('model_schemas/'),
+
+        'templates_dir'     => resource_path('infyom/infyom-generator-templates/'),
 
         'seeder'            => database_path('seeds/'),
 
         'database_seeder'   => database_path('seeds/DatabaseSeeder.php'),
 
-        'templates_dir'     => base_path('resources/infyom/infyom-generator-templates/'),
+        'modelJs'           => resource_path('assets/js/models/'),
 
-        'modelJs'           => base_path('resources/assets/js/models/'),
+        'factory'           => database_path('factories/'),
     ],
 
     /*
@@ -123,6 +125,8 @@ return [
     'options' => [
 
         'softDelete' => true,
+
+        'save_schema_file' => true,
 
         'tables_searchable_default' => false,
 
