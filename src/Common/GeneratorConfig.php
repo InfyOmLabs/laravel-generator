@@ -30,6 +30,7 @@ class GeneratorConfig
     public $pathRepository;
     public $pathModel;
     public $pathDataTables;
+    public $pathSeeder;
 
     public $pathApiController;
     public $pathApiRequest;
@@ -83,6 +84,7 @@ class GeneratorConfig
         'plural',
         'softDelete',
         'forceMigrate',
+        'seeder',
     ];
 
     public $tableName;
@@ -206,6 +208,8 @@ class GeneratorConfig
             'infyom.laravel_generator.path.views',
             base_path('resources/views/')
         ).$viewPrefix.$this->mSnakePlural.'/';
+
+        $this->pathSeeder = config('infyom.laravel_generator.path.seeder', base_path('database/seeder'));
 
         $this->modelJsPath = config(
                 'infyom.laravel_generator.path.modelsJs',
