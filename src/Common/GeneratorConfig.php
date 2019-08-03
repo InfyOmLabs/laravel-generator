@@ -30,6 +30,7 @@ class GeneratorConfig
     public $pathRepository;
     public $pathModel;
     public $pathDataTables;
+    public $pathFactory;
 
     public $pathApiController;
     public $pathApiRequest;
@@ -83,6 +84,7 @@ class GeneratorConfig
         'plural',
         'softDelete',
         'forceMigrate',
+        'factory',
     ];
 
     public $tableName;
@@ -201,6 +203,7 @@ class GeneratorConfig
         $this->pathRequest = config('infyom.laravel_generator.path.request', app_path('Http/Requests/')).$prefix;
 
         $this->pathRoutes = config('infyom.laravel_generator.path.routes', base_path('routes/web.php'));
+        $this->pathFactory = config('infyom.laravel_generator.path.factory', database_path('factories'));
 
         $this->pathViews = config(
             'infyom.laravel_generator.path.views',
