@@ -19,6 +19,7 @@ use InfyOm\Generator\Generators\Scaffold\MenuGenerator;
 use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
 use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
 use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
+use InfyOm\Generator\Generators\SeederGenerator;
 use InfyOm\Generator\Generators\TestTraitGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 use Symfony\Component\Console\Input\InputArgument;
@@ -76,6 +77,12 @@ class BaseCommand extends Command
         if ($this->commandData->getOption('factory')) {
             $factoryGenerator = new FactoryGenerator($this->commandData);
             $factoryGenerator->generate();
+        }
+
+        if ($this->commandData->getOption('seeder')) {
+            $seederGenerator = new SeederGenerator($this->commandData);
+            $seederGenerator->generate();
+            $seederGenerator->updateMainSeeder();
         }
     }
 
@@ -260,6 +267,7 @@ class BaseCommand extends Command
             ['softDelete', null, InputOption::VALUE_NONE, 'Soft Delete Option'],
             ['forceMigrate', null, InputOption::VALUE_NONE, 'Specify if you want to run migration or not'],
             ['factory', null, InputOption::VALUE_NONE, 'To generate factory'],
+            ['seeder', null, InputOption::VALUE_NONE, 'To generate seeder'],
         ];
     }
 
