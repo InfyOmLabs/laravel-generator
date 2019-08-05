@@ -45,7 +45,7 @@ class SeederGenerator extends BaseGenerator
     {
         $mainSeederContent = file_get_contents($this->commandData->config->pathDatabaseSeeder);
 
-        $newSeederStatement = "\$this->call(Create".$this->commandData->config->mPlural."Seeder::class);";
+        $newSeederStatement = '\$this->call(Create'.$this->commandData->config->mPlural.'Seeder::class);';
 
         if (strpos($mainSeederContent, $newSeederStatement) != false) {
             $this->commandData->commandObj->info($this->commandData->config->mPlural.'Seeder entry found in DatabaseSeeder. Skipping Adjustment.');
