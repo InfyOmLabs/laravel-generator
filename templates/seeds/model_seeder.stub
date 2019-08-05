@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class Create$MODEL_NAME$Seeder extends Seeder
+class Create$MODEL_NAME_PLURAL$Seeder extends Seeder
 {
     /**
      * Run the database seeds.
