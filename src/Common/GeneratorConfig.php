@@ -30,6 +30,9 @@ class GeneratorConfig
     public $pathRepository;
     public $pathModel;
     public $pathDataTables;
+    public $pathFactory;
+    public $pathSeeder;
+    public $pathDatabaseSeeder;
 
     public $pathApiController;
     public $pathApiRequest;
@@ -84,6 +87,8 @@ class GeneratorConfig
         'plural',
         'softDelete',
         'forceMigrate',
+        'factory',
+        'seeder',
     ];
 
     public $tableName;
@@ -202,15 +207,19 @@ class GeneratorConfig
         $this->pathRequest = config('infyom.laravel_generator.path.request', app_path('Http/Requests/')).$prefix;
 
         $this->pathRoutes = config('infyom.laravel_generator.path.routes', base_path('routes/web.php'));
+        $this->pathFactory = config('infyom.laravel_generator.path.factory', database_path('factories/'));
 
         $this->pathViews = config(
             'infyom.laravel_generator.path.views',
-            base_path('resources/views/')
+            resource_path('views/')
         ).$viewPrefix.$this->mSnakePlural.'/';
+
+        $this->pathSeeder = config('infyom.laravel_generator.path.seeder', database_path('seeds/'));
+        $this->pathDatabaseSeeder = config('infyom.laravel_generator.path.database_seeder', database_path('seeds/DatabaseSeeder.php'));
 
         $this->modelJsPath = config(
                 'infyom.laravel_generator.path.modelsJs',
-                base_path('resources/assets/js/models/')
+                resource_path('assets/js/models/')
         );
     }
 
@@ -340,6 +349,10 @@ class GeneratorConfig
                 $commandData->commandError('tableName required with fromTable option.');
                 exit;
             }
+        }
+
+        if (empty($this->options['save'])) {
+            $this->options['save'] = config('infyom.laravel_generator.options.save_schema_file', true);
         }
 
         $this->options['softDelete'] = config('infyom.laravel_generator.options.softDelete', false);

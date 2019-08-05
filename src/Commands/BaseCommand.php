@@ -9,6 +9,7 @@ use InfyOm\Generator\Generators\API\APIControllerGenerator;
 use InfyOm\Generator\Generators\API\APIRequestGenerator;
 use InfyOm\Generator\Generators\API\APIRoutesGenerator;
 use InfyOm\Generator\Generators\API\APITestGenerator;
+use InfyOm\Generator\Generators\FactoryGenerator;
 use InfyOm\Generator\Generators\MigrationGenerator;
 use InfyOm\Generator\Generators\ModelGenerator;
 use InfyOm\Generator\Generators\RepositoryGenerator;
@@ -18,6 +19,7 @@ use InfyOm\Generator\Generators\Scaffold\MenuGenerator;
 use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
 use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
 use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
+use InfyOm\Generator\Generators\SeederGenerator;
 use InfyOm\Generator\Generators\TestTraitGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 use Symfony\Component\Console\Input\InputArgument;
@@ -70,6 +72,17 @@ class BaseCommand extends Command
         if (!$this->isSkip('repository')) {
             $repositoryGenerator = new RepositoryGenerator($this->commandData);
             $repositoryGenerator->generate();
+        }
+
+        if ($this->commandData->getOption('factory')) {
+            $factoryGenerator = new FactoryGenerator($this->commandData);
+            $factoryGenerator->generate();
+        }
+
+        if ($this->commandData->getOption('seeder')) {
+            $seederGenerator = new SeederGenerator($this->commandData);
+            $seederGenerator->generate();
+            $seederGenerator->updateMainSeeder();
         }
     }
 
@@ -161,7 +174,7 @@ class BaseCommand extends Command
 
     public function runMigration()
     {
-        $migrationPath = config('infyom.laravel_generator.path.migration', 'database/migrations/');
+        $migrationPath = config('infyom.laravel_generator.path.migration', database_path('migrations/'));
         $path = Str::after($migrationPath, base_path()); // get path after base_path
         $this->call('migrate', ['--path' => $path, '--force' => true]);
 
@@ -207,7 +220,7 @@ class BaseCommand extends Command
             ];
         }
 
-        $path = config('infyom.laravel_generator.path.schema_files', base_path('resources/model_schemas/'));
+        $path = config('infyom.laravel_generator.path.schema_files', resource_path('model_schemas/'));
 
         $fileName = $this->commandData->modelName.'.json';
 
@@ -286,6 +299,8 @@ class BaseCommand extends Command
             ['relations', null, InputOption::VALUE_NONE, 'Specify if you want to pass relationships for fields'],
             ['softDelete', null, InputOption::VALUE_NONE, 'Soft Delete Option'],
             ['forceMigrate', null, InputOption::VALUE_NONE, 'Specify if you want to run migration or not'],
+            ['factory', null, InputOption::VALUE_NONE, 'To generate factory'],
+            ['seeder', null, InputOption::VALUE_NONE, 'To generate seeder'],
         ];
     }
 
