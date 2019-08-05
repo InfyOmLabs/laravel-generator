@@ -31,7 +31,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
         $this->publishTestCases();
         $this->publishBaseController();
         $this->publishBaseRepository();
-        if ($this->option('locale')) {
+        if ($this->option('localized')) {
             $this->publishLocaleFiles();
         }
     }
@@ -154,7 +154,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
     public function getOptions()
     {
         return [
-            ['locale', null, InputOption::VALUE_NONE, 'Publish locale files'],
+            ['localized', null, InputOption::VALUE_NONE, 'Localize files.'],
         ];
     }
 

@@ -128,6 +128,8 @@ return [
 
         'save_schema_file' => true,
 
+        'localized' => false,
+
         'tables_searchable_default' => false,
 
         'excluded_fields' => ['id'], // Array of columns that doesn't required while creating module

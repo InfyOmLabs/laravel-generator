@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Generators\Scaffold;
 
 use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Common\TemplatesManager;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 
@@ -31,17 +32,23 @@ class ControllerGenerator extends BaseGenerator
     public function generate()
     {
         if ($this->commandData->getAddOn('datatables')) {
-            $templateData = get_template('scaffold.controller.datatable_controller', 'laravel-generator');
+            $templateName = 'datatable_controller';
 
-            $this->generateDataTable();
-        } else {
-            $templateName = 'scaffold.controller.controller';
-
-            if ($this->commandData->config->getOption('localized')) {
+            if ($this->commandData->isLocalizedTemplates()) {
                 $templateName .= '_locale';
             }
 
-            $templateData = get_template($templateName, 'laravel-generator');
+            $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
+
+            $this->generateDataTable();
+        } else {
+            $templateName = 'controller';
+
+            if ($this->commandData->isLocalizedTemplates()) {
+                $templateName .= '_locale';
+            }
+
+            $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
 
             $paginate = $this->commandData->getOption('paginate');
 

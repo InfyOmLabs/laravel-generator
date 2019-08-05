@@ -289,7 +289,6 @@ class BaseCommand extends Command
             ['fromTable', null, InputOption::VALUE_NONE, 'Generate from existing table'],
             ['ignoreFields', null, InputOption::VALUE_REQUIRED, 'Ignore fields while generating from table'],
             ['save', null, InputOption::VALUE_NONE, 'Save model schema to file'],
-            ['localized', null, InputOption::VALUE_NONE, 'Localize files.'],
             ['primary', null, InputOption::VALUE_REQUIRED, 'Custom primary key'],
             ['prefix', null, InputOption::VALUE_REQUIRED, 'Prefix for all files'],
             ['paginate', null, InputOption::VALUE_REQUIRED, 'Pagination for index.blade.php'],
@@ -301,6 +300,7 @@ class BaseCommand extends Command
             ['forceMigrate', null, InputOption::VALUE_NONE, 'Specify if you want to run migration or not'],
             ['factory', null, InputOption::VALUE_NONE, 'To generate factory'],
             ['seeder', null, InputOption::VALUE_NONE, 'To generate seeder'],
+            ['localized', null, InputOption::VALUE_NONE, 'Localize files.'],
         ];
     }
 
