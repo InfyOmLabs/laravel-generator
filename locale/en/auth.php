@@ -22,6 +22,7 @@ return [
     'confirm_password' => 'Confirm Password',
     'remember_me' => 'Remember Me',
     'sign_in' => 'Sign In',
+    'sign_out' => 'Sign out',
     'register' => 'Register',
 
     'login' => [
@@ -50,5 +51,10 @@ return [
         'password' => [
             'reset_link' => 'Click here to reset your password'
         ]
+    ],
+
+    'app' => [
+        'member_since' => 'Member since',
+        'profile' => 'Profile',
     ]
 ];
