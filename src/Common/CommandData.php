@@ -57,9 +57,8 @@ class CommandData
     }
 
     /**
-     * @param Command $commandObj
-     * @param string  $commandType
-     *
+     * @param Command          $commandObj
+     * @param string           $commandType
      * @param TemplatesManager $templatesManager
      */
     public function __construct(Command $commandObj, $commandType, TemplatesManager $templatesManager = null)
@@ -67,7 +66,7 @@ class CommandData
         $this->commandObj = $commandObj;
 
         if (is_null($templatesManager)) {
-            $this->templateManager = app(TemplatesManager::class);;
+            $this->templateManager = app(TemplatesManager::class);
         } else {
             $this->templateManager = $templatesManager;
         }
