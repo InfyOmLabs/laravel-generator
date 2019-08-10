@@ -17,7 +17,6 @@ use InfyOm\Generator\Generators\Scaffold\MenuGenerator;
 use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
 use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
 use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
-use InfyOm\Generator\Generators\TestTraitGenerator;
 use InfyOm\Generator\Generators\VueJs\ControllerGenerator as VueJsControllerGenerator;
 use InfyOm\Generator\Generators\VueJs\ModelJsConfigGenerator;
 use InfyOm\Generator\Generators\VueJs\RoutesGenerator as VueJsRoutesGenerator;
@@ -127,9 +126,6 @@ class RollbackGeneratorCommand extends Command
         if ($this->commandData->getAddOn('tests')) {
             $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);
             $repositoryTestGenerator->rollback();
-
-            $testTraitGenerator = new TestTraitGenerator($this->commandData);
-            $testTraitGenerator->rollback();
 
             $apiTestGenerator = new APITestGenerator($this->commandData);
             $apiTestGenerator->rollback();
