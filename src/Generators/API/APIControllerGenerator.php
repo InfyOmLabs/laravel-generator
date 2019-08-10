@@ -26,7 +26,11 @@ class APIControllerGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = get_template('api.controller.api_controller', 'laravel-generator');
+        if ($this->isSkip('repository_pattern')) {
+            $templateData = get_template('api.controller.without-repo.api_controller', 'laravel-generator');
+        } else {
+            $templateData = get_template('api.controller.api_controller', 'laravel-generator');
+        }
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
         $templateData = $this->fillDocs($templateData);
@@ -64,5 +68,14 @@ class APIControllerGenerator extends BaseGenerator
         if ($this->rollbackFile($this->path, $this->fileName)) {
             $this->commandData->commandComment('API Controller file deleted: '.$this->fileName);
         }
+    }
+
+    public function isSkip($skip)
+    {
+        if ($this->commandData->getOption('skip')) {
+            return in_array($skip, (array) $this->commandData->getOption('skip'));
+        }
+
+        return false;
     }
 }

@@ -68,7 +68,7 @@ class BaseCommand extends Command
             $modelGenerator->generate();
         }
 
-        if (!$this->isSkip('repository')) {
+        if (!$this->isSkip('repository') && !$this->isSkip('repository_pattern')) {
             $repositoryGenerator = new RepositoryGenerator($this->commandData);
             $repositoryGenerator->generate();
         }
@@ -105,8 +105,10 @@ class BaseCommand extends Command
         }
 
         if (!$this->isSkip('tests') and $this->commandData->getAddOn('tests')) {
-            $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);
-            $repositoryTestGenerator->generate();
+            if (!$this->isSkip('repository_pattern')) {
+                $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);
+                $repositoryTestGenerator->generate();
+            }
 
             $apiTestGenerator = new APITestGenerator($this->commandData);
             $apiTestGenerator->generate();

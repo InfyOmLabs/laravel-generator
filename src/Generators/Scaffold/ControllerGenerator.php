@@ -31,11 +31,18 @@ class ControllerGenerator extends BaseGenerator
     public function generate()
     {
         if ($this->commandData->getAddOn('datatables')) {
-            $templateData = get_template('scaffold.controller.datatable_controller', 'laravel-generator');
-
+            if ($this->isSkip('repository_pattern')) {
+                $templateData = get_template('scaffold.controller.without-repo.datatable_controller', 'laravel-generator');
+            } else {
+                $templateData = get_template('scaffold.controller.datatable_controller', 'laravel-generator');
+            }
             $this->generateDataTable();
         } else {
-            $templateData = get_template('scaffold.controller.controller', 'laravel-generator');
+            if ($this->isSkip('repository_pattern')) {
+                $templateData = get_template('scaffold.controller.without-repo.controller', 'laravel-generator');
+            } else {
+                $templateData = get_template('scaffold.controller.controller', 'laravel-generator');
+            }
 
             $paginate = $this->commandData->getOption('paginate');
 
@@ -114,5 +121,14 @@ class ControllerGenerator extends BaseGenerator
                 $this->commandData->commandComment('DataTable file deleted: '.$this->fileName);
             }
         }
+    }
+
+    public function isSkip($skip)
+    {
+        if ($this->commandData->getOption('skip')) {
+            return in_array($skip, (array) $this->commandData->getOption('skip'));
+        }
+
+        return false;
     }
 }
