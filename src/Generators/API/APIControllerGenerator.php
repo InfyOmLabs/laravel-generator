@@ -26,8 +26,8 @@ class APIControllerGenerator extends BaseGenerator
 
     public function generate()
     {
-        if ($this->isSkip('repository_pattern')) {
-            $templateData = get_template('api.controller.without-repo.api_controller', 'laravel-generator');
+        if ($this->commandData->getOption('repositoryPattern')) {
+            $templateData = get_template('api.controller.model_api_controller', 'laravel-generator');
         } else {
             $templateData = get_template('api.controller.api_controller', 'laravel-generator');
         }

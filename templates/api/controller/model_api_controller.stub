@@ -15,8 +15,17 @@ class $MODEL_NAME$APIController extends AppBaseController
     $DOC_INDEX$
     public function index(Request $request)
     {
-        /** @var $MODEL_NAME$ $$MODEL_NAME_PLURAL_CAMEL$ */
-        $$MODEL_NAME_PLURAL_CAMEL$ = $MODEL_NAME$::all();
+        $query = $MODEL_NAME$::query();
+
+        if ($request->get('skip')) {
+            $query->skip($request->get('skip'));
+        }
+        if ($request->get('limit')) {
+            $query->limit($request->get('limit'));
+        }
+
+         /** @var $MODEL_NAME$ $$MODEL_NAME_PLURAL_CAMEL$ */
+        $$MODEL_NAME_PLURAL_CAMEL$ = $query->get();
 
         return $this->sendResponse($$MODEL_NAME_PLURAL_CAMEL$->toArray(), '$MODEL_NAME_PLURAL_HUMAN$ retrieved successfully');
     }

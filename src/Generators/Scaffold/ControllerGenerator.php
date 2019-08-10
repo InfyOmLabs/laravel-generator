@@ -31,17 +31,17 @@ class ControllerGenerator extends BaseGenerator
     public function generate()
     {
         if ($this->commandData->getAddOn('datatables')) {
-            if ($this->isSkip('repository_pattern')) {
-                $templateData = get_template('scaffold.controller.without-repo.datatable_controller', 'laravel-generator');
-            } else {
+            if ($this->commandData->getOption('repositoryPattern')) {
                 $templateData = get_template('scaffold.controller.datatable_controller', 'laravel-generator');
+            } else {
+                $templateData = get_template('scaffold.controller.model_datatable_controller', 'laravel-generator');
             }
             $this->generateDataTable();
         } else {
-            if ($this->isSkip('repository_pattern')) {
-                $templateData = get_template('scaffold.controller.without-repo.controller', 'laravel-generator');
-            } else {
+            if ($this->commandData->getOption('repositoryPattern')) {
                 $templateData = get_template('scaffold.controller.controller', 'laravel-generator');
+            } else {
+                $templateData = get_template('scaffold.controller.model_controller', 'laravel-generator');
             }
 
             $paginate = $this->commandData->getOption('paginate');

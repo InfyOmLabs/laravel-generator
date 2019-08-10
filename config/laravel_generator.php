@@ -126,6 +126,8 @@ return [
 
         'tables_searchable_default' => false,
 
+        'repository_pattern' => true,
+
         'excluded_fields' => ['id'], // Array of columns that doesn't required while creating module
     ],
 

@@ -350,6 +350,7 @@ class GeneratorConfig
         }
 
         $this->options['softDelete'] = config('infyom.laravel_generator.options.softDelete', false);
+        $this->options['repositoryPattern'] = config('infyom.laravel_generator.options.repository_pattern', false);
         if (!empty($this->options['skip'])) {
             $this->options['skip'] = array_map('trim', explode(',', $this->options['skip']));
         }
