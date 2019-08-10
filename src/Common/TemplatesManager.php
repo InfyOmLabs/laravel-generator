@@ -15,7 +15,7 @@ class TemplatesManager
     }
 
     /**
-     * @param  bool  $useLocale
+     * @param bool $useLocale
      */
     public function setUseLocale(bool $useLocale): void
     {

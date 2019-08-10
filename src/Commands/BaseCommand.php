@@ -236,8 +236,8 @@ class BaseCommand extends Command
     {
         $locales = [
             'singular' => $this->commandData->modelName,
-            'plural' => $this->commandData->config->mPlural,
-            'fields' => [],
+            'plural'   => $this->commandData->config->mPlural,
+            'fields'   => [],
         ];
 
         foreach ($this->commandData->fields as $field) {
@@ -253,7 +253,7 @@ class BaseCommand extends Command
         if (file_exists($path.$fileName) && !$this->confirmOverwrite($fileName)) {
             return;
         }
-        $content = "<?php\n\nreturn " . var_export( $locales, true ) . ";" . \PHP_EOL;
+        $content = "<?php\n\nreturn ".var_export($locales, true).';'.\PHP_EOL;
         FileUtil::createFile($path, $fileName, $content);
         $this->commandData->commandComment("\nModel Locale File saved: ");
         $this->commandData->commandInfo($fileName);
