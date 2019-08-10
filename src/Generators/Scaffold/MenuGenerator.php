@@ -35,7 +35,13 @@ class MenuGenerator extends BaseGenerator
 
         $this->menuContents = file_get_contents($this->path);
 
-        $this->menuTemplate = get_template('scaffold.layouts.menu_template', $this->templateType);
+        $templateName = 'menu_template';
+
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+        }
+
+        $this->menuTemplate = get_template('scaffold.layouts.'.$templateName, $this->templateType);
 
         $this->menuTemplate = fill_template($this->commandData->dynamicVars, $this->menuTemplate);
     }

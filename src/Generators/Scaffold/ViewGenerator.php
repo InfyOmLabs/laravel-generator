@@ -97,7 +97,13 @@ class ViewGenerator extends BaseGenerator
 
     private function generateDataTableActions()
     {
-        $templateData = get_template('scaffold.views.datatables_actions', $this->templateType);
+        $templateName = 'datatables_actions';
+
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+        }
+
+        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
@@ -108,7 +114,13 @@ class ViewGenerator extends BaseGenerator
 
     private function generateBladeTableBody()
     {
-        $templateData = get_template('scaffold.views.blade_table_body', $this->templateType);
+        $templateName = 'blade_table_body';
+
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+        }
+
+        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
@@ -138,7 +150,13 @@ class ViewGenerator extends BaseGenerator
 
     private function generateTableHeaderFields()
     {
-        $headerFieldTemplate = get_template('scaffold.views.table_header', $this->templateType);
+        $templateName = 'table_header';
+
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+        }
+
+        $headerFieldTemplate = get_template('scaffold.views.'.$templateName, $this->templateType);
 
         $headerFields = [];
 
@@ -159,7 +177,13 @@ class ViewGenerator extends BaseGenerator
 
     private function generateIndex()
     {
-        $templateData = get_template('scaffold.views.index', $this->templateType);
+        $templateName = 'index';
+
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+        }
+
+        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
@@ -206,7 +230,13 @@ class ViewGenerator extends BaseGenerator
             }
         }
 
-        $templateData = get_template('scaffold.views.fields', $this->templateType);
+        $templateName = 'fields';
+
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+        }
+
+        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         $templateData = str_replace('$FIELDS$', implode("\n\n", $this->htmlFields), $templateData);
@@ -217,7 +247,13 @@ class ViewGenerator extends BaseGenerator
 
     private function generateCreate()
     {
-        $templateData = get_template('scaffold.views.create', $this->templateType);
+        $templateName = 'create';
+
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+        }
+
+        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
@@ -227,7 +263,13 @@ class ViewGenerator extends BaseGenerator
 
     private function generateUpdate()
     {
-        $templateData = get_template('scaffold.views.edit', $this->templateType);
+        $templateName = 'edit';
+
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+        }
+
+        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
@@ -256,7 +298,13 @@ class ViewGenerator extends BaseGenerator
 
     private function generateShow()
     {
-        $templateData = get_template('scaffold.views.show', $this->templateType);
+        $templateName = 'show';
+
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+        }
+
+        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
