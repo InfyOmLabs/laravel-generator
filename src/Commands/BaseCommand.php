@@ -20,7 +20,6 @@ use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
 use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
 use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
 use InfyOm\Generator\Generators\SeederGenerator;
-use InfyOm\Generator\Generators\TestTraitGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -74,7 +73,9 @@ class BaseCommand extends Command
             $repositoryGenerator->generate();
         }
 
-        if ($this->commandData->getOption('factory')) {
+        if ($this->commandData->getOption('factory') || (
+                !$this->isSkip('tests') and $this->commandData->getAddOn('tests')
+            )) {
             $factoryGenerator = new FactoryGenerator($this->commandData);
             $factoryGenerator->generate();
         }
@@ -106,9 +107,6 @@ class BaseCommand extends Command
         if (!$this->isSkip('tests') and $this->commandData->getAddOn('tests')) {
             $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);
             $repositoryTestGenerator->generate();
-
-            $testTraitGenerator = new TestTraitGenerator($this->commandData);
-            $testTraitGenerator->generate();
 
             $apiTestGenerator = new APITestGenerator($this->commandData);
             $apiTestGenerator->generate();
