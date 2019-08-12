@@ -69,13 +69,4 @@ class APIControllerGenerator extends BaseGenerator
             $this->commandData->commandComment('API Controller file deleted: '.$this->fileName);
         }
     }
-
-    public function isSkip($skip)
-    {
-        if ($this->commandData->getOption('skip')) {
-            return in_array($skip, (array) $this->commandData->getOption('skip'));
-        }
-
-        return false;
-    }
 }
