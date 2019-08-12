@@ -87,6 +87,7 @@ class GeneratorConfig
         'forceMigrate',
         'factory',
         'seeder',
+        'repositoryPattern',
     ];
 
     public $tableName;

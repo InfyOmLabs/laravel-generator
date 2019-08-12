@@ -68,7 +68,7 @@ class BaseCommand extends Command
             $modelGenerator->generate();
         }
 
-        if (!$this->isSkip('repository') && !$this->commandData->getOption('repositoryPattern')) {
+        if (!$this->isSkip('repository') && $this->commandData->getOption('repositoryPattern')) {
             $repositoryGenerator = new RepositoryGenerator($this->commandData);
             $repositoryGenerator->generate();
         }
@@ -105,7 +105,7 @@ class BaseCommand extends Command
         }
 
         if (!$this->isSkip('tests') and $this->commandData->getAddOn('tests')) {
-            if (!$this->commandData->getOption('repositoryPattern')) {
+            if ($this->commandData->getOption('repositoryPattern')) {
                 $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);
                 $repositoryTestGenerator->generate();
             }
@@ -268,7 +268,7 @@ class BaseCommand extends Command
             ['forceMigrate', null, InputOption::VALUE_NONE, 'Specify if you want to run migration or not'],
             ['factory', null, InputOption::VALUE_NONE, 'To generate factory'],
             ['seeder', null, InputOption::VALUE_NONE, 'To generate seeder'],
-            ['repositoryPattern', null, InputOption::VALUE_REQUIRED, 'Skip Repositoy Pattern'],
+            ['repositoryPattern', null, InputOption::VALUE_REQUIRED, 'Repository Pattern'],
         ];
     }
 
