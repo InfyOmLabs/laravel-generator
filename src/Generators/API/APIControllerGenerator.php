@@ -27,11 +27,12 @@ class APIControllerGenerator extends BaseGenerator
     public function generate()
     {
         if ($this->commandData->getOption('repositoryPattern')) {
-            $templateData = get_template('api.controller.model_api_controller', 'laravel-generator');
+            $templateName = "api_controller";
         } else {
-            $templateData = get_template('api.controller.api_controller', 'laravel-generator');
+            $templateName = "model_api_controller";
         }
 
+        $templateData = get_template("api.controller.$templateName", 'laravel-generator');
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
         $templateData = $this->fillDocs($templateData);
 
