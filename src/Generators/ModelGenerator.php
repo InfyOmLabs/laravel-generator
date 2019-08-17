@@ -172,7 +172,7 @@ class ModelGenerator extends BaseGenerator
                     $relationName = $relation->inputs[0];
                 }
 
-                return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.Str::camel($relationName);
+                return '\Illuminate\Database\Eloquent\Collection'.' '.Str::camel(Str::plural($relationName));
             case 'mtm':
             case 'hmt':
                 return '\Illuminate\Database\Eloquent\Collection'.' '.Str::camel(Str::plural($relation->inputs[0]));
