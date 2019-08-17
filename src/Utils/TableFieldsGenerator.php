@@ -373,7 +373,9 @@ class TableFieldsGenerator
                     $isOneToMany = $this->isOneToMany($primary, $foreignKey, $modelTable->primaryKey);
                     if ($isOneToMany) {
                         $modelName = model_name_from_table_name($tableName);
-                        $this->relations[] = GeneratorFieldRelation::parseRelation('1tm,'.$modelName);
+                        $this->relations[] = GeneratorFieldRelation::parseRelation(
+                            '1tm,'.$modelName.','.$foreignKey->localField
+                        );
                         continue;
                     }
                 }
