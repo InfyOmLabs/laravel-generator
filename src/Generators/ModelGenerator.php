@@ -166,6 +166,13 @@ class ModelGenerator extends BaseGenerator
 
                 return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.Str::camel($relationName);
             case '1tm':
+                if (isset($relation->inputs[1])) {
+                    $relationName = str_replace('_id', '', strtolower($relation->inputs[1]));
+                } else {
+                    $relationName = $relation->inputs[0];
+                }
+
+                return '\Illuminate\Database\Eloquent\Collection'.' '.Str::camel(Str::plural($relationName));
             case 'mtm':
             case 'hmt':
                 return '\Illuminate\Database\Eloquent\Collection'.' '.Str::camel(Str::plural($relation->inputs[0]));

@@ -39,6 +39,11 @@ class GeneratorFieldRelation
                 $relationClass = 'HasOne';
                 break;
             case '1tm':
+                if (!empty($this->relationName)) {
+                    $pluralRelation = $this->relationName;
+                } elseif (isset($this->inputs[1])) {
+                    $pluralRelation = Str::camel(Str::plural(str_replace('_id', '', strtolower($this->inputs[1]))));
+                }
                 $functionName = $pluralRelation;
                 $relation = 'hasMany';
                 $relationClass = 'HasMany';
