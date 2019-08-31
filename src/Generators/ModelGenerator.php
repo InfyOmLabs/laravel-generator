@@ -155,7 +155,7 @@ class ModelGenerator extends BaseGenerator
     /**
      * @param $db_type
      * @param GeneratorFieldRelation|null $relation
-     * @param string|null $relationText
+     * @param string|null                 $relationText
      *
      * @return string
      */
@@ -339,7 +339,7 @@ class ModelGenerator extends BaseGenerator
         $count = 1;
         $oldField = null;
         foreach ($this->commandData->relations as $relation) {
-            $field = (isset($relation->inputs[1])) ? $relation->inputs[1] : null ;
+            $field = (isset($relation->inputs[1])) ? $relation->inputs[1] : null;
 
             $relationShipText = $field;
             if ($field == $oldField) {
