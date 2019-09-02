@@ -121,7 +121,7 @@ class ModelGenerator extends BaseGenerator
     private function fillDocs($templateData)
     {
         if ($this->commandData->getAddOn('swagger')) {
-            return $this->generateSwagger($templateData);
+            $templateData = $this->generateSwagger($templateData);
         }
 
         $docsTemplate = get_template('docs.model', 'laravel-generator');
@@ -130,15 +130,16 @@ class ModelGenerator extends BaseGenerator
         $fillables = $oldField = '';
         $count = 1;
         foreach ($this->commandData->relations as $relation) {
-            $field = $relationText = (isset($relation->inputs[1])) ? $relation->inputs[1] : null;
-
+            $field = $relationText = (isset($relation->inputs[0])) ? $relation->inputs[0] : null;
             if ($field == $oldField) {
                 $relationText = $relationText.'_'.$count;
                 $count++;
             }
-            $oldField = $field;
+
             $fillables .= ' * @property '.$this->getPHPDocType($relation->type, $relation, $relationText).PHP_EOL;
+            $oldField = $field;
         }
+
         foreach ($this->commandData->fields as $field) {
             if ($field->isFillable) {
                 $fillables .= ' * @property '.$this->getPHPDocType($field->fieldType).' '.$field->name.PHP_EOL;
@@ -162,30 +163,24 @@ class ModelGenerator extends BaseGenerator
     private function getPHPDocType($db_type, $relation = null, $relationText = null)
     {
         $relationText = (!empty($relationText)) ? $relationText : null;
+
         switch ($db_type) {
             case 'datetime':
                 return 'string|\Carbon\Carbon';
             case '1t1':
-                return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.Str::camel($relation->inputs[0]);
+                return '\\'.$this->commandData->config->nsModel.'\\'.$relationText.' '.Str::camel($relationText);
             case 'mt1':
-                if (isset($relationText)) {
-                    $relationName = str_replace('_id', '', strtolower($relationText));
+                if (isset($relation->inputs[1])) {
+                    $relationName = str_replace('_id', '', strtolower($relation->inputs[1]));
                 } else {
-                    $relationName = $relation->inputs[0];
+                    $relationName = $relationText;
                 }
 
-                return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.Str::camel($relationName);
+                return '\\'.$this->commandData->config->nsModel.'\\'.$relationText.' '.Str::camel($relationName);
             case '1tm':
-                if (isset($relationText)) {
-                    $relationName = str_replace('_id', '', strtolower($relationText));
-                } else {
-                    $relationName = $relation->inputs[0];
-                }
-
-                return '\Illuminate\Database\Eloquent\Collection'.' '.Str::camel(Str::plural($relationName));
             case 'mtm':
             case 'hmt':
-                return '\Illuminate\Database\Eloquent\Collection'.' '.Str::camel(Str::plural($relation->inputs[0]));
+                return '\Illuminate\Database\Eloquent\Collection'.' '.Str::camel(Str::plural($relationText));
             default:
                 $fieldData = SwaggerGenerator::getFieldType($db_type);
                 if (!empty($fieldData['fieldType'])) {
@@ -339,13 +334,14 @@ class ModelGenerator extends BaseGenerator
         $count = 1;
         $oldField = null;
         foreach ($this->commandData->relations as $relation) {
-            $field = (isset($relation->inputs[1])) ? $relation->inputs[1] : null ;
+            $field = (isset($relation->inputs[0])) ? $relation->inputs[0] : null;
 
             $relationShipText = $field;
             if ($field == $oldField) {
                 $relationShipText = $relationShipText.'_'.$count;
                 $count++;
             }
+
             $relationText = $relation->getRelationFunctionText($relationShipText);
             if (!empty($relationText)) {
                 $oldField = $field;
