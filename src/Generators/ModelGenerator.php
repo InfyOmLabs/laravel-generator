@@ -156,7 +156,7 @@ class ModelGenerator extends BaseGenerator
     /**
      * @param $db_type
      * @param GeneratorFieldRelation|null $relation
-     * @param string|null $relationText
+     * @param string|null                 $relationText
      *
      * @return string
      */
