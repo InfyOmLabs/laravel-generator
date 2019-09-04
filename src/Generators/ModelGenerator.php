@@ -30,7 +30,7 @@ class ModelGenerator extends BaseGenerator
     /**
      * ModelGenerator constructor.
      *
-     * @param  CommandData  $commandData
+     * @param CommandData $commandData
      */
     public function __construct(CommandData $commandData)
     {
@@ -156,7 +156,7 @@ class ModelGenerator extends BaseGenerator
     /**
      * @param $db_type
      * @param GeneratorFieldRelation|null $relation
-     * @param  string|null  $relationText
+     * @param string|null                 $relationText
      *
      * @return string
      */
