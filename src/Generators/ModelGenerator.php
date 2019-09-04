@@ -30,7 +30,7 @@ class ModelGenerator extends BaseGenerator
     /**
      * ModelGenerator constructor.
      *
-     * @param \InfyOm\Generator\Common\CommandData $commandData
+     * @param CommandData $commandData
      */
     public function __construct(CommandData $commandData)
     {
@@ -121,24 +121,34 @@ class ModelGenerator extends BaseGenerator
     {
         if ($this->commandData->getAddOn('swagger')) {
             $templateData = $this->generateSwagger($templateData);
-        } else {
-            $docsTemplate = get_template('docs.model', 'laravel-generator');
-            $docsTemplate = fill_template($this->commandData->dynamicVars, $docsTemplate);
-
-            $fillables = '';
-            foreach ($this->commandData->relations as $relation) {
-                $fillables .= ' * @property '.$this->getPHPDocType($relation->type, $relation).PHP_EOL;
-            }
-            foreach ($this->commandData->fields as $field) {
-                if ($field->isFillable) {
-                    $fillables .= ' * @property '.$this->getPHPDocType($field->fieldType).' '.$field->name.PHP_EOL;
-                }
-            }
-            $docsTemplate = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $docsTemplate);
-            $docsTemplate = str_replace('$PHPDOC$', $fillables, $docsTemplate);
-
-            $templateData = str_replace('$DOCS$', $docsTemplate, $templateData);
         }
+
+        $docsTemplate = get_template('docs.model', 'laravel-generator');
+        $docsTemplate = fill_template($this->commandData->dynamicVars, $docsTemplate);
+
+        $fillables = '';
+        $fieldsArr = [];
+        $count = 1;
+        foreach ($this->commandData->relations as $relation) {
+            $field = $relationText = (isset($relation->inputs[0])) ? $relation->inputs[0] : null;
+            if (in_array($field, $fieldsArr)) {
+                $relationText = $relationText.'_'.$count;
+                $count++;
+            }
+
+            $fillables .= ' * @property '.$this->getPHPDocType($relation->type, $relation, $relationText).PHP_EOL;
+            $fieldsArr[] = $field;
+        }
+
+        foreach ($this->commandData->fields as $field) {
+            if ($field->isFillable) {
+                $fillables .= ' * @property '.$this->getPHPDocType($field->fieldType).' '.$field->name.PHP_EOL;
+            }
+        }
+        $docsTemplate = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $docsTemplate);
+        $docsTemplate = str_replace('$PHPDOC$', $fillables, $docsTemplate);
+
+        $templateData = str_replace('$DOCS$', $docsTemplate, $templateData);
 
         return $templateData;
     }
@@ -146,35 +156,31 @@ class ModelGenerator extends BaseGenerator
     /**
      * @param $db_type
      * @param GeneratorFieldRelation|null $relation
+     * @param string|null                 $relationText
      *
      * @return string
      */
-    private function getPHPDocType($db_type, $relation = null)
+    private function getPHPDocType($db_type, $relation = null, $relationText = null)
     {
+        $relationText = (!empty($relationText)) ? $relationText : null;
+
         switch ($db_type) {
             case 'datetime':
                 return 'string|\Carbon\Carbon';
             case '1t1':
-                return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.camel_case($relation->inputs[0]);
+                return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.camel_case($relationText);
             case 'mt1':
                 if (isset($relation->inputs[1])) {
                     $relationName = str_replace('_id', '', strtolower($relation->inputs[1]));
                 } else {
-                    $relationName = $relation->inputs[0];
+                    $relationName = $relationText;
                 }
 
                 return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.camel_case($relationName);
             case '1tm':
-                if (isset($relation->inputs[1])) {
-                    $relationName = str_replace('_id', '', strtolower($relation->inputs[1]));
-                } else {
-                    $relationName = $relation->inputs[0];
-                }
-
-                return '\Illuminate\Database\Eloquent\Collection'.' '.Str::camel(Str::plural($relationName));
             case 'mtm':
             case 'hmt':
-                return '\Illuminate\Database\Eloquent\Collection'.' '.camel_case(str_plural($relation->inputs[0]));
+                return '\Illuminate\Database\Eloquent\Collection'.' '.camel_case(str_plural($relationText));
             default:
                 $fieldData = SwaggerGenerator::getFieldType($db_type);
                 if (!empty($fieldData['fieldType'])) {
@@ -325,9 +331,20 @@ class ModelGenerator extends BaseGenerator
     {
         $relations = [];
 
+        $count = 1;
+        $fieldsArr = [];
         foreach ($this->commandData->relations as $relation) {
-            $relationText = $relation->getRelationFunctionText();
+            $field = (isset($relation->inputs[0])) ? $relation->inputs[0] : null;
+
+            $relationShipText = $field;
+            if (in_array($field, $fieldsArr)) {
+                $relationShipText = $relationShipText.'_'.$count;
+                $count++;
+            }
+
+            $relationText = $relation->getRelationFunctionText($relationShipText);
             if (!empty($relationText)) {
+                $fieldsArr[] = $field;
                 $relations[] = $relationText;
             }
         }
