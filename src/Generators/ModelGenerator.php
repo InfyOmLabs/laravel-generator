@@ -127,17 +127,18 @@ class ModelGenerator extends BaseGenerator
         $docsTemplate = get_template('docs.model', 'laravel-generator');
         $docsTemplate = fill_template($this->commandData->dynamicVars, $docsTemplate);
 
-        $fillables = $oldField = '';
+        $fillables = '';
+        $fieldsArr = [];
         $count = 1;
         foreach ($this->commandData->relations as $relation) {
             $field = $relationText = (isset($relation->inputs[0])) ? $relation->inputs[0] : null;
-            if ($field == $oldField) {
+            if (in_array($field, $fieldsArr)) {
                 $relationText = $relationText.'_'.$count;
                 $count++;
             }
 
             $fillables .= ' * @property '.$this->getPHPDocType($relation->type, $relation, $relationText).PHP_EOL;
-            $oldField = $field;
+            $fieldsArr[] = $field;
         }
 
         foreach ($this->commandData->fields as $field) {
@@ -332,19 +333,19 @@ class ModelGenerator extends BaseGenerator
         $relations = [];
 
         $count = 1;
-        $oldField = null;
+        $fieldsArr = [];
         foreach ($this->commandData->relations as $relation) {
             $field = (isset($relation->inputs[0])) ? $relation->inputs[0] : null;
 
             $relationShipText = $field;
-            if ($field == $oldField) {
+            if (in_array($field, $fieldsArr)) {
                 $relationShipText = $relationShipText.'_'.$count;
                 $count++;
             }
 
             $relationText = $relation->getRelationFunctionText($relationShipText);
             if (!empty($relationText)) {
-                $oldField = $field;
+                $fieldsArr[] = $field;
                 $relations[] = $relationText;
             }
         }
