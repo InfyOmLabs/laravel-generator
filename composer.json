@@ -25,7 +25,7 @@
     "require": {
         "php": ">=7.2",
         "illuminate/support": "^6.0.0",
-        "prettus/l5-repository": "^2.6",
+        "prettus/l5-repository": "~2.6.35",
         "laracasts/flash": "~3.0"
     },
     "require-dev": {
