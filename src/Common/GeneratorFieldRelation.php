@@ -25,10 +25,10 @@ class GeneratorFieldRelation
         return $relation;
     }
 
-    public function getRelationFunctionText()
+    public function getRelationFunctionText($relationText = null)
     {
-        $singularRelation = (!empty($this->relationName)) ? $this->relationName : camel_case($this->inputs[0]);
-        $pluralRelation = (!empty($this->relationName)) ? $this->relationName : camel_case(str_plural($this->inputs[0]));
+        $singularRelation = (!empty($this->relationName)) ? $this->relationName : camel_case($relationText);
+        $pluralRelation = (!empty($this->relationName)) ? $this->relationName : camel_case(str_plural($relationText));
 
         switch ($this->type) {
             case '1t1':
@@ -37,11 +37,6 @@ class GeneratorFieldRelation
                 $relationClass = 'HasOne';
                 break;
             case '1tm':
-                if (!empty($this->relationName)) {
-                    $pluralRelation = $this->relationName;
-                } elseif (isset($this->inputs[1])) {
-                    $pluralRelation = Str::camel(Str::plural(str_replace('_id', '', strtolower($this->inputs[1]))));
-                }
                 $functionName = $pluralRelation;
                 $relation = 'hasMany';
                 $relationClass = 'HasMany';
