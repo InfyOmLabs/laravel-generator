@@ -516,7 +516,7 @@ class TableFieldsGenerator
             $foreignTable = $foreignKey->foreignTable;
             $foreignField = $foreignKey->foreignField;
 
-            if (!isset($tables[$foreignTable])) {
+            if (!isset($tables[$foreignTable]) || strpos($foreignTable, 'user') !== false ) {
                 continue;
             }
 

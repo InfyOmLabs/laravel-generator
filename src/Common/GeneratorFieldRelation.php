@@ -14,7 +14,9 @@ class GeneratorFieldRelation
     public static function parseRelation($relationInput)
     {
         $inputs = explode(',', $relationInput);
-
+        if ($inputs[1] == "" ) {
+            return false;
+        }
         $relation = new self();
         $relation->type = array_shift($inputs);
         $modelWithRelation = explode(':', array_shift($inputs)); //e.g ModelName:relationName
