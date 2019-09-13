@@ -61,8 +61,8 @@ class SwaggerGenerator
             case 'float':
             case 'real':
             case 'decimal':
-                $fieldType = 'float';
-                $fieldFormat = 'float';
+                $fieldType = 'number';
+                $fieldFormat = 'number';
                 break;
             case 'boolean':
                 $fieldType = 'boolean';
