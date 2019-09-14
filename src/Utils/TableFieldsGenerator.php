@@ -420,31 +420,33 @@ class TableFieldsGenerator
 
         // if foreign key is there
         if ($isAnyKeyOnModelTable) {
-            foreach ($foreignKeys as $foreignKey) {
-                $foreignField = $foreignKey->foreignField;
-                $foreignTableName = $foreignKey->foreignTable;
+            return false;
+        }
 
-                // if foreign table is model table
-                if ($foreignTableName == $modelTableName) {
-                    $foreignTable = $modelTable;
-                } else {
-                    $foreignTable = $tables[$foreignTableName];
-                    // get the many to many model table name
-                    $manyToManyTable = $foreignTableName;
-                }
+        foreach ($foreignKeys as $foreignKey) {
+            $foreignField = $foreignKey->foreignField;
+            $foreignTableName = $foreignKey->foreignTable;
 
-                // if foreign field is not primary key of foreign table
-                // then it can not be many to many
-                if ($foreignField != $foreignTable->primaryKey) {
-                    return false;
-                    break;
-                }
+            // if foreign table is model table
+            if ($foreignTableName == $modelTableName) {
+                $foreignTable = $modelTable;
+            } else {
+                $foreignTable = $tables[$foreignTableName];
+                // get the many to many model table name
+                $manyToManyTable = $foreignTableName;
+            }
 
-                // if foreign field is primary key of this table
-                // then it can not be many to many
-                if ($foreignField == $primary) {
-                    return false;
-                }
+            // if foreign field is not primary key of foreign table
+            // then it can not be many to many
+            if ($foreignField != $foreignTable->primaryKey) {
+                return false;
+                break;
+            }
+
+            // if foreign field is primary key of this table
+            // then it can not be many to many
+            if ($foreignField == $primary) {
+                return false;
             }
         }
 
