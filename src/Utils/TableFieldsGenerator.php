@@ -419,7 +419,7 @@ class TableFieldsGenerator
         }
 
         // if foreign key is there
-        if ($isAnyKeyOnModelTable) {
+        if (!$isAnyKeyOnModelTable) {
             return false;
         }
 
