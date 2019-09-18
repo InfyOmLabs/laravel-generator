@@ -246,6 +246,8 @@ class ModelGenerator extends BaseGenerator
                 $replace .= infy_nl_tab()."const CREATED_AT = $created_at;";
                 $replace .= infy_nl_tab()."const UPDATED_AT = $updated_at;\n";
             }
+        } elseif (empty($timestamps)) {
+            $replace = infy_nl_tab()."public \$timestamps = false;\n";
         }
 
         return str_replace('$TIMESTAMPS$', $replace, $templateData);
