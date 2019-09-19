@@ -159,7 +159,9 @@ class CommandData
             }
         }
 
-        $this->addTimestamps();
+        if (config('infyom.laravel_generator.timestamps.enabled', true)) {
+            $this->addTimestamps();
+        }
     }
 
     private function addPrimaryKey()
