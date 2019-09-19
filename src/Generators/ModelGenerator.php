@@ -234,20 +234,17 @@ class ModelGenerator extends BaseGenerator
         $timestamps = TableFieldsGenerator::getTimestampFieldNames();
 
         $replace = '';
-
-        if ($this->commandData->getOption('fromTable')) {
-            if (empty($timestamps)) {
-                $replace = infy_nl_tab()."public \$timestamps = false;\n";
-            } else {
-                list($created_at, $updated_at) = collect($timestamps)->map(function ($field) {
-                    return !empty($field) ? "'$field'" : 'null';
-                });
-
-                $replace .= infy_nl_tab()."const CREATED_AT = $created_at;";
-                $replace .= infy_nl_tab()."const UPDATED_AT = $updated_at;\n";
-            }
-        } elseif (empty($timestamps)) {
+        if (empty($timestamps)) {
             $replace = infy_nl_tab()."public \$timestamps = false;\n";
+        }
+
+        if ($this->commandData->getOption('fromTable') && !empty($timestamps)) {
+            list($created_at, $updated_at) = collect($timestamps)->map(function ($field) {
+                return !empty($field) ? "'$field'" : 'null';
+            });
+
+            $replace .= infy_nl_tab()."const CREATED_AT = $created_at;";
+            $replace .= infy_nl_tab()."const UPDATED_AT = $updated_at;\n";
         }
 
         return str_replace('$TIMESTAMPS$', $replace, $templateData);
