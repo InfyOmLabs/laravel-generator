@@ -154,8 +154,8 @@ class ViewGenerator extends BaseGenerator
 
                 case 'checkbox':
                     $fieldTemplate = get_template('vuejs.fields.checkbox', $this->templateType);
-                    $checkboxValue = $value = $field['htmlTypeInputs'];
-                    if ($field['fieldType'] != 'boolean') {
+                    $checkboxValue = $value = $field->htmlTypeInputs;
+                    if ($field->fieldType != 'boolean') {
                         $checkboxValue = "'".$value."'";
                     }
                     $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
