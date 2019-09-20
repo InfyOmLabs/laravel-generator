@@ -242,7 +242,6 @@ class ViewGenerator extends BaseGenerator
         $fieldsStr = '';
 
         foreach ($this->commandData->fields as $field) {
-
             if (!$field->inView) {
                 continue;
             }
