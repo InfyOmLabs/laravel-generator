@@ -149,6 +149,7 @@ class TableFieldsGenerator
                 $field->isFillable = false;
                 $field->inForm = false;
                 $field->inIndex = false;
+                $field->inView = false;
             }
             $field->isNotNull = (bool) $column->getNotNull();
             $field->description = $column->getComment(); // get comments from table
@@ -233,6 +234,7 @@ class TableFieldsGenerator
             $field->isSearchable = false;
             $field->inIndex = false;
             $field->inForm = false;
+            $field->inView = false;
         }
 
         return $field;
