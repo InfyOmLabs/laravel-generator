@@ -30,9 +30,21 @@ class GeneratorField
     public $inIndex = true;
     public $isNotNull = false;
 
-    public function parseDBType($dbInput)
+    /**
+     * @param Column $column
+     * @param $dbInput
+     */
+    public function parseDBType($dbInput, $column= null)
     {
         $this->dbInput = $dbInput;
+        if (!is_null($column)) {
+            if ($column->getLength() > 0) {
+                $this->dbInput = $this->dbInput . ',' . $column->getLength();
+            }
+            if (!$column->getNotnull()) {
+                $this->dbInput = $this->dbInput . ':nullable';
+            }
+        }
         $this->prepareMigrationText();
     }
 
