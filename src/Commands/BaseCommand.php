@@ -205,6 +205,7 @@ class BaseCommand extends Command
                 'primary'     => $field->isPrimary,
                 'inForm'      => $field->inForm,
                 'inIndex'     => $field->inIndex,
+                'inView'      => $field->inView,
             ];
         }
 
