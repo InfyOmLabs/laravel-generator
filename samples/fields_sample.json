@@ -8,7 +8,8 @@
         "fillable": false,
         "primary": true,
         "inForm": false,
-        "inIndex": false
+        "inIndex": false,
+        "inView": false
     },
     {
         "name": "title",
@@ -34,7 +35,8 @@
         "htmlType": "password",
         "searchable": false,
         "inForm": false,
-        "inIndex": false
+        "inIndex": false,
+        "inView": false
     },
     {
         "name": "token",
@@ -42,7 +44,8 @@
         "htmlType": "hidden",
         "searchable": false,
         "inForm": false,
-        "inIndex": false
+        "inIndex": false,
+        "inView": false
     },
     {
         "name": "email",
