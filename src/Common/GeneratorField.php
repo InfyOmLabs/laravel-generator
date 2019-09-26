@@ -38,12 +38,8 @@ class GeneratorField
     {
         $this->dbInput = $dbInput;
         if (!is_null($column)) {
-            if ($column->getLength() > 0) {
-                $this->dbInput = $this->dbInput.','.$column->getLength();
-            }
-            if (!$column->getNotnull()) {
-                $this->dbInput = $this->dbInput.':nullable';
-            }
+            $this->dbInput = ($column->getLength() > 0) ? $this->dbInput.','.$column->getLength() : $this->dbInput;
+            $this->dbInput = (!$column->getNotnull()) ? $this->dbInput.':nullable' : $this->dbInput;
         }
         $this->prepareMigrationText();
     }
