@@ -249,7 +249,7 @@ class TableFieldsGenerator
     {
         $field = new GeneratorField();
         $field->name = $column->getName();
-        $field->parseDBType($dbType);
+        $field->parseDBType($dbType, $column);
         $field->parseHtmlInput($htmlType);
 
         return $this->checkForPrimary($field);
