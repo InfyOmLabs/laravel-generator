@@ -29,7 +29,7 @@ class PublishTemplateCommand extends PublishBaseCommand
     {
         $this->templatesDir = config(
             'infyom.laravel_generator.path.templates_dir',
-            base_path('resources/infyom/infyom-generator-templates/')
+            resource_path('infyom/infyom-generator-templates/')
         );
 
         if ($this->publishGeneratorTemplates()) {
