@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Generators\Scaffold;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
@@ -33,6 +34,11 @@ class ViewGenerator extends BaseGenerator
     {
         if (!file_exists($this->path)) {
             mkdir($this->path, 0755, true);
+        }
+
+        $htmlInputs = Arr::pluck($this->commandData->fields, 'htmlInput');
+        if (in_array('file', $htmlInputs)) {
+            $this->commandData->addDynamicVariable('$FILES$', ", 'files' => true");
         }
 
         $this->commandData->commandComment("\nGenerating Views...");
