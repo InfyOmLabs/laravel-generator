@@ -273,7 +273,7 @@ class ViewGenerator extends BaseGenerator
         $this->commandData->commandInfo('show.blade.php created');
     }
 
-    public function rollback()
+    public function rollback($views = [])
     {
         $files = [
             'table.blade.php',
@@ -284,6 +284,13 @@ class ViewGenerator extends BaseGenerator
             'show.blade.php',
             'show_fields.blade.php',
         ];
+
+        if (! empty($views)) {
+            $files = [];
+            foreach ($views as $view) {
+                $files[] = $view.'.blade.php';
+            }
+        }
 
         if ($this->commandData->getAddOn('datatables')) {
             $files[] = 'datatables_actions.blade.php';
