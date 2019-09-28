@@ -82,7 +82,7 @@ class RollbackGeneratorCommand extends Command
         $this->commandData->config->init($this->commandData, ['tableName', 'prefix', 'plural', 'views']);
 
         $views = $this->commandData->getOption('views');
-        if (! empty($views)) {
+        if (!empty($views)) {
             $views = explode(',', $views);
             $viewGenerator = new ViewGenerator($this->commandData);
             $viewGenerator->rollback($views);
@@ -92,7 +92,6 @@ class RollbackGeneratorCommand extends Command
 
             return;
         }
-
 
         $migrationGenerator = new MigrationGenerator($this->commandData);
         $migrationGenerator->rollback();

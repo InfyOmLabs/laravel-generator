@@ -285,7 +285,7 @@ class ViewGenerator extends BaseGenerator
             'show_fields.blade.php',
         ];
 
-        if (! empty($views)) {
+        if (!empty($views)) {
             $files = [];
             foreach ($views as $view) {
                 $files[] = $view.'.blade.php';
