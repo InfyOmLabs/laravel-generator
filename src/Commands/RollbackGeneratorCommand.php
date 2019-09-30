@@ -79,7 +79,19 @@ class RollbackGeneratorCommand extends Command
         $this->commandData = new CommandData($this, $this->argument('type'));
         $this->commandData->config->mName = $this->commandData->modelName = $this->argument('model');
 
-        $this->commandData->config->init($this->commandData, ['tableName', 'prefix', 'plural']);
+        $this->commandData->config->init($this->commandData, ['tableName', 'prefix', 'plural', 'views']);
+
+        $views = $this->commandData->getOption('views');
+        if (!empty($views)) {
+            $views = explode(',', $views);
+            $viewGenerator = new ViewGenerator($this->commandData);
+            $viewGenerator->rollback($views);
+
+            $this->info('Generating autoload files');
+            $this->composer->dumpOptimized();
+
+            return;
+        }
 
         $migrationGenerator = new MigrationGenerator($this->commandData);
         $migrationGenerator->rollback();
@@ -151,6 +163,7 @@ class RollbackGeneratorCommand extends Command
             ['tableName', null, InputOption::VALUE_REQUIRED, 'Table Name'],
             ['prefix', null, InputOption::VALUE_REQUIRED, 'Prefix for all files'],
             ['plural', null, InputOption::VALUE_REQUIRED, 'Plural Model name'],
+            ['views', null, InputOption::VALUE_REQUIRED, 'Views to rollback'],
         ];
     }
 
