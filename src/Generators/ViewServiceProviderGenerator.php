@@ -33,6 +33,9 @@ class ViewServiceProviderGenerator extends BaseGenerator
 
         $fileName = basename($this->commandData->config->pathViewProvider);
 
+        if (File::exists($destination)) {
+            return;
+        }
         File::copy($templateData, $destination);
 
         $this->commandData->commandComment($fileName.' published');
@@ -47,32 +50,40 @@ class ViewServiceProviderGenerator extends BaseGenerator
      */
     public function addViewVariables($views, $variableName, $columns, $tableName)
     {
-        $nsModel = $this->commandData->config->nsModel.'\\'.model_name_from_table_name($tableName);
+        $model = model_name_from_table_name($tableName);
 
-        $mainSeederContent = file_get_contents($this->commandData->config->pathViewProvider);
+        $mainViewContent = file_get_contents($this->commandData->config->pathViewProvider);
         $newViewStatement = get_template('scaffold.view_composer', 'laravel-generator');
         $this->commandData->addDynamicVariable('$COMPOSER_VIEWS$', $views);
         $this->commandData->addDynamicVariable('$COMPOSER_VIEW_VARIABLE$', $variableName);
         $this->commandData->addDynamicVariable(
-            '$COMPOSER_VIEW_VARIABLE_VALUES$', $nsModel."::pluck($columns)->toArray()"
+            '$COMPOSER_VIEW_VARIABLE_VALUES$', $model."::pluck($columns)->toArray()"
         );
 
         $newViewStatement = fill_template($this->commandData->dynamicVars, $newViewStatement);
 
-        $newViewStatement = infy_tabs(2).$newViewStatement.infy_nl();
-
-        preg_match_all('/function boot(.*)/', $mainSeederContent, $matches);
+        $newViewStatement = infy_nl(1).$newViewStatement;
+        preg_match_all('/public function boot(.*)/', $mainViewContent, $matches);
 
         $totalMatches = count($matches[0]);
         $lastSeederStatement = $matches[0][$totalMatches - 1];
 
-        $replacePosition = strpos($mainSeederContent, $lastSeederStatement);
-
-        $mainSeederContent = substr_replace(
-            $mainSeederContent, $newViewStatement, $replacePosition + strlen($lastSeederStatement) + 6, 0
+        $replacePosition = strpos($mainViewContent, $lastSeederStatement);
+        $mainViewContent = substr_replace(
+            $mainViewContent, $newViewStatement, $replacePosition + strlen($lastSeederStatement) + 6, 0
         );
 
-        file_put_contents($this->commandData->config->pathViewProvider, $mainSeederContent);
+        // add modal namespace
+        $newModelStatement = infy_nl().'use '.$this->commandData->config->nsModel.'\\'.$model.';';
+        preg_match_all('/namespace(.*)/', $mainViewContent, $matches);
+        $totalMatches = count($matches[0]);
+        $nameSpaceStatement = $matches[0][$totalMatches - 1];
+        $replacePosition = strpos($mainViewContent, $nameSpaceStatement);
+        $mainViewContent = substr_replace(
+            $mainViewContent, $newModelStatement, $replacePosition + strlen($nameSpaceStatement), 0
+        );
+
+        file_put_contents($this->commandData->config->pathViewProvider, $mainViewContent);
         $this->commandData->commandComment('View service provider file updated.');
     }
 }
