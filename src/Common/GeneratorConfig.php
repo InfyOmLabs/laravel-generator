@@ -33,6 +33,7 @@ class GeneratorConfig
     public $pathFactory;
     public $pathSeeder;
     public $pathDatabaseSeeder;
+    public $pathViewProvider;
 
     public $pathApiController;
     public $pathApiRequest;

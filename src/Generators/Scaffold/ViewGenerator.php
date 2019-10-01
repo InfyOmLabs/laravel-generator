@@ -6,6 +6,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
+use InfyOm\Generator\Generators\ViewServiceProviderGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\HTMLFieldGenerator;
 
@@ -200,6 +201,30 @@ class ViewGenerator extends BaseGenerator
             }
 
             $fieldTemplate = HTMLFieldGenerator::generateHTML($field, $this->templateType);
+            if ($field->htmlType == 'selectTable') {
+                $fieldTemplate = get_template('scaffold.fields.select', $this->templateType);
+
+                $inputArr = explode(',', $field->htmlValues[1]);
+                $columns = '';
+                foreach ($inputArr as $item) {
+                    $columns .= "'$item'".",";
+                }
+                $columns = substr_replace($columns, "", -1);
+
+                $selectTable = $field->htmlValues[0];
+                $tableName = $this->commandData->config->tableName;
+                $variableName = Str::singular($selectTable).'Items';
+
+                $viewServiceProvider = new ViewServiceProviderGenerator($this->commandData);
+                $viewServiceProvider->generate();
+                $viewServiceProvider->addViewVariables($tableName.'.fields', $variableName, $columns, $selectTable);
+
+                $fieldTemplate = str_replace(
+                    '$INPUT_ARR$',
+                    '$'.$variableName,
+                    $fieldTemplate
+                );
+            }
 
             if (!empty($fieldTemplate)) {
                 $fieldTemplate = fill_template_with_field_data(
