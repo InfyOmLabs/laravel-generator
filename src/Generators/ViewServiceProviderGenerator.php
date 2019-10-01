@@ -6,7 +6,7 @@ use File;
 use InfyOm\Generator\Common\CommandData;
 
 /**
- * Class ViewServiceProviderGenerator
+ * Class ViewServiceProviderGenerator.
  */
 class ViewServiceProviderGenerator extends BaseGenerator
 {
@@ -15,7 +15,7 @@ class ViewServiceProviderGenerator extends BaseGenerator
     /**
      * ViewServiceProvider constructor.
      *
-     * @param  CommandData  $commandData
+     * @param CommandData $commandData
      */
     public function __construct(CommandData $commandData)
     {
@@ -23,7 +23,7 @@ class ViewServiceProviderGenerator extends BaseGenerator
     }
 
     /**
-     * Generate ViewServiceProvider
+     * Generate ViewServiceProvider.
      */
     public function generate()
     {
@@ -43,10 +43,10 @@ class ViewServiceProviderGenerator extends BaseGenerator
     }
 
     /**
-     * @param  string  $views
-     * @param  string  $variableName
-     * @param  string  $columns
-     * @param  string  $tableName
+     * @param string $views
+     * @param string $variableName
+     * @param string $columns
+     * @param string $tableName
      */
     public function addViewVariables($views, $variableName, $columns, $tableName)
     {
