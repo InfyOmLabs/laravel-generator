@@ -88,6 +88,7 @@ class GeneratorConfig
         'factory',
         'seeder',
         'repositoryPattern',
+        'moduleName',
     ];
 
     public $tableName;
