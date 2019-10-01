@@ -207,9 +207,9 @@ class ViewGenerator extends BaseGenerator
                 $inputArr = explode(',', $field->htmlValues[1]);
                 $columns = '';
                 foreach ($inputArr as $item) {
-                    $columns .= "'$item'".",";
+                    $columns .= "'$item'".',';
                 }
-                $columns = substr_replace($columns, "", -1);
+                $columns = substr_replace($columns, '', -1);
 
                 $selectTable = $field->htmlValues[0];
                 $tableName = $this->commandData->config->tableName;

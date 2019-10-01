@@ -60,6 +60,7 @@ class GeneratorField
             $inputsArr = explode(':', $htmlInput);
             $this->htmlType = array_shift($inputsArr);
             $this->htmlValues = $inputsArr;
+
             return;
         }
 
