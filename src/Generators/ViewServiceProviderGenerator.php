@@ -83,6 +83,21 @@ class ViewServiceProviderGenerator extends BaseGenerator
             $mainViewContent, $newModelStatement, $replacePosition + strlen($nameSpaceStatement), 0
         );
 
+        // add ViewServiceProvider to app.php
+        $configFile = base_path().'/config/app.php';
+        $file = file_get_contents($configFile);
+        $searchFor = 'Illuminate\View\ViewServiceProvider::class,';
+        $customProviders = strpos($file, $searchFor);
+        if ($customProviders) {
+            $newChanges = substr_replace(
+                $file,
+                infy_nl().infy_tab(8).'\App\Providers\ViewServiceProvider::class,',
+                $customProviders + strlen($searchFor),
+                0
+            );
+            file_put_contents($configFile, $newChanges);
+        }
+
         file_put_contents($this->commandData->config->pathViewProvider, $mainViewContent);
         $this->commandData->commandComment('View service provider file updated.');
     }
