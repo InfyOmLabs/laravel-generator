@@ -272,6 +272,22 @@ class ModelGenerator extends BaseGenerator
         return $rules;
     }
 
+    public function generateUniqueRules()
+    {
+        $tableNameSingular = Str::singular($this->commandData->config->tableName);
+        $uniqueRules = '';
+        foreach ($this->generateRules() as $rule) {
+            if (Str::contains($rule, 'unique:')) {
+                $rule = explode('=>', $rule);
+                $string = '$rules['.trim($rule[0]).'].","';
+
+                $uniqueRules .= '$rules['.trim($rule[0]).'] = '.$string.'.$this->route("'.$tableNameSingular.'");';
+            }
+        }
+
+        return $uniqueRules;
+    }
+
     public function generateCasts()
     {
         $casts = [];
