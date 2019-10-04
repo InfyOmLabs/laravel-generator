@@ -75,13 +75,16 @@ class ViewServiceProviderGenerator extends BaseGenerator
 
         // add modal namespace
         $newModelStatement = infy_nl().'use '.$this->commandData->config->nsModel.'\\'.$model.';';
-        preg_match_all('/namespace(.*)/', $mainViewContent, $matches);
-        $totalMatches = count($matches[0]);
-        $nameSpaceStatement = $matches[0][$totalMatches - 1];
-        $replacePosition = strpos($mainViewContent, $nameSpaceStatement);
-        $mainViewContent = substr_replace(
-            $mainViewContent, $newModelStatement, $replacePosition + strlen($nameSpaceStatement), 0
-        );
+        $isNameSpaceExist = strpos($mainViewContent, $newModelStatement);
+        if (!$isNameSpaceExist) {
+            preg_match_all('/namespace(.*)/', $mainViewContent, $matches);
+            $totalMatches = count($matches[0]);
+            $nameSpaceStatement = $matches[0][$totalMatches - 1];
+            $replacePosition = strpos($mainViewContent, $nameSpaceStatement);
+            $mainViewContent = substr_replace(
+                $mainViewContent, $newModelStatement, $replacePosition + strlen($nameSpaceStatement), 0
+            );
+        }
 
         // add ViewServiceProvider to app.php
         $configFile = base_path().'/config/app.php';
