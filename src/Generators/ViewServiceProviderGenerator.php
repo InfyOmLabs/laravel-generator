@@ -91,7 +91,9 @@ class ViewServiceProviderGenerator extends BaseGenerator
         $file = file_get_contents($configFile);
         $searchFor = 'Illuminate\View\ViewServiceProvider::class,';
         $customProviders = strpos($file, $searchFor);
-        if ($customProviders) {
+
+        $isExist = strpos($file, "App\Providers\ViewServiceProvider::class");
+        if ($customProviders && !$isExist) {
             $newChanges = substr_replace(
                 $file,
                 infy_nl().infy_tab(8).'\App\Providers\ViewServiceProvider::class,',
