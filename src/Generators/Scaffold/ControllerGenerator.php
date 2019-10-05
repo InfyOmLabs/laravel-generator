@@ -31,7 +31,12 @@ class ControllerGenerator extends BaseGenerator
     public function generate()
     {
         if ($this->commandData->getAddOn('datatables')) {
-            $templateName = 'datatable_controller';
+
+            if ($this->commandData->getOption('repositoryPattern')) {
+                $templateName = 'datatable_controller';
+            } else {
+                $templateName = 'model_datatable_controller';
+            }
 
             if ($this->commandData->isLocalizedTemplates()) {
                 $templateName .= '_locale';
@@ -41,8 +46,12 @@ class ControllerGenerator extends BaseGenerator
 
             $this->generateDataTable();
         } else {
-            $templateName = 'controller';
 
+           if ($this->commandData->getOption('repositoryPattern')) {
+                $templateName = 'controller';
+            } else {
+                $templateName = 'model_controller';
+            }
             if ($this->commandData->isLocalizedTemplates()) {
                 $templateName .= '_locale';
             }

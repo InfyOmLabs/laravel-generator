@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Generators\Scaffold;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
@@ -33,6 +34,11 @@ class ViewGenerator extends BaseGenerator
     {
         if (!file_exists($this->path)) {
             mkdir($this->path, 0755, true);
+        }
+
+        $htmlInputs = Arr::pluck($this->commandData->fields, 'htmlInput');
+        if (in_array('file', $htmlInputs)) {
+            $this->commandData->addDynamicVariable('$FILES$', ", 'files' => true");
         }
 
         $this->commandData->commandComment("\nGenerating Views...");
@@ -284,6 +290,9 @@ class ViewGenerator extends BaseGenerator
         $fieldsStr = '';
 
         foreach ($this->commandData->fields as $field) {
+            if (!$field->inView) {
+                continue;
+            }
             $singleFieldStr = str_replace('$FIELD_NAME_TITLE$', Str::title(str_replace('_', ' ', $field->name)),
                 $fieldTemplate);
             $singleFieldStr = str_replace('$FIELD_NAME$', $field->name, $singleFieldStr);
@@ -312,7 +321,7 @@ class ViewGenerator extends BaseGenerator
         $this->commandData->commandInfo('show.blade.php created');
     }
 
-    public function rollback()
+    public function rollback($views = [])
     {
         $files = [
             'table.blade.php',
@@ -323,6 +332,13 @@ class ViewGenerator extends BaseGenerator
             'show.blade.php',
             'show_fields.blade.php',
         ];
+
+        if (!empty($views)) {
+            $files = [];
+            foreach ($views as $view) {
+                $files[] = $view.'.blade.php';
+            }
+        }
 
         if ($this->commandData->getAddOn('datatables')) {
             $files[] = 'datatables_actions.blade.php';
