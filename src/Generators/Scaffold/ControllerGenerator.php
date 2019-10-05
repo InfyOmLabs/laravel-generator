@@ -5,7 +5,6 @@ namespace InfyOm\Generator\Generators\Scaffold;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\FileUtil;
-use Yajra\DataTables\Html\Column;
 
 class ControllerGenerator extends BaseGenerator
 {
@@ -32,7 +31,6 @@ class ControllerGenerator extends BaseGenerator
     public function generate()
     {
         if ($this->commandData->getAddOn('datatables')) {
-
             if ($this->commandData->getOption('repositoryPattern')) {
                 $templateName = 'datatable_controller';
             } else {
@@ -47,8 +45,7 @@ class ControllerGenerator extends BaseGenerator
 
             $this->generateDataTable();
         } else {
-
-           if ($this->commandData->getOption('repositoryPattern')) {
+            if ($this->commandData->getOption('repositoryPattern')) {
                 $templateName = 'controller';
             } else {
                 $templateName = 'model_controller';
@@ -110,7 +107,6 @@ class ControllerGenerator extends BaseGenerator
             $templateName .= '_locale';
         }
         $headerFieldTemplate = get_template('scaffold.views.'.$templateName, $this->templateType);
-
 
         $dataTableColumns = [];
         foreach ($this->commandData->fields as $field) {

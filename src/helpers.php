@@ -206,7 +206,7 @@ if (!function_exists('fill_field_template_locale')) {
      * @param array          $variables
      * @param string         $template
      * @param GeneratorField $field
-     * @param string $tableName
+     * @param string         $tableName
      *
      * @return string
      */
