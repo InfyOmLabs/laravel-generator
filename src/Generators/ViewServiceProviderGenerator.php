@@ -74,8 +74,9 @@ class ViewServiceProviderGenerator extends BaseGenerator
         );
 
         // add modal namespace
-        $newModelStatement = infy_nl().'use '.$this->commandData->config->nsModel.'\\'.$model.';';
+        $newModelStatement = 'use '.$this->commandData->config->nsModel.'\\'.$model.';';
         $isNameSpaceExist = strpos($mainViewContent, $newModelStatement);
+        $newModelStatement = infy_nl().$newModelStatement;
         if (!$isNameSpaceExist) {
             preg_match_all('/namespace(.*)/', $mainViewContent, $matches);
             $totalMatches = count($matches[0]);
