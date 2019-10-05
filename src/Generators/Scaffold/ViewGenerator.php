@@ -158,8 +158,10 @@ class ViewGenerator extends BaseGenerator
     {
         $templateName = 'table_header';
 
+        $localized = false;
         if ($this->commandData->isLocalizedTemplates()) {
             $templateName .= '_locale';
+            $localized = true;
         }
 
         $headerFieldTemplate = get_template('scaffold.views.'.$templateName, $this->templateType);
@@ -170,12 +172,22 @@ class ViewGenerator extends BaseGenerator
             if (!$field->inIndex) {
                 continue;
             }
-            $headerFields[] = $fieldTemplate = fill_template_with_field_data(
-                $this->commandData->dynamicVars,
-                $this->commandData->fieldNamesMapping,
-                $headerFieldTemplate,
-                $field
-            );
+
+            if ($localized) {
+                $headerFields[] = $fieldTemplate = fill_template_with_field_data_locale(
+                    $this->commandData->dynamicVars,
+                    $this->commandData->fieldNamesMapping,
+                    $headerFieldTemplate,
+                    $field
+                );
+            } else {
+                $headerFields[] = $fieldTemplate = fill_template_with_field_data(
+                    $this->commandData->dynamicVars,
+                    $this->commandData->fieldNamesMapping,
+                    $headerFieldTemplate,
+                    $field
+                );
+            }
         }
 
         return implode(infy_nl_tab(1, 2), $headerFields);
@@ -216,6 +228,14 @@ class ViewGenerator extends BaseGenerator
 
     private function generateFields()
     {
+        $templateName = 'fields';
+
+        $localized = false;
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+            $localized = true;
+        }
+
         $this->htmlFields = [];
 
         foreach ($this->commandData->fields as $field) {
@@ -223,7 +243,7 @@ class ViewGenerator extends BaseGenerator
                 continue;
             }
 
-            $fieldTemplate = HTMLFieldGenerator::generateHTML($field, $this->templateType);
+            $fieldTemplate = HTMLFieldGenerator::generateHTML($field, $this->templateType, $localized);
 
             if (!empty($fieldTemplate)) {
                 $fieldTemplate = fill_template_with_field_data(
@@ -234,12 +254,6 @@ class ViewGenerator extends BaseGenerator
                 );
                 $this->htmlFields[] = $fieldTemplate;
             }
-        }
-
-        $templateName = 'fields';
-
-        if ($this->commandData->isLocalizedTemplates()) {
-            $templateName .= '_locale';
         }
 
         $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
@@ -285,7 +299,11 @@ class ViewGenerator extends BaseGenerator
 
     private function generateShowFields()
     {
-        $fieldTemplate = get_template('scaffold.views.show_field', $this->templateType);
+        $templateName = 'show_field';
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+        }
+        $fieldTemplate = get_template('scaffold.views.'.$templateName, $this->templateType);
 
         $fieldsStr = '';
 

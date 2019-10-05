@@ -149,7 +149,6 @@ class TableFieldsGenerator
                 $field->isFillable = false;
                 $field->inForm = false;
                 $field->inIndex = false;
-                $field->inView = false;
             }
             $field->isNotNull = (bool) $column->getNotNull();
             $field->description = $column->getComment(); // get comments from table
@@ -234,7 +233,6 @@ class TableFieldsGenerator
             $field->isSearchable = false;
             $field->inIndex = false;
             $field->inForm = false;
-            $field->inView = false;
         }
 
         return $field;
@@ -253,7 +251,7 @@ class TableFieldsGenerator
     {
         $field = new GeneratorField();
         $field->name = $column->getName();
-        $field->parseDBType($dbType, $column);
+        $field->parseDBType($dbType);
         $field->parseHtmlInput($htmlType);
 
         return $this->checkForPrimary($field);
@@ -377,9 +375,7 @@ class TableFieldsGenerator
                     $isOneToMany = $this->isOneToMany($primary, $foreignKey, $modelTable->primaryKey);
                     if ($isOneToMany) {
                         $modelName = model_name_from_table_name($tableName);
-                        $this->relations[] = GeneratorFieldRelation::parseRelation(
-                            '1tm,'.$modelName.','.$foreignKey->localField
-                        );
+                        $this->relations[] = GeneratorFieldRelation::parseRelation('1tm,'.$modelName);
                         continue;
                     }
                 }

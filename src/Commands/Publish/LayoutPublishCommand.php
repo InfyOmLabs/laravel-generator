@@ -83,7 +83,7 @@ class LayoutPublishCommand extends PublishBaseCommand
     {
         return [
             'layouts/app_locale'        => 'layouts/app.blade.php',
-            'layouts/sidebar'           => 'layouts/sidebar.blade.php',
+            'layouts/sidebar_locale'    => 'layouts/sidebar.blade.php',
             'layouts/datatables_css'    => 'layouts/datatables_css.blade.php',
             'layouts/datatables_js'     => 'layouts/datatables_js.blade.php',
             'layouts/menu'              => 'layouts/menu.blade.php',
