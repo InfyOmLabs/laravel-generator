@@ -11,5 +11,5 @@ return [
     'created_at'   => 'Created At',
     'updated_at'   => 'Updated At',
     'deleted_at'   => 'Deleted At',
-    'are_you_sure' => 'Are you sure?'
+    'are_you_sure' => 'Are you sure?',
 ];
