@@ -88,7 +88,6 @@ class GeneratorConfig
         'forceMigrate',
         'factory',
         'seeder',
-        'localized',
         'repositoryPattern',
         'localized',
     ];
@@ -153,7 +152,6 @@ class GeneratorConfig
         $this->nsBaseController = config('infyom.laravel_generator.namespace.controller', 'App\Http\Controllers');
         $this->nsController = config('infyom.laravel_generator.namespace.controller', 'App\Http\Controllers').$prefix;
 
-        $this->nsTestTraits = config('infyom.laravel_generator.namespace.test_trait', 'Tests\Traits');
         $this->nsApiTests = config('infyom.laravel_generator.namespace.api_test', 'Tests\APIs');
         $this->nsRepositoryTests = config('infyom.laravel_generator.namespace.repository_test', 'Tests\Repositories');
         $this->nsTests = config('infyom.laravel_generator.namespace.tests', 'Tests');
@@ -198,8 +196,6 @@ class GeneratorConfig
         $this->pathApiRoutes = config('infyom.laravel_generator.path.api_routes', base_path('routes/api.php'));
 
         $this->pathApiTests = config('infyom.laravel_generator.path.api_test', base_path('tests/APIs/'));
-
-        $this->pathApiTestTraits = config('infyom.laravel_generator.path.test_trait', base_path('tests/Traits/'));
 
         $this->pathController = config(
             'infyom.laravel_generator.path.controller',
@@ -299,6 +295,8 @@ class GeneratorConfig
             '$API_VERSION$',
             config('infyom.laravel_generator.api_version', 'v1')
         );
+
+        $commandData->addDynamicVariable('$SEARCHABLE$', '');
 
         return $commandData;
     }

@@ -56,5 +56,12 @@ return [
     'app' => [
         'member_since' => 'Member since',
         'profile'      => 'Profile',
+        'online'       => 'Online',
+        'search'       => 'Search',
+        'create'       => 'Create',
+        'export'       => 'Export',
+        'print'        => 'Print',
+        'reset'        => 'Reset',
+        'reload'       => 'Reload',
     ],
 ];
