@@ -80,6 +80,21 @@ class PublishUserCommand extends PublishBaseCommand
         $this->comment("\nUser route added");
     }
 
+    private function updateMenu()
+    {
+        if (config('infyom.laravel_generator.add_on.menu.enabled')) {
+            $viewsPath    = config('infyom.laravel_generator.path.views', resource_path('views/'));
+            $templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
+            $path         = $viewsPath . 'layouts/menu.blade.php';
+            $menuContents = file_get_contents($path);
+            $sourceFile   = get_template_file_path('scaffold/users/menu', $templateType);
+            $menuContents .= "\n\n" . $sourceFile;
+
+            file_put_contents($path, $menuContents);
+            $this->comment("\nUser Menu added");
+        }
+    }
+
     private function publishUserController()
     {
         $templateData = get_template('user/user_controller', 'laravel-generator');
