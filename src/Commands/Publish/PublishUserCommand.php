@@ -87,8 +87,8 @@ class PublishUserCommand extends PublishBaseCommand
         $templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
         $path         = $viewsPath . 'layouts/menu.blade.php';
         $menuContents = file_get_contents($path);
-        $sourceFile   = get_template_file_path('scaffold/users/menu', $templateType);
-        $menuContents .= "\n\n" . $sourceFile;
+        $sourceFile   = file_get_contents(get_template_file_path('scaffold/users/menu', $templateType));
+        $menuContents .= "\n" . $sourceFile;
 
         file_put_contents($path, $menuContents);
         $this->comment("\nUser Menu added");
