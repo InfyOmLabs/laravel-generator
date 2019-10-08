@@ -202,28 +202,18 @@ class ViewGenerator extends BaseGenerator
 
             $fieldTemplate = HTMLFieldGenerator::generateHTML($field, $this->templateType);
             if ($field->htmlType == 'selectTable') {
-                $fieldTemplate = get_template('scaffold.fields.select', $this->templateType);
-
                 $inputArr = explode(',', $field->htmlValues[1]);
                 $columns = '';
                 foreach ($inputArr as $item) {
-                    $columns .= "'$item'".',';
+                    $columns .= "'$item'".',';  //e.g 'email,id,'
                 }
-                $columns = substr_replace($columns, '', -1);
+                $columns = substr_replace($columns, '', -1); // remove last ,
 
                 $selectTable = $field->htmlValues[0];
                 $tableName = $this->commandData->config->tableName;
-                $variableName = Str::singular($selectTable).'Items';
+                $variableName = Str::singular($selectTable).'Items'; // e.g $userItems
 
-                $viewServiceProvider = new ViewServiceProviderGenerator($this->commandData);
-                $viewServiceProvider->generate();
-                $viewServiceProvider->addViewVariables($tableName.'.fields', $variableName, $columns, $selectTable);
-
-                $fieldTemplate = str_replace(
-                    '$INPUT_ARR$',
-                    '$'.$variableName,
-                    $fieldTemplate
-                );
+                $fieldTemplate = $this->generateViewComposer($tableName, $variableName, $columns, $selectTable);
             }
 
             if (!empty($fieldTemplate)) {
@@ -244,6 +234,23 @@ class ViewGenerator extends BaseGenerator
 
         FileUtil::createFile($this->path, 'fields.blade.php', $templateData);
         $this->commandData->commandInfo('field.blade.php created');
+    }
+
+    private function generateViewComposer($tableName, $variableName, $columns, $selectTable)
+    {
+        $fieldTemplate = get_template('scaffold.fields.select', $this->templateType);
+
+        $viewServiceProvider = new ViewServiceProviderGenerator($this->commandData);
+        $viewServiceProvider->generate();
+        $viewServiceProvider->addViewVariables($tableName.'.fields', $variableName, $columns, $selectTable);
+
+        $fieldTemplate = str_replace(
+            '$INPUT_ARR$',
+            '$'.$variableName,
+            $fieldTemplate
+        );
+
+        return $fieldTemplate;
     }
 
     private function generateCreate()

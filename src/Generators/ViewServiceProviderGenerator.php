@@ -52,14 +52,24 @@ class ViewServiceProviderGenerator extends BaseGenerator
     {
         $model = model_name_from_table_name($tableName);
 
-        $mainViewContent = file_get_contents($this->commandData->config->pathViewProvider);
-        $newViewStatement = get_template('scaffold.view_composer', 'laravel-generator');
         $this->commandData->addDynamicVariable('$COMPOSER_VIEWS$', $views);
         $this->commandData->addDynamicVariable('$COMPOSER_VIEW_VARIABLE$', $variableName);
         $this->commandData->addDynamicVariable(
             '$COMPOSER_VIEW_VARIABLE_VALUES$', $model."::pluck($columns)->toArray()"
         );
 
+        $mainViewContent = $this->addViewComposer();
+        $mainViewContent = $this->addNamespace($model, $mainViewContent);
+        $this->addCustomProvider();
+
+        file_put_contents($this->commandData->config->pathViewProvider, $mainViewContent);
+        $this->commandData->commandComment('View service provider file updated.');
+    }
+
+    public function addViewComposer()
+    {
+        $mainViewContent = file_get_contents($this->commandData->config->pathViewProvider);
+        $newViewStatement = get_template('scaffold.view_composer', 'laravel-generator');
         $newViewStatement = fill_template($this->commandData->dynamicVars, $newViewStatement);
 
         $newViewStatement = infy_nl(1).$newViewStatement;
@@ -73,21 +83,11 @@ class ViewServiceProviderGenerator extends BaseGenerator
             $mainViewContent, $newViewStatement, $replacePosition + strlen($lastSeederStatement) + 6, 0
         );
 
-        // add modal namespace
-        $newModelStatement = 'use '.$this->commandData->config->nsModel.'\\'.$model.';';
-        $isNameSpaceExist = strpos($mainViewContent, $newModelStatement);
-        $newModelStatement = infy_nl().$newModelStatement;
-        if (!$isNameSpaceExist) {
-            preg_match_all('/namespace(.*)/', $mainViewContent, $matches);
-            $totalMatches = count($matches[0]);
-            $nameSpaceStatement = $matches[0][$totalMatches - 1];
-            $replacePosition = strpos($mainViewContent, $nameSpaceStatement);
-            $mainViewContent = substr_replace(
-                $mainViewContent, $newModelStatement, $replacePosition + strlen($nameSpaceStatement), 0
-            );
-        }
+        return $mainViewContent;
+    }
 
-        // add ViewServiceProvider to app.php
+    public function addCustomProvider()
+    {
         $configFile = base_path().'/config/app.php';
         $file = file_get_contents($configFile);
         $searchFor = 'Illuminate\View\ViewServiceProvider::class,';
@@ -103,8 +103,23 @@ class ViewServiceProviderGenerator extends BaseGenerator
             );
             file_put_contents($configFile, $newChanges);
         }
+    }
 
-        file_put_contents($this->commandData->config->pathViewProvider, $mainViewContent);
-        $this->commandData->commandComment('View service provider file updated.');
+    public function addNamespace($model, $mainViewContent)
+    {
+        $newModelStatement = 'use '.$this->commandData->config->nsModel.'\\'.$model.';';
+        $isNameSpaceExist = strpos($mainViewContent, $newModelStatement);
+        $newModelStatement = infy_nl().$newModelStatement;
+        if (!$isNameSpaceExist) {
+            preg_match_all('/namespace(.*)/', $mainViewContent, $matches);
+            $totalMatches = count($matches[0]);
+            $nameSpaceStatement = $matches[0][$totalMatches - 1];
+            $replacePosition = strpos($mainViewContent, $nameSpaceStatement);
+            $mainViewContent = substr_replace(
+                $mainViewContent, $newModelStatement, $replacePosition + strlen($nameSpaceStatement), 0
+            );
+        }
+
+        return $mainViewContent;
     }
 }
