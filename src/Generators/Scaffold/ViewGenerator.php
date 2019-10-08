@@ -199,6 +199,18 @@ class ViewGenerator extends BaseGenerator
                 continue;
             }
 
+            $validations = explode('|', $field->validations);
+            usort($validations, function ($record) {
+                return (Str::contains($record, ['max:', 'min:'])) ? 0 : 1;
+            });
+            $size = (Str::contains($validations[0], ['max:', 'min:'])) ? $validations[0] : '';
+            if (!empty($size)) {
+                $sizeInNumber = substr($size, 4);
+                $sizeText = substr($size, 0, 3);
+                $size = ", '$sizeText' => $sizeInNumber";
+            }
+            $this->commandData->addDynamicVariable('$SIZE$', $size);
+
             $fieldTemplate = HTMLFieldGenerator::generateHTML($field, $this->templateType);
 
             if (!empty($fieldTemplate)) {
