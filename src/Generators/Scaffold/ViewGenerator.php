@@ -200,16 +200,19 @@ class ViewGenerator extends BaseGenerator
             }
 
             $validations = explode('|', $field->validations);
-            usort($validations, function ($record) {
-                return (Str::contains($record, ['max:', 'min:'])) ? 0 : 1;
-            });
-            $size = (Str::contains($validations[0], ['max:', 'min:'])) ? $validations[0] : '';
-            if (!empty($size)) {
-                $sizeInNumber = substr($size, 4);
-                $sizeText = (substr($size, 0, 3) == 'min') ? 'minlength' : 'maxlength';
-                $size = ", '$sizeText' => $sizeInNumber";
+            $minMaxRules = '';
+            foreach ($validations as $validation) {
+                if (!Str::contains($validation, ['max:', 'min:'])) {
+                    continue;
+                }
+
+                $sizeInNumber = substr($validation, 4);
+                $sizeText = substr($validation, 0, 3) == 'min' ? 'minlength' : 'maxlength';
+                $size = ",'$sizeText' => $sizeInNumber";
+
+                $minMaxRules .= $size;
             }
-            $this->commandData->addDynamicVariable('$SIZE$', $size);
+            $this->commandData->addDynamicVariable('$SIZE$', $minMaxRules);
 
             $fieldTemplate = HTMLFieldGenerator::generateHTML($field, $this->templateType);
 
