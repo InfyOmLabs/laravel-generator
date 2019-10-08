@@ -26,8 +26,6 @@ class $MODEL_NAME$APIController extends AppBaseController
 
         $$MODEL_NAME_PLURAL_CAMEL$ = $query->get();
 
-        return $this->sendResponse($$MODEL_NAME_PLURAL_CAMEL$->toArray(), '$MODEL_NAME_PLURAL_HUMAN$ retrieved successfully');
-
          return $this->sendResponse(
              $$MODEL_NAME_PLURAL_CAMEL$->toArray(),
              __('messages.retrieved', ['model' => __('models/$MODEL_NAME_PLURAL_CAMEL$.plural')])
