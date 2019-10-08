@@ -29,6 +29,7 @@ class PublishUserCommand extends PublishBaseCommand
     {
         $this->copyView();
         $this->updateRoutes();
+        $this->updateMenu();
         $this->publishUserController();
         $this->publishUserRepository();
         $this->publishCreateUserRequest();
