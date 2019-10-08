@@ -140,7 +140,7 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
             'infyom.rollback',
             'infyom.vuejs',
             'infyom.publish.vuejs',
-            'infyom.publish.user'
+            'infyom.publish.user',
         ]);
     }
 }
