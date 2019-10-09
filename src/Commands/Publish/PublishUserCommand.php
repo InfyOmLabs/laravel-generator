@@ -74,11 +74,6 @@ class PublishUserCommand extends PublishBaseCommand
     {
         $path = config('infyom.laravel_generator.path.routes', base_path('routes/web.php'));
 
-        $prompt = 'Existing routes web.php file detected. Should we add standard auth routes? (y|N) :';
-        if (file_exists($path) && !$this->confirmOverwrite($path, $prompt)) {
-            return;
-        }
-
         $routeContents = file_get_contents($path);
 
         $routesTemplate = get_template('routes.user', 'laravel-generator');
