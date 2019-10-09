@@ -3,7 +3,6 @@
 namespace $NAMESPACE_REQUEST$;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\User;
 
 class CreateUserRequest extends FormRequest
 {
@@ -25,6 +24,12 @@ class CreateUserRequest extends FormRequest
      */
     public function rules()
     {
-        return User::$rules;
+        $rules =  [
+                    'name' => 'required',
+                    'email' => 'required',
+                    'password' => 'required'
+                ];
+
+        return $rules;
     }
 }
