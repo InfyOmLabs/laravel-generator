@@ -59,7 +59,15 @@ class PublishUserCommand extends PublishBaseCommand
 
     private function getViews()
     {
-        return ['users/create' => 'users/create.blade.php', 'users/edit' => 'users/edit.blade.php', 'users/fields' => 'users/fields.blade.php', 'users/index' => 'users/index.blade.php', 'users/show' => 'users/show.blade.php', 'users/show_fields' => 'users/show_fields.blade.php', 'users/table' => 'users/table.blade.php'];
+        return [
+            'users/create'      => 'users/create.blade.php',
+            'users/edit'        => 'users/edit.blade.php',
+            'users/fields'      => 'users/fields.blade.php',
+            'users/index'       => 'users/index.blade.php',
+            'users/show'        => 'users/show.blade.php',
+            'users/show_fields' => 'users/show_fields.blade.php',
+            'users/table'       => 'users/table.blade.php',
+        ];
     }
 
     private function updateRoutes()

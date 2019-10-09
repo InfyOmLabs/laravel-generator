@@ -8,7 +8,6 @@ use $NAMESPACE_REPOSITORY$\BaseRepository;
 /**
  * Class UserRepository
  * @package $NAMESPACE_REPOSITORY$
- * @version October 8, 2019, 5:51 am UTC
 */
 
 class UserRepository extends BaseRepository
