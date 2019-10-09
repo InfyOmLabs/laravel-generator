@@ -206,10 +206,15 @@ class ViewGenerator extends BaseGenerator
                     continue;
                 }
 
+                $validationText = substr($validation, 0, 3);
                 $sizeInNumber = substr($validation, 4);
-                $sizeText = substr($validation, 0, 3) == 'min' ? 'minlength' : 'maxlength';
-                $size = ",'$sizeText' => $sizeInNumber";
 
+                $sizeText = ($validationText == 'min') ? 'minlength' : 'maxlength';
+                if ($field->htmlType == 'number') {
+                    $sizeText = $validationText;
+                }
+
+                $size = ",'$sizeText' => $sizeInNumber";
                 $minMaxRules .= $size;
             }
             $this->commandData->addDynamicVariable('$SIZE$', $minMaxRules);
