@@ -5,6 +5,9 @@ namespace InfyOm\Generator\Common;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
+use InfyOm\Generator\Events\GeneratorFileCreated;
+use InfyOm\Generator\Events\GeneratorFileDeleted;
+use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
 use InfyOm\Generator\Utils\TableFieldsGenerator;
 
@@ -289,5 +292,17 @@ class CommandData
         $data['nsModel'] = $this->config->nsModel;
 
         return $data;
+    }
+
+    public function fireEvent($commandType, $eventType)
+    {
+        switch ($eventType) {
+            case FileUtil::FILE_CREATED:
+                event(new GeneratorFileCreated($commandType, $this->prepareEventsData()));
+                break;
+            case FileUtil::FILE_DELETED:
+                event(new GeneratorFileDeleted($commandType, $this->prepareEventsData()));
+                break;
+        }
     }
 }

@@ -4,6 +4,9 @@ namespace InfyOm\Generator\Utils;
 
 class FileUtil
 {
+    const FILE_CREATED = 1;
+    const FILE_DELETED = 2;
+
     public static function createFile($path, $fileName, $contents)
     {
         if (!file_exists($path)) {

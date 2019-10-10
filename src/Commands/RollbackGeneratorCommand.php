@@ -22,6 +22,7 @@ use InfyOm\Generator\Generators\VueJs\ControllerGenerator as VueJsControllerGene
 use InfyOm\Generator\Generators\VueJs\ModelJsConfigGenerator;
 use InfyOm\Generator\Generators\VueJs\RoutesGenerator as VueJsRoutesGenerator;
 use InfyOm\Generator\Generators\VueJs\ViewGenerator as VueJsViewGenerator;
+use InfyOm\Generator\Utils\FileUtil;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -153,7 +154,7 @@ class RollbackGeneratorCommand extends Command
         $this->info('Generating autoload files');
         $this->composer->dumpOptimized();
 
-        event(new GeneratorFileDeleted($type, $this->commandData->prepareEventsData()));
+        $this->commandData->fireEvent($type, FileUtil::FILE_DELETED);
     }
 
     /**
