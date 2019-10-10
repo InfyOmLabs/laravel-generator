@@ -5,7 +5,7 @@ namespace InfyOm\Generator\Events;
 use Illuminate\Queue\SerializesModels;
 
 /**
- * Class GeneratorFileCreating
+ * Class GeneratorFileCreating.
  */
 class GeneratorFileCreating
 {

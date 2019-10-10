@@ -299,10 +299,10 @@ class CommandData
     public function fireEvent($commandType, $eventType)
     {
         switch ($eventType) {
-            case FileUtil::FILE_CREATING;
+            case FileUtil::FILE_CREATING:
                 event(new GeneratorFileCreating($commandType, $this->prepareEventsData()));
                 break;
-            case FileUtil::FILE_CREATED;
+            case FileUtil::FILE_CREATED:
                 event(new GeneratorFileCreated($commandType, $this->prepareEventsData()));
                 break;
             case FileUtil::FILE_DELETING:
