@@ -3,7 +3,6 @@
 namespace InfyOm\Generator\Commands;
 
 use InfyOm\Generator\Common\CommandData;
-use InfyOm\Generator\Events\GeneratorFileCreated;
 use InfyOm\Generator\Utils\FileUtil;
 
 class APIScaffoldGeneratorCommand extends BaseCommand

@@ -4,7 +4,6 @@ namespace InfyOm\Generator\Commands\API;
 
 use InfyOm\Generator\Commands\BaseCommand;
 use InfyOm\Generator\Common\CommandData;
-use InfyOm\Generator\Events\GeneratorFileCreated;
 use InfyOm\Generator\Utils\FileUtil;
 
 class APIGeneratorCommand extends BaseCommand
