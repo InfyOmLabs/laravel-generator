@@ -4,6 +4,7 @@ namespace InfyOm\Generator\Commands\API;
 
 use InfyOm\Generator\Commands\BaseCommand;
 use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Events\GeneratorFileCreated;
 
 class APIGeneratorCommand extends BaseCommand
 {
@@ -45,6 +46,7 @@ class APIGeneratorCommand extends BaseCommand
         $this->generateAPIItems();
 
         $this->performPostActionsWithMigration();
+        event(new GeneratorFileCreated('api', $this->commandData->prepareEventsData()));
     }
 
     /**

@@ -281,4 +281,13 @@ class CommandData
         $this->fields = $tableFieldsGenerator->fields;
         $this->relations = $tableFieldsGenerator->relations;
     }
+
+    public function prepareEventsData()
+    {
+        $data['modelName'] = $this->modelName;
+        $data['tableName'] = $this->config->tableName;
+        $data['nsModel'] = $this->config->nsModel;
+
+        return $data;
+    }
 }

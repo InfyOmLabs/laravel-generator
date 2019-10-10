@@ -4,6 +4,7 @@ namespace InfyOm\Generator\Commands;
 
 use Illuminate\Console\Command;
 use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Events\GeneratorFileDeleted;
 use InfyOm\Generator\Generators\API\APIControllerGenerator;
 use InfyOm\Generator\Generators\API\APIRequestGenerator;
 use InfyOm\Generator\Generators\API\APIRoutesGenerator;
@@ -67,7 +68,8 @@ class RollbackGeneratorCommand extends Command
      */
     public function handle()
     {
-        if (!in_array($this->argument('type'), [
+        $type = $this->argument('type');
+        if (!in_array($type, [
             CommandData::$COMMAND_TYPE_API,
             CommandData::$COMMAND_TYPE_SCAFFOLD,
             CommandData::$COMMAND_TYPE_API_SCAFFOLD,
@@ -150,6 +152,8 @@ class RollbackGeneratorCommand extends Command
 
         $this->info('Generating autoload files');
         $this->composer->dumpOptimized();
+
+        event(new GeneratorFileDeleted($type, $this->commandData->prepareEventsData()));
     }
 
     /**
