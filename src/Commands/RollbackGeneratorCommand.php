@@ -4,7 +4,6 @@ namespace InfyOm\Generator\Commands;
 
 use Illuminate\Console\Command;
 use InfyOm\Generator\Common\CommandData;
-use InfyOm\Generator\Events\GeneratorFileDeleted;
 use InfyOm\Generator\Generators\API\APIControllerGenerator;
 use InfyOm\Generator\Generators\API\APIRequestGenerator;
 use InfyOm\Generator\Generators\API\APIRoutesGenerator;

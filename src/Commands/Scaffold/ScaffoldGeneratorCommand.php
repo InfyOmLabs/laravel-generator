@@ -4,7 +4,6 @@ namespace InfyOm\Generator\Commands\Scaffold;
 
 use InfyOm\Generator\Commands\BaseCommand;
 use InfyOm\Generator\Common\CommandData;
-use InfyOm\Generator\Events\GeneratorFileCreated;
 use InfyOm\Generator\Utils\FileUtil;
 
 class ScaffoldGeneratorCommand extends BaseCommand
