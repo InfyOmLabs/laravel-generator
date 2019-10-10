@@ -5,7 +5,7 @@ namespace InfyOm\Generator\Events;
 use Illuminate\Queue\SerializesModels;
 
 /**
- * Class GeneratorFileCreated
+ * Class GeneratorFileCreated.
  */
 class GeneratorFileCreated
 {
@@ -17,8 +17,8 @@ class GeneratorFileCreated
     /**
      * Create a new event instance.
      *
-     * @param  string  $type
-     * @param  array  $data
+     * @param string $type
+     * @param array  $data
      */
     public function __construct($type, $data)
     {
