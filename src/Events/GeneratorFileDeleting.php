@@ -5,7 +5,7 @@ namespace InfyOm\Generator\Events;
 use Illuminate\Queue\SerializesModels;
 
 /**
- * Class GeneratorFileDeleting
+ * Class GeneratorFileDeleting.
  */
 class GeneratorFileDeleting
 {
