@@ -56,6 +56,14 @@ class GeneratorField
             return;
         }
 
+        if (Str::contains($htmlInput, 'selectTable')) {
+            $inputsArr = explode(':', $htmlInput);
+            $this->htmlType = array_shift($inputsArr);
+            $this->htmlValues = $inputsArr;
+
+            return;
+        }
+
         $inputsArr = explode(',', $htmlInput);
 
         $this->htmlType = array_shift($inputsArr);
