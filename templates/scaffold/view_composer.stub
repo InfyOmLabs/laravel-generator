@@ -1,0 +1,4 @@
+        View::composer(['$COMPOSER_VIEWS$'], function ($view) {
+            $$COMPOSER_VIEW_VARIABLE$ = $COMPOSER_VIEW_VARIABLE_VALUES$;
+            $view->with('$COMPOSER_VIEW_VARIABLE$', $$COMPOSER_VIEW_VARIABLE$);
+        });
