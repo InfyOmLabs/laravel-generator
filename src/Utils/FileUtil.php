@@ -4,8 +4,10 @@ namespace InfyOm\Generator\Utils;
 
 class FileUtil
 {
-    const FILE_CREATED = 1;
-    const FILE_DELETED = 2;
+    const FILE_CREATING = 1;
+    const FILE_CREATED = 2;
+    const FILE_DELETING = 3;
+    const FILE_DELETED = 4;
 
     public static function createFile($path, $fileName, $contents)
     {

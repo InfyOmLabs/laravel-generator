@@ -42,6 +42,7 @@ class ScaffoldGeneratorCommand extends BaseCommand
         parent::handle();
 
         if ($this->checkIsThereAnyDataToGenerate()) {
+            $this->commandData->fireEvent('scaffold', FileUtil::FILE_CREATING);
             $this->generateCommonItems();
 
             $this->generateScaffoldItems();

@@ -38,6 +38,7 @@ class APIScaffoldGeneratorCommand extends BaseCommand
      */
     public function handle()
     {
+        $this->commandData->fireEvent('api_scaffold', FileUtil::FILE_CREATING);
         parent::handle();
 
         $this->generateCommonItems();

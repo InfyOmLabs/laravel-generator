@@ -78,6 +78,7 @@ class RollbackGeneratorCommand extends Command
             $this->error('invalid rollback type');
         }
 
+        $this->commandData->fireEvent($type, FileUtil::FILE_DELETING);
         $this->commandData = new CommandData($this, $this->argument('type'));
         $this->commandData->config->mName = $this->commandData->modelName = $this->argument('model');
 
@@ -91,6 +92,7 @@ class RollbackGeneratorCommand extends Command
 
             $this->info('Generating autoload files');
             $this->composer->dumpOptimized();
+            $this->commandData->fireEvent($type, FileUtil::FILE_DELETED);
 
             return;
         }
