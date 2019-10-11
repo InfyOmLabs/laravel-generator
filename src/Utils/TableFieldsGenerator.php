@@ -56,12 +56,17 @@ class TableFieldsGenerator
     /** @var array */
     public $ignoredFields;
 
-    public function __construct($tableName, $ignoredFields)
+    public function __construct($tableName, $ignoredFields, $connection = '')
     {
         $this->tableName = $tableName;
         $this->ignoredFields = $ignoredFields;
 
-        $this->schemaManager = DB::getDoctrineSchemaManager();
+        if (!empty($connection)) {
+            $this->schemaManager = DB::connection($connection)->getDoctrineSchemaManager();
+        } else {
+            $this->schemaManager = DB::getDoctrineSchemaManager();
+        }
+
         $platform = $this->schemaManager->getDatabasePlatform();
         $defaultMappings = [
             'enum' => 'string',
