@@ -244,7 +244,6 @@ class ViewGenerator extends BaseGenerator
                 continue;
             }
 
-
             $fieldTemplate = HTMLFieldGenerator::generateHTML($field, $this->templateType, $localized);
             if ($field->htmlType == 'selectTable') {
                 $inputArr = explode(',', $field->htmlValues[1]);
