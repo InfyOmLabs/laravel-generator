@@ -25,6 +25,8 @@ class Update$MODEL_NAME$Request extends FormRequest
      */
     public function rules()
     {
-        return $MODEL_NAME$::$rules;
+        $rules = $MODEL_NAME$::$rules;
+        $UNIQUE_RULES$
+        return $rules;
     }
 }

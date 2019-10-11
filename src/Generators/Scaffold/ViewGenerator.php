@@ -6,6 +6,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
+use InfyOm\Generator\Generators\ViewServiceProviderGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\HTMLFieldGenerator;
 
@@ -243,7 +244,22 @@ class ViewGenerator extends BaseGenerator
                 continue;
             }
 
+
             $fieldTemplate = HTMLFieldGenerator::generateHTML($field, $this->templateType, $localized);
+            if ($field->htmlType == 'selectTable') {
+                $inputArr = explode(',', $field->htmlValues[1]);
+                $columns = '';
+                foreach ($inputArr as $item) {
+                    $columns .= "'$item'".',';  //e.g 'email,id,'
+                }
+                $columns = substr_replace($columns, '', -1); // remove last ,
+
+                $selectTable = $field->htmlValues[0];
+                $tableName = $this->commandData->config->tableName;
+                $variableName = Str::singular($selectTable).'Items'; // e.g $userItems
+
+                $fieldTemplate = $this->generateViewComposer($tableName, $variableName, $columns, $selectTable);
+            }
 
             if (!empty($fieldTemplate)) {
                 $fieldTemplate = fill_template_with_field_data(
@@ -263,6 +279,23 @@ class ViewGenerator extends BaseGenerator
 
         FileUtil::createFile($this->path, 'fields.blade.php', $templateData);
         $this->commandData->commandInfo('field.blade.php created');
+    }
+
+    private function generateViewComposer($tableName, $variableName, $columns, $selectTable)
+    {
+        $fieldTemplate = get_template('scaffold.fields.select', $this->templateType);
+
+        $viewServiceProvider = new ViewServiceProviderGenerator($this->commandData);
+        $viewServiceProvider->generate();
+        $viewServiceProvider->addViewVariables($tableName.'.fields', $variableName, $columns, $selectTable);
+
+        $fieldTemplate = str_replace(
+            '$INPUT_ARR$',
+            '$'.$variableName,
+            $fieldTemplate
+        );
+
+        return $fieldTemplate;
     }
 
     private function generateCreate()
