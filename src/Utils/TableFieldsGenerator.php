@@ -89,7 +89,7 @@ class TableFieldsGenerator
             }
         }
 
-        $this->primaryKey = static::getPrimaryKeyOfTable($tableName);
+        $this->primaryKey = $this->getPrimaryKeyOfTable($tableName);
         $this->timestamps = static::getTimestampFieldNames();
         $this->defaultSearchable = config('infyom.laravel_generator.options.tables_searchable_default', false);
     }
@@ -170,10 +170,9 @@ class TableFieldsGenerator
      *
      * @return string|null The column name of the (simple) primary key
      */
-    public static function getPrimaryKeyOfTable($tableName)
+    public function getPrimaryKeyOfTable($tableName)
     {
-        $schema = DB::getDoctrineSchemaManager();
-        $column = $schema->listTableDetails($tableName)->getPrimaryKey();
+        $column = $this->schemaManager->listTableDetails($tableName)->getPrimaryKey();
 
         return $column ? $column->getColumns()[0] : '';
     }
