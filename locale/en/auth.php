@@ -33,7 +33,8 @@ return [
 
     'registration' => [
         'title'           => 'Register a new membership',
-        'agree_terms'     => 'I agree to the terms',
+        'i_agree'         => 'I agree to',
+        'terms'           => 'the terms',
         'have_membership' => 'I already have a membership',
     ],
 
