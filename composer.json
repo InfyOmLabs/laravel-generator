@@ -1,5 +1,6 @@
 {
     "name": "infyomlabs/laravel-generator",
+    "type": "library",
     "description": "InfyOm Laravel Generator",
     "keywords": [
         "laravel",
