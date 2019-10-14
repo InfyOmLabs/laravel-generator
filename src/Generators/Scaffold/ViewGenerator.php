@@ -200,6 +200,26 @@ class ViewGenerator extends BaseGenerator
                 continue;
             }
 
+            $validations = explode('|', $field->validations);
+            $minMaxRules = '';
+            foreach ($validations as $validation) {
+                if (!Str::contains($validation, ['max:', 'min:'])) {
+                    continue;
+                }
+
+                $validationText = substr($validation, 0, 3);
+                $sizeInNumber = substr($validation, 4);
+
+                $sizeText = ($validationText == 'min') ? 'minlength' : 'maxlength';
+                if ($field->htmlType == 'number') {
+                    $sizeText = $validationText;
+                }
+
+                $size = ",'$sizeText' => $sizeInNumber";
+                $minMaxRules .= $size;
+            }
+            $this->commandData->addDynamicVariable('$SIZE$', $minMaxRules);
+
             $fieldTemplate = HTMLFieldGenerator::generateHTML($field, $this->templateType);
             if ($field->htmlType == 'selectTable') {
                 $inputArr = explode(',', $field->htmlValues[1]);
