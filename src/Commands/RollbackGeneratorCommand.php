@@ -78,8 +78,8 @@ class RollbackGeneratorCommand extends Command
             $this->error('invalid rollback type');
         }
 
-        $this->commandData->fireEvent($type, FileUtil::FILE_DELETING);
         $this->commandData = new CommandData($this, $this->argument('type'));
+        $this->commandData->fireEvent($type, FileUtil::FILE_DELETING);
         $this->commandData->config->mName = $this->commandData->modelName = $this->argument('model');
 
         $this->commandData->config->init($this->commandData, ['tableName', 'prefix', 'plural', 'views']);
