@@ -5,6 +5,8 @@ return [
     'add_new'      => 'Add New',
     'cancel'       => 'Cancel',
     'save'         => 'Save',
+    'edit'         => 'Edit',
+    'detail'       => 'Detail',
     'back'         => 'Back',
     'action'       => 'Action',
     'id'           => 'Id',

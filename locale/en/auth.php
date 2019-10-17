@@ -56,6 +56,9 @@ return [
 
     'app' => [
         'member_since' => 'Member since',
+        'messages'     => 'Messages',
+        'settings'     => 'Settings',
+        'lock_account' => 'Lock Account',
         'profile'      => 'Profile',
         'online'       => 'Online',
         'search'       => 'Search',
