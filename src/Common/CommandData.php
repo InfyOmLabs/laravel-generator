@@ -274,7 +274,7 @@ class CommandData
             $ignoredFields = [];
         }
 
-        $tableFieldsGenerator = new TableFieldsGenerator($tableName, $ignoredFields);
+        $tableFieldsGenerator = new TableFieldsGenerator($tableName, $ignoredFields, $this->config->connection);
         $tableFieldsGenerator->prepareFieldsFromTable();
         $tableFieldsGenerator->prepareRelations();
 
