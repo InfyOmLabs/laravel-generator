@@ -269,6 +269,7 @@ class BaseCommand extends Command
             ['factory', null, InputOption::VALUE_NONE, 'To generate factory'],
             ['seeder', null, InputOption::VALUE_NONE, 'To generate seeder'],
             ['repositoryPattern', null, InputOption::VALUE_REQUIRED, 'Repository Pattern'],
+            ['connection', null, InputOption::VALUE_REQUIRED, 'Specify connection name'],
         ];
     }
 
