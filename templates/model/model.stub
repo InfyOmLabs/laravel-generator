@@ -11,6 +11,7 @@ $SOFT_DELETE$
     public $table = '$TABLE_NAME$';
     $TIMESTAMPS$
 $SOFT_DELETE_DATES$
+$CONNECTION$
 $PRIMARY$
     public $fillable = [
         $FIELDS$
