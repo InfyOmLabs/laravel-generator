@@ -161,7 +161,7 @@ class ModelGenerator extends BaseGenerator
      *
      * @return string
      */
-    private function getPHPDocType($db_type, $relation = null, $relationText = null)
+    public function getPHPDocType($db_type, $relation = null, $relationText = null)
     {
         $relationText = (!empty($relationText)) ? $relationText : null;
 

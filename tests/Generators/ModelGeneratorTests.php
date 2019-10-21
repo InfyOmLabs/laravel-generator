@@ -3,11 +3,11 @@
 namespace Tests\Generators;
 
 use InfyOm\Generator\Generators\ModelGenerator;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 use Tests\Traits\CommonTrait;
 
-class ModelGeneratorTests extends PHPUnit_Framework_TestCase
+class ModelGeneratorTests extends TestCase
 {
     use CommonTrait;
 
@@ -31,17 +31,19 @@ class ModelGeneratorTests extends PHPUnit_Framework_TestCase
 
         $relationObj = new stdClass();
         $relationObj->inputs[0] = 'Business'; // model name
-        $relationObj->inputs[1] = 'business_id'; // foreign key
 
         $inputs = [
             '\App\Models\Business business'                       => ['1t1', 'mt1'],
             '\Illuminate\Database\Eloquent\Collection businesses' => ['1tm', 'mtm', 'hmt'],
         ];
+
+        $count = 0;
         foreach ($inputs as $expected => $dbTypes) {
             foreach ($dbTypes as $dbType) {
-                $response = $modelGenerator->getPHPDocType($dbType, $relationObj);
+                $response = $modelGenerator->getPHPDocType($dbType, $relationObj, $relationObj->inputs[0]);
                 $this->assertEquals($expected, $response);
             }
+            $count++;
         }
     }
 
