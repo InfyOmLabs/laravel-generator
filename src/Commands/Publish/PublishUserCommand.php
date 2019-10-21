@@ -100,6 +100,9 @@ class PublishUserCommand extends PublishBaseCommand
     private function publishUserController()
     {
         $templateData = get_template('user/user_controller', 'laravel-generator');
+        if(!config('infyom.laravel_generator.option.repository_pattern')){
+            $templateData = get_template('user/user_controller_without_repository', 'laravel-generator');
+        }
 
         $templateData = $this->fillTemplate($templateData);
 
