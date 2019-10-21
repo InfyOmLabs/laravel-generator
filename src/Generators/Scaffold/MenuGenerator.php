@@ -44,7 +44,7 @@ class MenuGenerator extends BaseGenerator
     {
         $this->menuContents .= $this->menuTemplate.infy_nl();
         $existingMenuContents = file_get_contents($this->path);
-        if (Str::contains($existingMenuContents, "<span>".$this->commandData->config->mPlural."</span>")) {
+        if (Str::contains($existingMenuContents, '<span>'.$this->commandData->config->mPlural.'</span>')) {
             $this->commandData->commandObj->info('Menu '.$this->commandData->config->mPlural.' is already exists, Skipping Adjustment.');
 
             return;
