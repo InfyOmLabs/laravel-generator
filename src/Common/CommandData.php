@@ -144,7 +144,7 @@ class CommandData
             $validations = ($validations == false) ? '' : $validations;
 
             if ($this->getOption('relations')) {
-                $relation = $this->commandObj->ask('Enter relationship (Leave Black to skip):', false);
+                $relation = $this->commandObj->ask('Enter relationship (Leave Blank to skip):', false);
             } else {
                 $relation = '';
             }
@@ -159,7 +159,9 @@ class CommandData
             }
         }
 
-        $this->addTimestamps();
+        if (config('infyom.laravel_generator.timestamps.enabled', true)) {
+            $this->addTimestamps();
+        }
     }
 
     private function addPrimaryKey()
@@ -272,7 +274,7 @@ class CommandData
             $ignoredFields = [];
         }
 
-        $tableFieldsGenerator = new TableFieldsGenerator($tableName, $ignoredFields);
+        $tableFieldsGenerator = new TableFieldsGenerator($tableName, $ignoredFields, $this->config->connection);
         $tableFieldsGenerator->prepareFieldsFromTable();
         $tableFieldsGenerator->prepareRelations();
 

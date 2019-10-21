@@ -4,6 +4,7 @@ namespace InfyOm\Generator\Generators\API;
 
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
+use InfyOm\Generator\Generators\ModelGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 
 class APIRequestGenerator extends BaseGenerator
@@ -48,6 +49,10 @@ class APIRequestGenerator extends BaseGenerator
 
     private function generateUpdateRequest()
     {
+        $modelGenerator = new ModelGenerator($this->commandData);
+        $rules = $modelGenerator->generateUniqueRules();
+        $this->commandData->addDynamicVariable('$UNIQUE_RULES$', $rules);
+
         $templateData = get_template('api.request.update_request', 'laravel-generator');
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);

@@ -1,5 +1,6 @@
 {
     "name": "infyomlabs/laravel-generator",
+    "type": "library",
     "description": "InfyOm Laravel Generator",
     "keywords": [
         "laravel",
@@ -23,9 +24,8 @@
         }
     ],
     "require": {
-        "php": ">=5.5.9",
-        "illuminate/support": "5.8.*",
-        "prettus/l5-repository": "~2.6",
+        "php": ">=7.2",
+        "illuminate/support": "^6.0.0",
         "laracasts/flash": "~3.0"
     },
     "require-dev": {
