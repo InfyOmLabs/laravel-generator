@@ -4,6 +4,7 @@ namespace InfyOm\Generator\Common;
 
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
 use InfyOm\Generator\Utils\TableFieldsGenerator;
 
@@ -143,7 +144,7 @@ class CommandData
             $validations = ($validations == false) ? '' : $validations;
 
             if ($this->getOption('relations')) {
-                $relation = $this->commandObj->ask('Enter relationship (Leave Black to skip):', false);
+                $relation = $this->commandObj->ask('Enter relationship (Leave Blank to skip):', false);
             } else {
                 $relation = '';
             }
@@ -158,7 +159,9 @@ class CommandData
             }
         }
 
-        $this->addTimestamps();
+        if (config('infyom.laravel_generator.timestamps.enabled', true)) {
+            $this->addTimestamps();
+        }
     }
 
     private function addPrimaryKey()
@@ -226,6 +229,23 @@ class CommandData
             } else {
                 $fileContents = $this->getOption('jsonFromGUI');
                 $jsonData = json_decode($fileContents, true);
+
+                // override config options from jsonFromGUI
+                $this->config->overrideOptionsFromJsonFile($jsonData);
+
+                // Manage custom table name option
+                if (isset($jsonData['tableName'])) {
+                    $tableName = $jsonData['tableName'];
+                    $this->config->tableName = $tableName;
+                    $this->addDynamicVariable('$TABLE_NAME$', $tableName);
+                    $this->addDynamicVariable('$TABLE_NAME_TITLE$', Str::studly($tableName));
+                }
+
+                // Manage migrate option
+                if (isset($jsonData['migrate']) && $jsonData['migrate'] == false) {
+                    $this->config->options['skip'][] = 'migration';
+                }
+
                 foreach ($jsonData['fields'] as $field) {
                     if (isset($field['type']) && $field['relation']) {
                         $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
@@ -254,7 +274,7 @@ class CommandData
             $ignoredFields = [];
         }
 
-        $tableFieldsGenerator = new TableFieldsGenerator($tableName, $ignoredFields);
+        $tableFieldsGenerator = new TableFieldsGenerator($tableName, $ignoredFields, $this->config->connection);
         $tableFieldsGenerator->prepareFieldsFromTable();
         $tableFieldsGenerator->prepareRelations();
 

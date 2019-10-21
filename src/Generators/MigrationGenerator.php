@@ -19,7 +19,7 @@ class MigrationGenerator extends BaseGenerator
     public function __construct($commandData)
     {
         $this->commandData = $commandData;
-        $this->path = config('infyom.laravel_generator.path.migration', base_path('database/migrations/'));
+        $this->path = config('infyom.laravel_generator.path.migration', database_path('migrations/'));
     }
 
     public function generate()
@@ -32,7 +32,7 @@ class MigrationGenerator extends BaseGenerator
 
         $tableName = $this->commandData->dynamicVars['$TABLE_NAME$'];
 
-        $fileName = date('Y_m_d_His').'_'.'create_'.$tableName.'_table.php';
+        $fileName = date('Y_m_d_His').'_'.'create_'.strtolower($tableName).'_table.php';
 
         FileUtil::createFile($this->path, $fileName, $templateData);
 

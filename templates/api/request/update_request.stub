@@ -24,6 +24,8 @@ class Update$MODEL_NAME$APIRequest extends APIRequest
      */
     public function rules()
     {
-        return $MODEL_NAME$::$rules;
+        $rules = $MODEL_NAME$::$rules;
+        $UNIQUE_RULES$
+        return $rules;
     }
 }

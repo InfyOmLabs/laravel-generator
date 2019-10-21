@@ -2,11 +2,12 @@
 
 namespace InfyOm\Generator\Generators\Scaffold;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
+use InfyOm\Generator\Generators\ViewServiceProviderGenerator;
 use InfyOm\Generator\Utils\FileUtil;
-use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
 use InfyOm\Generator\Utils\HTMLFieldGenerator;
 
 class ViewGenerator extends BaseGenerator
@@ -34,6 +35,11 @@ class ViewGenerator extends BaseGenerator
     {
         if (!file_exists($this->path)) {
             mkdir($this->path, 0755, true);
+        }
+
+        $htmlInputs = Arr::pluck($this->commandData->fields, 'htmlInput');
+        if (in_array('file', $htmlInputs)) {
+            $this->commandData->addDynamicVariable('$FILES$', ", 'files' => true");
         }
 
         $this->commandData->commandComment("\nGenerating Views...");
@@ -164,7 +170,7 @@ class ViewGenerator extends BaseGenerator
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
-        if ($this->commandData->getOption('datatables')) {
+        if ($this->commandData->getAddOn('datatables')) {
             $templateData = str_replace('$PAGINATE$', '', $templateData);
         } else {
             $paginate = $this->commandData->getOption('paginate');
@@ -194,117 +200,43 @@ class ViewGenerator extends BaseGenerator
                 continue;
             }
 
-            //            switch ($field->htmlType) {
-            //                case 'text':
-            //                case 'textarea':
-            //                case 'date':
-            //                case 'file':
-            //                case 'email':
-            //                case 'password':
-            //                case 'number':
-            //                    $fieldTemplate = get_template('scaffold.fields.' . $field->htmlType, $this->templateType);
-            //                    break;
-            //
-            //                case 'select':
-            //                case 'enum':
-            //                    $fieldTemplate = get_template('scaffold.fields.select', $this->templateType);
-            //                    $inputsArr = explode(',', $field['htmlTypeInputs']);
-            //
-            //                    $fieldTemplate = str_replace(
-            //                        '$INPUT_ARR$',
-            //                        GeneratorFieldsInputUtil::prepareKeyValueArrayStr($inputsArr),
-            //                        $fieldTemplate
-            //                    );
-            //                    break;
-            //
-            //                case 'radio':
-            //                    $fieldTemplate = get_template('scaffold.fields.radio_group', $this->templateType);
-            //                    $radioTemplate = get_template('scaffold.fields.radio', $this->templateType);
-            //                    $inputsArr = explode(',', $field['htmlTypeInputs']);
-            //                    $radioButtons = [];
-            //                    foreach ($inputsArr as $item) {
-            //                        $radioButtonsTemplate = fill_field_template(
-            //                            $this->commandData->fieldNamesMapping,
-            //                            $radioTemplate, $field
-            //                        );
-            //                        $radioButtonsTemplate = str_replace('$VALUE$', $item, $radioButtonsTemplate);
-            //                        $radioButtons[] = $radioButtonsTemplate;
-            //                    }
-            //                    $fieldTemplate = str_replace('$RADIO_BUTTONS$', implode("\n", $radioButtons), $fieldTemplate);
-            //                    break;
-            //
-            ////                case 'checkbox-group':
-            ////                    $fieldTemplate = get_template('scaffold.fields.checkbox_group', $this->templateType);
-            ////                      $radioTemplate = get_template('scaffold.fields.checks', $this->templateType);
-            ////                      $inputsArr = explode(',', $field['htmlTypeInputs']);
-            ////                      $radioButtons = [];
-            ////                      foreach ($inputsArr as $item) {
-            ////                          $radioButtonsTemplate = fill_field_template(
-            ////                              $this->commandData->fieldNamesMapping,
-            ////                              $radioTemplate,
-            ////                              $field
-            ////                          );
-            ////                          $radioButtonsTemplate = str_replace('$VALUE$', $item, $radioButtonsTemplate);
-            ////                          $radioButtons[] = $radioButtonsTemplate;
-            ////                      }
-            ////                    $fieldTemplate = str_replace('$CHECKBOXES$', implode("\n", $radioButtons), $fieldTemplate);
-            ////                    break;
-            //
-            //                case 'bool-checkbox':
-            //                    $fieldTemplate = get_template('scaffold.fields.bool-checkbox', $this->templateType);
-            //                    $checkboxValue = $value = $field['htmlTypeInputs'];
-            //                    if ($field['fieldType'] === 'boolean') {
-            //                        if ($checkboxValue === 'checked') {
-            //                            $checkboxValue = '1, true';
-            //                        } elseif ($checkboxValue === 'unchecked') {
-            //                            $checkboxValue = '0';
-            //                        }
-            //                    }
-            //                    $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
-            //                    $fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
-            //                    break;
-            //
-            //                case 'toggle-switch':
-            //                    $fieldTemplate = get_template('scaffold.fields.toggle-switch', $this->templateType);
-            //                    $checkboxValue = $value = $field['htmlTypeInputs'];
-            //                    if ($field['fieldType'] === 'boolean') {
-            //                        $checkboxValue = "[ 'On' => '1' , 'Off' => '0']";
-            //                    }
-            //                    $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
-            //                    //$fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
-            //                    break;
-            //
-            //                case 'checkbox':
-            //                    $fieldTemplate = get_template('scaffold.fields.checkbox', $this->templateType);
-            //                    $checkboxValue = $value = $field['htmlTypeInputs'];
-            //                    if ($field['fieldType'] != 'boolean') {
-            //                        $checkboxValue = "'" . $value . "'";
-            //                    }
-            //                    $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
-            //                    $fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
-            //                    break;
-            //
-            //                case 'boolean':
-            //                    $fieldTemplate = get_template('scaffold.fields.boolean', $this->templateType);
-            //                    $checkboxValue = $value = $field['htmlTypeInputs'];
-            //                    if ($field['fieldType'] == 'boolean') {
-            //                        $checkboxValue = true;
-            //                    }
-            //                    $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
-            //                    // $fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
-            //                    break;
-            //
-            //                default:
-            //                    $fieldTemplate = '';
-            //                    break;
-            //            }
+            $validations = explode('|', $field->validations);
+            $minMaxRules = '';
+            foreach ($validations as $validation) {
+                if (!Str::contains($validation, ['max:', 'min:'])) {
+                    continue;
+                }
+
+                $validationText = substr($validation, 0, 3);
+                $sizeInNumber = substr($validation, 4);
+
+                $sizeText = ($validationText == 'min') ? 'minlength' : 'maxlength';
+                if ($field->htmlType == 'number') {
+                    $sizeText = $validationText;
+                }
+
+                $size = ",'$sizeText' => $sizeInNumber";
+                $minMaxRules .= $size;
+            }
+            $this->commandData->addDynamicVariable('$SIZE$', $minMaxRules);
 
             $fieldTemplate = HTMLFieldGenerator::generateHTML($field, $this->templateType);
+            if ($field->htmlType == 'selectTable') {
+                $inputArr = explode(',', $field->htmlValues[1]);
+                $columns = '';
+                foreach ($inputArr as $item) {
+                    $columns .= "'$item'".',';  //e.g 'email,id,'
+                }
+                $columns = substr_replace($columns, '', -1); // remove last ,
+
+                $selectTable = $field->htmlValues[0];
+                $tableName = $this->commandData->config->tableName;
+                $variableName = Str::singular($selectTable).'Items'; // e.g $userItems
+
+                $fieldTemplate = $this->generateViewComposer($tableName, $variableName, $columns, $selectTable);
+            }
 
             if (!empty($fieldTemplate)) {
-                if ($field->isNotNull) {
-                    $fieldTemplate = str_replace('$FIELD_NAME_TITLE$', '$FIELD_NAME_TITLE$'.($field->isNotNull ? ' <span class="required">*</span>' : ''), $fieldTemplate);
-                }
                 $fieldTemplate = fill_template_with_field_data(
                     $this->commandData->dynamicVars,
                     $this->commandData->fieldNamesMapping,
@@ -322,6 +254,23 @@ class ViewGenerator extends BaseGenerator
 
         FileUtil::createFile($this->path, 'fields.blade.php', $templateData);
         $this->commandData->commandInfo('field.blade.php created');
+    }
+
+    private function generateViewComposer($tableName, $variableName, $columns, $selectTable)
+    {
+        $fieldTemplate = get_template('scaffold.fields.select', $this->templateType);
+
+        $viewServiceProvider = new ViewServiceProviderGenerator($this->commandData);
+        $viewServiceProvider->generate();
+        $viewServiceProvider->addViewVariables($tableName.'.fields', $variableName, $columns, $selectTable);
+
+        $fieldTemplate = str_replace(
+            '$INPUT_ARR$',
+            '$'.$variableName,
+            $fieldTemplate
+        );
+
+        return $fieldTemplate;
     }
 
     private function generateCreate()
@@ -351,6 +300,9 @@ class ViewGenerator extends BaseGenerator
         $fieldsStr = '';
 
         foreach ($this->commandData->fields as $field) {
+            if (!$field->inView) {
+                continue;
+            }
             $singleFieldStr = str_replace('$FIELD_NAME_TITLE$', Str::title(str_replace('_', ' ', $field->name)),
                 $fieldTemplate);
             $singleFieldStr = str_replace('$FIELD_NAME$', $field->name, $singleFieldStr);
@@ -373,7 +325,7 @@ class ViewGenerator extends BaseGenerator
         $this->commandData->commandInfo('show.blade.php created');
     }
 
-    public function rollback()
+    public function rollback($views = [])
     {
         $files = [
             'table.blade.php',
@@ -384,6 +336,13 @@ class ViewGenerator extends BaseGenerator
             'show.blade.php',
             'show_fields.blade.php',
         ];
+
+        if (!empty($views)) {
+            $files = [];
+            foreach ($views as $view) {
+                $files[] = $view.'.blade.php';
+            }
+        }
 
         if ($this->commandData->getAddOn('datatables')) {
             $files[] = 'datatables_actions.blade.php';

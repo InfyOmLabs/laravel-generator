@@ -3,11 +3,13 @@
 namespace InfyOm\Generator\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\API\APIControllerGenerator;
 use InfyOm\Generator\Generators\API\APIRequestGenerator;
 use InfyOm\Generator\Generators\API\APIRoutesGenerator;
 use InfyOm\Generator\Generators\API\APITestGenerator;
+use InfyOm\Generator\Generators\FactoryGenerator;
 use InfyOm\Generator\Generators\MigrationGenerator;
 use InfyOm\Generator\Generators\ModelGenerator;
 use InfyOm\Generator\Generators\RepositoryGenerator;
@@ -17,7 +19,7 @@ use InfyOm\Generator\Generators\Scaffold\MenuGenerator;
 use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
 use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
 use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
-use InfyOm\Generator\Generators\TestTraitGenerator;
+use InfyOm\Generator\Generators\SeederGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -66,9 +68,22 @@ class BaseCommand extends Command
             $modelGenerator->generate();
         }
 
-        if (!$this->isSkip('repository')) {
+        if (!$this->isSkip('repository') && $this->commandData->getOption('repositoryPattern')) {
             $repositoryGenerator = new RepositoryGenerator($this->commandData);
             $repositoryGenerator->generate();
+        }
+
+        if ($this->commandData->getOption('factory') || (
+                !$this->isSkip('tests') and $this->commandData->getAddOn('tests')
+            )) {
+            $factoryGenerator = new FactoryGenerator($this->commandData);
+            $factoryGenerator->generate();
+        }
+
+        if ($this->commandData->getOption('seeder')) {
+            $seederGenerator = new SeederGenerator($this->commandData);
+            $seederGenerator->generate();
+            $seederGenerator->updateMainSeeder();
         }
     }
 
@@ -90,11 +105,10 @@ class BaseCommand extends Command
         }
 
         if (!$this->isSkip('tests') and $this->commandData->getAddOn('tests')) {
-            $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);
-            $repositoryTestGenerator->generate();
-
-            $testTraitGenerator = new TestTraitGenerator($this->commandData);
-            $testTraitGenerator->generate();
+            if ($this->commandData->getOption('repositoryPattern')) {
+                $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);
+                $repositoryTestGenerator->generate();
+            }
 
             $apiTestGenerator = new APITestGenerator($this->commandData);
             $apiTestGenerator->generate();
@@ -136,13 +150,14 @@ class BaseCommand extends Command
         }
 
         if ($runMigration) {
-            if ($this->commandData->config->forceMigrate) {
-                $this->call('migrate');
+            if ($this->commandData->getOption('forceMigrate')) {
+                $this->runMigration();
             } elseif (!$this->commandData->getOption('fromTable') and !$this->isSkip('migration')) {
-                if ($this->commandData->getOption('jsonFromGUI')) {
-                    $this->call('migrate');
-                } elseif ($this->confirm("\nDo you want to migrate database? [y|N]", false)) {
-                    $this->call('migrate');
+                $requestFromConsole = (php_sapi_name() == 'cli') ? true : false;
+                if ($this->commandData->getOption('jsonFromGUI') && $requestFromConsole) {
+                    $this->runMigration();
+                } elseif ($requestFromConsole && $this->confirm("\nDo you want to migrate database? [y|N]", false)) {
+                    $this->runMigration();
                 }
             }
         }
@@ -150,6 +165,15 @@ class BaseCommand extends Command
             $this->info('Generating autoload files');
             $this->composer->dumpOptimized();
         }
+    }
+
+    public function runMigration()
+    {
+        $migrationPath = config('infyom.laravel_generator.path.migration', database_path('migrations/'));
+        $path = Str::after($migrationPath, base_path()); // get path after base_path
+        $this->call('migrate', ['--path' => $path, '--force' => true]);
+
+        return true;
     }
 
     public function isSkip($skip)
@@ -181,6 +205,7 @@ class BaseCommand extends Command
                 'primary'     => $field->isPrimary,
                 'inForm'      => $field->inForm,
                 'inIndex'     => $field->inIndex,
+                'inView'      => $field->inView,
             ];
         }
 
@@ -191,7 +216,7 @@ class BaseCommand extends Command
             ];
         }
 
-        $path = config('infyom.laravel_generator.path.schema_files', base_path('resources/model_schemas/'));
+        $path = config('infyom.laravel_generator.path.schema_files', resource_path('model_schemas/'));
 
         $fileName = $this->commandData->modelName.'.json';
 
@@ -240,6 +265,12 @@ class BaseCommand extends Command
             ['datatables', null, InputOption::VALUE_REQUIRED, 'Override datatables settings'],
             ['views', null, InputOption::VALUE_REQUIRED, 'Specify only the views you want generated: index,create,edit,show'],
             ['relations', null, InputOption::VALUE_NONE, 'Specify if you want to pass relationships for fields'],
+            ['softDelete', null, InputOption::VALUE_NONE, 'Soft Delete Option'],
+            ['forceMigrate', null, InputOption::VALUE_NONE, 'Specify if you want to run migration or not'],
+            ['factory', null, InputOption::VALUE_NONE, 'To generate factory'],
+            ['seeder', null, InputOption::VALUE_NONE, 'To generate seeder'],
+            ['repositoryPattern', null, InputOption::VALUE_REQUIRED, 'Repository Pattern'],
+            ['connection', null, InputOption::VALUE_REQUIRED, 'Specify connection name'],
         ];
     }
 
