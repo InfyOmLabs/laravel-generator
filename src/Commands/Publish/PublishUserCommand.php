@@ -31,9 +31,9 @@ class PublishUserCommand extends PublishBaseCommand
         $this->updateRoutes();
         $this->updateMenu();
         $this->publishUserController();
-		if (config('infyom.laravel_generator.option.repository_pattern')) {
-           $this->publishUserRepository();
-		}
+        if (config('infyom.laravel_generator.option.repository_pattern')) {
+            $this->publishUserRepository();
+        }
         $this->publishCreateUserRequest();
         $this->publishUpdateUserRequest();
     }
