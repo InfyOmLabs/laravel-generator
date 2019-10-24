@@ -4,7 +4,6 @@ namespace $NAMESPACE_CONTROLLER$;
 
 use $NAMESPACE_REQUEST$\CreateUserRequest;
 use $NAMESPACE_REQUEST$\UpdateUserRequest;
-use $NAMESPACE_REPOSITORY$\UserRepository;
 use $NAMESPACE_CONTROLLER$\AppBaseController;
 use Illuminate\Http\Request;
 use Flash;
