@@ -24,13 +24,8 @@ class $MODEL_NAME$APIController extends AppBaseController
     $DOC_INDEX$
     public function index(Request $request)
     {
-        $$MODEL_NAME_PLURAL_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->all(
-            $request->except(['skip', 'limit']),
-            $request->get('skip'),
-            $request->get('limit')
-        );
-
-        return $this->sendResponse($$MODEL_NAME_PLURAL_CAMEL$->toArray(), '$MODEL_NAME_PLURAL_HUMAN$ retrieved successfully');
+        $$MODEL_NAME_PLURAL_CAMEL$ = $this->getModel($this->$MODEL_NAME_CAMEL$Repository, $request);
+        return $this->sendResponse($$MODEL_NAME_PLURAL_CAMEL$, '$MODEL_NAME_PLURAL_HUMAN$ retrieved successfully');
     }
 
     $DOC_STORE$

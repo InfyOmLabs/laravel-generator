@@ -3,6 +3,8 @@
 namespace $NAMESPACE_APP$\Http\Controllers;
 
 use InfyOm\Generator\Utils\ResponseUtil;
+use App\Repositories\BaseRepository;
+use Illuminate\Http\Request;
 use Response;
 
 /**
@@ -26,5 +28,23 @@ class AppBaseController extends Controller
     public function sendError($error, $code = 404)
     {
         return Response::json(ResponseUtil::makeError($error), $code);
+    }
+    
+    public function getModel(BaseRepository $repository, Request $request)
+    {
+        if ($request['page'] != 'none') {
+            $perPage = $request->has('offset') ? $request->offset : 10;
+            $model = $repository->paginate($perPage);
+            $model = $model->toArray();
+            $model['items'] = $model['data'];
+            unset($model['data']);
+        } else {
+            $model = $repository->all(
+                $request->except(['skip', 'limit']),
+                $request->get('skip'),
+                $request->get('limit')
+            )->toArray();
+        }
+        return $model;
     }
 }
