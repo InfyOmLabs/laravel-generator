@@ -60,6 +60,8 @@ class GeneratorConfig
     public $mHuman;
     public $mHumanPlural;
 
+    public $connection = '';
+
     /* Generator Options */
     public $options;
 
@@ -91,6 +93,7 @@ class GeneratorConfig
         'seeder',
         'repositoryPattern',
         'localized',
+        'connection',
     ];
 
     public $tableName;
@@ -262,6 +265,13 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$MODEL_NAME_HUMAN$', $this->mHuman);
         $commandData->addDynamicVariable('$MODEL_NAME_PLURAL_HUMAN$', $this->mHumanPlural);
         $commandData->addDynamicVariable('$FILES$', '');
+
+        $connectionText = '';
+        if ($connection = $this->getOption('connection')) {
+            $this->connection = $connection;
+            $connectionText = infy_tab(4).'public $connection = "'.$connection.'";';
+        }
+        $commandData->addDynamicVariable('$CONNECTION$', $connectionText);
 
         if (!empty($this->prefixes['route'])) {
             $commandData->addDynamicVariable('$ROUTE_NAMED_PREFIX$', $this->prefixes['route'].'.');

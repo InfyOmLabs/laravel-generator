@@ -49,6 +49,12 @@ class MenuGenerator extends BaseGenerator
     public function generate()
     {
         $this->menuContents .= $this->menuTemplate.infy_nl();
+        $existingMenuContents = file_get_contents($this->path);
+        if (Str::contains($existingMenuContents, '<span>'.$this->commandData->config->mHumanPlural.'</span>')) {
+            $this->commandData->commandObj->info('Menu '.$this->commandData->config->mHumanPlural.' is already exists, Skipping Adjustment.');
+
+            return;
+        }
 
         file_put_contents($this->path, $this->menuContents);
         $this->commandData->commandComment("\n".$this->commandData->config->mCamelPlural.' menu added.');

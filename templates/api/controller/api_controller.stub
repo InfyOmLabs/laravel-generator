@@ -85,6 +85,6 @@ class $MODEL_NAME$APIController extends AppBaseController
 
         $$MODEL_NAME_CAMEL$->delete();
 
-        return $this->sendResponse($id, '$MODEL_NAME_HUMAN$ deleted successfully');
+        return $this->sendSuccess('$MODEL_NAME_HUMAN$ deleted successfully');
     }
 }
