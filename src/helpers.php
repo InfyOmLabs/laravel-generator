@@ -179,6 +179,48 @@ if (!function_exists('fill_template_with_field_data')) {
     }
 }
 
+if (!function_exists('fill_template_with_field_data_locale')) {
+    /**
+     * fill template with field data.
+     *
+     * @param array          $variables
+     * @param array          $fieldVariables
+     * @param string         $template
+     * @param GeneratorField $field
+     *
+     * @return string
+     */
+    function fill_template_with_field_data_locale($variables, $fieldVariables, $template, $field)
+    {
+        $template = fill_template($variables, $template);
+        $tableName = $variables['$TABLE_NAME$'];
+
+        return fill_field_template_locale($fieldVariables, $template, $field, $tableName);
+    }
+}
+
+if (!function_exists('fill_field_template_locale')) {
+    /**
+     * fill field template with variable values.
+     *
+     * @param array          $variables
+     * @param string         $template
+     * @param GeneratorField $field
+     * @param string         $tableName
+     *
+     * @return string
+     */
+    function fill_field_template_locale($variables, $template, $field, $tableName)
+    {
+        foreach ($variables as $variable => $key) {
+            $value = $field->name;
+            $template = str_replace($variable, "@lang('models/$tableName.fields.$value')", $template);
+        }
+
+        return $template;
+    }
+}
+
 if (!function_exists('model_name_from_table_name')) {
     /**
      * generates model name from table name.
