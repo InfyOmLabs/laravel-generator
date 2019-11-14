@@ -68,6 +68,7 @@ class GeneratorConfig
     /* Prefixes */
     public $prefixes;
 
+    /** @var CommandData */
     private $commandData;
 
     /* Command Options */
@@ -91,6 +92,7 @@ class GeneratorConfig
         'factory',
         'seeder',
         'repositoryPattern',
+        'localized',
         'connection',
     ];
 
@@ -308,6 +310,8 @@ class GeneratorConfig
             config('infyom.laravel_generator.api_version', 'v1')
         );
 
+        $commandData->addDynamicVariable('$SEARCHABLE$', '');
+
         return $commandData;
     }
 
@@ -363,6 +367,14 @@ class GeneratorConfig
 
         if (empty($this->options['save'])) {
             $this->options['save'] = config('infyom.laravel_generator.options.save_schema_file', true);
+        }
+
+        if (empty($this->options['localized'])) {
+            $this->options['localized'] = config('infyom.laravel_generator.options.localized', false);
+        }
+
+        if ($this->options['localized']) {
+            $commandData->getTemplatesManager()->setUseLocale(true);
         }
 
         $this->options['softDelete'] = config('infyom.laravel_generator.options.softDelete', false);
