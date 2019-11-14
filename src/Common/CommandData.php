@@ -31,6 +31,9 @@ class CommandData
     /** @var Command */
     public $commandObj;
 
+    /** @var TemplatesManager */
+    private $templateManager;
+
     /** @var array */
     public $dynamicVars = [];
     public $fieldNamesMapping = [];
@@ -43,15 +46,31 @@ class CommandData
         return self::$instance;
     }
 
+    public function getTemplatesManager()
+    {
+        return $this->templateManager;
+    }
+
+    public function isLocalizedTemplates()
+    {
+        return $this->templateManager->isUsingLocale();
+    }
+
     /**
-     * @param Command $commandObj
-     * @param string  $commandType
-     *
-     * @return CommandData
+     * @param Command          $commandObj
+     * @param string           $commandType
+     * @param TemplatesManager $templatesManager
      */
-    public function __construct(Command $commandObj, $commandType)
+    public function __construct(Command $commandObj, $commandType, TemplatesManager $templatesManager = null)
     {
         $this->commandObj = $commandObj;
+
+        if (is_null($templatesManager)) {
+            $this->templateManager = app(TemplatesManager::class);
+        } else {
+            $this->templateManager = $templatesManager;
+        }
+
         $this->commandType = $commandType;
 
         $this->fieldNamesMapping = [
