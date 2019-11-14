@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Commands\Publish;
 
 use InfyOm\Generator\Utils\FileUtil;
+use Symfony\Component\Console\Input\InputOption;
 
 class LayoutPublishCommand extends PublishBaseCommand
 {
@@ -39,7 +40,11 @@ class LayoutPublishCommand extends PublishBaseCommand
 
         $this->createDirectories($viewsPath);
 
-        $files = $this->getViews();
+        if ($this->option('localized')) {
+            $files = $this->getLocaleViews();
+        } else {
+            $files = $this->getViews();
+        }
 
         foreach ($files as $stub => $blade) {
             $sourceFile = get_template_file_path('scaffold/'.$stub, $templateType);
@@ -71,6 +76,23 @@ class LayoutPublishCommand extends PublishBaseCommand
             'auth/email'                => 'auth/passwords/email.blade.php',
             'auth/reset'                => 'auth/passwords/reset.blade.php',
             'emails/password'           => 'auth/emails/password.blade.php',
+        ];
+    }
+
+    private function getLocaleViews()
+    {
+        return [
+            'layouts/app_locale'        => 'layouts/app.blade.php',
+            'layouts/sidebar_locale'    => 'layouts/sidebar.blade.php',
+            'layouts/datatables_css'    => 'layouts/datatables_css.blade.php',
+            'layouts/datatables_js'     => 'layouts/datatables_js.blade.php',
+            'layouts/menu'              => 'layouts/menu.blade.php',
+            'layouts/home'              => 'home.blade.php',
+            'auth/login_locale'         => 'auth/login.blade.php',
+            'auth/register_locale'      => 'auth/register.blade.php',
+            'auth/email_locale'         => 'auth/passwords/email.blade.php',
+            'auth/reset_locale'         => 'auth/passwords/reset.blade.php',
+            'emails/password_locale'    => 'auth/emails/password.blade.php',
         ];
     }
 
@@ -141,7 +163,9 @@ class LayoutPublishCommand extends PublishBaseCommand
      */
     public function getOptions()
     {
-        return [];
+        return [
+            ['localized', null, InputOption::VALUE_NONE, 'Localize files.'],
+        ];
     }
 
     /**
