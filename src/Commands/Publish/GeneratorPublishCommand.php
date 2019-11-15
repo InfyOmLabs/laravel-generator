@@ -117,6 +117,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
         $this->comment('Locale files published');
     }
+
     /**
      * Get the console command options.
      *
