@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Flash;
 use Response;
 use Hash;
-use App\User;
+use $NAMESPACE_USER$;
 class UserController extends AppBaseController
 {
     /**

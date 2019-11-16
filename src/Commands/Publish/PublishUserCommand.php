@@ -104,6 +104,7 @@ class PublishUserCommand extends PublishBaseCommand
         $templateData = get_template('user/user_controller', 'laravel-generator');
         if (!config('infyom.laravel_generator.options.repository_pattern')) {
             $templateData = get_template('user/user_controller_without_repository', 'laravel-generator');
+            $templateData = $this->fillTemplate($templateData);
         }
 
         $templateData = $this->fillTemplate($templateData);
@@ -195,6 +196,7 @@ class PublishUserCommand extends PublishBaseCommand
         $templateData = str_replace('$NAMESPACE_REQUEST$', config('infyom.laravel_generator.namespace.request'), $templateData);
 
         $templateData = str_replace('$NAMESPACE_REPOSITORY$', config('infyom.laravel_generator.namespace.repository'), $templateData);
+        $templateData = str_replace('$NAMESPACE_USER$', config('auth.providers.users.model'), $templateData);
 
         return $templateData;
     }
