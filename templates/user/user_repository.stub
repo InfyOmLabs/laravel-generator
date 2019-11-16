@@ -2,7 +2,7 @@
 
 namespace $NAMESPACE_REPOSITORY$;
 
-use App\User;
+use $NAMESPACE_USER$;
 use $NAMESPACE_REPOSITORY$\BaseRepository;
 
 /**
