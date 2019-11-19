@@ -9,3 +9,4 @@ Comment on this [issue](https://github.com/InfyOmLabs/laravel-generator/issues/6
 - [TinkerTool](https://www.tinkertool.in/)
 - [Reantamchet](https://reantamchet.com/)
 - [Get Free Bitcoin](getfreebitco.in)
+- [InfyLMS](https://codecanyon.net/item/infylms-library-management-system-laravel-reactjs/24884824)
