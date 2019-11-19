@@ -8,3 +8,4 @@ Comment on this [issue](https://github.com/InfyOmLabs/laravel-generator/issues/6
 - [Kavlinge Zoo](http://kavlingezoo.se/)
 - [TinkerTool](https://www.tinkertool.in/)
 - [Reantamchet](https://reantamchet.com/)
+- [Get Free Bitcoin](getfreebitco.in)
