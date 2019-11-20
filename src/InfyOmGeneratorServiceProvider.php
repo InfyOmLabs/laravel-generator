@@ -14,6 +14,7 @@ use InfyOm\Generator\Commands\Common\RepositoryGeneratorCommand;
 use InfyOm\Generator\Commands\Publish\GeneratorPublishCommand;
 use InfyOm\Generator\Commands\Publish\LayoutPublishCommand;
 use InfyOm\Generator\Commands\Publish\PublishTemplateCommand;
+use InfyOm\Generator\Commands\Publish\PublishUserCommand;
 use InfyOm\Generator\Commands\Publish\VueJsLayoutPublishCommand;
 use InfyOm\Generator\Commands\RollbackGeneratorCommand;
 use InfyOm\Generator\Commands\Scaffold\ControllerGeneratorCommand;
@@ -116,6 +117,10 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
             return new VueJsLayoutPublishCommand();
         });
 
+        $this->app->singleton('infyom.publish.user', function ($app) {
+            return new PublishUserCommand();
+        });
+
         $this->commands([
             'infyom.publish',
             'infyom.api',
@@ -135,6 +140,7 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
             'infyom.rollback',
             'infyom.vuejs',
             'infyom.publish.vuejs',
+            'infyom.publish.user',
         ]);
     }
 }
