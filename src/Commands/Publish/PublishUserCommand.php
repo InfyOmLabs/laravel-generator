@@ -18,7 +18,7 @@ class PublishUserCommand extends PublishBaseCommand
      *
      * @var string
      */
-    protected $description = 'Publishes users files';
+    protected $description = 'Publishes Users CRUD file';
 
     /**
      * Execute the command.
@@ -27,7 +27,7 @@ class PublishUserCommand extends PublishBaseCommand
      */
     public function handle()
     {
-        $this->copyView();
+        $this->copyViews();
         $this->updateRoutes();
         $this->updateMenu();
         $this->publishUserController();
@@ -38,7 +38,7 @@ class PublishUserCommand extends PublishBaseCommand
         $this->publishUpdateUserRequest();
     }
 
-    private function copyView()
+    private function copyViews()
     {
         $viewsPath = config('infyom.laravel_generator.path.views', resource_path('views/'));
         $templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
