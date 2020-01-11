@@ -2,8 +2,8 @@
 
 namespace InfyOm\Generator\Commands\Publish;
 
-use InfyOm\Generator\Utils\FileUtil;
 use Illuminate\Support\Str;
+use InfyOm\Generator\Utils\FileUtil;
 use Symfony\Component\Console\Input\InputOption;
 
 class LayoutPublishCommand extends PublishBaseCommand
@@ -65,7 +65,7 @@ class LayoutPublishCommand extends PublishBaseCommand
 
     private function getViews()
     {
-        $views =  [
+        $views = [
             'layouts/app'               => 'layouts/app.blade.php',
             'layouts/sidebar'           => 'layouts/sidebar.blade.php',
             'layouts/datatables_css'    => 'layouts/datatables_css.blade.php',
