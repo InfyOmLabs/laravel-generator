@@ -30,7 +30,10 @@ class GeneratorPublishCommand extends PublishBaseCommand
     {
         $this->publishTestCases();
         $this->publishBaseController();
-        $this->publishBaseRepository();
+        $repositoryPattern = config('infyom.laravel_generator.options.repository_pattern', true);
+        if ($repositoryPattern) {
+            $this->publishBaseRepository();
+        }
         if ($this->option('localized')) {
             $this->publishLocaleFiles();
         }
