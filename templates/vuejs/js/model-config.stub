@@ -1,0 +1,12 @@
+var objectRow = {            
+$FIELDS_ROW$
+};
+
+var tableColumns = [
+$FIELDS_COL$       
+    {
+        name: '__actions',
+        dataClass: 'center aligned',
+        callback: null
+    }        
+];

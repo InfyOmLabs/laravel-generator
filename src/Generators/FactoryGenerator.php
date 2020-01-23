@@ -5,59 +5,76 @@ namespace InfyOm\Generator\Generators;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
-use InfyOm\Generator\Utils\TemplateUtil;
 
-class TestTraitGenerator extends BaseGenerator
+/**
+ * Class FactoryGenerator.
+ */
+class FactoryGenerator extends BaseGenerator
 {
-    /** @var CommandData */
+    /** @var CommandData $commandData */
     private $commandData;
-
-    /** @var string */
+    /** @var string $path */
     private $path;
-
-    /** @var string */
+    /** @var string $fileName */
     private $fileName;
 
+    /**
+     * FactoryGenerator constructor.
+     *
+     * @param CommandData $commandData
+     */
     public function __construct(CommandData $commandData)
     {
         $this->commandData = $commandData;
-        $this->path = $commandData->config->pathApiTestTraits;
-        $this->fileName = 'Make'.$this->commandData->modelName.'Trait.php';
+        $this->path = $commandData->config->pathFactory;
+        $this->fileName = $this->commandData->modelName.'Factory.php';
     }
 
     public function generate()
     {
-        $templateData = TemplateUtil::getTemplate('test.trait', 'laravel-generator');
+        $templateData = get_template('factories.model_factory', 'laravel-generator');
 
         $templateData = $this->fillTemplate($templateData);
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
-        $this->commandData->commandObj->comment("\nTestTrait created: ");
+        $this->commandData->commandObj->comment("\nFactory created: ");
         $this->commandData->commandObj->info($this->fileName);
     }
 
+    /**
+     * @param string $templateData
+     *
+     * @return mixed|string
+     */
     private function fillTemplate($templateData)
     {
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
-        $templateData = str_replace('$FIELDS$', implode(','.infy_nl_tab(1, 3), $this->generateFields()), $templateData);
+        $templateData = str_replace(
+            '$FIELDS$',
+            implode(','.infy_nl_tab(1, 2), $this->generateFields()),
+            $templateData
+        );
 
         return $templateData;
     }
 
+    /**
+     * @return array
+     */
     private function generateFields()
     {
         $fields = [];
 
-        foreach ($this->commandData->inputFields as $field) {
-            if ($field['primary']) {
+        foreach ($this->commandData->fields as $field) {
+            if ($field->isPrimary) {
                 continue;
             }
 
-            $fieldData = "'".$field['fieldName']."' => ".'$fake->';
+            $fieldData = "'".$field->name."' => ".'$faker->';
 
-            switch ($field['fieldType']) {
+            switch ($field->fieldType) {
                 case 'integer':
                 case 'float':
                     $fakerData = 'randomDigitNotNull';
@@ -69,10 +86,13 @@ class TestTraitGenerator extends BaseGenerator
                     $fakerData = 'text';
                     break;
                 case 'datetime':
+                case 'timestamp':
                     $fakerData = "date('Y-m-d H:i:s')";
                     break;
                 case 'enum':
-                    $fakerData = 'randomElement('.GeneratorFieldsInputUtil::prepareValuesArrayStr(explode(',', $field['htmlTypeInputs'])).')';
+                    $fakerData = 'randomElement('.
+                        GeneratorFieldsInputUtil::prepareValuesArrayStr($field->htmlValues).
+                        ')';
                     break;
                 default:
                     $fakerData = 'word';
@@ -84,12 +104,5 @@ class TestTraitGenerator extends BaseGenerator
         }
 
         return $fields;
-    }
-
-    public function rollback()
-    {
-        if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('Test trait file deleted: '.$this->fileName);
-        }
     }
 }

@@ -5,7 +5,6 @@ namespace InfyOm\Generator\Generators\API;
 use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
-use InfyOm\Generator\Utils\TemplateUtil;
 
 class APIRoutesGenerator extends BaseGenerator
 {
@@ -29,17 +28,23 @@ class APIRoutesGenerator extends BaseGenerator
         $this->routeContents = file_get_contents($this->path);
 
         if (!empty($this->commandData->config->prefixes['route'])) {
-            $routesTemplate = TemplateUtil::getTemplate('api.routes.prefix_routes', 'laravel-generator');
+            $routesTemplate = get_template('api.routes.prefix_routes', 'laravel-generator');
         } else {
-            $routesTemplate = TemplateUtil::getTemplate('api.routes.routes', 'laravel-generator');
+            $routesTemplate = get_template('api.routes.routes', 'laravel-generator');
         }
 
-        $this->routesTemplate = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $routesTemplate);
+        $this->routesTemplate = fill_template($this->commandData->dynamicVars, $routesTemplate);
     }
 
     public function generate()
     {
         $this->routeContents .= "\n\n".$this->routesTemplate;
+        $existingRouteContents = file_get_contents($this->path);
+        if (Str::contains($existingRouteContents, "Route::resource('".$this->commandData->config->mSnakePlural."',")) {
+            $this->commandData->commandObj->info('Menu '.$this->commandData->config->mPlural.'is already exists, Skipping Adjustment.');
+
+            return;
+        }
 
         file_put_contents($this->path, $this->routeContents);
 

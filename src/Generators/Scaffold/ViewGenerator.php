@@ -2,12 +2,13 @@
 
 namespace InfyOm\Generator\Generators\Scaffold;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
+use InfyOm\Generator\Generators\ViewServiceProviderGenerator;
 use InfyOm\Generator\Utils\FileUtil;
-use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
-use InfyOm\Generator\Utils\TemplateUtil;
+use InfyOm\Generator\Utils\HTMLFieldGenerator;
 
 class ViewGenerator extends BaseGenerator
 {
@@ -27,13 +28,18 @@ class ViewGenerator extends BaseGenerator
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathViews;
-        $this->templateType = config('infyom.laravel_generator.templates', 'core-templates');
+        $this->templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
     }
 
     public function generate()
     {
         if (!file_exists($this->path)) {
             mkdir($this->path, 0755, true);
+        }
+
+        $htmlInputs = Arr::pluck($this->commandData->fields, 'htmlInput');
+        if (in_array('file', $htmlInputs)) {
+            $this->commandData->addDynamicVariable('$FILES$', ", 'files' => true");
         }
 
         $this->commandData->commandComment("\nGenerating Views...");
@@ -89,45 +95,54 @@ class ViewGenerator extends BaseGenerator
         $this->commandData->commandInfo('table.blade.php created');
     }
 
-    private function generateTableHeaderFields()
+    private function generateDataTableBody()
     {
-        $headerFieldTemplate = TemplateUtil::getTemplate('scaffold.views.table_header', $this->templateType);
+        $templateData = get_template('scaffold.views.datatable_body', $this->templateType);
 
-        $headerFields = [];
+        return fill_template($this->commandData->dynamicVars, $templateData);
+    }
 
-        foreach ($this->commandData->inputFields as $field) {
-            if (!$field['inIndex']) {
-                continue;
-            }
-            $headerFields[] = $fieldTemplate = TemplateUtil::fillTemplateWithFieldData(
-                $this->commandData->dynamicVars,
-                $this->commandData->fieldNamesMapping,
-                $headerFieldTemplate,
-                $field
-            );
+    private function generateDataTableActions()
+    {
+        $templateName = 'datatables_actions';
+
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
         }
 
-        return implode(infy_nl_tab(1, 2), $headerFields);
+        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
+
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+
+        FileUtil::createFile($this->path, 'datatables_actions.blade.php', $templateData);
+
+        $this->commandData->commandInfo('datatables_actions.blade.php created');
     }
 
     private function generateBladeTableBody()
     {
-        $templateData = TemplateUtil::getTemplate('scaffold.views.blade_table_body', $this->templateType);
+        $templateName = 'blade_table_body';
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+        }
+
+        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
+
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         $templateData = str_replace('$FIELD_HEADERS$', $this->generateTableHeaderFields(), $templateData);
 
-        $cellFieldTemplate = TemplateUtil::getTemplate('scaffold.views.table_cell', $this->templateType);
+        $cellFieldTemplate = get_template('scaffold.views.table_cell', $this->templateType);
 
         $tableBodyFields = [];
 
-        foreach ($this->commandData->inputFields as $field) {
-            if (!$field['inIndex']) {
+        foreach ($this->commandData->fields as $field) {
+            if (!$field->inIndex) {
                 continue;
             }
 
-            $tableBodyFields[] = TemplateUtil::fillTemplateWithFieldData(
+            $tableBodyFields[] = fill_template_with_field_data(
                 $this->commandData->dynamicVars,
                 $this->commandData->fieldNamesMapping,
                 $cellFieldTemplate,
@@ -140,39 +155,66 @@ class ViewGenerator extends BaseGenerator
         return str_replace('$FIELD_BODY$', $tableBodyFields, $templateData);
     }
 
-    private function generateDataTableBody()
+    private function generateTableHeaderFields()
     {
-        $templateData = TemplateUtil::getTemplate('scaffold.views.datatable_body', $this->templateType);
+        $templateName = 'table_header';
 
-        return TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
-    }
+        $localized = false;
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+            $localized = true;
+        }
 
-    private function generateDataTableActions()
-    {
-        $templateData = TemplateUtil::getTemplate('scaffold.views.datatables_actions', $this->templateType);
+        $headerFieldTemplate = get_template('scaffold.views.'.$templateName, $this->templateType);
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $headerFields = [];
 
-        FileUtil::createFile($this->path, 'datatables_actions.blade.php', $templateData);
+        foreach ($this->commandData->fields as $field) {
+            if (!$field->inIndex) {
+                continue;
+            }
 
-        $this->commandData->commandInfo('datatables_actions.blade.php created');
+            if ($localized) {
+                $headerFields[] = $fieldTemplate = fill_template_with_field_data_locale(
+                    $this->commandData->dynamicVars,
+                    $this->commandData->fieldNamesMapping,
+                    $headerFieldTemplate,
+                    $field
+                );
+            } else {
+                $headerFields[] = $fieldTemplate = fill_template_with_field_data(
+                    $this->commandData->dynamicVars,
+                    $this->commandData->fieldNamesMapping,
+                    $headerFieldTemplate,
+                    $field
+                );
+            }
+        }
+
+        return implode(infy_nl_tab(1, 2), $headerFields);
     }
 
     private function generateIndex()
     {
-        $templateData = TemplateUtil::getTemplate('scaffold.views.index', $this->templateType);
+        $templateName = 'index';
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+        }
 
-        if ($this->commandData->getOption('datatables')) {
+        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
+
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+
+        if ($this->commandData->getAddOn('datatables')) {
             $templateData = str_replace('$PAGINATE$', '', $templateData);
         } else {
             $paginate = $this->commandData->getOption('paginate');
 
             if ($paginate) {
-                $paginateTemplate = TemplateUtil::getTemplate('scaffold.views.paginate', $this->templateType);
+                $paginateTemplate = get_template('scaffold.views.paginate', $this->templateType);
 
-                $paginateTemplate = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $paginateTemplate);
+                $paginateTemplate = fill_template($this->commandData->dynamicVars, $paginateTemplate);
 
                 $templateData = str_replace('$PAGINATE$', $paginateTemplate, $templateData);
             } else {
@@ -187,119 +229,60 @@ class ViewGenerator extends BaseGenerator
 
     private function generateFields()
     {
+        $templateName = 'fields';
+
+        $localized = false;
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+            $localized = true;
+        }
+
         $this->htmlFields = [];
 
-        foreach ($this->commandData->inputFields as $field) {
-            if (!$field['inForm']) {
+        foreach ($this->commandData->fields as $field) {
+            if (!$field->inForm) {
                 continue;
             }
-            switch ($field['htmlType']) {
-                case 'text':
-                case 'textarea':
-                case 'date':
-                case 'file':
-                case 'email':
-                case 'password':
-                case 'number':
-                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.'.$field['htmlType'], $this->templateType);
-                    break;
 
-                case 'select':
-                case 'enum':
-                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.select', $this->templateType);
-                    $inputsArr = explode(',', $field['htmlTypeInputs']);
+            $validations = explode('|', $field->validations);
+            $minMaxRules = '';
+            foreach ($validations as $validation) {
+                if (!Str::contains($validation, ['max:', 'min:'])) {
+                    continue;
+                }
 
-                    $fieldTemplate = str_replace(
-                        '$INPUT_ARR$',
-                        GeneratorFieldsInputUtil::prepareKeyValueArrayStr($inputsArr),
-                        $fieldTemplate
-                    );
-                    break;
+                $validationText = substr($validation, 0, 3);
+                $sizeInNumber = substr($validation, 4);
 
-                case 'radio':
-                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.radio_group', $this->templateType);
-                    $radioTemplate = TemplateUtil::getTemplate('scaffold.fields.radio', $this->templateType);
-                    $inputsArr = explode(',', $field['htmlTypeInputs']);
-                    $radioButtons = [];
-                    foreach ($inputsArr as $item) {
-                        $radioButtonsTemplate = TemplateUtil::fillFieldTemplate(
-                            $this->commandData->fieldNamesMapping,
-                            $radioTemplate, $field
-                        );
-                        $radioButtonsTemplate = str_replace('$VALUE$', $item, $radioButtonsTemplate);
-                        $radioButtons[] = $radioButtonsTemplate;
-                    }
-                    $fieldTemplate = str_replace('$RADIO_BUTTONS$', implode("\n", $radioButtons), $fieldTemplate);
-                    break;
+                $sizeText = ($validationText == 'min') ? 'minlength' : 'maxlength';
+                if ($field->htmlType == 'number') {
+                    $sizeText = $validationText;
+                }
 
-//                case 'checkbox-group':
-//                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.checkbox_group', $this->templateType);
-//                      $radioTemplate = TemplateUtil::getTemplate('scaffold.fields.checks', $this->templateType);
-//                      $inputsArr = explode(',', $field['htmlTypeInputs']);
-//                      $radioButtons = [];
-//                      foreach ($inputsArr as $item) {
-//                          $radioButtonsTemplate = TemplateUtil::fillFieldTemplate(
-//                              $this->commandData->fieldNamesMapping,
-//                              $radioTemplate,
-//                              $field
-//                          );
-//                          $radioButtonsTemplate = str_replace('$VALUE$', $item, $radioButtonsTemplate);
-//                          $radioButtons[] = $radioButtonsTemplate;
-//                      }
-//                    $fieldTemplate = str_replace('$CHECKBOXES$', implode("\n", $radioButtons), $fieldTemplate);
-//                    break;
+                $size = ",'$sizeText' => $sizeInNumber";
+                $minMaxRules .= $size;
+            }
+            $this->commandData->addDynamicVariable('$SIZE$', $minMaxRules);
 
-                case 'bool-checkbox':
-                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.bool-checkbox', $this->templateType);
-                    $checkboxValue = $value = $field['htmlTypeInputs'];
-                    if ($field['fieldType'] === 'boolean') {
-                        if ($checkboxValue === 'checked') {
-                            $checkboxValue = '1, true';
-                        } elseif ($checkboxValue === 'unchecked') {
-                            $checkboxValue = '0';
-                        }
-                    }
-                    $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
-                    $fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
-                    break;
+            $fieldTemplate = HTMLFieldGenerator::generateHTML($field, $this->templateType, $localized);
 
-                case 'toggle-switch':
-                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.toggle-switch', $this->templateType);
-                    $checkboxValue = $value = $field['htmlTypeInputs'];
-                    if ($field['fieldType'] === 'boolean') {
-                        $checkboxValue = "[ 'On' => '1' , 'Off' => '0']";
-                    }
-                    $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
-                    //$fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
-                    break;
+            if ($field->htmlType == 'selectTable') {
+                $inputArr = explode(',', $field->htmlValues[1]);
+                $columns = '';
+                foreach ($inputArr as $item) {
+                    $columns .= "'$item'".',';  //e.g 'email,id,'
+                }
+                $columns = substr_replace($columns, '', -1); // remove last ,
 
-                case 'checkbox':
-                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.checkbox', $this->templateType);
-                    $checkboxValue = $value = $field['htmlTypeInputs'];
-                    if ($field['fieldType'] != 'boolean') {
-                        $checkboxValue = "'".$value."'";
-                    }
-                    $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
-                    $fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
-                    break;
+                $selectTable = $field->htmlValues[0];
+                $tableName = $this->commandData->config->tableName;
+                $variableName = Str::singular($selectTable).'Items'; // e.g $userItems
 
-                case 'boolean':
-                    $fieldTemplate = TemplateUtil::getTemplate('scaffold.fields.boolean', $this->templateType);
-                    $checkboxValue = $value = $field['htmlTypeInputs'];
-                    if ($field['fieldType'] == 'boolean') {
-                        $checkboxValue = true;
-                    }
-                    $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
-                    // $fieldTemplate = str_replace('$VALUE$', $value, $fieldTemplate);
-                    break;
-
-                default:
-                    $fieldTemplate = '';
-                    break;
+                $fieldTemplate = $this->generateViewComposer($tableName, $variableName, $columns, $selectTable);
             }
 
             if (!empty($fieldTemplate)) {
-                $fieldTemplate = TemplateUtil::fillTemplateWithFieldData(
+                $fieldTemplate = fill_template_with_field_data(
                     $this->commandData->dynamicVars,
                     $this->commandData->fieldNamesMapping,
                     $fieldTemplate,
@@ -309,8 +292,8 @@ class ViewGenerator extends BaseGenerator
             }
         }
 
-        $templateData = TemplateUtil::getTemplate('scaffold.views.fields', $this->templateType);
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         $templateData = str_replace('$FIELDS$', implode("\n\n", $this->htmlFields), $templateData);
 
@@ -318,11 +301,34 @@ class ViewGenerator extends BaseGenerator
         $this->commandData->commandInfo('field.blade.php created');
     }
 
+    private function generateViewComposer($tableName, $variableName, $columns, $selectTable)
+    {
+        $fieldTemplate = get_template('scaffold.fields.select', $this->templateType);
+
+        $viewServiceProvider = new ViewServiceProviderGenerator($this->commandData);
+        $viewServiceProvider->generate();
+        $viewServiceProvider->addViewVariables($tableName.'.fields', $variableName, $columns, $selectTable);
+
+        $fieldTemplate = str_replace(
+            '$INPUT_ARR$',
+            '$'.$variableName,
+            $fieldTemplate
+        );
+
+        return $fieldTemplate;
+    }
+
     private function generateCreate()
     {
-        $templateData = TemplateUtil::getTemplate('scaffold.views.create', $this->templateType);
+        $templateName = 'create';
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+        }
+
+        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
+
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, 'create.blade.php', $templateData);
         $this->commandData->commandInfo('create.blade.php created');
@@ -330,34 +336,38 @@ class ViewGenerator extends BaseGenerator
 
     private function generateUpdate()
     {
-        $templateData = TemplateUtil::getTemplate('scaffold.views.edit', $this->templateType);
+        $templateName = 'edit';
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+        }
+
+        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
+
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, 'edit.blade.php', $templateData);
         $this->commandData->commandInfo('edit.blade.php created');
     }
 
-    private function generateShow()
-    {
-        $templateData = TemplateUtil::getTemplate('scaffold.views.show', $this->templateType);
-
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
-
-        FileUtil::createFile($this->path, 'show.blade.php', $templateData);
-        $this->commandData->commandInfo('show.blade.php created');
-    }
-
     private function generateShowFields()
     {
-        $fieldTemplate = TemplateUtil::getTemplate('scaffold.views.show_field', $this->templateType);
+        $templateName = 'show_field';
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+        }
+        $fieldTemplate = get_template('scaffold.views.'.$templateName, $this->templateType);
 
         $fieldsStr = '';
 
-        foreach ($this->commandData->inputFields as $field) {
-            $singleFieldStr = str_replace('$FIELD_NAME_TITLE$', Str::title(str_replace('_', ' ', $field['fieldName'])), $fieldTemplate);
-            $singleFieldStr = str_replace('$FIELD_NAME$', $field['fieldName'], $singleFieldStr);
-            $singleFieldStr = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $singleFieldStr);
+        foreach ($this->commandData->fields as $field) {
+            if (!$field->inView) {
+                continue;
+            }
+            $singleFieldStr = str_replace('$FIELD_NAME_TITLE$', Str::title(str_replace('_', ' ', $field->name)),
+                $fieldTemplate);
+            $singleFieldStr = str_replace('$FIELD_NAME$', $field->name, $singleFieldStr);
+            $singleFieldStr = fill_template($this->commandData->dynamicVars, $singleFieldStr);
 
             $fieldsStr .= $singleFieldStr."\n\n";
         }
@@ -366,7 +376,23 @@ class ViewGenerator extends BaseGenerator
         $this->commandData->commandInfo('show_fields.blade.php created');
     }
 
-    public function rollback()
+    private function generateShow()
+    {
+        $templateName = 'show';
+
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+        }
+
+        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
+
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+
+        FileUtil::createFile($this->path, 'show.blade.php', $templateData);
+        $this->commandData->commandInfo('show.blade.php created');
+    }
+
+    public function rollback($views = [])
     {
         $files = [
             'table.blade.php',
@@ -378,8 +404,15 @@ class ViewGenerator extends BaseGenerator
             'show_fields.blade.php',
         ];
 
+        if (!empty($views)) {
+            $files = [];
+            foreach ($views as $view) {
+                $files[] = $view.'.blade.php';
+            }
+        }
+
         if ($this->commandData->getAddOn('datatables')) {
-            $files[]='datatables_actions.blade.php';
+            $files[] = 'datatables_actions.blade.php';
         }
 
         foreach ($files as $file) {
@@ -388,5 +421,4 @@ class ViewGenerator extends BaseGenerator
             }
         }
     }
-
 }

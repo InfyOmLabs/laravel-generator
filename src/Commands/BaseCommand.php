@@ -3,11 +3,13 @@
 namespace InfyOm\Generator\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\API\APIControllerGenerator;
 use InfyOm\Generator\Generators\API\APIRequestGenerator;
 use InfyOm\Generator\Generators\API\APIRoutesGenerator;
 use InfyOm\Generator\Generators\API\APITestGenerator;
+use InfyOm\Generator\Generators\FactoryGenerator;
 use InfyOm\Generator\Generators\MigrationGenerator;
 use InfyOm\Generator\Generators\ModelGenerator;
 use InfyOm\Generator\Generators\RepositoryGenerator;
@@ -17,7 +19,7 @@ use InfyOm\Generator\Generators\Scaffold\MenuGenerator;
 use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
 use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
 use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
-use InfyOm\Generator\Generators\TestTraitGenerator;
+use InfyOm\Generator\Generators\SeederGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -51,7 +53,7 @@ class BaseCommand extends Command
         $this->commandData->modelName = $this->argument('model');
 
         $this->commandData->initCommandData();
-        $this->commandData->getInputFields();
+        $this->commandData->getFields();
     }
 
     public function generateCommonItems()
@@ -66,9 +68,22 @@ class BaseCommand extends Command
             $modelGenerator->generate();
         }
 
-        if (!$this->isSkip('repository')) {
+        if (!$this->isSkip('repository') && $this->commandData->getOption('repositoryPattern')) {
             $repositoryGenerator = new RepositoryGenerator($this->commandData);
             $repositoryGenerator->generate();
+        }
+
+        if ($this->commandData->getOption('factory') || (
+                !$this->isSkip('tests') and $this->commandData->getAddOn('tests')
+            )) {
+            $factoryGenerator = new FactoryGenerator($this->commandData);
+            $factoryGenerator->generate();
+        }
+
+        if ($this->commandData->getOption('seeder')) {
+            $seederGenerator = new SeederGenerator($this->commandData);
+            $seederGenerator->generate();
+            $seederGenerator->updateMainSeeder();
         }
     }
 
@@ -90,11 +105,10 @@ class BaseCommand extends Command
         }
 
         if (!$this->isSkip('tests') and $this->commandData->getAddOn('tests')) {
-            $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);
-            $repositoryTestGenerator->generate();
-
-            $testTraitGenerator = new TestTraitGenerator($this->commandData);
-            $testTraitGenerator->generate();
+            if ($this->commandData->getOption('repositoryPattern')) {
+                $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);
+                $repositoryTestGenerator->generate();
+            }
 
             $apiTestGenerator = new APITestGenerator($this->commandData);
             $apiTestGenerator->generate();
@@ -136,18 +150,35 @@ class BaseCommand extends Command
         }
 
         if ($runMigration) {
-            if ($this->commandData->config->forceMigrate) {
-                $this->call('migrate');
+            if ($this->commandData->getOption('forceMigrate')) {
+                $this->runMigration();
             } elseif (!$this->commandData->getOption('fromTable') and !$this->isSkip('migration')) {
-                if ($this->confirm("\nDo you want to migrate database? [y|N]", false)) {
-                    $this->call('migrate');
+                $requestFromConsole = (php_sapi_name() == 'cli') ? true : false;
+                if ($this->commandData->getOption('jsonFromGUI') && $requestFromConsole) {
+                    $this->runMigration();
+                } elseif ($requestFromConsole && $this->confirm("\nDo you want to migrate database? [y|N]", false)) {
+                    $this->runMigration();
                 }
             }
         }
+
+        if ($this->commandData->getOption('localized')) {
+            $this->saveLocaleFile();
+        }
+
         if (!$this->isSkip('dump-autoload')) {
             $this->info('Generating autoload files');
             $this->composer->dumpOptimized();
         }
+    }
+
+    public function runMigration()
+    {
+        $migrationPath = config('infyom.laravel_generator.path.migration', database_path('migrations/'));
+        $path = Str::after($migrationPath, base_path()); // get path after base_path
+        $this->call('migrate', ['--path' => $path, '--force' => true]);
+
+        return true;
     }
 
     public function isSkip($skip)
@@ -168,20 +199,29 @@ class BaseCommand extends Command
     {
         $fileFields = [];
 
-        foreach ($this->commandData->inputFields as $field) {
+        foreach ($this->commandData->fields as $field) {
             $fileFields[] = [
-                'fieldInput'  => $field['fieldInput'],
-                'htmlType'    => $field['htmlType'],
-                'validations' => $field['validations'],
-                'searchable'  => $field['searchable'],
-                'fillable'    => $field['fillable'],
-                'primary'     => $field['primary'],
-                'inForm'      => $field['inForm'],
-                'inIndex'     => $field['inIndex'],
+                'name'        => $field->name,
+                'dbType'      => $field->dbInput,
+                'htmlType'    => $field->htmlInput,
+                'validations' => $field->validations,
+                'searchable'  => $field->isSearchable,
+                'fillable'    => $field->isFillable,
+                'primary'     => $field->isPrimary,
+                'inForm'      => $field->inForm,
+                'inIndex'     => $field->inIndex,
+                'inView'      => $field->inView,
             ];
         }
 
-        $path = config('infyom.laravel_generator.path.schema_files', base_path('resources/model_schemas/'));
+        foreach ($this->commandData->relations as $relation) {
+            $fileFields[] = [
+                'type'     => 'relation',
+                'relation' => $relation->type.','.implode(',', $relation->inputs),
+            ];
+        }
+
+        $path = config('infyom.laravel_generator.path.schema_files', resource_path('model_schemas/'));
 
         $fileName = $this->commandData->modelName.'.json';
 
@@ -190,6 +230,31 @@ class BaseCommand extends Command
         }
         FileUtil::createFile($path, $fileName, json_encode($fileFields, JSON_PRETTY_PRINT));
         $this->commandData->commandComment("\nSchema File saved: ");
+        $this->commandData->commandInfo($fileName);
+    }
+
+    private function saveLocaleFile()
+    {
+        $locales = [
+            'singular' => $this->commandData->modelName,
+            'plural'   => $this->commandData->config->mPlural,
+            'fields'   => [],
+        ];
+
+        foreach ($this->commandData->fields as $field) {
+            $locales['fields'][$field->name] = Str::title(str_replace('_', ' ', $field->name));
+        }
+
+        $path = config('infyom.laravel_generator.path.models_locale_files', base_path('resources/lang/en/models/'));
+
+        $fileName = $this->commandData->config->mCamelPlural.'.php';
+
+        if (file_exists($path.$fileName) && !$this->confirmOverwrite($fileName)) {
+            return;
+        }
+        $content = "<?php\n\nreturn ".var_export($locales, true).';'.\PHP_EOL;
+        FileUtil::createFile($path, $fileName, $content);
+        $this->commandData->commandComment("\nModel Locale File saved: ");
         $this->commandData->commandInfo($fileName);
     }
 
@@ -218,8 +283,10 @@ class BaseCommand extends Command
         return [
             ['fieldsFile', null, InputOption::VALUE_REQUIRED, 'Fields input as json file'],
             ['jsonFromGUI', null, InputOption::VALUE_REQUIRED, 'Direct Json string while using GUI interface'],
+            ['plural', null, InputOption::VALUE_REQUIRED, 'Plural Model name'],
             ['tableName', null, InputOption::VALUE_REQUIRED, 'Table Name'],
             ['fromTable', null, InputOption::VALUE_NONE, 'Generate from existing table'],
+            ['ignoreFields', null, InputOption::VALUE_REQUIRED, 'Ignore fields while generating from table'],
             ['save', null, InputOption::VALUE_NONE, 'Save model schema to file'],
             ['primary', null, InputOption::VALUE_REQUIRED, 'Custom primary key'],
             ['prefix', null, InputOption::VALUE_REQUIRED, 'Prefix for all files'],
@@ -227,6 +294,14 @@ class BaseCommand extends Command
             ['skip', null, InputOption::VALUE_REQUIRED, 'Skip Specific Items to Generate (migration,model,controllers,api_controller,scaffold_controller,repository,requests,api_requests,scaffold_requests,routes,api_routes,scaffold_routes,views,tests,menu,dump-autoload)'],
             ['datatables', null, InputOption::VALUE_REQUIRED, 'Override datatables settings'],
             ['views', null, InputOption::VALUE_REQUIRED, 'Specify only the views you want generated: index,create,edit,show'],
+            ['relations', null, InputOption::VALUE_NONE, 'Specify if you want to pass relationships for fields'],
+            ['softDelete', null, InputOption::VALUE_NONE, 'Soft Delete Option'],
+            ['forceMigrate', null, InputOption::VALUE_NONE, 'Specify if you want to run migration or not'],
+            ['factory', null, InputOption::VALUE_NONE, 'To generate factory'],
+            ['seeder', null, InputOption::VALUE_NONE, 'To generate seeder'],
+            ['localized', null, InputOption::VALUE_NONE, 'Localize files.'],
+            ['repositoryPattern', null, InputOption::VALUE_REQUIRED, 'Repository Pattern'],
+            ['connection', null, InputOption::VALUE_REQUIRED, 'Specify connection name'],
         ];
     }
 

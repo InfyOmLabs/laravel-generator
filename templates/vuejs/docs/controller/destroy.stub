@@ -1,0 +1,8 @@
+/**
+     * Remove the specified $MODEL_NAME$ from storage.
+     * DELETE /$MODEL_NAME_PLURAL_CAMEL$/{id}
+     *
+     * @param  int $id
+     *
+     * @return Response
+     */

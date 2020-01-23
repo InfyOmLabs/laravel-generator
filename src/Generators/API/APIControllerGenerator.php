@@ -5,7 +5,6 @@ namespace InfyOm\Generator\Generators\API;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\FileUtil;
-use InfyOm\Generator\Utils\TemplateUtil;
 
 class APIControllerGenerator extends BaseGenerator
 {
@@ -27,9 +26,19 @@ class APIControllerGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = TemplateUtil::getTemplate('api.controller.api_controller', 'laravel-generator');
+        if ($this->commandData->getOption('repositoryPattern')) {
+            $templateName = 'api_controller';
+        } else {
+            $templateName = 'model_api_controller';
+        }
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+        }
+
+        $templateData = get_template("api.controller.$templateName", 'laravel-generator');
+
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
         $templateData = $this->fillDocs($templateData);
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
@@ -43,7 +52,7 @@ class APIControllerGenerator extends BaseGenerator
         $methods = ['controller', 'index', 'store', 'show', 'update', 'destroy'];
 
         if ($this->commandData->getAddOn('swagger')) {
-            $templatePrefix = 'controller';
+            $templatePrefix = 'controller_docs';
             $templateType = 'swagger-generator';
         } else {
             $templatePrefix = 'api.docs.controller';
@@ -52,8 +61,8 @@ class APIControllerGenerator extends BaseGenerator
 
         foreach ($methods as $method) {
             $key = '$DOC_'.strtoupper($method).'$';
-            $docTemplate = TemplateUtil::getTemplate($templatePrefix.'.'.$method, $templateType);
-            $docTemplate = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $docTemplate);
+            $docTemplate = get_template($templatePrefix.'.'.$method, $templateType);
+            $docTemplate = fill_template($this->commandData->dynamicVars, $docTemplate);
             $templateData = str_replace($key, $docTemplate, $templateData);
         }
 

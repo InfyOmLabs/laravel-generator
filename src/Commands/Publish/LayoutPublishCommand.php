@@ -3,7 +3,7 @@
 namespace InfyOm\Generator\Commands\Publish;
 
 use InfyOm\Generator\Utils\FileUtil;
-use InfyOm\Generator\Utils\TemplateUtil;
+use Symfony\Component\Console\Input\InputOption;
 
 class LayoutPublishCommand extends PublishBaseCommand
 {
@@ -22,36 +22,34 @@ class LayoutPublishCommand extends PublishBaseCommand
     protected $description = 'Publishes auth files';
 
     /**
-     * Laravel Application version.
-     *
-     * @var string
-     */
-    protected $laravelVersion;
-
-    /**
      * Execute the command.
      *
      * @return void
      */
     public function handle()
     {
-        $version = $this->getApplication()->getVersion();
-        if (str_contains($version, '5.1')) {
-            $this->laravelVersion = '5.1';
-        } else {
-            $this->laravelVersion = '5.2';
-        }
         $this->copyView();
         $this->updateRoutes();
         $this->publishHomeController();
     }
 
-    private function getViews()
+    private function copyView()
     {
-        if ($this->laravelVersion == '5.1') {
-            return $this->getLaravel51Views();
+        $viewsPath = config('infyom.laravel_generator.path.views', resource_path('views/'));
+        $templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
+
+        $this->createDirectories($viewsPath);
+
+        if ($this->option('localized')) {
+            $files = $this->getLocaleViews();
         } else {
-            return $this->getLaravel52Views();
+            $files = $this->getViews();
+        }
+
+        foreach ($files as $stub => $blade) {
+            $sourceFile = get_template_file_path('scaffold/'.$stub, $templateType);
+            $destinationFile = $viewsPath.$blade;
+            $this->publishFile($sourceFile, $destinationFile, $blade);
         }
     }
 
@@ -60,77 +58,56 @@ class LayoutPublishCommand extends PublishBaseCommand
         FileUtil::createDirectoryIfNotExist($viewsPath.'layouts');
         FileUtil::createDirectoryIfNotExist($viewsPath.'auth');
 
-        if ($this->laravelVersion == '5.1') {
-            FileUtil::createDirectoryIfNotExist($viewsPath.'emails');
-        } else {
-            FileUtil::createDirectoryIfNotExist($viewsPath.'auth/passwords');
-            FileUtil::createDirectoryIfNotExist($viewsPath.'auth/emails');
-        }
+        FileUtil::createDirectoryIfNotExist($viewsPath.'auth/passwords');
+        FileUtil::createDirectoryIfNotExist($viewsPath.'auth/emails');
     }
 
-    private function getLaravel51Views()
+    private function getViews()
     {
         return [
-            'layouts/app'     => 'layouts/app.blade.php',
-            'layouts/sidebar' => 'layouts/sidebar.blade.php',
-            'layouts/menu'    => 'layouts/menu.blade.php',
-            'layouts/home'    => 'home.blade.php',
-            'auth/login'      => 'auth/login.blade.php',
-            'auth/register'   => 'auth/register.blade.php',
-            'auth/email'      => 'auth/password.blade.php',
-            'auth/reset'      => 'auth/reset.blade.php',
-            'emails/password' => 'emails/password.blade.php',
+            'layouts/app'               => 'layouts/app.blade.php',
+            'layouts/sidebar'           => 'layouts/sidebar.blade.php',
+            'layouts/datatables_css'    => 'layouts/datatables_css.blade.php',
+            'layouts/datatables_js'     => 'layouts/datatables_js.blade.php',
+            'layouts/menu'              => 'layouts/menu.blade.php',
+            'layouts/home'              => 'home.blade.php',
+            'auth/login'                => 'auth/login.blade.php',
+            'auth/register'             => 'auth/register.blade.php',
+            'auth/email'                => 'auth/passwords/email.blade.php',
+            'auth/reset'                => 'auth/passwords/reset.blade.php',
+            'emails/password'           => 'auth/emails/password.blade.php',
         ];
     }
 
-    private function getLaravel52Views()
+    private function getLocaleViews()
     {
         return [
-            'layouts/app'     => 'layouts/app.blade.php',
-            'layouts/sidebar' => 'layouts/sidebar.blade.php',
-            'layouts/menu'    => 'layouts/menu.blade.php',
-            'layouts/home'    => 'home.blade.php',
-            'auth/login'      => 'auth/login.blade.php',
-            'auth/register'   => 'auth/register.blade.php',
-            'auth/email'      => 'auth/passwords/email.blade.php',
-            'auth/reset'      => 'auth/passwords/reset.blade.php',
-            'emails/password' => 'auth/emails/password.blade.php',
+            'layouts/app_locale'        => 'layouts/app.blade.php',
+            'layouts/sidebar_locale'    => 'layouts/sidebar.blade.php',
+            'layouts/datatables_css'    => 'layouts/datatables_css.blade.php',
+            'layouts/datatables_js'     => 'layouts/datatables_js.blade.php',
+            'layouts/menu'              => 'layouts/menu.blade.php',
+            'layouts/home'              => 'home.blade.php',
+            'auth/login_locale'         => 'auth/login.blade.php',
+            'auth/register_locale'      => 'auth/register.blade.php',
+            'auth/email_locale'         => 'auth/passwords/email.blade.php',
+            'auth/reset_locale'         => 'auth/passwords/reset.blade.php',
+            'emails/password_locale'    => 'auth/emails/password.blade.php',
         ];
-    }
-
-    private function copyView()
-    {
-        $viewsPath = config('infyom.laravel_generator.path.views', base_path('resources/views/'));
-        $templateType = config('infyom.laravel_generator.templates', 'core-templates');
-
-        $this->createDirectories($viewsPath);
-
-        $files = $this->getViews();
-
-        foreach ($files as $stub => $blade) {
-            $sourceFile = TemplateUtil::getTemplateFilePath('scaffold/'.$stub, $templateType);
-            $destinationFile = $viewsPath.$blade;
-            $this->publishFile($sourceFile, $destinationFile, $blade);
-        }
     }
 
     private function updateRoutes()
     {
-        $path = config('infyom.laravel_generator.path.routes', app_path('Http/routes.php'));
+        $path = config('infyom.laravel_generator.path.routes', base_path('routes/web.php'));
 
-        $prompt = 'Existing routes.php file detected. Should we add standard routes? (y|N) :';
+        $prompt = 'Existing routes web.php file detected. Should we add standard auth routes? (y|N) :';
         if (file_exists($path) && !$this->confirmOverwrite($path, $prompt)) {
             return;
         }
 
         $routeContents = file_get_contents($path);
 
-        $routesTemplate = TemplateUtil::getTemplate('routes.auth', 'laravel-generator');
-        if ($this->laravelVersion == '5.1') {
-            $routesTemplate = str_replace('$LOGOUT_METHOD$', 'getLogout', $routesTemplate);
-        } else {
-            $routesTemplate = str_replace('$LOGOUT_METHOD$', 'logout', $routesTemplate);
-        }
+        $routesTemplate = get_template('routes.auth', 'laravel-generator');
 
         $routeContents .= "\n\n".$routesTemplate;
 
@@ -140,7 +117,7 @@ class LayoutPublishCommand extends PublishBaseCommand
 
     private function publishHomeController()
     {
-        $templateData = TemplateUtil::getTemplate('home_controller', 'laravel-generator');
+        $templateData = get_template('home_controller', 'laravel-generator');
 
         $templateData = $this->fillTemplate($templateData);
 
@@ -186,7 +163,9 @@ class LayoutPublishCommand extends PublishBaseCommand
      */
     public function getOptions()
     {
-        return [];
+        return [
+            ['localized', null, InputOption::VALUE_NONE, 'Localize files.'],
+        ];
     }
 
     /**

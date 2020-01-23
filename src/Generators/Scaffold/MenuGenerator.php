@@ -5,7 +5,6 @@ namespace InfyOm\Generator\Generators\Scaffold;
 use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
-use InfyOm\Generator\Utils\TemplateUtil;
 
 class MenuGenerator extends BaseGenerator
 {
@@ -29,21 +28,33 @@ class MenuGenerator extends BaseGenerator
         $this->commandData = $commandData;
         $this->path = config(
             'infyom.laravel_generator.path.views',
-            base_path('resources/views/'
+            resource_path('views/'
             )
         ).$commandData->getAddOn('menu.menu_file');
-        $this->templateType = config('infyom.laravel_generator.templates', 'core-templates');
+        $this->templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
 
         $this->menuContents = file_get_contents($this->path);
 
-        $this->menuTemplate = TemplateUtil::getTemplate('scaffold.layouts.menu_template', $this->templateType);
+        $templateName = 'menu_template';
 
-        $this->menuTemplate = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $this->menuTemplate);
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+        }
+
+        $this->menuTemplate = get_template('scaffold.layouts.'.$templateName, $this->templateType);
+
+        $this->menuTemplate = fill_template($this->commandData->dynamicVars, $this->menuTemplate);
     }
 
     public function generate()
     {
         $this->menuContents .= $this->menuTemplate.infy_nl();
+        $existingMenuContents = file_get_contents($this->path);
+        if (Str::contains($existingMenuContents, '<span>'.$this->commandData->config->mHumanPlural.'</span>')) {
+            $this->commandData->commandObj->info('Menu '.$this->commandData->config->mHumanPlural.' is already exists, Skipping Adjustment.');
+
+            return;
+        }
 
         file_put_contents($this->path, $this->menuContents);
         $this->commandData->commandComment("\n".$this->commandData->config->mCamelPlural.' menu added.');

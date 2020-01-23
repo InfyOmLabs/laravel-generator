@@ -4,8 +4,8 @@ namespace InfyOm\Generator\Generators\Scaffold;
 
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
+use InfyOm\Generator\Generators\ModelGenerator;
 use InfyOm\Generator\Utils\FileUtil;
-use InfyOm\Generator\Utils\TemplateUtil;
 
 class RequestGenerator extends BaseGenerator
 {
@@ -37,9 +37,9 @@ class RequestGenerator extends BaseGenerator
 
     private function generateCreateRequest()
     {
-        $templateData = TemplateUtil::getTemplate('scaffold.request.create_request', 'laravel-generator');
+        $templateData = get_template('scaffold.request.create_request', 'laravel-generator');
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, $this->createFileName, $templateData);
 
@@ -49,9 +49,13 @@ class RequestGenerator extends BaseGenerator
 
     private function generateUpdateRequest()
     {
-        $templateData = TemplateUtil::getTemplate('scaffold.request.update_request', 'laravel-generator');
+        $modelGenerator = new ModelGenerator($this->commandData);
+        $rules = $modelGenerator->generateUniqueRules();
+        $this->commandData->addDynamicVariable('$UNIQUE_RULES$', $rules);
 
-        $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        $templateData = get_template('scaffold.request.update_request', 'laravel-generator');
+
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, $this->updateFileName, $templateData);
 

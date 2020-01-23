@@ -2,10 +2,10 @@
 
 namespace $NAMESPACE_REQUEST$;
 
-use $NAMESPACE_REQUEST_BASE$\Request;
+use Illuminate\Foundation\Http\FormRequest;
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
 
-class Update$MODEL_NAME$Request extends Request
+class Update$MODEL_NAME$Request extends FormRequest
 {
 
     /**
@@ -25,6 +25,8 @@ class Update$MODEL_NAME$Request extends Request
      */
     public function rules()
     {
-        return $MODEL_NAME$::$rules;
+        $rules = $MODEL_NAME$::$rules;
+        $UNIQUE_RULES$
+        return $rules;
     }
 }

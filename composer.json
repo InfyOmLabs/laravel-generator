@@ -1,5 +1,6 @@
 {
     "name": "infyomlabs/laravel-generator",
+    "type": "library",
     "description": "InfyOm Laravel Generator",
     "keywords": [
         "laravel",
@@ -23,10 +24,13 @@
         }
     ],
     "require": {
-        "php": ">=5.5.9",
-        "illuminate/support": "~5.0",
-        "prettus/l5-repository": "~2.1",
-        "laracasts/flash": "~2.0"
+        "php": ">=7.2",
+        "illuminate/support": "^6.0.0",
+        "laracasts/flash": "~3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~5.0",
+        "mockery/mockery": "~0.9"
     },
     "autoload": {
         "psr-4": {
@@ -35,5 +39,17 @@
         "files": [
             "src/helpers.php"
         ]
-    }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "\\InfyOm\\Generator\\InfyOmGeneratorServiceProvider"
+            ]
+        }
+    }    
 }

@@ -2,12 +2,17 @@
 
 namespace InfyOm\Generator\Generators;
 
-use InfyOm\Generator\Utils\TemplateUtil;
+use InfyOm\Generator\Common\GeneratorField;
 
 class SwaggerGenerator
 {
     public static $swaggerTypes = [];
 
+    /**
+     * @param GeneratorField[] $inputFields
+     *
+     * @return array
+     */
     public static function generateTypes($inputFields)
     {
         if (!empty(self::$swaggerTypes)) {
@@ -17,73 +22,18 @@ class SwaggerGenerator
         $fieldTypes = [];
 
         foreach ($inputFields as $field) {
-            $fieldFormat = '';
-            switch (strtolower($field['fieldType'])) {
-                case 'integer':
-                case 'increments':
-                case 'smallinteger':
-                case 'long':
-                case 'bigint':
-                    $fieldType = 'integer';
-                    $fieldFormat = 'int32';
-                    break;
-                case 'double':
-                    $fieldType = 'number';
-                    $fieldFormat = 'double';
-                    break;
-                case 'float':
-                case 'decimal':
-                    $fieldType = 'number';
-                    $fieldFormat = 'float';
-                    break;
-                case 'boolean':
-                    $fieldType = 'boolean';
-                    break;
-                case 'string':
-                case 'char':
-                case 'text':
-                case 'enum':
-                    $fieldType = 'string';
-                    break;
-                case 'byte':
-                    $fieldType = 'string';
-                    $fieldFormat = 'byte';
-                    break;
-                case 'binary':
-                    $fieldType = 'string';
-                    $fieldFormat = 'binary';
-                    break;
-                case 'password':
-                    $fieldType = 'string';
-                    $fieldFormat = 'password';
-                    break;
-                case 'date':
-                    $fieldType = 'string';
-                    $fieldFormat = 'date';
-                    break;
-                case 'dateTime':
-                case 'timestamp':
-                    $fieldType = 'string';
-                    $fieldFormat = 'date-time';
-                    break;
-                default:
-                    $fieldType = null;
-                    $fieldFormat = null;
-                    break;
-            }
+            $fieldData = self::getFieldType($field->fieldType);
+            $fieldType = $fieldData['fieldType'];
+            $fieldFormat = $fieldData['fieldFormat'];
 
             if (!empty($fieldType)) {
                 $fieldType = [
-                    'name'   => $field['fieldName'],
+                    'name'   => $field->name,
                     'type'   => $fieldType,
                     'format' => $fieldFormat,
                 ];
 
-                if (isset($field['description'])) {
-                    $fieldType['description'] = $field['description'];
-                } else {
-                    $fieldType['description'] = '';
-                }
+                $fieldType['description'] = (!empty($field->description)) ? $field->description : '';
 
                 $fieldTypes[] = $fieldType;
             }
@@ -94,15 +44,72 @@ class SwaggerGenerator
         return self::$swaggerTypes;
     }
 
+    public static function getFieldType($type)
+    {
+        $fieldType = null;
+        $fieldFormat = null;
+        switch (strtolower($type)) {
+            case 'increments':
+            case 'integer':
+            case 'smallinteger':
+            case 'long':
+            case 'biginteger':
+                $fieldType = 'integer';
+                $fieldFormat = 'int32';
+                break;
+            case 'double':
+            case 'float':
+            case 'real':
+            case 'decimal':
+                $fieldType = 'number';
+                $fieldFormat = 'number';
+                break;
+            case 'boolean':
+                $fieldType = 'boolean';
+                break;
+            case 'string':
+            case 'char':
+            case 'text':
+            case 'mediumtext':
+            case 'longtext':
+            case 'enum':
+                $fieldType = 'string';
+                break;
+            case 'byte':
+                $fieldType = 'string';
+                $fieldFormat = 'byte';
+                break;
+            case 'binary':
+                $fieldType = 'string';
+                $fieldFormat = 'binary';
+                break;
+            case 'password':
+                $fieldType = 'string';
+                $fieldFormat = 'password';
+                break;
+            case 'date':
+                $fieldType = 'string';
+                $fieldFormat = 'date';
+                break;
+            case 'datetime':
+            case 'timestamp':
+                $fieldType = 'string';
+                $fieldFormat = 'date-time';
+                break;
+        }
+
+        return ['fieldType' => $fieldType, 'fieldFormat' => $fieldFormat];
+    }
+
     public static function generateSwagger($fields, $fillables, $variables)
     {
-        $template = TemplateUtil::getTemplate('model.model', 'swagger-generator');
+        $template = get_template('model_docs.model', 'swagger-generator');
 
-        $templateData = TemplateUtil::fillTemplate($variables, $template);
+        $templateData = fill_template($variables, $template);
 
-        $templateData = str_replace('$REQUIRED_FIELDS$', implode(', ', $fillables), $templateData);
+        $templateData = str_replace('$REQUIRED_FIELDS$', '"'.implode('", "', $fillables).'"', $templateData);
 
-        $propertyTemplate = TemplateUtil::getTemplate('model.property', 'swagger-generator');
+        $propertyTemplate = get_template('model_docs.property', 'swagger-generator');
 
         $properties = self::preparePropertyFields($propertyTemplate, $fields);
 
@@ -111,6 +118,12 @@ class SwaggerGenerator
         return $templateData;
     }
 
+    /**
+     * @param $template
+     * @param $fields
+     *
+     * @return array
+     */
     public static function preparePropertyFields($template, $fields)
     {
         $templates = [];
