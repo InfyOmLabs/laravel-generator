@@ -12,7 +12,7 @@ InfyOm Laravel Generator
 
 Documentation is located [here](http://labs.infyom.com/laravelgenerator)
 
-Video Tutorials is located [here](https://github.com/shailesh-ladumor/infyom-laravel-generator-tutorial)
+[Video Tutorials](https://github.com/shailesh-ladumor/infyom-laravel-generator-tutorial) (**Credits**: [shailesh-ladumor](https://github.com/shailesh-ladumor))
 
 <h2>Sponsors</h2>
 
