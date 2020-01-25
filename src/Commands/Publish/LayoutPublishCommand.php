@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Commands\Publish;
 
+use Illuminate\Support\Str;
 use InfyOm\Generator\Utils\FileUtil;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -64,7 +65,7 @@ class LayoutPublishCommand extends PublishBaseCommand
 
     private function getViews()
     {
-        return [
+        $views = [
             'layouts/app'               => 'layouts/app.blade.php',
             'layouts/sidebar'           => 'layouts/sidebar.blade.php',
             'layouts/datatables_css'    => 'layouts/datatables_css.blade.php',
@@ -77,6 +78,21 @@ class LayoutPublishCommand extends PublishBaseCommand
             'auth/reset'                => 'auth/passwords/reset.blade.php',
             'emails/password'           => 'auth/emails/password.blade.php',
         ];
+
+        $version = $this->getApplication()->getVersion();
+        if (Str::contains($version, '6.')) {
+            $verifyView = [
+                'auth/verify_6' => 'auth/verify.blade.php',
+            ];
+        } else {
+            $verifyView = [
+                'auth/verify' => 'auth/verify.blade.php',
+            ];
+        }
+
+        $views = array_merge($views, $verifyView);
+
+        return $views;
     }
 
     private function getLocaleViews()
