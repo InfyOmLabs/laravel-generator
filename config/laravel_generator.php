@@ -50,6 +50,8 @@ return [
         'modelJs'           => resource_path('assets/js/models/'),
 
         'factory'           => database_path('factories/'),
+
+        'view_provider'     => app_path('Providers/ViewServiceProvider.php'),
     ],
 
     /*
@@ -123,6 +125,8 @@ return [
         'softDelete' => true,
 
         'save_schema_file' => true,
+
+        'localized' => false,
 
         'tables_searchable_default' => false,
 

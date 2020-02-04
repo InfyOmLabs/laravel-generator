@@ -4,6 +4,7 @@ namespace InfyOm\Generator\Generators\Scaffold;
 
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
+use InfyOm\Generator\Generators\ModelGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 
 class RequestGenerator extends BaseGenerator
@@ -48,6 +49,10 @@ class RequestGenerator extends BaseGenerator
 
     private function generateUpdateRequest()
     {
+        $modelGenerator = new ModelGenerator($this->commandData);
+        $rules = $modelGenerator->generateUniqueRules();
+        $this->commandData->addDynamicVariable('$UNIQUE_RULES$', $rules);
+
         $templateData = get_template('scaffold.request.update_request', 'laravel-generator');
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);

@@ -30,7 +30,10 @@ class $MODEL_NAME$APIController extends AppBaseController
             $request->get('limit')
         );
 
-        return $this->sendResponse($$MODEL_NAME_PLURAL_CAMEL$->toArray(), '$MODEL_NAME_PLURAL_HUMAN$ retrieved successfully');
+        return $this->sendResponse(
+            $$MODEL_NAME_PLURAL_CAMEL$->toArray(),
+            __('messages.retrieved', ['model' => __('models/$MODEL_NAME_PLURAL_CAMEL$.plural')])
+        );
     }
 
     $DOC_STORE$
@@ -40,7 +43,10 @@ class $MODEL_NAME$APIController extends AppBaseController
 
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->create($input);
 
-        return $this->sendResponse($$MODEL_NAME_CAMEL$->toArray(), '$MODEL_NAME_HUMAN$ saved successfully');
+        return $this->sendResponse(
+            $$MODEL_NAME_CAMEL$->toArray(),
+            __('messages.saved', ['model' => __('models/$MODEL_NAME_PLURAL_CAMEL$.singular')])
+        );
     }
 
     $DOC_SHOW$
@@ -50,10 +56,15 @@ class $MODEL_NAME$APIController extends AppBaseController
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
-            return $this->sendError('$MODEL_NAME_HUMAN$ not found');
+            return $this->sendError(
+                __('messages.not_found', ['model' => __('models/$MODEL_NAME_PLURAL_CAMEL$.singular')])
+            );
         }
 
-        return $this->sendResponse($$MODEL_NAME_CAMEL$->toArray(), '$MODEL_NAME_HUMAN$ retrieved successfully');
+        return $this->sendResponse(
+            $$MODEL_NAME_CAMEL$->toArray(),
+            __('messages.retrieved', ['model' => __('models/$MODEL_NAME_PLURAL_CAMEL$.singular')])
+        );
     }
 
     $DOC_UPDATE$
@@ -65,12 +76,17 @@ class $MODEL_NAME$APIController extends AppBaseController
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
-            return $this->sendError('$MODEL_NAME_HUMAN$ not found');
+            return $this->sendError(
+                __('messages.not_found', ['model' => __('models/$MODEL_NAME_PLURAL_CAMEL$.singular')])
+            );
         }
 
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->update($input, $id);
 
-        return $this->sendResponse($$MODEL_NAME_CAMEL$->toArray(), '$MODEL_NAME$ updated successfully');
+        return $this->sendResponse(
+            $$MODEL_NAME_CAMEL$->toArray(),
+            __('messages.updated', ['model' => __('models/$MODEL_NAME_PLURAL_CAMEL$.singular')])
+        );
     }
 
     $DOC_DESTROY$
@@ -80,11 +96,16 @@ class $MODEL_NAME$APIController extends AppBaseController
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
 
         if (empty($$MODEL_NAME_CAMEL$)) {
-            return $this->sendError('$MODEL_NAME_HUMAN$ not found');
+            return $this->sendError(
+                __('messages.not_found', ['model' => __('models/$MODEL_NAME_PLURAL_CAMEL$.singular')])
+            );
         }
 
         $$MODEL_NAME_CAMEL$->delete();
 
-        return $this->sendSuccess('$MODEL_NAME_HUMAN$ deleted successfully');
+        return $this->sendResponse(
+            $id,
+            __('messages.deleted', ['model' => __('models/$MODEL_NAME_PLURAL_CAMEL$.singular')])
+        );
     }
 }

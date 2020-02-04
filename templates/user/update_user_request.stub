@@ -3,9 +3,8 @@
 namespace $NAMESPACE_REQUEST$;
 
 use Illuminate\Foundation\Http\FormRequest;
-use $NAMESPACE_MODEL$\$MODEL_NAME$;
 
-class Update$MODEL_NAME$Request extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
 
     /**
@@ -25,8 +24,13 @@ class Update$MODEL_NAME$Request extends FormRequest
      */
     public function rules()
     {
-        $rules = $MODEL_NAME$::$rules;
-        $UNIQUE_RULES$
+        $id = $this->route('user');
+        $rules = [
+          'name'     => 'required',
+          'email'    => 'required|email|unique:users,email,'.$id,
+          'password' => 'confirmed'
+        ];
+        
         return $rules;
     }
 }

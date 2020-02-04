@@ -8,3 +8,5 @@ Comment on this [issue](https://github.com/InfyOmLabs/laravel-generator/issues/6
 - [Kavlinge Zoo](http://kavlingezoo.se/)
 - [TinkerTool](https://www.tinkertool.in/)
 - [Reantamchet](https://reantamchet.com/)
+- [Get Free Bitcoin](http://getfreebitco.in)
+- [InfyLMS](https://codecanyon.net/item/infylms-library-management-system-laravel-reactjs/24884824)

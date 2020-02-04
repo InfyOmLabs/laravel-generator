@@ -42,7 +42,13 @@ class MenuGenerator extends BaseGenerator
         {
             $this->menuContents = file_get_contents($this->path);
 
-            $this->menuTemplate = get_template('scaffold.layouts.menu_template', $this->templateType);
+            $templateName = 'menu_template';
+
+            if ($this->commandData->isLocalizedTemplates()) {
+                $templateName .= '_locale';
+            }
+
+            $this->menuTemplate = get_template('scaffold.layouts.'.$templateName, $this->templateType);
 
             $this->menuTemplate = fill_template($this->commandData->dynamicVars, $this->menuTemplate);
         }
@@ -54,6 +60,12 @@ class MenuGenerator extends BaseGenerator
             return true;
 
         $this->menuContents .= $this->menuTemplate.infy_nl();
+        $existingMenuContents = file_get_contents($this->path);
+        if (Str::contains($existingMenuContents, '<span>'.$this->commandData->config->mHumanPlural.'</span>')) {
+            $this->commandData->commandObj->info('Menu '.$this->commandData->config->mHumanPlural.' is already exists, Skipping Adjustment.');
+
+            return;
+        }
 
         file_put_contents($this->path, $this->menuContents);
         $this->commandData->commandComment("\n".$this->commandData->config->mCamelPlural.' menu added.');
