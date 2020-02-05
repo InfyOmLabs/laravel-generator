@@ -23,7 +23,7 @@ class MenuGenerator extends BaseGenerator
     /** @var string */
     private $menuTemplate;
 
-    /** @var boolean */
+    /** @var bool */
     private $dontGenerateMenu;
 
     public function __construct(CommandData $commandData)
@@ -36,10 +36,9 @@ class MenuGenerator extends BaseGenerator
         ).$commandData->getAddOn('menu.menu_file');
         $this->templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
 
-        if (!file_exists($this->path))
+        if (!file_exists($this->path)) {
             $this->dontGenerateMenu = true;
-        else
-        {
+        } else {
             $this->menuContents = file_get_contents($this->path);
 
             $templateName = 'menu_template';
@@ -56,8 +55,9 @@ class MenuGenerator extends BaseGenerator
 
     public function generate()
     {
-        if ($this->dontGenerateMenu)
+        if ($this->dontGenerateMenu) {
             return true;
+        }
 
         $this->menuContents .= $this->menuTemplate.infy_nl();
         $existingMenuContents = file_get_contents($this->path);

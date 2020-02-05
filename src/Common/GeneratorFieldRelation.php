@@ -29,7 +29,7 @@ class GeneratorFieldRelation
 
     public function getRelationFunctionText($relationText = null)
     {
-        $relationText = str_replace(".", "_", $relationText);
+        $relationText = str_replace('.', '_', $relationText);
         $singularRelation = (!empty($this->relationName)) ? $this->relationName : Str::camel($relationText);
         $pluralRelation = (!empty($this->relationName)) ? $this->relationName : Str::camel(Str::plural($relationText));
 
