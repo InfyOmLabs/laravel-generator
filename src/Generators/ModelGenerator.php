@@ -165,29 +165,48 @@ class ModelGenerator extends BaseGenerator
     {
         $relationText = (!empty($relationText)) ? $relationText : null;
 
-        switch ($db_type) {
+        switch (strtolower($db_type)) {
+            case 'increments':
+            case 'integer':
+            case 'smallinteger':
+            case 'long':
+            case 'biginteger':
+                return 'integer';
+            case 'double':
+            case 'float':
+            case 'real':
+            case 'decimal':
+                return 'float';
+            case 'boolean':
+                return 'boolean';
+            case 'string':
+            case 'char':
+            case 'text':
+            case 'mediumtext':
+            case 'longtext':
+            case 'enum':
+            case 'byte':
+            case 'binary':
+            case 'password':
+                return 'string';
+            case 'timestamp':
+            case 'date':
             case 'datetime':
                 return 'string|\Carbon\Carbon';
             case '1t1':
-                return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.Str::camel($relationText);
+                return '\\' . $this->commandData->config->nsModel . '\\' . $relation->inputs[0] . ' ' . Str::camel($relationText);
             case 'mt1':
                 if (isset($relation->inputs[1])) {
                     $relationName = str_replace('_id', '', strtolower($relation->inputs[1]));
                 } else {
                     $relationName = $relationText;
                 }
-
-                return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.Str::camel($relationName);
+                return '\\' . $this->commandData->config->nsModel . '\\' . $relation->inputs[0] . ' ' . Str::camel($relationName);
             case '1tm':
             case 'mtm':
             case 'hmt':
-                return '\Illuminate\Database\Eloquent\Collection'.' '.Str::camel(Str::plural($relationText));
+                return '\Illuminate\Database\Eloquent\Collection' . ' ' . Str::camel(Str::plural($relationText));
             default:
-                $fieldData = SwaggerGenerator::getFieldType($db_type);
-                if (!empty($fieldData['fieldType'])) {
-                    return $fieldData['fieldType'];
-                }
-
                 return $db_type;
         }
     }
