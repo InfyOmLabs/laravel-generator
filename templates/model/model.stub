@@ -7,17 +7,18 @@ $SOFT_DELETE_IMPORT$
 $DOCS$
 class $MODEL_NAME$ extends Model
 {
-$SOFT_DELETE$
+    $SOFT_DELETE$
+    $TIMESTAMPS$
+    $CONNECTION$
+    $PRIMARY$
+
     /**
      * The table associated with the model.
      *
      * @var string
      */
     public $table = '$TABLE_NAME$';
-    $TIMESTAMPS$
-$SOFT_DELETE_DATES$
-$CONNECTION$
-$PRIMARY$
+
     /**
      * The attributes that are mass assignable.
      *
