@@ -100,7 +100,7 @@ return [
     |
     */
 
-    'model_extend_class' => 'Eloquent',
+    'model_extend_class' => 'Illuminate\\Database\\Eloquent\\Model',
 
     /*
     |--------------------------------------------------------------------------
