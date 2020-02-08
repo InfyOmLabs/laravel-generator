@@ -269,7 +269,7 @@ class GeneratorConfig
         $connectionText = '';
         if ($connection = $this->getOption('connection')) {
             $this->connection = $connection;
-            $connectionText = infy_tab(4).'public $connection = "'.$connection.'";';
+            $connectionText = 'public $connection = "'.$connection.'";';
         }
         $commandData->addDynamicVariable('$CONNECTION$', $connectionText);
 
