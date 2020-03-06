@@ -11,11 +11,11 @@ use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
  */
 class FactoryGenerator extends BaseGenerator
 {
-    /** @var CommandData $commandData */
+    /** @var CommandData */
     private $commandData;
-    /** @var string $path */
+    /** @var string */
     private $path;
-    /** @var string $fileName */
+    /** @var string */
     private $fileName;
 
     /**
