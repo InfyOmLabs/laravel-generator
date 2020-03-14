@@ -262,12 +262,14 @@ class VueJsLayoutPublishCommand extends PublishBaseCommand
     {
         $templateData = str_replace(
             '$NAMESPACE_CONTROLLER$',
-            config('infyom.laravel_generator.namespace.controller'), $templateData
+            config('infyom.laravel_generator.namespace.controller'),
+            $templateData
         );
 
         $templateData = str_replace(
             '$NAMESPACE_REQUEST$',
-            config('infyom.laravel_generator.namespace.request'), $templateData
+            config('infyom.laravel_generator.namespace.request'),
+            $templateData
         );
 
         return $templateData;

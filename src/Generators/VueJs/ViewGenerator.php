@@ -127,7 +127,8 @@ class ViewGenerator extends BaseGenerator
                     foreach ($inputsArr as $item) {
                         $radioButtonsTemplate = fill_field_template(
                             $this->commandData->fieldNamesMapping,
-                            $radioTemplate, $field
+                            $radioTemplate,
+                            $field
                         );
                         $radioButtonsTemplate = str_replace('$VALUE$', $item, $radioButtonsTemplate);
                         $radioButtons[] = $radioButtonsTemplate;
