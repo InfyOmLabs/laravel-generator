@@ -223,7 +223,10 @@ class CommandData
                 } elseif (file_exists(base_path($fieldsFileValue))) {
                     $filePath = base_path($fieldsFileValue);
                 } else {
-                    $schemaFileDirector = config('infyom.laravel_generator.path.schema_files');
+                    $schemaFileDirector = config(
+                        'infyom.laravel_generator.path.schema_files',
+                        resource_path('model_schemas/')
+                    );
                     $filePath = $schemaFileDirector.$fieldsFileValue;
                 }
 
