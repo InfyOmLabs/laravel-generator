@@ -145,7 +145,7 @@ class ModelGenerator extends BaseGenerator
 
         foreach ($this->commandData->fields as $field) {
             if ($field->isFillable) {
-                $fillables .= ' * @property '.$this->getPHPDocType($field->fieldType).' '.$field->name.PHP_EOL;
+                $fillables .= ' * @property '.$this->getPHPDocType($field->fieldType).' $'.$field->name.PHP_EOL;
             }
         }
         $docsTemplate = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $docsTemplate);
@@ -165,7 +165,7 @@ class ModelGenerator extends BaseGenerator
      */
     private function getPHPDocType($db_type, $relation = null, $relationText = null)
     {
-        $relationText = (!empty($relationText)) ? $relationText : null;
+        $relationText = (!empty($relationText)) ? '$'.$relationText : null;
 
         switch ($db_type) {
             case 'datetime':
