@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Generators\Scaffold;
 
+use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\FileUtil;
@@ -125,13 +126,47 @@ class ControllerGenerator extends BaseGenerator
                 $field
             );
 
-            if ($field->isSearchable) {
-                $dataTableColumns[] = $fieldTemplate;
+            if (stripos($field->name, 'email') !== false) {
+                $dataTableColumns[] =  "'".$field->name."' => [
+                'title'      => '".Str::title(str_replace("_", ' ', $field->name))."',
+                'render'     => '\"<a href=\\\"mailto:\"+data+\"\\\">\"+data+\"</a>\"',
+                'data'       => '".$field->name."',
+                'name'       => '".$field->name."',
+                'searchable' => true
+            ]";
+            } elseif (stripos($field->name, 'url') !== false) {
+                $dataTableColumns[] =  "'".$field->name."' => [
+                'title'      => '".Str::title(str_replace("_", ' ', $field->name))."',
+                'render'     => '\"<a href=\\\"\"+data+\"\\\">\"+data+\"</a>\"',
+                'data'       => '".$field->name."',
+                'name'       => '".$field->name."',
+                'searchable' => true
+            ]";
+            } elseif (stripos($field->name, 'image') !== false) {
+                $dataTableColumns[] =  "'".$field->name."' => [
+                'title'      => '".Str::title(str_replace("_", ' ', $field->name))."',
+                'render'     => '\"<img src=\\\"\"+data+\"\\\" height = \\\"50\\\" />\"',
+                'data'       => '".$field->name."',
+                'name'       => '".$field->name."',
+                'searchable' => true
+            ]";
+            } else if ($field->isSearchable) {
+                $dataTableColumns[] =  "'".$field->name."' => [
+                'title'      => '".Str::title(str_replace("_", ' ', $field->name))."',
+                'data'       => '".$field->name."',
+                'name'       => '".$field->name."',
+                'searchable' => true
+            ]";
             } else {
                 if ($this->commandData->isLocalizedTemplates()) {
                     $dataTableColumns[] = $fieldTemplate;
                 } else {
-                    $dataTableColumns[] = "'".$field->name."' => ['searchable' => false]";
+                    $dataTableColumns[] = "'".$field->name."' => [
+                'title'      => '".Str::title(str_replace("_", ' ', $field->name))."',
+                'data'       => '".$field->name."',
+                'name'       => '".$field->name."',
+                'searchable' => false
+            ]";
                 }
             }
         }
