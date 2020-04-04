@@ -105,49 +105,63 @@ class TableFieldsGenerator
             switch ($type) {
                 case 'integer':
                     $field = $this->generateIntFieldInput($column, 'integer');
+                    $field->isSearchable = false;
                     break;
                 case 'smallint':
                     $field = $this->generateIntFieldInput($column, 'smallInteger');
+                    $field->isSearchable = false;
                     break;
                 case 'bigint':
                     $field = $this->generateIntFieldInput($column, 'bigInteger');
+                    $field->isSearchable = false;
                     break;
                 case 'boolean':
                     $name = Str::title(str_replace('_', ' ', $column->getName()));
                     $field = $this->generateField($column, 'boolean', 'checkbox,1');
+                    $field->isSearchable = false;
                     break;
                 case 'datetime':
                     $field = $this->generateField($column, 'datetime', 'date');
+                    $field->isSearchable = false;
                     break;
                 case 'datetimetz':
                     $field = $this->generateField($column, 'dateTimeTz', 'date');
+                    $field->isSearchable = false;
                     break;
                 case 'date':
                     $field = $this->generateField($column, 'date', 'date');
+                    $field->isSearchable = false;
                     break;
                 case 'time':
                     $field = $this->generateField($column, 'time', 'text');
+                    $field->isSearchable = false;
                     break;
                 case 'decimal':
                     $field = $this->generateNumberInput($column, 'decimal');
+                    $field->isSearchable = false;
                     break;
                 case 'float':
                     $field = $this->generateNumberInput($column, 'float');
+                    $field->isSearchable = false;
                     break;
                 case 'string':
                     $field = $this->generateField($column, 'string', 'text');
+                    $field->isSearchable = true;
                     break;
                 case 'text':
                     $field = $this->generateField($column, 'text', 'textarea');
+                    $field->isSearchable = true;
                     break;
                 default:
                     $field = $this->generateField($column, 'string', 'text');
+                    $field->isSearchable = true;
                     break;
             }
 
-            if (strtolower($field->name) == 'password') {
+            if (strtolower($field->name) == 'password' || strtolower($field->name) == 'user_pass') {
                 $field->htmlType = 'password';
-            } elseif (strtolower($field->name) == 'email') {
+                $field->isSearchable = false;
+            } elseif (strtolower($field->name) == 'email' || strtolower($field->name) == 'user_email') {
                 $field->htmlType = 'email';
             } elseif (in_array($field->name, $this->timestamps)) {
                 $field->isSearchable = false;
