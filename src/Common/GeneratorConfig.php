@@ -211,10 +211,11 @@ class GeneratorConfig
         $this->pathRoutes = config('infyom.laravel_generator.path.routes', base_path('routes/web.php'));
         $this->pathFactory = config('infyom.laravel_generator.path.factory', database_path('factories/'));
 
-        $this->pathViews = config(
-            'infyom.laravel_generator.path.views',
-            resource_path('views/')
-        ).$viewPrefix.$this->mSnakePlural.'/';
+        $viewPath = config('infyom.laravel_generator.path.views', resource_path('views/'));
+        if(strpos($viewPath, 'views/'.$viewPrefix) === false){  // Don't add view prefix twice
+            $viewPath .= $viewPrefix;
+        }
+        $this->pathViews = $viewPath.$this->mSnakePlural.'/';
 
         $this->pathSeeder = config('infyom.laravel_generator.path.seeder', database_path('seeds/'));
         $this->pathDatabaseSeeder = config('infyom.laravel_generator.path.database_seeder', database_path('seeds/DatabaseSeeder.php'));
