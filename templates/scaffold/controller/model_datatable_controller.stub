@@ -6,9 +6,13 @@ use $NAMESPACE_DATATABLES$\$MODEL_NAME$DataTable;
 use $NAMESPACE_REQUEST$;
 use $NAMESPACE_REQUEST$\Create$MODEL_NAME$Request;
 use $NAMESPACE_REQUEST$\Update$MODEL_NAME$Request;
+use $NAMESPACE_APP$\Http\Controllers\AppBaseController;
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
 use Flash;
-use $NAMESPACE_APP$\Http\Controllers\AppBaseController;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Redirector;
+use Illuminate\View\View;
 use Response;
 
 class $MODEL_NAME$Controller extends AppBaseController
@@ -17,7 +21,7 @@ class $MODEL_NAME$Controller extends AppBaseController
      * Display a listing of the $MODEL_NAME$.
      *
      * @param $MODEL_NAME$DataTable $$MODEL_NAME_CAMEL$DataTable
-     * @return Response
+     * @return Response|Factory|RedirectResponse|Redirector|View
      */
     public function index($MODEL_NAME$DataTable $$MODEL_NAME_CAMEL$DataTable)
     {
@@ -27,7 +31,7 @@ class $MODEL_NAME$Controller extends AppBaseController
     /**
      * Show the form for creating a new $MODEL_NAME$.
      *
-     * @return Response
+     * @return Response|Factory|RedirectResponse|Redirector|View
      */
     public function create()
     {
@@ -39,7 +43,7 @@ class $MODEL_NAME$Controller extends AppBaseController
      *
      * @param Create$MODEL_NAME$Request $request
      *
-     * @return Response
+     * @return Response|Factory|RedirectResponse|Redirector|View
      */
     public function store(Create$MODEL_NAME$Request $request)
     {
@@ -58,7 +62,7 @@ class $MODEL_NAME$Controller extends AppBaseController
      *
      * @param  int $id
      *
-     * @return Response
+     * @return Response|Factory|RedirectResponse|Redirector|View
      */
     public function show($id)
     {
@@ -79,7 +83,7 @@ class $MODEL_NAME$Controller extends AppBaseController
      *
      * @param  int $id
      *
-     * @return Response
+     * @return Response|Factory|RedirectResponse|Redirector|View
      */
     public function edit($id)
     {
@@ -101,7 +105,7 @@ class $MODEL_NAME$Controller extends AppBaseController
      * @param  int              $id
      * @param Update$MODEL_NAME$Request $request
      *
-     * @return Response
+     * @return Response|Factory|RedirectResponse|Redirector|View
      */
     public function update($id, Update$MODEL_NAME$Request $request)
     {
@@ -129,7 +133,7 @@ class $MODEL_NAME$Controller extends AppBaseController
      *
      * @throws \Exception
      *
-     * @return Response
+     * @return Response|Factory|RedirectResponse|Redirector|View
      */
     public function destroy($id)
     {
