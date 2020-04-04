@@ -223,9 +223,11 @@ class BaseCommand extends Command
 
         $path = config('infyom.laravel_generator.path.schema_files', resource_path('model_schemas/'));
 
+        $overwrite = config('infyom.laravel_generator.overwrite', false);
+
         $fileName = $this->commandData->modelName.'.json';
 
-        if (file_exists($path.$fileName) && !$this->confirmOverwrite($fileName)) {
+        if (!$overwrite && file_exists($path.$fileName) && !$this->confirmOverwrite($fileName)) {
             return;
         }
         FileUtil::createFile($path, $fileName, json_encode($fileFields, JSON_PRETTY_PRINT));

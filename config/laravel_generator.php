@@ -213,4 +213,10 @@ return [
         'doctrine_mappings' => [],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Overwrite existing files without confirmation (useful when auto-generating from many tables headlessly)
+    |--------------------------------------------------------------------------
+    */
+    'overwrite' => false,
 ];
