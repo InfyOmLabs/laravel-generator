@@ -299,7 +299,7 @@ class CommandData
 
         $this->fields = $tableFieldsGenerator->fields;
         $primary = collect($this->fields)->where('isPrimary', true)->first();
-        if($primary){
+        if ($primary) {
             $this->addDynamicVariable('$PRIMARY_KEY_NAME$', $this->primaryName = $primary->name);
         }
         $this->relations = $tableFieldsGenerator->relations;
