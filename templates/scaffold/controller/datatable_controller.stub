@@ -7,9 +7,9 @@ use $NAMESPACE_REQUEST$;
 use $NAMESPACE_REQUEST$\Create$MODEL_NAME$Request;
 use $NAMESPACE_REQUEST$\Update$MODEL_NAME$Request;
 use $NAMESPACE_REPOSITORY$\$MODEL_NAME$Repository;
-use Flash;
+use Laracasts\Flash\Flash;
 use $NAMESPACE_APP$\Http\Controllers\AppBaseController;
-use Response;
+use LIlluminate\Http\Response;
 
 class $MODEL_NAME$Controller extends AppBaseController
 {

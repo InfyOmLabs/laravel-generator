@@ -3,7 +3,7 @@
 namespace $NAMESPACE_APP$\Http\Controllers;
 
 use InfyOm\Generator\Utils\ResponseUtil;
-use Response;
+use Illuminate\Http\Response;
 
 /**
  * @SWG\Swagger(

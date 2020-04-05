@@ -6,8 +6,8 @@ use $NAMESPACE_REQUEST$\CreateUserRequest;
 use $NAMESPACE_REQUEST$\UpdateUserRequest;
 use $NAMESPACE_CONTROLLER$\AppBaseController;
 use Illuminate\Http\Request;
-use Flash;
-use Response;
+use Laracasts\Flash\Flash;
+use LIlluminate\Http\Response;
 use Hash;
 use $NAMESPACE_USER$;
 class UserController extends AppBaseController

@@ -8,7 +8,7 @@ use $NAMESPACE_MODEL$\$MODEL_NAME$;
 use $NAMESPACE_REPOSITORY$\$MODEL_NAME$Repository;
 use Illuminate\Http\Request;
 use $NAMESPACE_APP$\Http\Controllers\AppBaseController;
-use Response;
+use Illuminate\Http\Response;
 
 $DOC_CONTROLLER$
 class $MODEL_NAME$APIController extends AppBaseController
