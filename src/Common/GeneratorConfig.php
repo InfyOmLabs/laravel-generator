@@ -219,12 +219,13 @@ class GeneratorConfig
         $this->pathSeeder = config('infyom.laravel_generator.path.seeder', database_path('seeds/'));
         $this->pathDatabaseSeeder = config('infyom.laravel_generator.path.database_seeder', database_path('seeds/DatabaseSeeder.php'));
         $this->pathViewProvider = config(
-            'infyom.laravel_generator.path.view_provider', app_path('Providers/ViewServiceProvider.php')
+            'infyom.laravel_generator.path.view_provider',
+            app_path('Providers/ViewServiceProvider.php')
         );
 
         $this->modelJsPath = config(
-                'infyom.laravel_generator.path.modelsJs',
-                resource_path('assets/js/models/')
+            'infyom.laravel_generator.path.modelsJs',
+            resource_path('assets/js/models/')
         );
     }
 
