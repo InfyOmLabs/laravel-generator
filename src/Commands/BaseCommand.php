@@ -74,8 +74,8 @@ class BaseCommand extends Command
         }
 
         if ($this->commandData->getOption('factory') || (
-                !$this->isSkip('tests') and $this->commandData->getAddOn('tests')
-            )) {
+            !$this->isSkip('tests') and $this->commandData->getAddOn('tests')
+        )) {
             $factoryGenerator = new FactoryGenerator($this->commandData);
             $factoryGenerator->generate();
         }

@@ -55,7 +55,8 @@ class ViewServiceProviderGenerator extends BaseGenerator
         $this->commandData->addDynamicVariable('$COMPOSER_VIEWS$', $views);
         $this->commandData->addDynamicVariable('$COMPOSER_VIEW_VARIABLE$', $variableName);
         $this->commandData->addDynamicVariable(
-            '$COMPOSER_VIEW_VARIABLE_VALUES$', $model."::pluck($columns)->toArray()"
+            '$COMPOSER_VIEW_VARIABLE_VALUES$',
+            $model."::pluck($columns)->toArray()"
         );
 
         $mainViewContent = $this->addViewComposer();
@@ -80,7 +81,10 @@ class ViewServiceProviderGenerator extends BaseGenerator
 
         $replacePosition = strpos($mainViewContent, $lastSeederStatement);
         $mainViewContent = substr_replace(
-            $mainViewContent, $newViewStatement, $replacePosition + strlen($lastSeederStatement) + 6, 0
+            $mainViewContent,
+            $newViewStatement,
+            $replacePosition + strlen($lastSeederStatement) + 6,
+            0
         );
 
         return $mainViewContent;
@@ -116,7 +120,10 @@ class ViewServiceProviderGenerator extends BaseGenerator
             $nameSpaceStatement = $matches[0][$totalMatches - 1];
             $replacePosition = strpos($mainViewContent, $nameSpaceStatement);
             $mainViewContent = substr_replace(
-                $mainViewContent, $newModelStatement, $replacePosition + strlen($nameSpaceStatement), 0
+                $mainViewContent,
+                $newModelStatement,
+                $replacePosition + strlen($nameSpaceStatement),
+                0
             );
         }
 
