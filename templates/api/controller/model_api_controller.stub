@@ -2,8 +2,8 @@
 
 namespace $NAMESPACE_API_CONTROLLER$;
 
-use $NAMESPACE_API_REQUEST$\Create$MODEL_NAME$APIRequest;
-use $NAMESPACE_API_REQUEST$\Update$MODEL_NAME$APIRequest;
+use $NAMESPACE_API_REQUEST$\$MODEL_NAME$\Create$MODEL_NAME$APIRequest;
+use $NAMESPACE_API_REQUEST$\$MODEL_NAME$\Update$MODEL_NAME$APIRequest;
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
 use Illuminate\Http\Request;
 use $NAMESPACE_APP$\Http\Controllers\AppBaseController;
@@ -32,7 +32,7 @@ class $MODEL_NAME$APIController extends AppBaseController
     $DOC_STORE$
     public function store(Create$MODEL_NAME$APIRequest $request)
     {
-        $input = $request->all();
+        $input = $request->validated();
 
         /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
         $$MODEL_NAME_CAMEL$ = $MODEL_NAME$::create($input);
@@ -41,44 +41,22 @@ class $MODEL_NAME$APIController extends AppBaseController
     }
 
     $DOC_SHOW$
-    public function show($id)
+    public function show($MODEL_NAME$ $MODEL_NAME_CAMEL$)
     {
-        /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
-        $$MODEL_NAME_CAMEL$ = $MODEL_NAME$::find($id);
-
-        if (empty($$MODEL_NAME_CAMEL$)) {
-            return $this->sendError('$MODEL_NAME_HUMAN$ not found');
-        }
-
         return $this->sendResponse($$MODEL_NAME_CAMEL$->toArray(), '$MODEL_NAME_HUMAN$ retrieved successfully');
     }
 
     $DOC_UPDATE$
-    public function update($id, Update$MODEL_NAME$APIRequest $request)
+    public function update($MODEL_NAME$ $MODEL_NAME_CAMEL$, Update$MODEL_NAME$APIRequest $request)
     {
-        /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
-        $$MODEL_NAME_CAMEL$ = $MODEL_NAME$::find($id);
-
-        if (empty($$MODEL_NAME_CAMEL$)) {
-            return $this->sendError('$MODEL_NAME_HUMAN$ not found');
-        }
-
-        $$MODEL_NAME_CAMEL$->fill($request->all());
-        $$MODEL_NAME_CAMEL$->save();
+        $$MODEL_NAME_CAMEL$->update($request->validated());
 
         return $this->sendResponse($$MODEL_NAME_CAMEL$->toArray(), '$MODEL_NAME$ updated successfully');
     }
 
     $DOC_DESTROY$
-    public function destroy($id)
+    public function destroy($MODEL_NAME$ $MODEL_NAME_CAMEL$)
     {
-        /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
-        $$MODEL_NAME_CAMEL$ = $MODEL_NAME$::find($id);
-
-        if (empty($$MODEL_NAME_CAMEL$)) {
-            return $this->sendError('$MODEL_NAME_HUMAN$ not found');
-        }
-
         $$MODEL_NAME_CAMEL$->delete();
 
         return $this->sendSuccess('$MODEL_NAME_HUMAN$ deleted successfully');

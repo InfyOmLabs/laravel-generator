@@ -24,7 +24,7 @@ class RequestGenerator extends BaseGenerator
     public function __construct(CommandData $commandData)
     {
         $this->commandData = $commandData;
-        $this->path = $commandData->config->pathRequest;
+        $this->path = $commandData->config->pathRequest.'/'.$this->commandData->modelName;
         $this->createFileName = 'Create'.$this->commandData->modelName.'Request.php';
         $this->updateFileName = 'Update'.$this->commandData->modelName.'Request.php';
     }

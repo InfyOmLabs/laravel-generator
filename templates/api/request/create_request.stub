@@ -1,6 +1,6 @@
 <?php
 
-namespace $NAMESPACE_API_REQUEST$;
+namespace $NAMESPACE_API_REQUEST$\$MODEL_NAME$;
 
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
 use InfyOm\Generator\Request\APIRequest;
@@ -12,7 +12,7 @@ class Create$MODEL_NAME$APIRequest extends APIRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -22,8 +22,20 @@ class Create$MODEL_NAME$APIRequest extends APIRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
-        return $MODEL_NAME$::$rules;
+        $rules = $MODEL_NAME$::$standard_rules;
+        $UNIQUE_RULES$
+        return $rules;
+    }
+
+    /**
+     * Get the validation labels that apply to the request.
+     *
+     * @return array
+     */
+    public function attributes(): array()
+    {
+        return $MODEL_NAME$::$labels;
     }
 }

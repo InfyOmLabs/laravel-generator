@@ -1,6 +1,6 @@
 <?php
 
-namespace $NAMESPACE_REQUEST$;
+namespace $NAMESPACE_REQUEST$\$MODEL_NAME$;
 
 use Illuminate\Foundation\Http\FormRequest;
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
@@ -13,7 +13,7 @@ class Update$MODEL_NAME$Request extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -23,10 +23,20 @@ class Update$MODEL_NAME$Request extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
-        $rules = $MODEL_NAME$::$rules;
+        $rules = $MODEL_NAME$::$standard_rules;
         $UNIQUE_RULES$
         return $rules;
+    }
+
+    /**
+     * Get the validation labels that apply to the request.
+     *
+     * @return array
+     */
+    public function attributes(): array()
+{
+        return $MODEL_NAME$::$labels;
     }
 }

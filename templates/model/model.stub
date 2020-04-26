@@ -27,11 +27,20 @@ $PRIMARY$
     ];
 
     /**
-     * Validation rules
+     * Labels dos campos
      *
      * @var array
      */
-    public static $rules = [
+    public static $labels = [
+        $FIELDS$
+    ];
+
+    /**
+     * Regras padrões para Create e Update
+     *
+     * @var array
+     */
+    public static $standard_rules = [
         $RULES$
     ];
 
