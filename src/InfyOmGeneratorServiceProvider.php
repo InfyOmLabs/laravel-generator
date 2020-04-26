@@ -30,10 +30,12 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $configPath = __DIR__.'/../config/laravel_generator.php';
+        $timestamp = date('Y_m_d_His', time() + 5);
 
         $this->publishes([
-            $configPath => config_path('infyom/laravel_generator.php'),
+            __DIR__.'/../install/config/laravel_generator.php' => config_path('infyom/laravel_generator.php'),
+            __DIR__.'/../install/database/migrations/2020_04_25_153857_add_timezone_column_for_users.php' => database_path("migrations/{$timestamp}_add_timezone_column_for_users.php"),
+            __DIR__.'/../install/app' => config_path(),
         ]);
     }
 
