@@ -1,0 +1,4 @@
+//
+// Charts
+//
+"use strict";var BarStackedChart=function(){var a,t,e,r,s=$("#chart-bar-stacked");s.length&&(a=s,t=function(){return Math.round(100*Math.random())},e={labels:["January","February","March","April","May","June","July"],datasets:[{label:"Dataset 1",backgroundColor:Charts.colors.theme.danger,data:[t(),t(),t(),t(),t(),t(),t()]},{label:"Dataset 2",backgroundColor:Charts.colors.theme.primary,data:[t(),t(),t(),t(),t(),t(),t()]},{label:"Dataset 3",backgroundColor:Charts.colors.theme.success,data:[t(),t(),t(),t(),t(),t(),t()]}]},r=new Chart(a,{type:"bar",data:e,options:{tooltips:{mode:"index",intersect:!1},responsive:!0,scales:{xAxes:[{stacked:!0}],yAxes:[{stacked:!0}]}}}),a.data("chart",r))}();

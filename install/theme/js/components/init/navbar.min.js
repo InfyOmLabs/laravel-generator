@@ -1,0 +1,4 @@
+//
+// Navbar
+//
+"use strict";var Navbar=function(){var a=$(".navbar-nav, .navbar-nav .nav"),n=$(".navbar .collapse"),o=$(".navbar .dropdown");n.on({"show.bs.collapse":function(){var o;(o=$(this)).closest(a).find(n).not(o).collapse("hide")}}),o.on({"hide.bs.dropdown":function(){var a,n;a=$(this),(n=a.find(".dropdown-menu")).addClass("close"),setTimeout(function(){n.removeClass("close")},200)}})}(),NavbarCollapse=function(){$(".navbar-nav");var a=$(".navbar .navbar-custom-collapse");a.length&&(a.on({"hide.bs.collapse":function(){a.addClass("collapsing-out")}}),a.on({"hidden.bs.collapse":function(){a.removeClass("collapsing-out")}}))}();

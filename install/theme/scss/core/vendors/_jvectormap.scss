@@ -1,0 +1,39 @@
+//
+// Jvector Map
+//
+
+
+.vector-map {
+    position: relative;
+    height: 600px;
+}
+
+
+// Size variations
+
+.vector-map-sm {
+    height: 280px; 
+}
+
+
+// Vendor overrides
+
+.jvectormap-container {
+    width: 100%;
+    height: 100%;
+}
+
+.jvectormap-zoomin,
+.jvectormap-zoomout {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.jvectormap-zoomin {
+    bottom: 4.25rem;
+}
+
+.jvectormap-zoomout {
+    bottom: 2rem;
+}

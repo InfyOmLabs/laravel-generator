@@ -37,6 +37,10 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
             __DIR__.'/../install/database/migrations/2020_04_25_153857_add_timezone_column_for_users.php' => database_path("migrations/{$timestamp}_add_timezone_column_for_users.php"),
             __DIR__.'/../install/app' => config_path(),
         ]);
+
+        $this->publishes([
+            __DIR__.'/../install/theme/' => public_path('theme'),
+        ], 'public');
     }
 
     /**

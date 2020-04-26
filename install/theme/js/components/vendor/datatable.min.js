@@ -1,0 +1,4 @@
+//
+// Datatable
+//
+"use strict";var DatatableBasic=function(){var a=$("#datatable-basic");a.length&&a.on("init.dt",function(){$("div.dataTables_length select").removeClass("custom-select custom-select-sm")}).DataTable({keys:!0,select:{style:"multi"},language:{paginate:{previous:"<i class='fas fa-angle-left'>",next:"<i class='fas fa-angle-right'>"}}})}(),DatatableButtons=function(){var a,t=$("#datatable-buttons");t.length&&(a={lengthChange:!1,dom:"Bfrtip",buttons:["copy","print"],language:{paginate:{previous:"<i class='fas fa-angle-left'>",next:"<i class='fas fa-angle-right'>"}}},t.on("init.dt",function(){$(".dt-buttons .btn").removeClass("btn-secondary").addClass("btn-sm btn-default")}).DataTable(a))}();

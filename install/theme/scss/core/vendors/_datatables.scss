@@ -1,0 +1,40 @@
+//
+// Datatables
+//
+
+.dataTables_wrapper {
+    font-size: $font-size-sm;
+}
+
+table.dataTable {
+    margin-bottom: $card-spacer-y !important;
+    border-bottom: 1px solid $table-border-color;
+
+    tbody {
+        > tr.selected {
+            background-color: theme-color("primary");
+        }
+    }
+}
+
+.dataTables_length,
+.dataTables_info,
+.dt-buttons {
+    padding-left: $card-spacer-x;
+}
+
+.dataTables_length {
+    .form-control {
+        margin: 0 .375rem;
+    }
+}
+
+.dataTables_filter {
+    padding-right: $card-spacer-x;
+    display: inline-block;
+    float: right;
+}
+
+.dataTables_paginate {
+    padding-right: $card-spacer-x;
+}
