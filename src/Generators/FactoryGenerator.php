@@ -76,8 +76,10 @@ class FactoryGenerator extends BaseGenerator
 
             switch ($field->fieldType) {
                 case 'integer':
-                case 'float':
                     $fakerData = 'randomDigitNotNull';
+                    break;
+                case 'float':
+                    $fakerData = 'randomFloat()';
                     break;
                 case 'string':
                     $fakerData = 'word';
@@ -88,6 +90,9 @@ class FactoryGenerator extends BaseGenerator
                 case 'datetime':
                 case 'timestamp':
                     $fakerData = "date('Y-m-d H:i:s')";
+                    break;
+                case 'date':
+                    $fakerData = "date('Y-m-d')";
                     break;
                 case 'enum':
                     $fakerData = 'randomElement('.
