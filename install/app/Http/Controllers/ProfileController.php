@@ -5,10 +5,9 @@ namespace App\Http\Controllers;
 use App\Helpers\TimezoneHelper;
 use App\Http\Requests\Profile\ProfileRequest;
 use App\Http\Requests\Profile\PasswordRequest;
-use App\Http\Controllers\AppBaseController;
 use Illuminate\Support\Facades\Hash;
 
-class ProfileController extends AppBaseController
+class ProfileController extends Controller
 {
     /**
      * Show the form for editing the profile.
