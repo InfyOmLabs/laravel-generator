@@ -24,7 +24,7 @@ class ControllerGenerator extends BaseGenerator
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathController;
-        $this->templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
+        $this->templateType = config('infyom.laravel_generator.templates', 'argon-templates');
         $this->fileName = $this->commandData->modelName.'Controller.php';
     }
 

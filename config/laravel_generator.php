@@ -91,7 +91,7 @@ return [
     |
     */
 
-    'templates'         => 'adminlte-templates',
+    'templates'         => 'argon-templates',
 
     /*
     |--------------------------------------------------------------------------
@@ -172,7 +172,7 @@ return [
 
             'enabled'       => true,
 
-            'menu_file'     => 'layouts/menu.blade.php',
+            'menu_file'     => 'layouts/navbars/sidebar/menu.blade.php',
         ],
     ],
 
