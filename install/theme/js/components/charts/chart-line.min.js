@@ -1,4 +1,0 @@
-//
-// Charts
-//
-"use strict";var LineChart=function(){var a,e,r=$("#chart-line");r.length&&(a=r,e=new Chart(a,{type:"line",options:{scales:{yAxes:[{gridLines:{color:Charts.colors.gray[200],zeroLineColor:Charts.colors.gray[200]},ticks:{}}]}},data:{labels:["May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],datasets:[{label:"Performance",data:[0,20,10,30,15,40,20,60,60]}]}}),a.data("chart",e))}();

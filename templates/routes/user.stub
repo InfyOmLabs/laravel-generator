@@ -1,1 +1,5 @@
-Route::resource('users', 'UserController')->middleware('auth');
+
+
+Route::group(['middleware' => ['auth', 'verified']], function () {
+    Route::resource('users', 'UserController')->middleware('auth');
+});

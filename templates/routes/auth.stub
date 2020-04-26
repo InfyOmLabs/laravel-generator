@@ -1,3 +1,9 @@
 Auth::routes(['verify' => true]);
 
-Route::get('/home', 'HomeController@index')->middleware('verified');
+
+Route::group(['middleware' => ['auth', 'verified']], function () {
+    Route::get('/home', 'HomeController@index')->middleware('verified');
+    Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
+    Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
+    Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
+});

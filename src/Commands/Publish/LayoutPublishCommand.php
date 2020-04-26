@@ -30,7 +30,6 @@ class LayoutPublishCommand extends PublishBaseCommand
     public function handle()
     {
         $this->copyView();
-        $this->updateRoutes();
         $this->publishHomeController();
     }
 
@@ -110,25 +109,6 @@ class LayoutPublishCommand extends PublishBaseCommand
             'auth/reset_locale'         => 'auth/passwords/reset.blade.php',
             'emails/password_locale'    => 'auth/emails/password.blade.php',
         ];
-    }
-
-    private function updateRoutes()
-    {
-        $path = config('infyom.laravel_generator.path.routes', base_path('routes/web.php'));
-
-        $prompt = 'Existing routes web.php file detected. Should we add standard auth routes? (y|N) :';
-        if (file_exists($path) && !$this->confirmOverwrite($path, $prompt)) {
-            return;
-        }
-
-        $routeContents = file_get_contents($path);
-
-        $routesTemplate = get_template('routes.auth', 'laravel-generator');
-
-        $routeContents .= "\n\n".$routesTemplate;
-
-        file_put_contents($path, $routeContents);
-        $this->comment("\nRoutes added");
     }
 
     private function publishHomeController()

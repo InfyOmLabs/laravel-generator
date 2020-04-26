@@ -17,7 +17,9 @@ class PublishBaseCommand extends BaseCommand
             return;
         }
 
-        copy($sourceFile, $destinationFile);
+        $destinationDir = pathinfo($destinationFile, PATHINFO_DIRNAME);
+        File::makeDirectory($destinationDir, 493, true, true);
+        File::copy($sourceFile, $destinationFile);
 
         $this->comment($fileName.' published');
         $this->info($destinationFile);

@@ -90,7 +90,7 @@ class PublishUserCommand extends PublishBaseCommand
     {
         $viewsPath = config('infyom.laravel_generator.path.views', resource_path('views/'));
         $templateType = config('infyom.laravel_generator.templates', 'argon-templates');
-        $path = $viewsPath.'layouts/menu.blade.php';
+        $path = $viewsPath. config('infyom.add_on.menu.menu_file', 'layouts/menu.blade.php');
         $menuContents = file_get_contents($path);
         $sourceFile = file_get_contents(get_template_file_path('scaffold/users/menu', $templateType));
         $menuContents .= "\n".$sourceFile;
