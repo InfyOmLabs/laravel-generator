@@ -110,7 +110,7 @@ if (!function_exists('get_template')) {
      *
      * @param string $templateName
      * @param string $templateType
-     * @param bool   $stripEndOfline  Strip the end of line from the returned template file
+     * @param bool   $stripEndOfline Strip the end of line from the returned template file
      *
      * @return string
      */
