@@ -110,14 +110,31 @@ if (!function_exists('get_template')) {
      *
      * @param string $templateName
      * @param string $templateType
+     * @param bool $stripEndOfline  Strip the end of line from the returned template file
      *
      * @return string
      */
-    function get_template($templateName, $templateType)
+    function get_template($templateName, $templateType, $stripEndOfLine = false)
     {
         $path = get_template_file_path($templateName, $templateType);
 
-        return file_get_contents($path);
+        $content = file_get_contents($path);
+
+        /**
+         * Strip the last line ending from the template.
+         *
+         * This is needed for partial templates such as documentation sections
+         * which are then included inside a larger template.
+         *
+         * Any partial template file edited on a unix-like system will have an
+         * EOL that will cause an unexpected extra line end when combined with
+         * the main template.
+         */
+        if ($stripEndOfLine) {
+            return rtrim($content, "\r\n");
+        }
+
+        return $content;
     }
 }
 

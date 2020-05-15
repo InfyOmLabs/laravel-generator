@@ -127,7 +127,7 @@ class ModelGenerator extends BaseGenerator
             $templateData = $this->generateSwagger($templateData);
         }
 
-        $docsTemplate = get_template('docs.model', 'laravel-generator');
+        $docsTemplate = get_template('docs.model', 'laravel-generator', true);
         $docsTemplate = fill_template($this->commandData->dynamicVars, $docsTemplate);
 
         $fillables = '';
@@ -199,7 +199,7 @@ class ModelGenerator extends BaseGenerator
     {
         $fieldTypes = SwaggerGenerator::generateTypes($this->commandData->fields);
 
-        $template = get_template('model_docs.model', 'swagger-generator');
+        $template = get_template('model_docs.model', 'swagger-generator', true);
 
         $template = fill_template($this->commandData->dynamicVars, $template);
 
@@ -209,7 +209,7 @@ class ModelGenerator extends BaseGenerator
             $template
         );
 
-        $propertyTemplate = get_template('model_docs.property', 'swagger-generator');
+        $propertyTemplate = get_template('model_docs.property', 'swagger-generator', true);
 
         $properties = SwaggerGenerator::preparePropertyFields($propertyTemplate, $fieldTypes);
 

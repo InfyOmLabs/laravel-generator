@@ -61,7 +61,7 @@ class APIControllerGenerator extends BaseGenerator
 
         foreach ($methods as $method) {
             $key = '$DOC_'.strtoupper($method).'$';
-            $docTemplate = get_template($templatePrefix.'.'.$method, $templateType);
+            $docTemplate = get_template($templatePrefix.'.'.$method, $templateType, true);
             $docTemplate = fill_template($this->commandData->dynamicVars, $docTemplate);
             $templateData = str_replace($key, $docTemplate, $templateData);
         }
