@@ -143,6 +143,7 @@ class SwaggerGenerator
                 $format = ",\n *          format=\"".$format.'"';
             }
             $propertyTemplate = str_replace('$FIELD_FORMAT$', $format, $propertyTemplate);
+            $propertyTemplate = rtrim($propertyTemplate);
             $templates[] = $propertyTemplate;
         }
 
