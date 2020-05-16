@@ -5,5 +5,5 @@
      * @param int $id
      * @param Update$MODEL_NAME$APIRequest $request
      *
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse|Response
      */

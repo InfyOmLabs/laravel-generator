@@ -6,5 +6,5 @@
      *
      * @throws \Exception
      *
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse|Response
      */
