@@ -61,10 +61,14 @@ class ModelGenerator extends BaseGenerator
         $templateData = $this->fillSoftDeletes($templateData);
 
         $fillables = [];
+        $primaryKey = 'id';
 
         foreach ($this->commandData->fields as $field) {
             if ($field->isFillable) {
                 $fillables[] = "'".$field->name."'";
+            }
+            if ($field->isPrimary) {
+                $primaryKey = $field->name;
             }
         }
 
@@ -76,6 +80,9 @@ class ModelGenerator extends BaseGenerator
             $primary = infy_tab()."protected \$primaryKey = '".$this->commandData->getOption('primary')."';\n";
         } else {
             $primary = '';
+            if ($this->commandData->getOption('fieldsFile') && $primaryKey != 'id') {
+                $primary = infy_tab()."protected \$primaryKey = '".$primaryKey."';\n";
+            }
         }
 
         $templateData = str_replace('$PRIMARY$', $primary, $templateData);
