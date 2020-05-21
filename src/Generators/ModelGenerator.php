@@ -85,6 +85,8 @@ class ModelGenerator extends BaseGenerator
 
         $templateData = str_replace('$CAST$', implode(','.infy_nl_tab(1, 2), $this->generateCasts()), $templateData);
 
+        $templateData = str_replace('$FIELDS_SEARCHABLE', implode(','.infy_nl_tab(1, 2), $this->generateSearchable()), $templateData);
+
         $templateData = str_replace(
             '$RELATIONS$',
             fill_template($this->commandData->dynamicVars, implode(PHP_EOL.infy_nl_tab(1, 1), $this->generateRelations())),
@@ -381,6 +383,18 @@ class ModelGenerator extends BaseGenerator
         }
 
         return $relations;
+    }
+
+    public function generateSearchable() {
+        $searchables = [];
+
+        foreach ($this->commandData->fields as $field) {
+            if ($field->isSearchable) {
+                $searchables[] = "'".$field->name."' => 10";
+            }
+        }
+
+        return $searchables;
     }
 
     public function rollback()

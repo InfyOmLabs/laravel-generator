@@ -4,9 +4,12 @@ namespace $NAMESPACE_MODEL$;
 
 use $NAMESPACE_MODEL_EXTEND$ as Model;
 $SOFT_DELETE_IMPORT$
+use OwenIt\Auditing\Contracts\Auditable;
+use App\Traits\SearchableTrait;
 $DOCS$
-class $MODEL_NAME$ extends Model
+class $MODEL_NAME$ extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable, SearchableTrait;
 $SOFT_DELETE$
     public $table = '$TABLE_NAME$';
     $TIMESTAMPS$
@@ -42,6 +45,17 @@ $PRIMARY$
      */
     public static $standard_rules = [
         $RULES$
+    ];
+
+    /**
+     * Searchable rules.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            $FIELDS_SEARCHABLE$
+        ],
     ];
 
     $RELATIONS$
