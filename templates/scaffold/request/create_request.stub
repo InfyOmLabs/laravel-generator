@@ -37,6 +37,7 @@ class Create$MODEL_NAME$Request extends FormRequest
      */
     public function attributes(): array()
     {
-        return $MODEL_NAME$::$labels;
+        $rules_labels = $MODEL_NAME$::$labels;
+        return $rules_labels;
     }
 }

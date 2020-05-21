@@ -2,13 +2,16 @@
 
 namespace $NAMESPACE_CONTROLLER$;
 
+use $NAMESPACE_REQUEST$\$MODEL_NAME$\Index$MODEL_NAME$Request;
 use $NAMESPACE_REQUEST$\$MODEL_NAME$\Create$MODEL_NAME$Request;
 use $NAMESPACE_REQUEST$\$MODEL_NAME$\Update$MODEL_NAME$Request;
 use $NAMESPACE_APP$\Http\Controllers\AppBaseController;
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
 use Illuminate\Http\Request;
-use Flash;
-use Response;
+use Illuminate\Http\Response;
+use Illuminate\Support\Arr;
+use Illuminate\View\View;
+use Laracasts\Flash\Flash;
 
 class $MODEL_NAME$Controller extends AppBaseController
 {
@@ -17,40 +20,33 @@ class $MODEL_NAME$Controller extends AppBaseController
      *
      * @param Request $request
      *
-     * @return Response
+     * @return Factory|View
      */
-    public function index(Request $request)
+    public function index(Index$MODEL_NAME$Request $request)
     {
-        /** @var $MODEL_NAME$ $$MODEL_NAME_PLURAL_CAMEL$ */
-        $$MODEL_NAME_PLURAL_CAMEL$ = $MODEL_NAME$::$RENDER_TYPE$;
+        $requestSanitized = $request->validated();
 
-        return view('$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.index')
-            ->with('$MODEL_NAME_PLURAL_CAMEL$', $$MODEL_NAME_PLURAL_CAMEL$);
+        /** @var $MODEL_NAME$ $$MODEL_NAME_PLURAL_CAMEL$ */
+        $$MODEL_NAME_PLURAL_CAMEL$ = $MODEL_NAME$::when(Arr::has($requestSanitized, 'query'), function ($query) use ($requestSanitized) {
+            $query->search($requestSanitized['query']);
+        })->$RENDER_TYPE$;
+
+        return view('$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.index', [
+            '$MODEL_NAME_PLURAL_CAMEL$' => $$MODEL_NAME_PLURAL_CAMEL$
+        ]);
     }
 
     /**
      * Show the form for creating a new $MODEL_NAME$.
      *
-     * @return Response
-     */
-    public function create()
-    {
-        return view('$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.create');
-    }
-
-    /**
-     * Store a newly created $MODEL_NAME$ in storage.
-     *
-     * @param Create$MODEL_NAME$Request $request
-     *
-     * @return Response
+     * @return Factory|View
      */
     public function store(Create$MODEL_NAME$Request $request)
     {
-        $input = $request->validated();
+        $requestSanitized = $request->validated();
 
         /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
-        $$MODEL_NAME_CAMEL$ = $MODEL_NAME$::create($input);
+        $$MODEL_NAME_CAMEL$ = $MODEL_NAME$::create($requestSanitized);
 
         Flash::success('$MODEL_NAME_HUMAN$ saved successfully.');
 
@@ -62,11 +58,13 @@ class $MODEL_NAME$Controller extends AppBaseController
      *
      * @param $MODEL_NAME$ $$MODEL_NAME_CAMEL$
      *
-     * @return Response
+     * @return Factory|View
      */
     public function show($MODEL_NAME$ $$MODEL_NAME_CAMEL$)
     {
-        return view('$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.show')->with('$MODEL_NAME_CAMEL$', $$MODEL_NAME_CAMEL$);
+        return view('$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.show', [
+                'MODEL_NAME_CAMEL$' => $$MODEL_NAME_CAMEL$
+        ]);
     }
 
     /**
@@ -74,11 +72,13 @@ class $MODEL_NAME$Controller extends AppBaseController
      *
      * @param $MODEL_NAME$ $$MODEL_NAME_CAMEL$
      *
-     * @return Response
+     * @return Factory|View
      */
     public function edit($MODEL_NAME$ $$MODEL_NAME_CAMEL$)
     {
-        return view('$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.edit')->with('$MODEL_NAME_CAMEL$', $$MODEL_NAME_CAMEL$);
+        return view('$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.edit', [
+            '$MODEL_NAME_CAMEL$' => $$MODEL_NAME_CAMEL$
+        ]);
     }
 
     /**
@@ -87,11 +87,12 @@ class $MODEL_NAME$Controller extends AppBaseController
      * @param $MODEL_NAME$ $$MODEL_NAME_CAMEL$
      * @param Update$MODEL_NAME$Request $request
      *
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update($MODEL_NAME$ $$MODEL_NAME_CAMEL$, Update$MODEL_NAME$Request $request)
     {
-        $$MODEL_NAME_CAMEL$->update($request->validated());
+        $requestSanitized = $request->validated();
+        $$MODEL_NAME_CAMEL$->update($requestSanitized);
 
         Flash::success('$MODEL_NAME_HUMAN$ updated successfully.');
 
@@ -105,7 +106,7 @@ class $MODEL_NAME$Controller extends AppBaseController
      *
      * @throws \Exception
      *
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function destroy($MODEL_NAME$ $$MODEL_NAME_CAMEL$)
     {

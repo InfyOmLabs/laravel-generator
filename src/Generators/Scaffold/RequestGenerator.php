@@ -16,6 +16,9 @@ class RequestGenerator extends BaseGenerator
     private $path;
 
     /** @var string */
+    private $indexFileName;
+
+    /** @var string */
     private $createFileName;
 
     /** @var string */
@@ -25,14 +28,28 @@ class RequestGenerator extends BaseGenerator
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathRequest.'/'.$this->commandData->modelName;
+        $this->indexFileName = 'Index'.$this->commandData->modelName.'Request.php';
         $this->createFileName = 'Create'.$this->commandData->modelName.'Request.php';
         $this->updateFileName = 'Update'.$this->commandData->modelName.'Request.php';
     }
 
     public function generate()
     {
+        $this->generateIndexRequest();
         $this->generateCreateRequest();
         $this->generateUpdateRequest();
+    }
+
+    private function generateIndexRequest()
+    {
+        $templateData = get_template('scaffold.request.index_request', 'laravel-generator');
+
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+
+        FileUtil::createFile($this->path, $this->indexFileName, $templateData);
+
+        $this->commandData->commandComment("\nIndex Request created: ");
+        $this->commandData->commandInfo($this->indexFileName);
     }
 
     private function generateCreateRequest()
@@ -65,12 +82,16 @@ class RequestGenerator extends BaseGenerator
 
     public function rollback()
     {
+        if ($this->rollbackFile($this->path, $this->indexFileName)) {
+            $this->commandData->commandComment('Index Request file deleted: '.$this->indexFileName);
+        }
+
         if ($this->rollbackFile($this->path, $this->createFileName)) {
-            $this->commandData->commandComment('Create API Request file deleted: '.$this->createFileName);
+            $this->commandData->commandComment('Create Request file deleted: '.$this->createFileName);
         }
 
         if ($this->rollbackFile($this->path, $this->updateFileName)) {
-            $this->commandData->commandComment('Update API Request file deleted: '.$this->updateFileName);
+            $this->commandData->commandComment('Update Request file deleted: '.$this->updateFileName);
         }
     }
 }

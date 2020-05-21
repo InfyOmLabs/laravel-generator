@@ -1,1 +1,9 @@
-Route::resource('$MODEL_NAME_PLURAL_CAMEL$', '$PATH_PREFIX$$MODEL_NAME$Controller');
+Route::prefix('$MODEL_NAME_PLURAL_CAMEL$')->name('$MODEL_NAME_PLURAL_CAMEL$')->group((function () {
+    Route::get('', '$PATH_PREFIX$$MODEL_NAME$Controller@index')->name('index')->middleware('permission:$MODEL_NAME_PLURAL_CAMEL$.index');
+    Route::get('create', '$PATH_PREFIX$$MODEL_NAME$Controller@create')->name('create')->middleware('permission:$MODEL_NAME_PLURAL_CAMEL$.create');
+    Route::post('', '$PATH_PREFIX$$MODEL_NAME$Controller@store')->name('store')->middleware('permission:$MODEL_NAME_PLURAL_CAMEL$.create');
+    Route::get('{$$MODEL_NAME_CAMEL$}', '$PATH_PREFIX$$MODEL_NAME$Controller@show')->name('show')->middleware('permission:$MODEL_NAME_PLURAL_CAMEL$.show');
+    Route::get('{$$MODEL_NAME_CAMEL$}/edit', '$PATH_PREFIX$$MODEL_NAME$Controller@edit')->name('edit')->middleware('permission:$MODEL_NAME_PLURAL_CAMEL$.edit');
+    Route::patch('{$$MODEL_NAME_CAMEL$}', '$PATH_PREFIX$$MODEL_NAME$Controller@update')->name('update')->middleware('permission:$MODEL_NAME_PLURAL_CAMEL$.edit');
+    Route::delete('{$$MODEL_NAME_CAMEL$}', '$PATH_PREFIX$$MODEL_NAME$Controller@destroy')->name('destroy')->middleware('permission:$MODEL_NAME_PLURAL_CAMEL$.destroy');
+});
