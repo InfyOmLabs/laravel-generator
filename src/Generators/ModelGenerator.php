@@ -295,6 +295,7 @@ class ModelGenerator extends BaseGenerator
                             $rule[] = 'boolean';
                             break;
                         case 'float':
+                        case 'double':
                         case 'decimal':
                             $rule[] = 'numeric';
                             break;
