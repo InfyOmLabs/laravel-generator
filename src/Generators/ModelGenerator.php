@@ -282,9 +282,8 @@ class ModelGenerator extends BaseGenerator
                  */
                 if ($this->commandData->getOption('fromTable')) {
                     $rule = empty($field->validations) ? [] : explode('|', $field->validations);
-                    $dbOptions = explode(':', $field->dbInput);
 
-                    if (in_array('nullable', $dbOptions)) {
+                    if (!$field->isNotNull) {
                         $rule[] = 'nullable';
                     }
 
@@ -303,7 +302,7 @@ class ModelGenerator extends BaseGenerator
                             $rule[] = 'string';
 
                             // Enforce a maximum string length if possible.
-                            foreach ($dbOptions as $key => $value) {
+                            foreach (explode(':', $field->dbInput) as $key => $value) {
                                 if (preg_match('/string,(\d+)/', $value, $matches)) {
                                     $rule[] = 'max:'.$matches[1];
                                 }
