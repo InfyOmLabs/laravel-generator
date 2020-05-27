@@ -305,7 +305,7 @@ class ModelGenerator extends BaseGenerator
                             // Enforce a maximum string length if possible.
                             foreach ($dbOptions as $key => $value) {
                                 if (preg_match('/string,(\d+)/', $value, $matches)) {
-                                    $rule[] = 'max:' . $matches[1];
+                                    $rule[] = 'max:'.$matches[1];
                                 }
                             }
                             break;
