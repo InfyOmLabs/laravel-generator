@@ -333,8 +333,10 @@ class ModelGenerator extends BaseGenerator
                 case 'double':
                     $rule .= "'double'";
                     break;
-                case 'float':
                 case 'decimal':
+                    $rule .= sprintf("'decimal:%d'", $field->numberDecimalPoints);
+                    break;
+                case 'float':
                     $rule .= "'float'";
                     break;
                 case 'boolean':
