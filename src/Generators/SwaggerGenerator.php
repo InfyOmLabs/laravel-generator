@@ -28,9 +28,9 @@ class SwaggerGenerator
 
             if (!empty($fieldType)) {
                 $fieldType = [
-                    'name'   => $field->name,
-                    'type'   => $fieldType,
-                    'format' => $fieldFormat,
+                    'name'     => $field->name,
+                    'type'     => $fieldType,
+                    'format'   => $fieldFormat,
                     'nullable' => !$field->isNotNull,
                     'readOnly' => !$field->isFillable,
                 ];
