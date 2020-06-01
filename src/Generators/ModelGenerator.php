@@ -18,6 +18,7 @@ class ModelGenerator extends BaseGenerator
     protected $excluded_fields = [
         'created_at',
         'updated_at',
+        'deleted_at',
     ];
 
     /** @var CommandData */
@@ -266,7 +267,7 @@ class ModelGenerator extends BaseGenerator
     private function generateRules()
     {
         $dont_require_fields = config('infyom.laravel_generator.options.hidden_fields', [])
-                + config('infyom.laravel_generator.options.excluded_fields', []);
+                + config('infyom.laravel_generator.options.excluded_fields', $this->excluded_fields);
 
         $rules = [];
 
