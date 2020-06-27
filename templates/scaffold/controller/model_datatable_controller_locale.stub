@@ -43,7 +43,7 @@ class $MODEL_NAME$Controller extends AppBaseController
      */
     public function store(Create$MODEL_NAME$Request $request)
     {
-        $input = $request->all();
+        $input = $request->validated();
 
         /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
         $$MODEL_NAME_CAMEL$ = $MODEL_NAME$::create($input);
@@ -114,7 +114,7 @@ class $MODEL_NAME$Controller extends AppBaseController
             return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
         }
 
-        $$MODEL_NAME_CAMEL$->fill($request->all());
+        $$MODEL_NAME_CAMEL$->fill($request->validated());
         $$MODEL_NAME_CAMEL$->save();
 
         Flash::success(__('messages.updated', ['model' => __('models/$MODEL_NAME_PLURAL_CAMEL$.singular')]));

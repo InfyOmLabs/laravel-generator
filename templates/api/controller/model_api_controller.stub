@@ -32,7 +32,7 @@ class $MODEL_NAME$APIController extends AppBaseController
     $DOC_STORE$
     public function store(Create$MODEL_NAME$APIRequest $request)
     {
-        $input = $request->all();
+        $input = $request->validated();
 
         /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
         $$MODEL_NAME_CAMEL$ = $MODEL_NAME$::create($input);
@@ -63,7 +63,7 @@ class $MODEL_NAME$APIController extends AppBaseController
             return $this->sendError('$MODEL_NAME_HUMAN$ not found');
         }
 
-        $$MODEL_NAME_CAMEL$->fill($request->all());
+        $$MODEL_NAME_CAMEL$->fill($request->validated());
         $$MODEL_NAME_CAMEL$->save();
 
         return $this->sendResponse($$MODEL_NAME_CAMEL$->toArray(), '$MODEL_NAME$ updated successfully');

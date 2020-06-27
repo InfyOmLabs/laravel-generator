@@ -51,7 +51,7 @@ class $MODEL_NAME$Controller extends AppBaseController
      */
     public function store(Create$MODEL_NAME$Request $request)
     {
-        $input = $request->all();
+        $input = $request->validated();
 
         $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->create($input);
 
@@ -118,7 +118,7 @@ class $MODEL_NAME$Controller extends AppBaseController
             return redirect(route('$ROUTE_NAMED_PREFIX$$MODEL_NAME_PLURAL_CAMEL$.index'));
         }
 
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->update($request->all(), $id);
+        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->update($request->validated(), $id);
 
         Flash::success('$MODEL_NAME_HUMAN$ updated successfully.');
 
