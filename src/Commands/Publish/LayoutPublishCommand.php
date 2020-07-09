@@ -2,7 +2,9 @@
 
 namespace InfyOm\Generator\Commands\Publish;
 
+use Illuminate\Support\Str;
 use InfyOm\Generator\Utils\FileUtil;
+use Symfony\Component\Console\Input\InputOption;
 
 class LayoutPublishCommand extends PublishBaseCommand
 {
@@ -34,12 +36,16 @@ class LayoutPublishCommand extends PublishBaseCommand
 
     private function copyView()
     {
-        $viewsPath = config('infyom.laravel_generator.path.views', base_path('resources/views/'));
-        $templateType = config('infyom.laravel_generator.templates', 'core-templates');
+        $viewsPath = config('infyom.laravel_generator.path.views', resource_path('views/'));
+        $templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
 
         $this->createDirectories($viewsPath);
 
-        $files = $this->getViews();
+        if ($this->option('localized')) {
+            $files = $this->getLocaleViews();
+        } else {
+            $files = $this->getViews();
+        }
 
         foreach ($files as $stub => $blade) {
             $sourceFile = get_template_file_path('scaffold/'.$stub, $templateType);
@@ -54,25 +60,61 @@ class LayoutPublishCommand extends PublishBaseCommand
         FileUtil::createDirectoryIfNotExist($viewsPath.'auth');
 
         FileUtil::createDirectoryIfNotExist($viewsPath.'auth/passwords');
+        FileUtil::createDirectoryIfNotExist($viewsPath.'auth/emails');
     }
 
     private function getViews()
     {
+        $views = [
+            'layouts/app'               => 'layouts/app.blade.php',
+            'layouts/sidebar'           => 'layouts/sidebar.blade.php',
+            'layouts/datatables_css'    => 'layouts/datatables_css.blade.php',
+            'layouts/datatables_js'     => 'layouts/datatables_js.blade.php',
+            'layouts/menu'              => 'layouts/menu.blade.php',
+            'layouts/home'              => 'home.blade.php',
+            'auth/login'                => 'auth/login.blade.php',
+            'auth/register'             => 'auth/register.blade.php',
+            'auth/email'                => 'auth/passwords/email.blade.php',
+            'auth/reset'                => 'auth/passwords/reset.blade.php',
+            'emails/password'           => 'auth/emails/password.blade.php',
+        ];
+
+        $version = $this->getApplication()->getVersion();
+        if (Str::contains($version, '6.')) {
+            $verifyView = [
+                'auth/verify_6' => 'auth/verify.blade.php',
+            ];
+        } else {
+            $verifyView = [
+                'auth/verify' => 'auth/verify.blade.php',
+            ];
+        }
+
+        $views = array_merge($views, $verifyView);
+
+        return $views;
+    }
+
+    private function getLocaleViews()
+    {
         return [
-            'layouts/app'     => 'layouts/app.blade.php',
-            'layouts/sidebar' => 'layouts/sidebar.blade.php',
-            'layouts/menu'    => 'layouts/menu.blade.php',
-            'layouts/home'    => 'home.blade.php',
-            'auth/login'      => 'auth/login.blade.php',
-            'auth/register'   => 'auth/register.blade.php',
-            'auth/email'      => 'auth/passwords/email.blade.php',
-            'auth/reset'      => 'auth/passwords/reset.blade.php',
+            'layouts/app_locale'        => 'layouts/app.blade.php',
+            'layouts/sidebar_locale'    => 'layouts/sidebar.blade.php',
+            'layouts/datatables_css'    => 'layouts/datatables_css.blade.php',
+            'layouts/datatables_js'     => 'layouts/datatables_js.blade.php',
+            'layouts/menu'              => 'layouts/menu.blade.php',
+            'layouts/home'              => 'home.blade.php',
+            'auth/login_locale'         => 'auth/login.blade.php',
+            'auth/register_locale'      => 'auth/register.blade.php',
+            'auth/email_locale'         => 'auth/passwords/email.blade.php',
+            'auth/reset_locale'         => 'auth/passwords/reset.blade.php',
+            'emails/password_locale'    => 'auth/emails/password.blade.php',
         ];
     }
 
     private function updateRoutes()
     {
-        $path = config('infyom.laravel_generator.path.routes', app_path('routes/web.php'));
+        $path = config('infyom.laravel_generator.path.routes', base_path('routes/web.php'));
 
         $prompt = 'Existing routes web.php file detected. Should we add standard auth routes? (y|N) :';
         if (file_exists($path) && !$this->confirmOverwrite($path, $prompt)) {
@@ -119,12 +161,14 @@ class LayoutPublishCommand extends PublishBaseCommand
     {
         $templateData = str_replace(
             '$NAMESPACE_CONTROLLER$',
-            config('infyom.laravel_generator.namespace.controller'), $templateData
+            config('infyom.laravel_generator.namespace.controller'),
+            $templateData
         );
 
         $templateData = str_replace(
             '$NAMESPACE_REQUEST$',
-            config('infyom.laravel_generator.namespace.request'), $templateData
+            config('infyom.laravel_generator.namespace.request'),
+            $templateData
         );
 
         return $templateData;
@@ -137,7 +181,9 @@ class LayoutPublishCommand extends PublishBaseCommand
      */
     public function getOptions()
     {
-        return [];
+        return [
+            ['localized', null, InputOption::VALUE_NONE, 'Localize files.'],
+        ];
     }
 
     /**

@@ -26,7 +26,17 @@ class APIControllerGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = get_template('api.controller.api_controller', 'laravel-generator');
+        if ($this->commandData->getOption('repositoryPattern')) {
+            $templateName = 'api_controller';
+        } else {
+            $templateName = 'model_api_controller';
+        }
+
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+        }
+
+        $templateData = get_template("api.controller.$templateName", 'laravel-generator');
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
         $templateData = $this->fillDocs($templateData);
@@ -42,7 +52,7 @@ class APIControllerGenerator extends BaseGenerator
         $methods = ['controller', 'index', 'store', 'show', 'update', 'destroy'];
 
         if ($this->commandData->getAddOn('swagger')) {
-            $templatePrefix = 'controller';
+            $templatePrefix = 'controller_docs';
             $templateType = 'swagger-generator';
         } else {
             $templatePrefix = 'api.docs.controller';

@@ -11,7 +11,7 @@ return [
 
     'path' => [
 
-        'migration'         => base_path('database/migrations/'),
+        'migration'         => database_path('migrations/'),
 
         'model'             => app_path('Models/'),
 
@@ -31,19 +31,27 @@ return [
 
         'api_controller'    => app_path('Http/Controllers/API/'),
 
-        'test_trait'        => base_path('tests/traits/'),
+        'repository_test'   => base_path('tests/Repositories/'),
 
-        'repository_test'   => base_path('tests/'),
+        'api_test'          => base_path('tests/APIs/'),
 
-        'api_test'          => base_path('tests/'),
+        'tests'             => base_path('tests/'),
 
-        'views'             => base_path('resources/views/'),
+        'views'             => resource_path('views/'),
 
-        'schema_files'      => base_path('resources/model_schemas/'),
+        'schema_files'      => resource_path('model_schemas/'),
 
-        'templates_dir'     => base_path('resources/infyom/infyom-generator-templates/'),
+        'templates_dir'     => resource_path('infyom/infyom-generator-templates/'),
 
-        'modelJs'           => base_path('resources/assets/js/models/'),
+        'seeder'            => database_path('seeds/'),
+
+        'database_seeder'   => database_path('seeds/DatabaseSeeder.php'),
+
+        'modelJs'           => resource_path('assets/js/models/'),
+
+        'factory'           => database_path('factories/'),
+
+        'view_provider'     => app_path('Providers/ViewServiceProvider.php'),
     ],
 
     /*
@@ -68,6 +76,12 @@ return [
         'request'           => 'App\Http\Requests',
 
         'api_request'       => 'App\Http\Requests\API',
+
+        'repository_test'   => 'Tests\Repositories',
+
+        'api_test'          => 'Tests\APIs',
+
+        'tests'             => 'Tests',
     ],
 
     /*
@@ -77,7 +91,7 @@ return [
     |
     */
 
-    'templates'         => 'core-templates',
+    'templates'         => 'adminlte-templates',
 
     /*
     |--------------------------------------------------------------------------
@@ -110,7 +124,15 @@ return [
 
         'softDelete' => true,
 
+        'save_schema_file' => true,
+
+        'localized' => false,
+
         'tables_searchable_default' => false,
+
+        'repository_pattern' => true,
+
+        'excluded_fields' => ['id'], // Array of columns that doesn't required while creating module
     ],
 
     /*
@@ -148,7 +170,7 @@ return [
 
         'menu'          => [
 
-            'enabled'       => false,
+            'enabled'       => true,
 
             'menu_file'     => 'layouts/menu.blade.php',
         ],
@@ -170,6 +192,25 @@ return [
         'updated_at'    => 'updated_at',
 
         'deleted_at'    => 'deleted_at',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Save model files to `App/Models` when use `--prefix`. see #208
+    |--------------------------------------------------------------------------
+    |
+    */
+    'ignore_model_prefix' => false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Specify custom doctrine mappings as per your need
+    |--------------------------------------------------------------------------
+    |
+    */
+    'from_table' => [
+
+        'doctrine_mappings' => [],
     ],
 
 ];

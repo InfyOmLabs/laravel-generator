@@ -4,6 +4,7 @@ namespace InfyOm\Generator\Common;
 
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
 use InfyOm\Generator\Utils\TableFieldsGenerator;
 
@@ -12,7 +13,6 @@ class CommandData
     public static $COMMAND_TYPE_API = 'api';
     public static $COMMAND_TYPE_SCAFFOLD = 'scaffold';
     public static $COMMAND_TYPE_API_SCAFFOLD = 'api_scaffold';
-    public static $COMMAND_TYPE_VUEJS = 'vuejs';
 
     /** @var string */
     public $modelName;
@@ -30,6 +30,9 @@ class CommandData
     /** @var Command */
     public $commandObj;
 
+    /** @var TemplatesManager */
+    private $templateManager;
+
     /** @var array */
     public $dynamicVars = [];
     public $fieldNamesMapping = [];
@@ -42,15 +45,31 @@ class CommandData
         return self::$instance;
     }
 
+    public function getTemplatesManager()
+    {
+        return $this->templateManager;
+    }
+
+    public function isLocalizedTemplates()
+    {
+        return $this->templateManager->isUsingLocale();
+    }
+
     /**
-     * @param Command $commandObj
-     * @param string  $commandType
-     *
-     * @return CommandData
+     * @param Command          $commandObj
+     * @param string           $commandType
+     * @param TemplatesManager $templatesManager
      */
-    public function __construct(Command $commandObj, $commandType)
+    public function __construct(Command $commandObj, $commandType, TemplatesManager $templatesManager = null)
     {
         $this->commandObj = $commandObj;
+
+        if (is_null($templatesManager)) {
+            $this->templateManager = app(TemplatesManager::class);
+        } else {
+            $this->templateManager = $templatesManager;
+        }
+
         $this->commandType = $commandType;
 
         $this->fieldNamesMapping = [
@@ -145,7 +164,7 @@ class CommandData
             $validations = ($validations == false) ? '' : $validations;
 
             if ($this->getOption('relations')) {
-                $relation = $this->commandObj->ask('Enter relationship (Leave Black to skip):', '');
+                $relation = $this->commandObj->ask('Enter relationship (Leave Blank to skip):', false);
             } else {
                 $relation = '';
             }
@@ -160,7 +179,9 @@ class CommandData
             }
         }
 
-        $this->addTimestamps();
+        if (config('infyom.laravel_generator.timestamps.enabled', true)) {
+            $this->addTimestamps();
+        }
     }
 
     private function addPrimaryKey()
@@ -197,10 +218,17 @@ class CommandData
         // fieldsFile option will get high priority than json option if both options are passed
         try {
             if ($this->getOption('fieldsFile')) {
-                if (file_exists($this->getOption('fieldsFile'))) {
-                    $filePath = $this->getOption('fieldsFile');
+                $fieldsFileValue = $this->getOption('fieldsFile');
+                if (file_exists($fieldsFileValue)) {
+                    $filePath = $fieldsFileValue;
+                } elseif (file_exists(base_path($fieldsFileValue))) {
+                    $filePath = base_path($fieldsFileValue);
                 } else {
-                    $filePath = base_path($this->getOption('fieldsFile'));
+                    $schemaFileDirector = config(
+                        'infyom.laravel_generator.path.schema_files',
+                        resource_path('model_schemas/')
+                    );
+                    $filePath = $schemaFileDirector.$fieldsFileValue;
                 }
 
                 if (!file_exists($filePath)) {
@@ -222,13 +250,35 @@ class CommandData
                     }
                 }
             } else {
-                //                $fileContents = $this->getOption('jsonFromGUI');
-//                $jsonData = json_decode($fileContents, true);
-//                $this->inputFields = array_merge($this->inputFields, GeneratorFieldsInputUtil::validateFieldsFile($jsonData['fields']));
-//                $this->config->overrideOptionsFromJsonFile($jsonData);
-//                if (isset($jsonData['migrate'])) {
-//                    $this->config->forceMigrate = $jsonData['migrate'];
-//                }
+                $fileContents = $this->getOption('jsonFromGUI');
+                $jsonData = json_decode($fileContents, true);
+
+                // override config options from jsonFromGUI
+                $this->config->overrideOptionsFromJsonFile($jsonData);
+
+                // Manage custom table name option
+                if (isset($jsonData['tableName'])) {
+                    $tableName = $jsonData['tableName'];
+                    $this->config->tableName = $tableName;
+                    $this->addDynamicVariable('$TABLE_NAME$', $tableName);
+                    $this->addDynamicVariable('$TABLE_NAME_TITLE$', Str::studly($tableName));
+                }
+
+                // Manage migrate option
+                if (isset($jsonData['migrate']) && $jsonData['migrate'] == false) {
+                    $this->config->options['skip'][] = 'migration';
+                }
+
+                foreach ($jsonData['fields'] as $field) {
+                    if (isset($field['type']) && $field['relation']) {
+                        $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
+                    } else {
+                        $this->fields[] = GeneratorField::parseFieldFromFile($field);
+                        if (isset($field['relation'])) {
+                            $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
+                        }
+                    }
+                }
             }
         } catch (Exception $e) {
             $this->commandError($e->getMessage());
@@ -240,7 +290,14 @@ class CommandData
     {
         $tableName = $this->dynamicVars['$TABLE_NAME$'];
 
-        $tableFieldsGenerator = new TableFieldsGenerator($tableName);
+        $ignoredFields = $this->getOption('ignoreFields');
+        if (!empty($ignoredFields)) {
+            $ignoredFields = explode(',', trim($ignoredFields));
+        } else {
+            $ignoredFields = [];
+        }
+
+        $tableFieldsGenerator = new TableFieldsGenerator($tableName, $ignoredFields, $this->config->connection);
         $tableFieldsGenerator->prepareFieldsFromTable();
         $tableFieldsGenerator->prepareRelations();
 

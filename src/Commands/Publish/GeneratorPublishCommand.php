@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Commands\Publish;
 
 use InfyOm\Generator\Utils\FileUtil;
+use Symfony\Component\Console\Input\InputOption;
 
 class GeneratorPublishCommand extends PublishBaseCommand
 {
@@ -29,6 +30,13 @@ class GeneratorPublishCommand extends PublishBaseCommand
     {
         $this->publishTestCases();
         $this->publishBaseController();
+        $repositoryPattern = config('infyom.laravel_generator.options.repository_pattern', true);
+        if ($repositoryPattern) {
+            $this->publishBaseRepository();
+        }
+        if ($this->option('localized')) {
+            $this->publishLocaleFiles();
+        }
     }
 
     /**
@@ -54,15 +62,35 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
     private function publishTestCases()
     {
-        $traitPath = __DIR__.'/../../../templates/test/api_test_trait.stub';
+        $testsPath = config('infyom.laravel_generator.path.tests', base_path('tests/'));
+        $testsNameSpace = config('infyom.laravel_generator.namespace.tests', 'Tests');
+        $createdAtField = config('infyom.laravel_generator.timestamps.created_at', 'created_at');
+        $updatedAtField = config('infyom.laravel_generator.timestamps.updated_at', 'updated_at');
 
-        $testsPath = config('infyom.laravel_generator.path.api_test', base_path('tests/'));
+        $templateData = get_template('test.api_test_trait', 'laravel-generator');
 
-        $this->publishFile($traitPath, $testsPath.'ApiTestTrait.php', 'ApiTestTrait.php');
+        $templateData = str_replace('$NAMESPACE_TESTS$', $testsNameSpace, $templateData);
+        $templateData = str_replace('$TIMESTAMPS$', "['$createdAtField', '$updatedAtField']", $templateData);
 
-        if (!file_exists($testsPath.'traits/')) {
-            mkdir($testsPath.'traits/');
-            $this->info('traits directory created');
+        $fileName = 'ApiTestTrait.php';
+
+        if (file_exists($testsPath.$fileName) && !$this->confirmOverwrite($fileName)) {
+            return;
+        }
+
+        FileUtil::createFile($testsPath, $fileName, $templateData);
+        $this->info('ApiTestTrait created');
+
+        $testAPIsPath = config('infyom.laravel_generator.path.api_test', base_path('tests/APIs/'));
+        if (!file_exists($testAPIsPath)) {
+            FileUtil::createDirectoryIfNotExist($testAPIsPath);
+            $this->info('APIs Tests directory created');
+        }
+
+        $testRepositoriesPath = config('infyom.laravel_generator.path.repository_test', base_path('tests/Repositories/'));
+        if (!file_exists($testRepositoriesPath)) {
+            FileUtil::createDirectoryIfNotExist($testRepositoriesPath);
+            $this->info('Repositories Tests directory created');
         }
     }
 
@@ -85,6 +113,36 @@ class GeneratorPublishCommand extends PublishBaseCommand
         $this->info('AppBaseController created');
     }
 
+    private function publishBaseRepository()
+    {
+        $templateData = get_template('base_repository', 'laravel-generator');
+
+        $templateData = $this->fillTemplate($templateData);
+
+        $repositoryPath = app_path('Repositories/');
+
+        FileUtil::createDirectoryIfNotExist($repositoryPath);
+
+        $fileName = 'BaseRepository.php';
+
+        if (file_exists($repositoryPath.$fileName) && !$this->confirmOverwrite($fileName)) {
+            return;
+        }
+
+        FileUtil::createFile($repositoryPath, $fileName, $templateData);
+
+        $this->info('BaseRepository created');
+    }
+
+    private function publishLocaleFiles()
+    {
+        $localesDir = __DIR__.'/../../../locale/';
+
+        $this->publishDirectory($localesDir, resource_path('lang'), 'lang', true);
+
+        $this->comment('Locale files published');
+    }
+
     /**
      * Get the console command options.
      *
@@ -92,7 +150,9 @@ class GeneratorPublishCommand extends PublishBaseCommand
      */
     public function getOptions()
     {
-        return [];
+        return [
+            ['localized', null, InputOption::VALUE_NONE, 'Localize files.'],
+        ];
     }
 
     /**

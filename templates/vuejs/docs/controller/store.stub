@@ -1,8 +1,0 @@
-/**
-     * Store a newly created $MODEL_NAME$ in storage.
-     * POST /$MODEL_NAME_PLURAL_CAMEL$
-     *
-     * @param Create$MODEL_NAME$APIRequest $request
-     *
-     * @return Response
-     */

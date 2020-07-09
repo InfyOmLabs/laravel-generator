@@ -8,7 +8,8 @@
         "fillable": false,
         "primary": true,
         "inForm": false,
-        "inIndex": false
+        "inIndex": false,
+        "inView": false
     },
     {
         "name": "title",
@@ -34,7 +35,8 @@
         "htmlType": "password",
         "searchable": false,
         "inForm": false,
-        "inIndex": false
+        "inIndex": false,
+        "inView": false
     },
     {
         "name": "token",
@@ -42,7 +44,8 @@
         "htmlType": "hidden",
         "searchable": false,
         "inForm": false,
-        "inIndex": false
+        "inIndex": false,
+        "inView": false
     },
     {
         "name": "email",
@@ -80,17 +83,21 @@
     {
         "name": "is_private",
         "dbType": "boolean",
-        "htmlType": "checkbox:1"
+        "htmlType": "checkbox,1"
     },
     {
         "name": "writer_id",
-        "dbType": "integer:unsigned:foreign,writers,id",
+        "dbType": "integer:unsigned:default,0:foreign,writers,id",
         "htmlType": "text",
         "relation": "mt1,Writer,writer_id,id"
     },
     {
         "type": "relation",
         "relation": "1tm,Comment"
+    },
+    {
+      "type": "relation",
+      "relation": "1tm,User:customRelationName,user_id,id"
     },
     {
         "name": "users",

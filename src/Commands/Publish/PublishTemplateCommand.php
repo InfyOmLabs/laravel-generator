@@ -29,11 +29,12 @@ class PublishTemplateCommand extends PublishBaseCommand
     {
         $this->templatesDir = config(
             'infyom.laravel_generator.path.templates_dir',
-            base_path('resources/infyom/infyom-generator-templates/')
+            resource_path('infyom/infyom-generator-templates/')
         );
 
         if ($this->publishGeneratorTemplates()) {
             $this->publishScaffoldTemplates();
+            $this->publishSwaggerTemplates();
         }
     }
 
@@ -48,15 +49,25 @@ class PublishTemplateCommand extends PublishBaseCommand
     }
 
     /**
-     * Publishes templates.
+     * Publishes scaffold stemplates.
      */
     public function publishScaffoldTemplates()
     {
-        $templateType = config('infyom.laravel_generator.templates', 'core-templates');
+        $templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
 
         $templatesPath = base_path('vendor/infyomlabs/'.$templateType.'/templates/scaffold');
 
-        return $this->publishDirectory($templatesPath, $this->templatesDir.'/scaffold', 'infyom-generator-templates/scaffold', true);
+        return $this->publishDirectory($templatesPath, $this->templatesDir.'scaffold', 'infyom-generator-templates/scaffold', true);
+    }
+
+    /**
+     * Publishes swagger stemplates.
+     */
+    public function publishSwaggerTemplates()
+    {
+        $templatesPath = base_path('vendor/infyomlabs/swagger-generator/templates');
+
+        return $this->publishDirectory($templatesPath, $this->templatesDir, 'swagger-generator', true);
     }
 
     /**
