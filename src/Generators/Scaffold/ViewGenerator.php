@@ -282,6 +282,11 @@ class ViewGenerator extends BaseGenerator
                 }
 
                 $tableName = $this->commandData->config->tableName;
+                $viewPath = $this->commandData->config->prefixes['view'];
+                if (!empty($viewPath)) {
+                    $tableName = $viewPath.'.'.$tableName;
+                }
+
                 $variableName = Str::singular($selectTable).'Items'; // e.g $userItems
 
                 $fieldTemplate = $this->generateViewComposer($tableName, $variableName, $columns, $selectTable, $modalName);
