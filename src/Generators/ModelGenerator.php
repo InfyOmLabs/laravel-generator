@@ -18,6 +18,7 @@ class ModelGenerator extends BaseGenerator
     protected $excluded_fields = [
         'created_at',
         'updated_at',
+        'deleted_at',
     ];
 
     /** @var CommandData */
@@ -266,14 +267,56 @@ class ModelGenerator extends BaseGenerator
     private function generateRules()
     {
         $dont_require_fields = config('infyom.laravel_generator.options.hidden_fields', [])
-                + config('infyom.laravel_generator.options.excluded_fields', []);
+                + config('infyom.laravel_generator.options.excluded_fields', $this->excluded_fields);
 
         $rules = [];
 
         foreach ($this->commandData->fields as $field) {
-            if (!$field->isPrimary && $field->isNotNull && empty($field->validations) &&
-                !in_array($field->name, $dont_require_fields)) {
-                $field->validations = 'required';
+            if (!$field->isPrimary && !in_array($field->name, $dont_require_fields)) {
+                if ($field->isNotNull && empty($field->validations)) {
+                    $field->validations = 'required';
+                }
+
+                /**
+                 * Generate some sane defaults based on the field type if we
+                 * are generating from a database table.
+                 */
+                if ($this->commandData->getOption('fromTable')) {
+                    $rule = empty($field->validations) ? [] : explode('|', $field->validations);
+
+                    if (!$field->isNotNull) {
+                        $rule[] = 'nullable';
+                    }
+
+                    switch ($field->fieldType) {
+                        case 'integer':
+                            $rule[] = 'integer';
+                            break;
+                        case 'boolean':
+                            $rule[] = 'boolean';
+                            break;
+                        case 'float':
+                        case 'double':
+                        case 'decimal':
+                            $rule[] = 'numeric';
+                            break;
+                        case 'string':
+                            $rule[] = 'string';
+
+                            // Enforce a maximum string length if possible.
+                            foreach (explode(':', $field->dbInput) as $key => $value) {
+                                if (preg_match('/string,(\d+)/', $value, $matches)) {
+                                    $rule[] = 'max:'.$matches[1];
+                                }
+                            }
+                            break;
+                        case 'text':
+                            $rule[] = 'string';
+                            break;
+                    }
+
+                    $field->validations = implode('|', $rule);
+                }
             }
 
             if (!empty($field->validations)) {
