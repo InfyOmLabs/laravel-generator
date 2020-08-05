@@ -136,7 +136,14 @@ class GeneratorField
             if ($functionName == 'foreign') {
                 $foreignTable = array_shift($inputParams);
                 $foreignField = array_shift($inputParams);
-                $this->foreignKeyText .= "\$table->foreign('".$this->name."')->references('".$foreignField."')->on('".$foreignTable."');";
+                $this->foreignKeyText .= "\$table->foreign('".$this->name."')->references('".$foreignField."')->on('".$foreignTable."')";
+                if (count($inputParams)) {
+                    $cascade = array_shift($inputParams);
+                    if ($cascade == 'cascade') {
+                        $this->foreignKeyText .= "->onUpdate('cascade')->onDelete('cascade')";
+                    }
+                }
+                $this->foreignKeyText .= ";";
             } else {
                 $this->migrationText .= '->'.$functionName;
                 $this->migrationText .= '(';
