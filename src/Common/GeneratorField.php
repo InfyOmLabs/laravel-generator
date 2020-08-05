@@ -143,7 +143,7 @@ class GeneratorField
                         $this->foreignKeyText .= "->onUpdate('cascade')->onDelete('cascade')";
                     }
                 }
-                $this->foreignKeyText .= ";";
+                $this->foreignKeyText .= ';';
             } else {
                 $this->migrationText .= '->'.$functionName;
                 $this->migrationText .= '(';
