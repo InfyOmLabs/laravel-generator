@@ -100,7 +100,25 @@ if (!function_exists('get_template_file_path')) {
             return $path;
         }
 
-        return base_path('vendor/infyomlabs/'.$templateType.'/templates/'.$templateName.'.stub');
+        return get_templates_package_path($templateType).'/templates/'.$templateName.'.stub';
+    }
+}
+
+if (!function_exists('get_templates_package_path')) {
+    /**
+     * Finds templates package's full path.
+     *
+     * @param string $templateType
+     *
+     * @return string
+     */
+    function get_templates_package_path($templateType)
+    {
+        if (strpos($templateType, '/') === false) {
+            $templateType = base_path('vendor/infyomlabs/').$templateType;
+        }
+
+        return $templateType;
     }
 }
 
