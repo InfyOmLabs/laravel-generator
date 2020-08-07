@@ -106,9 +106,10 @@ if (!function_exists('get_template_file_path')) {
 
 if (!function_exists('get_templates_package_path')) {
     /**
-     * Finds templates package's full path
+     * Finds templates package's full path.
      *
      * @param string $templateType
+     *
      * @return string
      */
     function get_templates_package_path($templateType)
