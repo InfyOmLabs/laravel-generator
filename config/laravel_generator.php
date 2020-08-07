@@ -47,8 +47,6 @@ return [
 
         'database_seeder'   => database_path('seeds/DatabaseSeeder.php'),
 
-        'modelJs'           => resource_path('assets/js/models/'),
-
         'factory'           => database_path('factories/'),
 
         'view_provider'     => app_path('Providers/ViewServiceProvider.php'),
