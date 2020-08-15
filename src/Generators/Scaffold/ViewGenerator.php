@@ -150,7 +150,7 @@ class ViewGenerator extends BaseGenerator
             );
         }
 
-        $tableBodyFields = implode(infy_nl_tab(1, 3), $tableBodyFields);
+        $tableBodyFields = implode(infy_nl_tab(1, 4), $tableBodyFields);
 
         return str_replace('$FIELD_BODY$', $tableBodyFields, $templateData);
     }
@@ -191,7 +191,7 @@ class ViewGenerator extends BaseGenerator
             }
         }
 
-        return implode(infy_nl_tab(1, 2), $headerFields);
+        return implode(infy_nl_tab(1, 4), $headerFields);
     }
 
     private function generateIndex()
