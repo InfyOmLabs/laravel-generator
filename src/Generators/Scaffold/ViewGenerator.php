@@ -216,7 +216,7 @@ class ViewGenerator extends BaseGenerator
 
                 $paginateTemplate = fill_template($this->commandData->dynamicVars, $paginateTemplate);
 
-                $templateData = str_replace('$PAGINATE$', $paginateTemplate, $templateData);
+                $templateData = str_replace('$PAGINATE$', $paginateTemplate, infy_tabs(5).$templateData);
             } else {
                 $templateData = str_replace('$PAGINATE$', '', $templateData);
             }
