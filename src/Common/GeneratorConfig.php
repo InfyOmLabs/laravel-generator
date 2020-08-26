@@ -401,11 +401,11 @@ class GeneratorConfig
     {
         $this->prefixes['route'] = explode('/', config('infyom.laravel_generator.prefixes.route', ''));
         $this->prefixes['path'] = explode('/', config('infyom.laravel_generator.prefixes.path', ''));
-        
+
         /**
-         * Check if exist view namespace when generate views path is inside a package
+         * Check if exist view namespace when generate views path is inside a package.
          */
-        if(strpos(config('infyom.laravel_generator.prefixes.view', ''), '::') !== false) {
+        if (strpos(config('infyom.laravel_generator.prefixes.view', ''), '::') !== false) {
             $viewNamespaced = explode('::', config('infyom.laravel_generator.prefixes.view', ''));
             $this->prefixes['view_namespace'] = $viewNamespaced[0];
             $this->prefixes['view'] = explode('.', $viewNamespaced[1]);
@@ -413,7 +413,7 @@ class GeneratorConfig
             $this->prefixes['view_namespace'] = '';
             $this->prefixes['view'] = explode('.', config('infyom.laravel_generator.prefixes.view', ''));
         }
-        
+
         $this->prefixes['public'] = explode('/', config('infyom.laravel_generator.prefixes.public', ''));
 
         if ($this->getOption('prefix')) {
