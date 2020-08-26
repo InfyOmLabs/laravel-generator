@@ -314,7 +314,11 @@ class ViewGenerator extends BaseGenerator
 
     private function generateViewComposer($tableName, $variableName, $columns, $selectTable, $modelName = null)
     {
-        $fieldTemplate = get_template('scaffold.fields.select', $this->templateType);
+        $templateName = 'scaffold.fields.select';
+        if ($this->commandData->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+        }
+        $fieldTemplate = get_template($templateName, $this->templateType);
 
         $viewServiceProvider = new ViewServiceProviderGenerator($this->commandData);
         $viewServiceProvider->generate();
