@@ -282,7 +282,12 @@ class ViewGenerator extends BaseGenerator
                 }
 
                 $tableName = $this->commandData->config->tableName;
-                $viewPath = $this->commandData->config->prefixes['view'];
+
+                /**
+                 * Add namespace to view
+                 */
+                if(!empty($this->commandData->config->prefixes['view_namespace'])) $viewPath = $this->commandData->config->prefixes['view'];
+                else $viewPath = $this->commandData->config->prefixes['view_namespace'].'::'.$this->commandData->config->prefixes['view'];
                 if (!empty($viewPath)) {
                     $tableName = $viewPath.'.'.$tableName;
                 }
