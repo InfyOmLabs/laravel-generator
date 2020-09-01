@@ -101,6 +101,7 @@ return [
     */
 
     'model_extend_class' => 'Eloquent',
+    'model_default_date_format' => 'Y-m-d H:i:s.uP',
 
     /*
     |--------------------------------------------------------------------------
