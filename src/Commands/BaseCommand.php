@@ -83,7 +83,6 @@ class BaseCommand extends Command
         if ($this->commandData->getOption('seeder')) {
             $seederGenerator = new SeederGenerator($this->commandData);
             $seederGenerator->generate();
-            $seederGenerator->updateMainSeeder();
         }
     }
 
