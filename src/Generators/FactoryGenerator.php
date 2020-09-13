@@ -72,7 +72,7 @@ class FactoryGenerator extends BaseGenerator
                 continue;
             }
 
-            $fieldData = "'".$field->name."' => ".'$faker->';
+            $fieldData = "'".$field->name."' => ".'$this->faker->';
 
             switch ($field->fieldType) {
                 case 'integer':
