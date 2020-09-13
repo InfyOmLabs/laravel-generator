@@ -40,4 +40,4 @@ class SeederGenerator extends BaseGenerator
         $this->commandData->commandComment("\nSeeder created: ");
         $this->commandData->commandInfo($this->fileName);
     }
- }
+}
