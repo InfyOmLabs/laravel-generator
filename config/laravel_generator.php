@@ -75,6 +75,10 @@ return [
 
         'api_request'       => 'App\Http\Requests\API',
 
+        'seeder'            => 'Database\Seeders',
+
+        'factory'           => 'Database\Factories',
+
         'repository_test'   => 'Tests\Repositories',
 
         'api_test'          => 'Tests\APIs',

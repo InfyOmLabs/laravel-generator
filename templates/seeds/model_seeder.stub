@@ -1,5 +1,7 @@
 <?php
 
+namespace $NAMESPACE_SEEDER$;
+
 use Illuminate\Database\Seeder;
 
 class $MODEL_NAME_PLURAL$TableSeeder extends Seeder

@@ -13,6 +13,9 @@ class GeneratorConfig
     public $nsDataTables;
     public $nsModelExtend;
 
+    public $nsSeeder;
+    public $nsFactory;
+
     public $nsApiController;
     public $nsApiRequest;
 
@@ -139,6 +142,8 @@ class GeneratorConfig
         if (config('infyom.laravel_generator.ignore_model_prefix', false)) {
             $this->nsModel = config('infyom.laravel_generator.namespace.model', 'App\Models');
         }
+        $this->nsSeeder = config('infyom.laravel_generator.namespace.seeder', 'Database\Seeders').$prefix;
+        $this->nsFactory = config('infyom.laravel_generator.namespace.factory', 'Database\Factories').$prefix;
         $this->nsDataTables = config('infyom.laravel_generator.namespace.datatables', 'App\DataTables').$prefix;
         $this->nsModelExtend = config(
             'infyom.laravel_generator.model_extend_class',
@@ -236,6 +241,9 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$NAMESPACE_MODEL$', $this->nsModel);
         $commandData->addDynamicVariable('$NAMESPACE_DATATABLES$', $this->nsDataTables);
         $commandData->addDynamicVariable('$NAMESPACE_MODEL_EXTEND$', $this->nsModelExtend);
+
+        $commandData->addDynamicVariable('$NAMESPACE_SEEDER$', $this->nsSeeder);
+        $commandData->addDynamicVariable('$NAMESPACE_FACTORY$', $this->nsFactory);
 
         $commandData->addDynamicVariable('$NAMESPACE_API_CONTROLLER$', $this->nsApiController);
         $commandData->addDynamicVariable('$NAMESPACE_API_REQUEST$', $this->nsApiRequest);
