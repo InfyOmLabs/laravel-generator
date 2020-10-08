@@ -97,6 +97,7 @@ class GeneratorConfig
         'repositoryPattern',
         'localized',
         'connection',
+        'moduleName',
     ];
 
     public $tableName;
@@ -398,6 +399,55 @@ class GeneratorConfig
             } else {
                 $this->addOns['datatables'] = false;
             }
+        }
+        if (!empty($this->options['moduleName'])) {
+            if (!file_exists(config_path('modules.php'))) {
+                $commandData->commandError('Can\'t use modules since config doesn\'t exist in '.config_path('modules.php').'.');
+                exit;
+            }
+            // change folder locations
+            $this->modules_path = config('modules.paths.modules', base_path('Modules')).'/'.$this->options['moduleName'];
+            $config_paths = config('infyom.laravel_generator.path');
+            $new_config_paths = [];
+            foreach ($config_paths as $key => $path) {
+                if (preg_match('/migrations/', $path)) {
+                    $path = str_replace('migrations', 'Migrations', $path);
+                }
+                if (strpos($path, app_path()) === 0) {
+                    $new_config_paths[$key] = str_replace(app_path(), $this->modules_path, $path);
+                } else {
+                    $new_config_paths[$key] = str_replace(base_path(), $this->modules_path, $path);
+                }
+                $new_config_paths[$key][strlen($this->modules_path) + 1] = strtoupper($new_config_paths[$key][strlen($this->modules_path) + 1]);
+            }
+            config(['infyom.laravel_generator.path' => $new_config_paths]);
+
+            // change namespace
+            $this->module_namespace = config('modules.namespace', 'Modules').'\\'.$this->options['moduleName'].'\\';
+            $config_namespaces = config('infyom.laravel_generator.namespace');
+            $new_config_namespaces = [];
+            foreach ($config_namespaces as $key => $namespace) {
+                if (strpos($namespace, 'App\\') === 0) {
+                    $namespace = str_replace('App\\', '', $namespace);
+                }
+                $new_config_namespaces[$key] = $this->module_namespace.$namespace;
+            }
+            config(['infyom.laravel_generator.namespace' => $new_config_namespaces]);
+
+            // change prefix
+            $viewPrefix = $this->prefixes['view'];
+            config(['infyom.laravel_generator.prefixes.view' => strtolower($this->options['moduleName']).'::']);
+            $this->prefixes['view'] = config('infyom.laravel_generator.prefixes.view');
+            if ($this->getOption('plural')) {
+                $this->mPlural = $this->getOption('plural');
+            } else {
+                $this->mPlural = Str::plural($this->mName);
+            }
+            $this->mSnakePlural = Str::snake($this->mPlural);
+            $this->pathViews = config(
+                'infyom.laravel_generator.path.views',
+                base_path('resources/views/')
+            ).$viewPrefix.$this->mSnakePlural.'/';
         }
     }
 

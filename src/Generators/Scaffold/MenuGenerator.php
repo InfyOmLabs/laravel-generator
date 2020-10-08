@@ -23,6 +23,9 @@ class MenuGenerator extends BaseGenerator
     /** @var string */
     private $menuTemplate;
 
+    /** @var bool */
+    private $dontGenerateMenu;
+
     public function __construct(CommandData $commandData)
     {
         $this->commandData = $commandData;
@@ -34,21 +37,29 @@ class MenuGenerator extends BaseGenerator
         ).$commandData->getAddOn('menu.menu_file');
         $this->templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
 
-        $this->menuContents = file_get_contents($this->path);
+        if (!file_exists($this->path)) {
+            $this->dontGenerateMenu = true;
+        } else {
+            $this->menuContents = file_get_contents($this->path);
 
-        $templateName = 'menu_template';
+            $templateName = 'menu_template';
 
-        if ($this->commandData->isLocalizedTemplates()) {
-            $templateName .= '_locale';
+            if ($this->commandData->isLocalizedTemplates()) {
+                $templateName .= '_locale';
+            }
+
+            $this->menuTemplate = get_template('scaffold.layouts.'.$templateName, $this->templateType);
+
+            $this->menuTemplate = fill_template($this->commandData->dynamicVars, $this->menuTemplate);
         }
-
-        $this->menuTemplate = get_template('scaffold.layouts.'.$templateName, $this->templateType);
-
-        $this->menuTemplate = fill_template($this->commandData->dynamicVars, $this->menuTemplate);
     }
 
     public function generate()
     {
+        if ($this->dontGenerateMenu) {
+            return true;
+        }
+
         $this->menuContents .= $this->menuTemplate.infy_nl();
         $existingMenuContents = file_get_contents($this->path);
         if (Str::contains($existingMenuContents, '<span>'.$this->commandData->config->mHumanPlural.'</span>')) {

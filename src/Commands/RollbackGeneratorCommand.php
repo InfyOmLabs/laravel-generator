@@ -75,7 +75,7 @@ class RollbackGeneratorCommand extends Command
         $this->commandData = new CommandData($this, $this->argument('type'));
         $this->commandData->config->mName = $this->commandData->modelName = $this->argument('model');
 
-        $this->commandData->config->init($this->commandData, ['tableName', 'prefix', 'plural', 'views']);
+        $this->commandData->config->init($this->commandData, ['tableName', 'prefix', 'plural', 'views', 'moduleName']);
 
         $views = $this->commandData->getOption('views');
         if (!empty($views)) {
@@ -151,6 +151,7 @@ class RollbackGeneratorCommand extends Command
             ['prefix', null, InputOption::VALUE_REQUIRED, 'Prefix for all files'],
             ['plural', null, InputOption::VALUE_REQUIRED, 'Plural Model name'],
             ['views', null, InputOption::VALUE_REQUIRED, 'Views to rollback'],
+            ['moduleName', null, InputOption::VALUE_REQUIRED, 'Generate files to this module & namespace (eg. Admin)'],
         ];
     }
 

@@ -29,7 +29,6 @@ class GeneratorField
     public $inForm = true;
     public $inIndex = true;
     public $inView = true;
-    public $isNotNull = false;
 
     /** @var int */
     public $numberDecimalPoints = 2;
