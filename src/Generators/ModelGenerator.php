@@ -138,7 +138,7 @@ class ModelGenerator extends BaseGenerator
             $templateData = str_replace('$HAS_FACTORY$', '', $templateData);
         } else {
             $templateData = str_replace(
-                '$HAS_FACTORY_IMPORT$', 
+                '$HAS_FACTORY_IMPORT$',
                 'use Illuminate\Database\Eloquent\Factories\HasFactory;',
                 $templateData
             );
