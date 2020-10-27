@@ -116,7 +116,7 @@ class ModelGenerator extends BaseGenerator
         } else {
             $templateData = str_replace(
                 '$SOFT_DELETE_IMPORT$',
-                "use Illuminate\\Database\\Eloquent\\SoftDeletes;",
+                'use Illuminate\Database\Eloquent\SoftDeletes;',
                 $templateData
             );
             $templateData = str_replace('$SOFT_DELETE$', infy_tab()."use SoftDeletes;\n", $templateData);
@@ -139,7 +139,7 @@ class ModelGenerator extends BaseGenerator
         } else {
             $templateData = str_replace(
                 '$HAS_FACTORY_IMPORT$', 
-                "use Illuminate\\Database\\Eloquent\\Factories\\HasFactory;", 
+                'use Illuminate\Database\Eloquent\Factories\HasFactory;', 
                 $templateData
             );
             $templateData = str_replace('$HAS_FACTORY$', infy_tab()."use HasFactory;\n", $templateData);
