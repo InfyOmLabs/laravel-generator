@@ -81,17 +81,28 @@ abstract class BaseRepository
      * @param array $search
      * @param int|null $skip
      * @param int|null $limit
+     * @param array    $sort with [['field_name' => 'asc|desc'], ...]
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function allQuery($search = [], $skip = null, $limit = null)
+    public function allQuery($search = [], $skip = null, $limit = null, $sort = [])
     {
         $query = $this->model->newQuery();
 
         if (count($search)) {
             foreach($search as $key => $value) {
                 if (in_array($key, $this->getFieldsSearchable())) {
-                    $query->where($key, $value);
+                    $values = array_unique(array_filter(array_map('trim', explode(" ", $value))));
+                    foreach($values as $value)
+                        $query->where($key, 'ilike', '%'.$value.'%');
                 }
+            }
+        }
+
+        if (count($sort))
+        {
+            foreach($sort as $field => $sort)
+            {
+                $query->orderBy($field, $sort);
             }
         }
 
@@ -113,12 +124,13 @@ abstract class BaseRepository
      * @param int|null $skip
      * @param int|null $limit
      * @param array $columns
+     * @param array    $sort with [['field_name' => 'asc|desc'], ...]
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function all($search = [], $skip = null, $limit = null, $columns = ['*'])
+    public function all($search = [], $skip = null, $limit = null, $columns = ['*'], $sort = [])
     {
-        $query = $this->allQuery($search, $skip, $limit);
+        $query = $this->allQuery($search, $skip, $limit, $sort);
 
         return $query->get($columns);
     }
