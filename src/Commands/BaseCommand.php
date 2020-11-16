@@ -303,6 +303,7 @@ class BaseCommand extends Command
             ['localized', null, InputOption::VALUE_NONE, 'Localize files.'],
             ['repositoryPattern', null, InputOption::VALUE_REQUIRED, 'Repository Pattern'],
             ['connection', null, InputOption::VALUE_REQUIRED, 'Specify connection name'],
+            ['moduleName', null, InputOption::VALUE_REQUIRED, 'Generate files to this module & namespace (eg. Admin)'],
         ];
     }
 
