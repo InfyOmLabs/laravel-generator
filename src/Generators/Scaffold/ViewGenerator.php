@@ -175,10 +175,21 @@ class ViewGenerator extends BaseGenerator
             }
 
             if ($localized) {
+                /**
+                 * Replacing $FIELD_NAME$ before fill_template_with_field_data_locale() otherwise also
+                 * $FIELD_NAME$ get replaced with @lang('models/$modelName.fields.$value')
+                 * and so we don't have $FIELD_NAME$ in table_header_locale.stub
+                 * We could need 'raw' field name in header for example for sorting.
+                 * We still have $FIELD_NAME_TITLE$ replaced with @lang('models/$modelName.fields.$value').
+                 *
+                 * @see issue https://github.com/InfyOmLabs/laravel-generator/issues/887
+                 */
+                $preFilledHeaderFieldTemplate = str_replace('$FIELD_NAME$', $field->name, $headerFieldTemplate);
+
                 $headerFields[] = $fieldTemplate = fill_template_with_field_data_locale(
                     $this->commandData->dynamicVars,
                     $this->commandData->fieldNamesMapping,
-                    $headerFieldTemplate,
+                    $preFilledHeaderFieldTemplate,
                     $field
                 );
             } else {
