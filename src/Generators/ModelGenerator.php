@@ -61,6 +61,8 @@ class ModelGenerator extends BaseGenerator
 
         $templateData = $this->fillSoftDeletes($templateData);
 
+        $templateData = $this->fillHasFactory($templateData);
+
         $fillables = [];
         $primaryKey = 'id';
 
@@ -114,7 +116,7 @@ class ModelGenerator extends BaseGenerator
         } else {
             $templateData = str_replace(
                 '$SOFT_DELETE_IMPORT$',
-                "use Illuminate\\Database\\Eloquent\\SoftDeletes;\n",
+                'use Illuminate\Database\Eloquent\SoftDeletes;',
                 $templateData
             );
             $templateData = str_replace('$SOFT_DELETE$', infy_tab()."use SoftDeletes;\n", $templateData);
@@ -124,6 +126,23 @@ class ModelGenerator extends BaseGenerator
                 infy_nl_tab()."protected \$dates = ['".$deletedAtTimestamp."'];\n",
                 $templateData
             );
+        }
+
+        return $templateData;
+    }
+
+    private function fillHasFactory($templateData)
+    {
+        if (!$this->commandData->getAddOn('tests')) {
+            $templateData = str_replace('$HAS_FACTORY_IMPORT$', '', $templateData);
+            $templateData = str_replace('$HAS_FACTORY$', '', $templateData);
+        } else {
+            $templateData = str_replace(
+                '$HAS_FACTORY_IMPORT$',
+                'use Illuminate\Database\Eloquent\Factories\HasFactory;',
+                $templateData
+            );
+            $templateData = str_replace('$HAS_FACTORY$', infy_tab()."use HasFactory;\n", $templateData);
         }
 
         return $templateData;

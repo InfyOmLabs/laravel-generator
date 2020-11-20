@@ -26,7 +26,7 @@ class $MODEL_NAME$RepositoryTest extends TestCase
      */
     public function test_create_$MODEL_NAME_SNAKE$()
     {
-        $$MODEL_NAME_CAMEL$ = factory($MODEL_NAME$::class)->make()->toArray();
+        $$MODEL_NAME_CAMEL$ = $MODEL_NAME$::factory()->make()->toArray();
 
         $created$MODEL_NAME$ = $this->$MODEL_NAME_CAMEL$Repo->create($$MODEL_NAME_CAMEL$);
 
@@ -42,7 +42,7 @@ class $MODEL_NAME$RepositoryTest extends TestCase
      */
     public function test_read_$MODEL_NAME_SNAKE$()
     {
-        $$MODEL_NAME_CAMEL$ = factory($MODEL_NAME$::class)->create();
+        $$MODEL_NAME_CAMEL$ = $MODEL_NAME$::factory()->create();
 
         $db$MODEL_NAME$ = $this->$MODEL_NAME_CAMEL$Repo->find($$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
 
@@ -55,8 +55,8 @@ class $MODEL_NAME$RepositoryTest extends TestCase
      */
     public function test_update_$MODEL_NAME_SNAKE$()
     {
-        $$MODEL_NAME_CAMEL$ = factory($MODEL_NAME$::class)->create();
-        $fake$MODEL_NAME$ = factory($MODEL_NAME$::class)->make()->toArray();
+        $$MODEL_NAME_CAMEL$ = $MODEL_NAME$::factory()->create();
+        $fake$MODEL_NAME$ = $MODEL_NAME$::factory()->make()->toArray();
 
         $updated$MODEL_NAME$ = $this->$MODEL_NAME_CAMEL$Repo->update($fake$MODEL_NAME$, $$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
 
@@ -70,7 +70,7 @@ class $MODEL_NAME$RepositoryTest extends TestCase
      */
     public function test_delete_$MODEL_NAME_SNAKE$()
     {
-        $$MODEL_NAME_CAMEL$ = factory($MODEL_NAME$::class)->create();
+        $$MODEL_NAME_CAMEL$ = $MODEL_NAME$::factory()->create();
 
         $resp = $this->$MODEL_NAME_CAMEL$Repo->delete($$MODEL_NAME_CAMEL$->$PRIMARY_KEY_NAME$);
 
