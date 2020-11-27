@@ -36,6 +36,10 @@ class APIControllerGenerator extends BaseGenerator
             $templateName .= '_locale';
         }
 
+        if ($this->commandData->getOption('resources')) {
+            $templateName .= '_resource';
+        }
+
         $templateData = get_template("api.controller.$templateName", 'laravel-generator');
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
