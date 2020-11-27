@@ -104,6 +104,35 @@ if (!function_exists('get_template_file_path')) {
     }
 }
 
+
+if (!function_exists('get_template_directory')) {
+    /**
+     * get path for template file.
+     *
+     * @param  string  $templateName
+     * @param  string  $templateType
+     *
+     * @return string
+     */
+    function get_template_directory($templateName, $templateType)
+    {
+        $templateName = str_replace('.', '/', $templateName);
+
+        $templatesPath = config(
+            'infyom.laravel_generator.path.templates_dir',
+            resource_path('infyom/infyom-generator-templates/')
+        );
+
+        $path = $templatesPath.$templateName;
+
+        if (file_exists($path)) {
+            return $path;
+        }
+
+        return get_templates_package_path($templateType).'/templates/'.$templateName;
+    }
+}
+
 if (!function_exists('get_templates_package_path')) {
     /**
      * Finds templates package's full path.

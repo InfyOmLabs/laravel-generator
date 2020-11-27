@@ -13,6 +13,7 @@ use InfyOm\Generator\Commands\Common\ModelGeneratorCommand;
 use InfyOm\Generator\Commands\Common\RepositoryGeneratorCommand;
 use InfyOm\Generator\Commands\Publish\GeneratorPublishCommand;
 use InfyOm\Generator\Commands\Publish\LayoutPublishCommand;
+use InfyOm\Generator\Commands\Publish\PublishStislaLayout;
 use InfyOm\Generator\Commands\Publish\PublishTemplateCommand;
 use InfyOm\Generator\Commands\Publish\PublishUserCommand;
 use InfyOm\Generator\Commands\RollbackGeneratorCommand;
@@ -112,6 +113,10 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
             return new PublishUserCommand();
         });
 
+        $this->app->singleton('infyom.publish.stisla', function ($app) {
+            return new PublishStislaLayout();
+        });
+
         $this->commands([
             'infyom.publish',
             'infyom.api',
@@ -130,6 +135,7 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
             'infyom.scaffold.views',
             'infyom.rollback',
             'infyom.publish.user',
+            'infyom.publish.stisla',
         ]);
     }
 }
