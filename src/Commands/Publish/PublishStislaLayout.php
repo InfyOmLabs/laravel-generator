@@ -36,15 +36,11 @@ class PublishStislaLayout extends PublishBaseCommand
     private function copyView()
     {
         $viewsPath = config('infyom.laravel_generator.path.views', resource_path('views/'));
-        $templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
+        $templateType = config('infyom.laravel_generator.templates', 'stisla-templates');
 
         $this->createDirectories($viewsPath);
 
-        if ($this->option('localized')) {
-            $files = $this->getLocaleViews();
-        } else {
-            $files = $this->getViews();
-        }
+        $files = $this->getViews();
 
         foreach ($files as $stub => $blade) {
             $sourceFile = get_template_file_path('scaffold/'.$stub, $templateType);
@@ -96,14 +92,10 @@ class PublishStislaLayout extends PublishBaseCommand
         $views = [
             'layouts/app'             => 'layouts/app.blade.php',
             'layouts/sidebar'         => 'layouts/sidebar.blade.php',
-            'layouts/datatables_css'  => 'layouts/datatables_css.blade.php',
-            'layouts/datatables_js'   => 'layouts/datatables_js.blade.php',
             'layouts/menu'            => 'layouts/menu.blade.php',
-            'layouts/home'            => 'home.blade.php',
             'layouts/footer'          => 'layouts/footer.blade.php',
             'auth/login'              => 'auth/login.blade.php',
             'auth/register'           => 'auth/register.blade.php',
-            'auth/email'              => 'auth/passwords/email.blade.php',
             'auth/reset'              => 'auth/passwords/reset.blade.php',
             'emails/password'         => 'auth/emails/password.blade.php',
             'auth/auth_app'           => 'layouts/auth_app.blade.php',
@@ -112,27 +104,10 @@ class PublishStislaLayout extends PublishBaseCommand
             'layouts/header'          => 'layouts/header.blade.php',
             'profile/change_password' => 'profile/change_password.blade.php',
             'profile/edit_profile'    => 'profile/edit_profile.blade.php',
-            'auth/verify' => 'auth/verify.blade.php',
+            'auth/verify'             => 'auth/verify.blade.php',
         ];
 
         return $views;
-    }
-
-    private function getLocaleViews()
-    {
-        return [
-            'layouts/app_locale'     => 'layouts/app.blade.php',
-            'layouts/sidebar_locale' => 'layouts/sidebar.blade.php',
-            'layouts/datatables_css' => 'layouts/datatables_css.blade.php',
-            'layouts/datatables_js'  => 'layouts/datatables_js.blade.php',
-            'layouts/menu'           => 'layouts/menu.blade.php',
-            'layouts/home'           => 'home.blade.php',
-            'auth/login_locale'      => 'auth/login.blade.php',
-            'auth/register_locale'   => 'auth/register.blade.php',
-            'auth/email_locale'      => 'auth/passwords/email.blade.php',
-            'auth/reset_locale'      => 'auth/passwords/reset.blade.php',
-            'emails/password_locale' => 'auth/emails/password.blade.php',
-        ];
     }
 
     private function publishHomeController()
