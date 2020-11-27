@@ -96,7 +96,6 @@ class PublishStislaLayout extends PublishBaseCommand
             'layouts/footer'          => 'layouts/footer.blade.php',
             'auth/login'              => 'auth/login.blade.php',
             'auth/register'           => 'auth/register.blade.php',
-            'auth/reset'              => 'auth/passwords/reset.blade.php',
             'emails/password'         => 'auth/emails/password.blade.php',
             'auth/auth_app'           => 'layouts/auth_app.blade.php',
             'auth/forgot-password'    => 'auth/forgot-password.blade.php',
