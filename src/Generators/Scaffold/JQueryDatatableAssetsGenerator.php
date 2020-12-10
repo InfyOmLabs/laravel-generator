@@ -7,7 +7,7 @@ use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 
 /**
- * Class JQueryDatatableAssetsGenerator
+ * Class JQueryDatatableAssetsGenerator.
  */
 class JQueryDatatableAssetsGenerator extends BaseGenerator
 {
@@ -34,7 +34,7 @@ class JQueryDatatableAssetsGenerator extends BaseGenerator
     {
         $this->generateJquery();
     }
-    
+
     public function generateJquery()
     {
         $templateName = 'jquery';
@@ -72,7 +72,6 @@ class JQueryDatatableAssetsGenerator extends BaseGenerator
         file_put_contents($path.$this->fileName, $templateData);
         $this->commandData->commandComment("\n".$this->config->tableName.' assets added.');
 
-
         // Publish JS Rendere Template
         $templateName = 'js_renderer_template';
         $templateData = get_template('scaffold.'.$templateName, 'laravel-generator');
@@ -95,6 +94,5 @@ class JQueryDatatableAssetsGenerator extends BaseGenerator
 
         file_put_contents(base_path('webpack.mix.js'), $webpackMixContents);
         $this->commandData->commandComment("\n".$this->commandData->config->mCamelPlural.' webpack.mix.js updated.');
-
     }
 }

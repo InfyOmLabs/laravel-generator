@@ -1,0 +1,22 @@
+<?php
+
+namespace $NAMESPACE_DATATABLES$;
+
+use App\Models\$MODEL_NAME$;
+
+/**
+ * Class $MODEL_NAME$DataTable
+ */
+class $MODEL_NAME$DataTable
+{
+    /**
+     * @return $MODEL_NAME$
+     */
+    public function get()
+    {
+        /** @var $MODEL_NAME$ $query */
+        $query = $MODEL_NAME$::query()->select('$TABLE_NAME$.*');
+
+        return $query;
+    }
+}
