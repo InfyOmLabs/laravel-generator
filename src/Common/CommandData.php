@@ -124,6 +124,11 @@ class CommandData
     {
         $this->dynamicVars[$name] = $val;
     }
+    
+    public function jqueryDT()
+    {
+        return $this->getOption('jqueryDT') ? true : false;
+    }
 
     public function getFields()
     {
