@@ -104,13 +104,12 @@ if (!function_exists('get_template_file_path')) {
     }
 }
 
-
 if (!function_exists('get_template_directory')) {
     /**
      * get path for template file.
      *
-     * @param  string  $templateName
-     * @param  string  $templateType
+     * @param string $templateName
+     * @param string $templateType
      *
      * @return string
      */
