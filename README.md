@@ -1,4 +1,4 @@
-<h1 align="center"><img src="http://infyom.com/images/logo-red-black.png" alt="InfyOm"></h1>
+<h1 align="center"><img src="https://assets.infyom.com/open-source/infyom-logo.png" alt="InfyOm"></h1>
 
 InfyOm Laravel Generator
 ==========================
@@ -7,7 +7,6 @@ InfyOm Laravel Generator
 [![Monthly Downloads](https://poser.pugx.org/infyomlabs/laravel-generator/d/monthly)](https://packagist.org/packages/infyomlabs/laravel-generator)
 [![Daily Downloads](https://poser.pugx.org/infyomlabs/laravel-generator/d/daily)](https://packagist.org/packages/infyomlabs/laravel-generator)
 [![License](https://poser.pugx.org/infyomlabs/laravel-generator/license)](https://packagist.org/packages/infyomlabs/laravel-generator)
-[![Build Status](https://travis-ci.org/InfyOmLabs/laravel-generator.svg?branch=test-cases)](https://travis-ci.org/InfyOmLabs/laravel-generator)
 
 Generate Admin Panels CRUDs and APIs in Minutes with tons of other features and customizations with 3 different themes.  
 Read [Documentation](https://www.infyom.com/open-source) for detailed installation steps and usage.
