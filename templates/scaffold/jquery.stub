@@ -23,7 +23,7 @@ $(tableName).DataTable({
         $JQUERY_FIELDS$
         {
             data: function (row) {
-                let url = recordsURL + '/' + row.id;
+                let url = recordsURL + row.id;
                 let data = [
                 {
                     'id': row.id,
