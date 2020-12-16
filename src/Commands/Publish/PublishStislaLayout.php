@@ -2,7 +2,6 @@
 
 namespace InfyOm\Generator\Commands\Publish;
 
-use Illuminate\Support\Str;
 use InfyOm\Generator\Utils\FileUtil;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -47,7 +46,6 @@ class PublishStislaLayout extends PublishBaseCommand
             $destinationFile = $viewsPath.$blade;
             $this->publishFile($sourceFile, $destinationFile, $blade);
         }
-
 
         // Publish Package.json and webpack mix
         $rootViews = [
@@ -119,7 +117,7 @@ class PublishStislaLayout extends PublishBaseCommand
 
         $fileName = 'HomeController.php';
 
-        if (file_exists($controllerPath.$fileName) && ! $this->confirmOverwrite($fileName)) {
+        if (file_exists($controllerPath.$fileName) && !$this->confirmOverwrite($fileName)) {
             return;
         }
 
@@ -131,7 +129,7 @@ class PublishStislaLayout extends PublishBaseCommand
     /**
      * Replaces dynamic variables of template.
      *
-     * @param  string  $templateData
+     * @param string $templateData
      *
      * @return string
      */
