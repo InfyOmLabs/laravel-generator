@@ -1,0 +1,36 @@
+name: Run tests
+
+on: push
+
+jobs:
+  php-tests:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        php: [7.4, 7.3, 7.2]
+
+    name: P${{ matrix.php }} - Run Package Tests
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-composer-${{ hashFiles('composer.json') }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v1
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-interaction --no-suggest
+
+      - name: Execute tests
+        run: vendor/bin/phpunit --verbose
