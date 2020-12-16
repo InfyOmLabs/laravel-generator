@@ -6,11 +6,7 @@ jobs:
   php-tests:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        php: [7.4, 7.3, 7.2]
-
-    name: P${{ matrix.php }} - Run Package Tests
+    name: Run Package Tests
 
     steps:
       - name: Checkout Code
@@ -25,7 +21,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v1
         with:
-          php-version: ${{ matrix.php }}
+          php-version: 7.3
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
           coverage: none
 
