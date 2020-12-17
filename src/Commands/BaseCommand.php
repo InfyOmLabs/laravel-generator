@@ -142,7 +142,7 @@ class BaseCommand extends Command
             $menuGenerator->generate();
         }
 
-        if ($this->getOptions('jqueryDT')) {
+        if ($this->commandData->jqueryDT()) {
             $assetsGenerator = new JQueryDatatableAssetsGenerator($this->commandData);
             $assetsGenerator->generate();
         }
