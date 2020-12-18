@@ -15,6 +15,7 @@ use InfyOm\Generator\Generators\ModelGenerator;
 use InfyOm\Generator\Generators\RepositoryGenerator;
 use InfyOm\Generator\Generators\RepositoryTestGenerator;
 use InfyOm\Generator\Generators\Scaffold\ControllerGenerator;
+use InfyOm\Generator\Generators\Scaffold\JQueryDatatableAssetsGenerator;
 use InfyOm\Generator\Generators\Scaffold\MenuGenerator;
 use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
 use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
@@ -140,6 +141,11 @@ class BaseCommand extends Command
         if (!$this->isSkip('menu') and $this->commandData->config->getAddOn('menu.enabled')) {
             $menuGenerator = new MenuGenerator($this->commandData);
             $menuGenerator->generate();
+        }
+
+        if ($this->commandData->jqueryDT()) {
+            $assetsGenerator = new JQueryDatatableAssetsGenerator($this->commandData);
+            $assetsGenerator->generate();
         }
     }
 
@@ -302,6 +308,7 @@ class BaseCommand extends Command
             ['localized', null, InputOption::VALUE_NONE, 'Localize files.'],
             ['repositoryPattern', null, InputOption::VALUE_REQUIRED, 'Repository Pattern'],
             ['connection', null, InputOption::VALUE_REQUIRED, 'Specify connection name'],
+            ['jqueryDT', null, InputOption::VALUE_NONE, 'Generate listing screen into JQuery Datatables'],
         ];
     }
 
