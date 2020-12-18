@@ -1,0 +1,1 @@
+ mix.js('resources/assets/js/$TABLE_NAME$/$TABLE_NAME$.js', 'public/assets/js/$TABLE_NAME$/$TABLE_NAME$.js').version();
