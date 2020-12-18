@@ -123,6 +123,12 @@ class ViewGenerator extends BaseGenerator
     {
         $templateName = 'blade_table_body';
 
+        $tableFields = $this->generateTableHeaderFields();
+        if ($this->commandData->jqueryDT()) {
+            $templateName = 'js_table';
+            $tableFields = $this->generateJSTableHeaderFields();
+        }
+
         if ($this->commandData->isLocalizedTemplates()) {
             $templateName .= '_locale';
         }
@@ -131,7 +137,7 @@ class ViewGenerator extends BaseGenerator
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
-        $templateData = str_replace('$FIELD_HEADERS$', $this->generateTableHeaderFields(), $templateData);
+        $templateData = str_replace('$FIELD_HEADERS$', $tableFields, $templateData);
 
         $cellFieldTemplate = get_template('scaffold.views.table_cell', $this->templateType);
 
@@ -153,6 +159,20 @@ class ViewGenerator extends BaseGenerator
         $tableBodyFields = implode(infy_nl_tab(1, 3), $tableBodyFields);
 
         return str_replace('$FIELD_BODY$', $tableBodyFields, $templateData);
+    }
+
+    private function generateJSTableHeaderFields()
+    {
+        $fields = '';
+        foreach ($this->commandData->fields as $field) {
+            if (in_array($field->name, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
+                continue;
+            }
+
+            $fields .= '<th scope="col">'.str_replace("'", '', $field->name).'</th>';
+        }
+
+        return $fields;
     }
 
     private function generateTableHeaderFields()
@@ -207,7 +227,7 @@ class ViewGenerator extends BaseGenerator
 
     private function generateIndex()
     {
-        $templateName = 'index';
+        $templateName = ($this->commandData->jqueryDT()) ? 'js_index' : 'index';
 
         if ($this->commandData->isLocalizedTemplates()) {
             $templateName .= '_locale';

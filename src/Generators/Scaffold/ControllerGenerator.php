@@ -44,6 +44,11 @@ class ControllerGenerator extends BaseGenerator
             $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
 
             $this->generateDataTable();
+        } elseif ($this->commandData->jqueryDT()) {
+            $templateName = 'jquery_datatable_controller';
+            $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
+
+            $this->generateDataTable();
         } else {
             if ($this->commandData->getOption('repositoryPattern')) {
                 $templateName = 'controller';
@@ -75,7 +80,7 @@ class ControllerGenerator extends BaseGenerator
 
     private function generateDataTable()
     {
-        $templateName = 'datatable';
+        $templateName = ($this->commandData->jqueryDT()) ? 'jquery_datatable' : 'datatable';
         if ($this->commandData->isLocalizedTemplates()) {
             $templateName .= '_locale';
         }

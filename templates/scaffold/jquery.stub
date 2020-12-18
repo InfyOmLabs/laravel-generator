@@ -1,0 +1,43 @@
+'use strict';
+
+let tableName = '#$MODEL_NAME_PLURAL_CAMEL$Table';
+$(tableName).DataTable({
+    scrollX: true,
+    deferRender: true,
+    scroller: true,
+    processing: true,
+    serverSide: true,
+    'order': [[0, 'asc']],
+    ajax: {
+        url: recordsURL,
+    },
+    columnDefs: [
+        {
+            'targets': [$ACTION_COLUMN_COUNT$],
+            'orderable': false,
+            'className': 'text-center',
+            'width': '8%',
+        },
+    ],
+    columns: [
+        $JQUERY_FIELDS$
+        {
+            data: function (row) {
+                let url = recordsURL + row.id;
+                let data = [
+                {
+                    'id': row.id,
+                    'url': url + '/edit',
+                }];
+                                
+                return prepareTemplateRender('#$MODEL_NAME_PLURAL_CAMEL$Template',
+                    data);
+            }, name: 'id',
+        },
+    ],
+});
+
+$(document).on('click', '.delete-btn', function (event) {
+    let recordId = $(event.currentTarget).data('id');
+    deleteItem(recordsURL + recordId, tableName, '$MODEL_NAME_HUMAN$');
+});
