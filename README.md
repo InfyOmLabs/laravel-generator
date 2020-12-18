@@ -31,9 +31,17 @@ You can support us by either sponsoring us or buying one of our paid products. O
 
 ### Buy our Paid Products
 
-[![InfyChat](https://assets.infyom.com/open-source/infychat-banner.png)](https://codecanyon.net/item/infychat-laravel-chat-app-package/25054608)
+[![InfyChat](https://assets.infyom.com/open-source/infychat-banner.png)](https://bit.ly/3gYLWny)
 
 You can also check out our other paid products on [CodeCanyon](https://codecanyon.net/user/infyomlabs/portfolio).
+
+### Follow Us
+
+- [Twitter](https://twitter.com/infyom)
+- [Facebook](https://www.facebook.com/infyom)
+- [LinkedIn](https://in.linkedin.com/company/infyom-technologies)
+- [Youtube](https://www.youtube.com/channel/UC8IvwfChD6i7Wp4yZp3tNsQ)
+- [Contact Us](https://infyom.com/contact-us)
 
 ## Made with InfyOm Generator
 
