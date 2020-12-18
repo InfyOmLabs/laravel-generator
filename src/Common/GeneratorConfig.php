@@ -47,6 +47,7 @@ class GeneratorConfig
     public $pathRequest;
     public $pathRoutes;
     public $pathViews;
+    public $pathAssets;
     public $modelJsPath;
 
     /* Model Names */
@@ -97,6 +98,7 @@ class GeneratorConfig
         'repositoryPattern',
         'localized',
         'connection',
+        'jqueryDT',
     ];
 
     public $tableName;
@@ -220,6 +222,11 @@ class GeneratorConfig
             'infyom.laravel_generator.path.views',
             resource_path('views/')
         ).$viewPrefix.$this->mSnakePlural.'/';
+
+        $this->pathAssets = config(
+            'infyom.laravel_generator.path.assets',
+            resource_path('assets/')
+        );
 
         $this->pathSeeder = config('infyom.laravel_generator.path.seeder', database_path('seeders/'));
         $this->pathDatabaseSeeder = config('infyom.laravel_generator.path.database_seeder', database_path('seeders/DatabaseSeeder.php'));
