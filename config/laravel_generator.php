@@ -138,7 +138,7 @@ return [
 
         'repository_pattern' => true,
 
-        'resources' => true,
+        'resources' => false,
 
         'excluded_fields' => ['id'], // Array of columns that doesn't required while creating module
     ],
