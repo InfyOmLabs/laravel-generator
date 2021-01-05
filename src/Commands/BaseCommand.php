@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\API\APIControllerGenerator;
 use InfyOm\Generator\Generators\API\APIRequestGenerator;
+use InfyOm\Generator\Generators\API\APIResourceGenerator;
 use InfyOm\Generator\Generators\API\APIRoutesGenerator;
 use InfyOm\Generator\Generators\API\APITestGenerator;
 use InfyOm\Generator\Generators\FactoryGenerator;
@@ -113,6 +114,10 @@ class BaseCommand extends Command
 
             $apiTestGenerator = new APITestGenerator($this->commandData);
             $apiTestGenerator->generate();
+        }
+        if ($this->commandData->getOption('resources')) {
+            $apiResourceGenerator = new APIResourceGenerator($this->commandData);
+            $apiResourceGenerator->generate();
         }
     }
 
@@ -307,6 +312,7 @@ class BaseCommand extends Command
             ['seeder', null, InputOption::VALUE_NONE, 'To generate seeder'],
             ['localized', null, InputOption::VALUE_NONE, 'Localize files.'],
             ['repositoryPattern', null, InputOption::VALUE_REQUIRED, 'Repository Pattern'],
+            ['resources', null, InputOption::VALUE_REQUIRED, 'Resources'],
             ['connection', null, InputOption::VALUE_REQUIRED, 'Specify connection name'],
             ['jqueryDT', null, InputOption::VALUE_NONE, 'Generate listing screen into JQuery Datatables'],
         ];
