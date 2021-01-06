@@ -17,6 +17,7 @@ class GeneratorConfig
     public $nsFactory;
 
     public $nsApiController;
+    public $nsApiResource;
     public $nsApiRequest;
 
     public $nsRequest;
@@ -39,6 +40,7 @@ class GeneratorConfig
     public $pathViewProvider;
 
     public $pathApiController;
+    public $pathApiResource;
     public $pathApiRequest;
     public $pathApiRoutes;
     public $pathApiTests;
@@ -96,6 +98,7 @@ class GeneratorConfig
         'factory',
         'seeder',
         'repositoryPattern',
+        'resources',
         'localized',
         'connection',
         'jqueryDT',
@@ -156,6 +159,10 @@ class GeneratorConfig
             'infyom.laravel_generator.namespace.api_controller',
             'App\Http\Controllers\API'
         ).$prefix;
+        $this->nsApiResource = config(
+            'infyom.laravel_generator.namespace.api_resource',
+            'App\Http\Resources'
+        ).$prefix;
         $this->nsApiRequest = config('infyom.laravel_generator.namespace.api_request', 'App\Http\Requests\API').$prefix;
 
         $this->nsRequest = config('infyom.laravel_generator.namespace.request', 'App\Http\Requests').$prefix;
@@ -197,6 +204,11 @@ class GeneratorConfig
         $this->pathApiController = config(
             'infyom.laravel_generator.path.api_controller',
             app_path('Http/Controllers/API/')
+        ).$prefix;
+
+        $this->pathApiResource = config(
+            'infyom.laravel_generator.path.api_resource',
+            app_path('Http/Resources/')
         ).$prefix;
 
         $this->pathApiRequest = config(
@@ -253,6 +265,7 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$NAMESPACE_FACTORY$', $this->nsFactory);
 
         $commandData->addDynamicVariable('$NAMESPACE_API_CONTROLLER$', $this->nsApiController);
+        $commandData->addDynamicVariable('$NAMESPACE_API_RESOURCE$', $this->nsApiResource);
         $commandData->addDynamicVariable('$NAMESPACE_API_REQUEST$', $this->nsApiRequest);
 
         $commandData->addDynamicVariable('$NAMESPACE_BASE_CONTROLLER$', $this->nsBaseController);
@@ -395,6 +408,7 @@ class GeneratorConfig
 
         $this->options['softDelete'] = config('infyom.laravel_generator.options.softDelete', false);
         $this->options['repositoryPattern'] = config('infyom.laravel_generator.options.repository_pattern', true);
+        $this->options['resources'] = config('infyom.laravel_generator.options.resources', true);
         if (!empty($this->options['skip'])) {
             $this->options['skip'] = array_map('trim', explode(',', $this->options['skip']));
         }
