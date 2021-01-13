@@ -74,9 +74,10 @@ class LayoutPublishCommand extends PublishBaseCommand
             'layouts/home'              => 'home.blade.php',
             'auth/login'                => 'auth/login.blade.php',
             'auth/register'             => 'auth/register.blade.php',
-            'auth/email'                => 'auth/passwords/email.blade.php',
-            'auth/reset'                => 'auth/passwords/reset.blade.php',
-            'emails/password'           => 'auth/emails/password.blade.php',
+            'auth/passwords/confirm'    => 'auth/passwords/confirm.blade.php',
+            'auth/passwords/email'      => 'auth/passwords/email.blade.php',
+            'auth/passwords/reset'      => 'auth/passwords/reset.blade.php',
+            'auth/emails/password'      => 'auth/emails/password.blade.php',
         ];
 
         $version = $this->getApplication()->getVersion();
