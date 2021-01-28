@@ -229,7 +229,7 @@ class GeneratorConfig
             'infyom.laravel_generator.path.views',
             resource_path('views/')
         ).$viewPrefix.$this->mSnakePlural.'/';
-        
+
         $this->pathAssets = config(
             'infyom.laravel_generator.path.assets',
             resource_path('assets/')
