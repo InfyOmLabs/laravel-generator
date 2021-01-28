@@ -66,7 +66,7 @@ class JQueryDatatableAssetsGenerator extends BaseGenerator
         $templateData = str_replace('$JQUERY_FIELDS$', $fields, $templateData);
 
         $path = $this->path.$this->config->tableName.'/';
-        if (! file_exists($path)) {
+        if (!file_exists($path)) {
             FileUtil::createDirectoryIfNotExist($path);
         }
         file_put_contents($path.$this->fileName, $templateData);
@@ -78,7 +78,7 @@ class JQueryDatatableAssetsGenerator extends BaseGenerator
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         $path = $this->config->pathViews.'templates/';
-        if (! file_exists($path)) {
+        if (!file_exists($path)) {
             FileUtil::createDirectoryIfNotExist($path);
         }
 

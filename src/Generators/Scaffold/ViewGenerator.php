@@ -23,7 +23,7 @@ class ViewGenerator extends BaseGenerator
 
     /** @var array */
     private $htmlFields;
-    
+
     public function __construct(CommandData $commandData)
     {
         $this->commandData = $commandData;
@@ -122,7 +122,7 @@ class ViewGenerator extends BaseGenerator
     private function generateBladeTableBody()
     {
         $templateName = 'blade_table_body';
-        
+
         $tableFields = $this->generateTableHeaderFields();
         if ($this->commandData->jqueryDT()) {
             $templateName = 'js_table';
@@ -160,7 +160,7 @@ class ViewGenerator extends BaseGenerator
 
         return str_replace('$FIELD_BODY$', $tableBodyFields, $templateData);
     }
-    
+
     private function generateJSTableHeaderFields()
     {
         $fields = '';
@@ -169,9 +169,9 @@ class ViewGenerator extends BaseGenerator
                 continue;
             }
 
-            $fields .= '<th scope="col">'.str_replace("'", "", $field->name).'</th>';
+            $fields .= '<th scope="col">'.str_replace("'", '', $field->name).'</th>';
         }
-        
+
         return $fields;
     }
 
