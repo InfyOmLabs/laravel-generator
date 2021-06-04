@@ -30,6 +30,8 @@ class GeneratorConfig
     public $nsTestTraits;
     public $nsTests;
 
+    public $controllerTests;
+
     /* Path variables */
     public $pathRepository;
     public $pathModel;
@@ -173,6 +175,8 @@ class GeneratorConfig
         $this->nsApiTests = config('infyom.laravel_generator.namespace.api_test', 'Tests\APIs');
         $this->nsRepositoryTests = config('infyom.laravel_generator.namespace.repository_test', 'Tests\Repositories');
         $this->nsTests = config('infyom.laravel_generator.namespace.tests', 'Tests');
+
+        $this->controllerTests = config('infyom.laravel_generator.namespace.controller_tests', 'Tests\Controllers');
     }
 
     public function loadPaths()
@@ -276,6 +280,8 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$NAMESPACE_API_TESTS$', $this->nsApiTests);
         $commandData->addDynamicVariable('$NAMESPACE_REPOSITORIES_TESTS$', $this->nsRepositoryTests);
         $commandData->addDynamicVariable('$NAMESPACE_TESTS$', $this->nsTests);
+
+        $commandData->addDynamicVariable('$NAMESPACE_CONTROLLERS_TESTS$', $this->controllerTests);
 
         $commandData->addDynamicVariable('$TABLE_NAME$', $this->tableName);
         $commandData->addDynamicVariable('$TABLE_NAME_TITLE$', Str::studly($this->tableName));

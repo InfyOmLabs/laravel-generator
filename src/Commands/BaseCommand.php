@@ -16,6 +16,7 @@ use InfyOm\Generator\Generators\ModelGenerator;
 use InfyOm\Generator\Generators\RepositoryGenerator;
 use InfyOm\Generator\Generators\RepositoryTestGenerator;
 use InfyOm\Generator\Generators\Scaffold\ControllerGenerator;
+use InfyOm\Generator\Generators\Scaffold\ControllerTestGenerator;
 use InfyOm\Generator\Generators\Scaffold\JQueryDatatableAssetsGenerator;
 use InfyOm\Generator\Generators\Scaffold\MenuGenerator;
 use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
@@ -130,6 +131,11 @@ class BaseCommand extends Command
         if (!$this->isSkip('controllers') and !$this->isSkip('scaffold_controller')) {
             $controllerGenerator = new ControllerGenerator($this->commandData);
             $controllerGenerator->generate();
+        }
+
+        if (!$this->isSkip('tests') and !$this->isSkip('scaffold_tests')) {
+            $controllerTestGenerator = new ControllerTestGenerator($this->commandData);
+            $controllerTestGenerator->generate();
         }
 
         if (!$this->isSkip('views')) {
