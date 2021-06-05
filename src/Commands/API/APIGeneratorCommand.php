@@ -39,8 +39,8 @@ class APIGeneratorCommand extends BaseCommand
      */
     public function handle()
     {
-        $this->commandData->fireEvent('api', FileUtil::FILE_CREATING);
         parent::handle();
+        $this->commandData->fireEvent('api', FileUtil::FILE_CREATING);
 
         $this->generateCommonItems();
 
