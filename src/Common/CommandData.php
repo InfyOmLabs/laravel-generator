@@ -195,7 +195,7 @@ class CommandData
         } else {
             $primaryKey->name = 'id';
         }
-        $primaryKey->parseDBType('increments');
+        $primaryKey->parseDBType('id');
         $primaryKey->parseOptions('s,f,p,if,ii');
 
         $this->fields[] = $primaryKey;
