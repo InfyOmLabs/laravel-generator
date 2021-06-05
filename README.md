@@ -31,7 +31,7 @@ You can support us by either sponsoring us or buying one of our paid products. O
 
 ### Buy our Paid Products
 
-[![InfyChat](https://assets.infyom.com/open-source/infychat-banner.png)](https://bit.ly/3gYLWny)
+[![InfyChat](https://assets.infyom.com/open-source/infychat-banner.png)](https://1.envato.market/jWeAmM)
 
 You can also check out our other paid products on [CodeCanyon](https://codecanyon.net/user/infyomlabs/portfolio).
 
