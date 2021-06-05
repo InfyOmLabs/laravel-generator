@@ -31,6 +31,8 @@ return [
 
         'api_controller'    => app_path('Http/Controllers/API/'),
 
+        'api_resource'      => app_path('Http/Resources/'),
+
         'repository_test'   => base_path('tests/Repositories/'),
 
         'api_test'          => base_path('tests/APIs/'),
@@ -43,13 +45,13 @@ return [
 
         'templates_dir'     => resource_path('infyom/infyom-generator-templates/'),
 
-        'seeder'            => database_path('seeds/'),
+        'seeder'            => database_path('seeders/'),
 
-        'database_seeder'   => database_path('seeds/DatabaseSeeder.php'),
-
-        'modelJs'           => resource_path('assets/js/models/'),
+        'database_seeder'   => database_path('seeders/DatabaseSeeder.php'),
 
         'factory'           => database_path('factories/'),
+
+        'view_provider'     => app_path('Providers/ViewServiceProvider.php'),
     ],
 
     /*
@@ -71,9 +73,15 @@ return [
 
         'api_controller'    => 'App\Http\Controllers\API',
 
+        'api_resource'      => 'App\Http\Resources',
+
         'request'           => 'App\Http\Requests',
 
         'api_request'       => 'App\Http\Requests\API',
+
+        'seeder'            => 'Database\Seeders',
+
+        'factory'           => 'Database\Factories',
 
         'repository_test'   => 'Tests\Repositories',
 
@@ -124,9 +132,13 @@ return [
 
         'save_schema_file' => true,
 
+        'localized' => false,
+
         'tables_searchable_default' => false,
 
         'repository_pattern' => true,
+
+        'resources' => false,
 
         'excluded_fields' => ['id'], // Array of columns that doesn't required while creating module
     ],

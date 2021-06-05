@@ -1,1 +1,1 @@
-Route::resource('$MODEL_NAME_PLURAL_CAMEL$', '$PATH_PREFIX$$MODEL_NAME$Controller');
+Route::resource('$MODEL_NAME_PLURAL_CAMEL$', $NAMESPACE_CONTROLLER$\$PATH_PREFIX$$MODEL_NAME$Controller::class);

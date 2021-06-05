@@ -11,11 +11,11 @@ use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
  */
 class FactoryGenerator extends BaseGenerator
 {
-    /** @var CommandData $commandData */
+    /** @var CommandData */
     private $commandData;
-    /** @var string $path */
+    /** @var string */
     private $path;
-    /** @var string $fileName */
+    /** @var string */
     private $fileName;
 
     /**
@@ -72,7 +72,7 @@ class FactoryGenerator extends BaseGenerator
                 continue;
             }
 
-            $fieldData = "'".$field->name."' => ".'$faker->';
+            $fieldData = "'".$field->name."' => ".'$this->faker->';
 
             switch ($field->fieldType) {
                 case 'integer':
@@ -104,5 +104,12 @@ class FactoryGenerator extends BaseGenerator
         }
 
         return $fields;
+    }
+
+    public function rollback()
+    {
+        if ($this->rollbackFile($this->path, $this->fileName)) {
+            $this->commandData->commandComment('Factory file deleted: '.$this->fileName);
+        }
     }
 }

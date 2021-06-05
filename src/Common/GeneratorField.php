@@ -31,6 +31,9 @@ class GeneratorField
     public $inView = true;
     public $isNotNull = false;
 
+    /** @var int */
+    public $numberDecimalPoints = 2;
+
     /**
      * @param Column $column
      * @param $dbInput
@@ -52,6 +55,14 @@ class GeneratorField
 
         if (empty($htmlInput)) {
             $this->htmlType = 'text';
+
+            return;
+        }
+
+        if (Str::contains($htmlInput, 'selectTable')) {
+            $inputsArr = explode(':', $htmlInput);
+            $this->htmlType = array_shift($inputsArr);
+            $this->htmlValues = $inputsArr;
 
             return;
         }
@@ -125,7 +136,14 @@ class GeneratorField
             if ($functionName == 'foreign') {
                 $foreignTable = array_shift($inputParams);
                 $foreignField = array_shift($inputParams);
-                $this->foreignKeyText .= "\$table->foreign('".$this->name."')->references('".$foreignField."')->on('".$foreignTable."');";
+                $this->foreignKeyText .= "\$table->foreign('".$this->name."')->references('".$foreignField."')->on('".$foreignTable."')";
+                if (count($inputParams)) {
+                    $cascade = array_shift($inputParams);
+                    if ($cascade == 'cascade') {
+                        $this->foreignKeyText .= "->onUpdate('cascade')->onDelete('cascade')";
+                    }
+                }
+                $this->foreignKeyText .= ';';
             } else {
                 $this->migrationText .= '->'.$functionName;
                 $this->migrationText .= '(';

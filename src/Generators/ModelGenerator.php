@@ -18,6 +18,7 @@ class ModelGenerator extends BaseGenerator
     protected $excluded_fields = [
         'created_at',
         'updated_at',
+        'deleted_at',
     ];
 
     /** @var CommandData */
@@ -55,15 +56,22 @@ class ModelGenerator extends BaseGenerator
 
     private function fillTemplate($templateData)
     {
+        $rules = $this->generateRules();
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         $templateData = $this->fillSoftDeletes($templateData);
 
+        $templateData = $this->fillHasFactory($templateData);
+
         $fillables = [];
+        $primaryKey = 'id';
 
         foreach ($this->commandData->fields as $field) {
             if ($field->isFillable) {
                 $fillables[] = "'".$field->name."'";
+            }
+            if ($field->isPrimary) {
+                $primaryKey = $field->name;
             }
         }
 
@@ -75,13 +83,16 @@ class ModelGenerator extends BaseGenerator
             $primary = infy_tab()."protected \$primaryKey = '".$this->commandData->getOption('primary')."';\n";
         } else {
             $primary = '';
+            if ($this->commandData->getOption('fieldsFile') && $primaryKey != 'id') {
+                $primary = infy_tab()."protected \$primaryKey = '".$primaryKey."';\n";
+            }
         }
 
         $templateData = str_replace('$PRIMARY$', $primary, $templateData);
 
         $templateData = str_replace('$FIELDS$', implode(','.infy_nl_tab(1, 2), $fillables), $templateData);
 
-        $templateData = str_replace('$RULES$', implode(','.infy_nl_tab(1, 2), $this->generateRules()), $templateData);
+        $templateData = str_replace('$RULES$', implode(','.infy_nl_tab(1, 2), $rules), $templateData);
 
         $templateData = str_replace('$CAST$', implode(','.infy_nl_tab(1, 2), $this->generateCasts()), $templateData);
 
@@ -104,15 +115,34 @@ class ModelGenerator extends BaseGenerator
             $templateData = str_replace('$SOFT_DELETE_DATES$', '', $templateData);
         } else {
             $templateData = str_replace(
-                '$SOFT_DELETE_IMPORT$', "use Illuminate\\Database\\Eloquent\\SoftDeletes;\n",
+                '$SOFT_DELETE_IMPORT$',
+                'use Illuminate\Database\Eloquent\SoftDeletes;',
                 $templateData
             );
             $templateData = str_replace('$SOFT_DELETE$', infy_tab()."use SoftDeletes;\n", $templateData);
             $deletedAtTimestamp = config('infyom.laravel_generator.timestamps.deleted_at', 'deleted_at');
             $templateData = str_replace(
-                '$SOFT_DELETE_DATES$', infy_nl_tab()."protected \$dates = ['".$deletedAtTimestamp."'];\n",
+                '$SOFT_DELETE_DATES$',
+                infy_nl_tab()."protected \$dates = ['".$deletedAtTimestamp."'];\n",
                 $templateData
             );
+        }
+
+        return $templateData;
+    }
+
+    private function fillHasFactory($templateData)
+    {
+        if (!$this->commandData->getAddOn('tests')) {
+            $templateData = str_replace('$HAS_FACTORY_IMPORT$', '', $templateData);
+            $templateData = str_replace('$HAS_FACTORY$', '', $templateData);
+        } else {
+            $templateData = str_replace(
+                '$HAS_FACTORY_IMPORT$',
+                'use Illuminate\Database\Eloquent\Factories\HasFactory;',
+                $templateData
+            );
+            $templateData = str_replace('$HAS_FACTORY$', infy_tab()."use HasFactory;\n", $templateData);
         }
 
         return $templateData;
@@ -143,7 +173,7 @@ class ModelGenerator extends BaseGenerator
 
         foreach ($this->commandData->fields as $field) {
             if ($field->isFillable) {
-                $fillables .= ' * @property '.$this->getPHPDocType($field->fieldType).' '.$field->name.PHP_EOL;
+                $fillables .= ' * @property '.$this->getPHPDocType($field->fieldType).' $'.$field->name.PHP_EOL;
             }
         }
         $docsTemplate = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $docsTemplate);
@@ -169,7 +199,7 @@ class ModelGenerator extends BaseGenerator
             case 'datetime':
                 return 'string|\Carbon\Carbon';
             case '1t1':
-                return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.Str::camel($relationText);
+                return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' $'.Str::camel($relationText);
             case 'mt1':
                 if (isset($relation->inputs[1])) {
                     $relationName = str_replace('_id', '', strtolower($relation->inputs[1]));
@@ -177,11 +207,11 @@ class ModelGenerator extends BaseGenerator
                     $relationName = $relationText;
                 }
 
-                return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' '.Str::camel($relationName);
+                return '\\'.$this->commandData->config->nsModel.'\\'.$relation->inputs[0].' $'.Str::camel($relationName);
             case '1tm':
             case 'mtm':
             case 'hmt':
-                return '\Illuminate\Database\Eloquent\Collection'.' '.Str::camel(Str::plural($relationText));
+                return '\Illuminate\Database\Eloquent\Collection $'.Str::camel(Str::plural($relationText));
             default:
                 $fieldData = SwaggerGenerator::getFieldType($db_type);
                 if (!empty($fieldData['fieldType'])) {
@@ -200,8 +230,11 @@ class ModelGenerator extends BaseGenerator
 
         $template = fill_template($this->commandData->dynamicVars, $template);
 
-        $template = str_replace('$REQUIRED_FIELDS$',
-            '"'.implode('"'.', '.'"', $this->generateRequiredFields()).'"', $template);
+        $template = str_replace(
+            '$REQUIRED_FIELDS$',
+            '"'.implode('"'.', '.'"', $this->generateRequiredFields()).'"',
+            $template
+        );
 
         $propertyTemplate = get_template('model_docs.property', 'swagger-generator');
 
@@ -253,14 +286,56 @@ class ModelGenerator extends BaseGenerator
     private function generateRules()
     {
         $dont_require_fields = config('infyom.laravel_generator.options.hidden_fields', [])
-                + config('infyom.laravel_generator.options.excluded_fields', []);
+                + config('infyom.laravel_generator.options.excluded_fields', $this->excluded_fields);
 
         $rules = [];
 
         foreach ($this->commandData->fields as $field) {
-            if (!$field->isPrimary && $field->isNotNull && empty($field->validations) &&
-                !in_array($field->name, $dont_require_fields)) {
-                $field->validations = 'required';
+            if (!$field->isPrimary && !in_array($field->name, $dont_require_fields)) {
+                if ($field->isNotNull && empty($field->validations)) {
+                    $field->validations = 'required';
+                }
+
+                /**
+                 * Generate some sane defaults based on the field type if we
+                 * are generating from a database table.
+                 */
+                if ($this->commandData->getOption('fromTable')) {
+                    $rule = empty($field->validations) ? [] : explode('|', $field->validations);
+
+                    if (!$field->isNotNull) {
+                        $rule[] = 'nullable';
+                    }
+
+                    switch ($field->fieldType) {
+                        case 'integer':
+                            $rule[] = 'integer';
+                            break;
+                        case 'boolean':
+                            $rule[] = 'boolean';
+                            break;
+                        case 'float':
+                        case 'double':
+                        case 'decimal':
+                            $rule[] = 'numeric';
+                            break;
+                        case 'string':
+                            $rule[] = 'string';
+
+                            // Enforce a maximum string length if possible.
+                            foreach (explode(':', $field->dbInput) as $key => $value) {
+                                if (preg_match('/string,(\d+)/', $value, $matches)) {
+                                    $rule[] = 'max:'.$matches[1];
+                                }
+                            }
+                            break;
+                        case 'text':
+                            $rule[] = 'string';
+                            break;
+                    }
+
+                    $field->validations = implode('|', $rule);
+                }
             }
 
             if (!empty($field->validations)) {
@@ -320,8 +395,10 @@ class ModelGenerator extends BaseGenerator
                 case 'double':
                     $rule .= "'double'";
                     break;
-                case 'float':
                 case 'decimal':
+                    $rule .= sprintf("'decimal:%d'", $field->numberDecimalPoints);
+                    break;
+                case 'float':
                     $rule .= "'float'";
                     break;
                 case 'boolean':

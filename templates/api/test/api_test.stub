@@ -15,7 +15,7 @@ class $MODEL_NAME$ApiTest extends TestCase
      */
     public function test_create_$MODEL_NAME_SNAKE$()
     {
-        $$MODEL_NAME_CAMEL$ = factory($MODEL_NAME$::class)->make()->toArray();
+        $$MODEL_NAME_CAMEL$ = $MODEL_NAME$::factory()->make()->toArray();
 
         $this->response = $this->json(
             'POST',
@@ -30,7 +30,7 @@ class $MODEL_NAME$ApiTest extends TestCase
      */
     public function test_read_$MODEL_NAME_SNAKE$()
     {
-        $$MODEL_NAME_CAMEL$ = factory($MODEL_NAME$::class)->create();
+        $$MODEL_NAME_CAMEL$ = $MODEL_NAME$::factory()->create();
 
         $this->response = $this->json(
             'GET',
@@ -45,8 +45,8 @@ class $MODEL_NAME$ApiTest extends TestCase
      */
     public function test_update_$MODEL_NAME_SNAKE$()
     {
-        $$MODEL_NAME_CAMEL$ = factory($MODEL_NAME$::class)->create();
-        $edited$MODEL_NAME$ = factory($MODEL_NAME$::class)->make()->toArray();
+        $$MODEL_NAME_CAMEL$ = $MODEL_NAME$::factory()->create();
+        $edited$MODEL_NAME$ = $MODEL_NAME$::factory()->make()->toArray();
 
         $this->response = $this->json(
             'PUT',
@@ -62,7 +62,7 @@ class $MODEL_NAME$ApiTest extends TestCase
      */
     public function test_delete_$MODEL_NAME_SNAKE$()
     {
-        $$MODEL_NAME_CAMEL$ = factory($MODEL_NAME$::class)->create();
+        $$MODEL_NAME_CAMEL$ = $MODEL_NAME$::factory()->create();
 
         $this->response = $this->json(
             'DELETE',

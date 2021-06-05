@@ -3,9 +3,9 @@
 namespace Tests\Utils;
 
 use InfyOm\Generator\Utils\ResponseUtil;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ResponseUtilTest extends PHPUnit_Framework_TestCase
+class ResponseUtilTest extends TestCase
 {
     public function testMakeResponse()
     {

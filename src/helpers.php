@@ -100,7 +100,25 @@ if (!function_exists('get_template_file_path')) {
             return $path;
         }
 
-        return base_path('vendor/infyomlabs/'.$templateType.'/templates/'.$templateName.'.stub');
+        return get_templates_package_path($templateType).'/templates/'.$templateName.'.stub';
+    }
+}
+
+if (!function_exists('get_templates_package_path')) {
+    /**
+     * Finds templates package's full path.
+     *
+     * @param string $templateType
+     *
+     * @return string
+     */
+    function get_templates_package_path($templateType)
+    {
+        if (strpos($templateType, '/') === false) {
+            $templateType = base_path('vendor/infyomlabs/').$templateType;
+        }
+
+        return $templateType;
     }
 }
 
@@ -176,6 +194,48 @@ if (!function_exists('fill_template_with_field_data')) {
         $template = fill_template($variables, $template);
 
         return fill_field_template($fieldVariables, $template, $field);
+    }
+}
+
+if (!function_exists('fill_template_with_field_data_locale')) {
+    /**
+     * fill template with field data.
+     *
+     * @param array          $variables
+     * @param array          $fieldVariables
+     * @param string         $template
+     * @param GeneratorField $field
+     *
+     * @return string
+     */
+    function fill_template_with_field_data_locale($variables, $fieldVariables, $template, $field)
+    {
+        $template = fill_template($variables, $template);
+        $modelName = $variables['$MODEL_NAME_PLURAL_CAMEL$'];
+
+        return fill_field_template_locale($fieldVariables, $template, $field, $modelName);
+    }
+}
+
+if (!function_exists('fill_field_template_locale')) {
+    /**
+     * fill field template with variable values.
+     *
+     * @param array          $variables
+     * @param string         $template
+     * @param GeneratorField $field
+     * @param string         $modelName
+     *
+     * @return string
+     */
+    function fill_field_template_locale($variables, $template, $field, $modelName)
+    {
+        foreach ($variables as $variable => $key) {
+            $value = $field->name;
+            $template = str_replace($variable, "@lang('models/$modelName.fields.$value')", $template);
+        }
+
+        return $template;
     }
 }
 

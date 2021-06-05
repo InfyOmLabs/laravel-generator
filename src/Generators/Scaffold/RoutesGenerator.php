@@ -35,6 +35,12 @@ class RoutesGenerator
     public function generate()
     {
         $this->routeContents .= "\n\n".$this->routesTemplate;
+        $existingRouteContents = file_get_contents($this->path);
+        if (Str::contains($existingRouteContents, "Route::resource('".$this->commandData->config->mSnakePlural."',")) {
+            $this->commandData->commandObj->info('Route '.$this->commandData->config->mPlural.' is already exists, Skipping Adjustment.');
+
+            return;
+        }
 
         file_put_contents($this->path, $this->routeContents);
         $this->commandData->commandComment("\n".$this->commandData->config->mCamelPlural.' routes added.');

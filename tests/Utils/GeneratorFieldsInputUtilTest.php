@@ -3,8 +3,9 @@
 namespace Tests;
 
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
+use PHPUnit\Framework\TestCase;
 
-class GeneratorFieldsInputUtilTest extends \PHPUnit_Framework_TestCase
+class GeneratorFieldsInputUtilTest extends TestCase
 {
     public function testValidateFieldInput()
     {

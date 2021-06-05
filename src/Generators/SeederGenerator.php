@@ -40,31 +40,4 @@ class SeederGenerator extends BaseGenerator
         $this->commandData->commandComment("\nSeeder created: ");
         $this->commandData->commandInfo($this->fileName);
     }
-
-    public function updateMainSeeder()
-    {
-        $mainSeederContent = file_get_contents($this->commandData->config->pathDatabaseSeeder);
-
-        $newSeederStatement = '\$this->call('.$this->commandData->config->mPlural.'TableSeeder::class);';
-
-        if (strpos($mainSeederContent, $newSeederStatement) != false) {
-            $this->commandData->commandObj->info($this->commandData->config->mPlural.'TableSeeder entry found in DatabaseSeeder. Skipping Adjustment.');
-
-            return;
-        }
-
-        $newSeederStatement = infy_tabs(2).$newSeederStatement.infy_nl();
-
-        preg_match_all('/\\$this->call\\((.*);/', $mainSeederContent, $matches);
-
-        $totalMatches = count($matches[0]);
-        $lastSeederStatement = $matches[0][$totalMatches - 1];
-
-        $replacePosition = strpos($mainSeederContent, $lastSeederStatement);
-
-        $mainSeederContent = substr_replace($mainSeederContent, $newSeederStatement, $replacePosition + strlen($lastSeederStatement) + 1, 0);
-
-        file_put_contents($this->commandData->config->pathDatabaseSeeder, $mainSeederContent);
-        $this->commandData->commandComment('Main Seeder file updated.');
-    }
 }

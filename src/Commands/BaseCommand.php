@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\API\APIControllerGenerator;
 use InfyOm\Generator\Generators\API\APIRequestGenerator;
+use InfyOm\Generator\Generators\API\APIResourceGenerator;
 use InfyOm\Generator\Generators\API\APIRoutesGenerator;
 use InfyOm\Generator\Generators\API\APITestGenerator;
 use InfyOm\Generator\Generators\FactoryGenerator;
@@ -15,6 +16,7 @@ use InfyOm\Generator\Generators\ModelGenerator;
 use InfyOm\Generator\Generators\RepositoryGenerator;
 use InfyOm\Generator\Generators\RepositoryTestGenerator;
 use InfyOm\Generator\Generators\Scaffold\ControllerGenerator;
+use InfyOm\Generator\Generators\Scaffold\JQueryDatatableAssetsGenerator;
 use InfyOm\Generator\Generators\Scaffold\MenuGenerator;
 use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
 use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
@@ -74,8 +76,8 @@ class BaseCommand extends Command
         }
 
         if ($this->commandData->getOption('factory') || (
-                !$this->isSkip('tests') and $this->commandData->getAddOn('tests')
-            )) {
+            !$this->isSkip('tests') and $this->commandData->getAddOn('tests')
+        )) {
             $factoryGenerator = new FactoryGenerator($this->commandData);
             $factoryGenerator->generate();
         }
@@ -83,7 +85,6 @@ class BaseCommand extends Command
         if ($this->commandData->getOption('seeder')) {
             $seederGenerator = new SeederGenerator($this->commandData);
             $seederGenerator->generate();
-            $seederGenerator->updateMainSeeder();
         }
     }
 
@@ -113,6 +114,10 @@ class BaseCommand extends Command
             $apiTestGenerator = new APITestGenerator($this->commandData);
             $apiTestGenerator->generate();
         }
+        if ($this->commandData->getOption('resources')) {
+            $apiResourceGenerator = new APIResourceGenerator($this->commandData);
+            $apiResourceGenerator->generate();
+        }
     }
 
     public function generateScaffoldItems()
@@ -141,6 +146,11 @@ class BaseCommand extends Command
             $menuGenerator = new MenuGenerator($this->commandData);
             $menuGenerator->generate();
         }
+
+        if ($this->commandData->jqueryDT()) {
+            $assetsGenerator = new JQueryDatatableAssetsGenerator($this->commandData);
+            $assetsGenerator->generate();
+        }
     }
 
     public function performPostActions($runMigration = false)
@@ -161,6 +171,11 @@ class BaseCommand extends Command
                 }
             }
         }
+
+        if ($this->commandData->getOption('localized')) {
+            $this->saveLocaleFile();
+        }
+
         if (!$this->isSkip('dump-autoload')) {
             $this->info('Generating autoload files');
             $this->composer->dumpOptimized();
@@ -228,6 +243,31 @@ class BaseCommand extends Command
         $this->commandData->commandInfo($fileName);
     }
 
+    private function saveLocaleFile()
+    {
+        $locales = [
+            'singular' => $this->commandData->modelName,
+            'plural'   => $this->commandData->config->mPlural,
+            'fields'   => [],
+        ];
+
+        foreach ($this->commandData->fields as $field) {
+            $locales['fields'][$field->name] = Str::title(str_replace('_', ' ', $field->name));
+        }
+
+        $path = config('infyom.laravel_generator.path.models_locale_files', base_path('resources/lang/en/models/'));
+
+        $fileName = $this->commandData->config->mCamelPlural.'.php';
+
+        if (file_exists($path.$fileName) && !$this->confirmOverwrite($fileName)) {
+            return;
+        }
+        $content = "<?php\n\nreturn ".var_export($locales, true).';'.\PHP_EOL;
+        FileUtil::createFile($path, $fileName, $content);
+        $this->commandData->commandComment("\nModel Locale File saved: ");
+        $this->commandData->commandInfo($fileName);
+    }
+
     /**
      * @param $fileName
      * @param string $prompt
@@ -269,7 +309,11 @@ class BaseCommand extends Command
             ['forceMigrate', null, InputOption::VALUE_NONE, 'Specify if you want to run migration or not'],
             ['factory', null, InputOption::VALUE_NONE, 'To generate factory'],
             ['seeder', null, InputOption::VALUE_NONE, 'To generate seeder'],
+            ['localized', null, InputOption::VALUE_NONE, 'Localize files.'],
             ['repositoryPattern', null, InputOption::VALUE_REQUIRED, 'Repository Pattern'],
+            ['resources', null, InputOption::VALUE_REQUIRED, 'Resources'],
+            ['connection', null, InputOption::VALUE_REQUIRED, 'Specify connection name'],
+            ['jqueryDT', null, InputOption::VALUE_NONE, 'Generate listing screen into JQuery Datatables'],
         ];
     }
 
