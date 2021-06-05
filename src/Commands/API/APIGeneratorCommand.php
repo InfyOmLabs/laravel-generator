@@ -4,6 +4,7 @@ namespace InfyOm\Generator\Commands\API;
 
 use InfyOm\Generator\Commands\BaseCommand;
 use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Utils\FileUtil;
 
 class APIGeneratorCommand extends BaseCommand
 {
@@ -39,12 +40,14 @@ class APIGeneratorCommand extends BaseCommand
     public function handle()
     {
         parent::handle();
+        $this->commandData->fireEvent('api', FileUtil::FILE_CREATING);
 
         $this->generateCommonItems();
 
         $this->generateAPIItems();
 
         $this->performPostActionsWithMigration();
+        $this->commandData->fireEvent('api', FileUtil::FILE_CREATED);
     }
 
     /**
