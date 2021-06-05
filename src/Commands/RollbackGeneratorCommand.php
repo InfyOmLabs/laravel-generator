@@ -18,6 +18,7 @@ use InfyOm\Generator\Generators\Scaffold\MenuGenerator;
 use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
 use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
 use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
+use InfyOm\Generator\Utils\FileUtil;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -64,7 +65,8 @@ class RollbackGeneratorCommand extends Command
      */
     public function handle()
     {
-        if (!in_array($this->argument('type'), [
+        $type = $this->argument('type');
+        if (!in_array($type, [
             CommandData::$COMMAND_TYPE_API,
             CommandData::$COMMAND_TYPE_SCAFFOLD,
             CommandData::$COMMAND_TYPE_API_SCAFFOLD,
@@ -73,6 +75,7 @@ class RollbackGeneratorCommand extends Command
         }
 
         $this->commandData = new CommandData($this, $this->argument('type'));
+        $this->commandData->fireEvent($type, FileUtil::FILE_DELETING);
         $this->commandData->config->mName = $this->commandData->modelName = $this->argument('model');
 
         $this->commandData->config->init($this->commandData, ['tableName', 'prefix', 'plural', 'views']);
@@ -85,6 +88,7 @@ class RollbackGeneratorCommand extends Command
 
             $this->info('Generating autoload files');
             $this->composer->dumpOptimized();
+            $this->commandData->fireEvent($type, FileUtil::FILE_DELETED);
 
             return;
         }
@@ -137,6 +141,8 @@ class RollbackGeneratorCommand extends Command
 
         $this->info('Generating autoload files');
         $this->composer->dumpOptimized();
+
+        $this->commandData->fireEvent($type, FileUtil::FILE_DELETED);
     }
 
     /**
