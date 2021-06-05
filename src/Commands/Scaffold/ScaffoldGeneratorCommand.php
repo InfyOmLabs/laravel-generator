@@ -4,6 +4,7 @@ namespace InfyOm\Generator\Commands\Scaffold;
 
 use InfyOm\Generator\Commands\BaseCommand;
 use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Utils\FileUtil;
 
 class ScaffoldGeneratorCommand extends BaseCommand
 {
@@ -41,11 +42,13 @@ class ScaffoldGeneratorCommand extends BaseCommand
         parent::handle();
 
         if ($this->checkIsThereAnyDataToGenerate()) {
+            $this->commandData->fireEvent('scaffold', FileUtil::FILE_CREATING);
             $this->generateCommonItems();
 
             $this->generateScaffoldItems();
 
             $this->performPostActionsWithMigration();
+            $this->commandData->fireEvent('scaffold', FileUtil::FILE_CREATED);
         } else {
             $this->commandData->commandInfo('There are not enough input fields for scaffold generation.');
         }

@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Commands;
 
 use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Utils\FileUtil;
 
 class APIScaffoldGeneratorCommand extends BaseCommand
 {
@@ -38,6 +39,7 @@ class APIScaffoldGeneratorCommand extends BaseCommand
     public function handle()
     {
         parent::handle();
+        $this->commandData->fireEvent('api_scaffold', FileUtil::FILE_CREATING);
 
         $this->generateCommonItems();
 
@@ -46,6 +48,7 @@ class APIScaffoldGeneratorCommand extends BaseCommand
         $this->generateScaffoldItems();
 
         $this->performPostActionsWithMigration();
+        $this->commandData->fireEvent('api_scaffold', FileUtil::FILE_CREATED);
     }
 
     /**
