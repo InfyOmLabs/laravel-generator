@@ -1,0 +1,62 @@
+<?php
+
+namespace $NAMESPACE_CONTROLLERS_TESTS$;
+
+use Illuminate\Http\Response;
+use $NAMESPACE_MODEL$\$MODEL_NAME$;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use $NAMESPACE_TESTS$\TestCase;
+
+class $MODEL_NAME$ControllerTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function setUp() : void
+    {
+        parent::setUp();
+    }
+
+    /**
+     * @test list $MODEL_NAME_PLURAL_SNAKE$
+     */
+    public function test_can_list_$MODEL_NAME_PLURAL_SNAKE$()
+    {
+        $response = $this->get('/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_SNAKE$');
+        $response->assertStatus(Response::HTTP_OK);
+    }
+
+    /**
+     * @test create $MODEL_NAME_CAMEL$
+     */
+    public function test_can_create_$MODEL_NAME_CAMEL$()
+    {
+        $data = $MODEL_NAME$::factory()->make();
+        $response = $this->post('/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_SNAKE$', $data->toArray());
+        $response->assertStatus(Response::HTTP_FOUND);
+        $response->assertRedirect('/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_SNAKE$');
+    }
+
+    /**
+     * @test delete $MODEL_NAME_CAMEL$
+     */
+    public function test_can_delete_$MODEL_NAME_CAMEL$()
+    {
+        $data = $MODEL_NAME$::factory()->create();
+        $response = $this->post('/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_SNAKE$/' . $data->id, array_merge(['_method' => 'DELETE']));
+        $response->assertStatus(Response::HTTP_FOUND);
+        $response->assertRedirect('/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_SNAKE$');
+    }
+
+    /**
+     * @test update $MODEL_NAME_CAMEL$
+     */
+    public function test_can_update_$MODEL_NAME_CAMEL$()
+    {
+        $data = $MODEL_NAME$::factory()->create();
+        $updatedData = $MODEL_NAME$::factory()->make();
+
+        $response = $this->post('/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_SNAKE$/' . $data->id, array_merge(['_method' => 'PATCH'], $updatedData->toArray()));
+        $response->assertStatus(Response::HTTP_FOUND);
+        $response->assertRedirect('/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_SNAKE$');
+    }
+}

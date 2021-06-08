@@ -92,6 +92,12 @@ class GeneratorPublishCommand extends PublishBaseCommand
             FileUtil::createDirectoryIfNotExist($testRepositoriesPath);
             $this->info('Repositories Tests directory created');
         }
+
+        $testControllersPath = config('infyom.laravel_generator.path.controller_test', base_path('tests/Controllers/'));
+        if (!file_exists($testControllersPath)) {
+            FileUtil::createDirectoryIfNotExist($testRepositoriesPath);
+            $this->info('Controllers Tests directory created');
+        }
     }
 
     private function publishBaseController()

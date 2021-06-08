@@ -17,6 +17,7 @@ $SOFT_DELETE_DATES$
 $CONNECTION$
 $PRIMARY$
     public $fillable = [
+        'created_at',
         $FIELDS$
     ];
 
