@@ -32,6 +32,7 @@ class $MODEL_NAME$ControllerTest extends TestCase
     {
         $data = $MODEL_NAME$::factory()->make();
         $response = $this->post('/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_SNAKE$', $data->toArray());
+        $MODEL_NAME$::query()->firstOrFail();
         $response->assertStatus(Response::HTTP_FOUND);
         $response->assertRedirect('/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_SNAKE$');
     }
@@ -42,9 +43,12 @@ class $MODEL_NAME$ControllerTest extends TestCase
     public function test_can_delete_$MODEL_NAME_CAMEL$()
     {
         $data = $MODEL_NAME$::factory()->create();
-        $response = $this->post('/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_SNAKE$/' . $data->id, array_merge(['_method' => 'DELETE']));
+        $response = $this->post('/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_SNAKE$/' . $data->$PRIMARY_KEY_NAME$, array_merge(['_method' => 'DELETE']));
         $response->assertStatus(Response::HTTP_FOUND);
         $response->assertRedirect('/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_SNAKE$');
+        $this->assertSoftDeleted('$MODEL_NAME_PLURAL_SNAKE$', [
+            '$PRIMARY_KEY_NAME$' => $data->$PRIMARY_KEY_NAME$
+        ]);
     }
 
     /**
@@ -55,7 +59,7 @@ class $MODEL_NAME$ControllerTest extends TestCase
         $data = $MODEL_NAME$::factory()->create();
         $updatedData = $MODEL_NAME$::factory()->make();
 
-        $response = $this->post('/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_SNAKE$/' . $data->id, array_merge(['_method' => 'PATCH'], $updatedData->toArray()));
+        $response = $this->post('/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_SNAKE$/' . $data->$PRIMARY_KEY_NAME$, array_merge(['_method' => 'PATCH'], $updatedData->toArray()));
         $response->assertStatus(Response::HTTP_FOUND);
         $response->assertRedirect('/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_SNAKE$');
     }
