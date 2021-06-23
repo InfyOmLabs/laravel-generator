@@ -191,6 +191,7 @@ class FactoryGenerator extends BaseGenerator
         if ($rule) {
             $max = $this->extractMinMax($rule, 'max') ?? PHP_INT_MAX;
             $min = $this->extractMinMax($rule, 'min') ?? 0;
+
             return "numberBetween($min, $max)";
         } else {
             return 'randomDigitNotNull';
@@ -209,11 +210,12 @@ class FactoryGenerator extends BaseGenerator
     {
         $relation = $this->relations[$fieldName]['relation'];
         $variable = Str::camel($relation);
+
         return "'".$fieldName."' => ".'$'.$variable.'->id';
     }
 
     /**
-     * Generates a valid text based on applicable model rule
+     * Generates a valid text based on applicable model rule.
      *
      * @param string $rule The applicable model rule.
      *
@@ -250,7 +252,7 @@ class FactoryGenerator extends BaseGenerator
 
         return null;
     }
-    
+
     /**
      * Generate valid model so we can use the id where applicable
      * This method assumes the model has a factory.
