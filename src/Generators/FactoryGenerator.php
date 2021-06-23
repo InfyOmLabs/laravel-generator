@@ -151,7 +151,7 @@ class FactoryGenerator extends BaseGenerator
                     } elseif (strpos($lower, 'password') !== false) {
                         $fakerData = "lexify('1???@???A???')";
                     } elseif (strpos($lower, 'address')) {
-                        $fakerData = "address";
+                        $fakerData = 'address';
                     } else {
                         if (!$rule) {
                             $rule = 'max:255';
