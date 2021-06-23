@@ -41,13 +41,13 @@ class FactoryGenerator extends BaseGenerator
                     if (isset($relations->inputs[1])) {
                         $field = $relation->inputs[1];
                     } else {
-                        $field = Str::snake($relation)."_id";
+                        $field = Str::snake($relation).'_id';
                     }
                     if ($field) {
                         $rel = $relation;
                         $this->relations[$field] = [
                             'relation'      => $rel,
-                            'model_class'   => $this->commandData->config->nsModel."\\".$relation,
+                            'model_class'   => $this->commandData->config->nsModel.'\\'.$relation,
                         ];
                     }
                 }
@@ -181,9 +181,9 @@ class FactoryGenerator extends BaseGenerator
 
     /**
      * Generates a valid number based on applicable model rule.
-     * 
+     *
      * @param string $rule The applicable model rule
-     * 
+     *
      * @return string
      */
     public function getValidNumber($rule = null)
@@ -192,8 +192,7 @@ class FactoryGenerator extends BaseGenerator
             $max = $this->extractMinMax($rule, 'max') ?? PHP_INT_MAX;
             $min = $this->extractMinMax($rule, 'min') ?? 0;
             return "numberBetween($min, $max)";
-        }
-        else {
+        } else {
             return 'randomDigitNotNull';
         }
     }
@@ -201,9 +200,9 @@ class FactoryGenerator extends BaseGenerator
     /**
      * Generates a valid relation if applicable
      * This method assumes the related field primary key is id.
-     * 
+     *
      * @param string $fieldName The field name
-     * 
+     *
      * @return string
      */
     public function getValidRelation($fieldName)
@@ -215,7 +214,9 @@ class FactoryGenerator extends BaseGenerator
 
     /**
      * Generates a valid text based on applicable model rule
-     * @param string $rule The applicable model rule
+     *
+     * @param string $rule The applicable model rule.
+     *
      * @return string
      */
     public function getValidText($rule = null)
@@ -225,8 +226,7 @@ class FactoryGenerator extends BaseGenerator
             $min = $this->extractMinMax($rule, 'min') ?? 0;
 
             return 'text('.'$this->faker->numberBetween('.$min.', '.$max.'))';
-        }
-        else {
+        } else {
             return 'text';
         }
     }
@@ -237,11 +237,11 @@ class FactoryGenerator extends BaseGenerator
     public function extractMinMax($rule, $t = 'min')
     {
         $i = strpos($rule, $t);
-        $e = strpos($rule, '|',  $i);
-        if ($e === FALSE) {
+        $e = strpos($rule, '|', $i);
+        if ($e === false) {
             $e = strlen($rule);
         }
-        if ($i !== FALSE) {
+        if ($i !== false) {
             $len = $e - ($i + 4);
             $result = substr($rule, $i + 4, $len);
 
@@ -264,7 +264,7 @@ class FactoryGenerator extends BaseGenerator
             $qualifier = $data['model_class'];
             $variable = Str::camel($relation);
             $model = Str::studly($relation);
-            $text .= infy_nl_tab(1, 2).'$'.$relation. '= '.$variable.'::first();'.
+            $text .= infy_nl_tab(1, 2).'$'.$relation.'= '.$variable.'::first();'.
             infy_nl_tab(1, 2).
             'if (!$'.$relation.') {'.
             infy_nl_tab(1, 3).
@@ -272,6 +272,7 @@ class FactoryGenerator extends BaseGenerator
             infy_nl_tab(1, 2).'}';
             $uses .= infy_nl()."Use $qualifier;";
         }
+
         return [
             'text' => $text,
             'uses' => $uses,
