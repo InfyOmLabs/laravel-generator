@@ -2,10 +2,10 @@
 
 namespace InfyOm\Generator\Generators;
 
+use Illuminate\Support\Str;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
-use Illuminate\Support\Str;
 
 /**
  * Class FactoryGenerator.
@@ -33,7 +33,7 @@ class FactoryGenerator extends BaseGenerator
         $this->fileName = $this->commandData->modelName.'Factory.php';
         //setup relations if available
         //assumes relation fields are tailed with _id if not supplied
-        if(property_exists($this->commandData, 'relations')) {
+        if (property_exists($this->commandData, 'relations')) {
             foreach ($this->commandData->relations as $relation) {
                 if ($relation->type == 'mt1') {
                     $relation = (isset($relation->inputs[0])) ? $relation->inputs[0] : null;
@@ -42,12 +42,12 @@ class FactoryGenerator extends BaseGenerator
                         $field = $relation->inputs[1];
                     } else {
                         $field = Str::snake($relation)."_id";
-                    }                    
+                    }
                     if ($field) {
                         $rel = $relation;
                         $this->relations[$field] = [
-                            'relation' => $rel,
-                            'model_class' => $this->commandData->config->nsModel."\\".$relation
+                            'relation'      => $rel,
+                            'model_class'   => $this->commandData->config->nsModel."\\".$relation,
                         ];
                     }
                 }
@@ -105,9 +105,9 @@ class FactoryGenerator extends BaseGenerator
     private function generateFields()
     {
         $fields = [];
-        
+
         //get model validation rules
-        $class = $this->commandData->config->nsModel."\\".$this->commandData->modelName;
+        $class = $this->commandData->config->nsModel.'\\'.$this->commandData->modelName;
         $rules = $class::$rules;
         $relations = array_keys($this->relations);
 
@@ -125,13 +125,13 @@ class FactoryGenerator extends BaseGenerator
             switch ($field->fieldType) {
                 case 'integer':
                 case 'smallinteger':
-                    $fakerData = in_array($field->name, $relations) ? ":relation" : $this->getValidNumber($rule);
+                    $fakerData = in_array($field->name, $relations) ? ':relation' : $this->getValidNumber($rule);
                     break;
                 case 'long':
                 case 'biginteger':
                 case 'float':
                 case 'double':
-                case 'decimal':                    
+                case 'decimal':
                     $fakerData = $this->getValidNumber($rule);
                     break;
                 case 'char':
@@ -146,7 +146,7 @@ class FactoryGenerator extends BaseGenerator
                 case 'text':
                     $fakerData = $rule ? $this->getValidText($rule) : 'text(500)';
                 case 'boolean':
-                    $fakerData = "boolean";
+                    $fakerData = 'boolean';
                     break;
                 case 'date':
                     $fakerData = "date('Y-m-d')";
@@ -167,7 +167,7 @@ class FactoryGenerator extends BaseGenerator
                     $fakerData = 'word';
             }
 
-            if ($fakerData == ":relation") {
+            if ($fakerData == ':relation') {
                 $fieldData = $this->getValidRelation($field->name);
             } else {
                 $fieldData .= $fakerData;
@@ -180,8 +180,10 @@ class FactoryGenerator extends BaseGenerator
     }
 
     /**
-     * Generates a valid number based on applicable model rule
+     * Generates a valid number based on applicable model rule.
+     * 
      * @param string $rule The applicable model rule
+     * 
      * @return string
      */
     public function getValidNumber($rule = null)
@@ -192,21 +194,23 @@ class FactoryGenerator extends BaseGenerator
             return "numberBetween($min, $max)";
         }
         else {
-            return "randomDigitNotNull";
+            return 'randomDigitNotNull';
         }
     }
 
     /**
      * Generates a valid relation if applicable
-     * This method assumes the related field primary key is id
+     * This method assumes the related field primary key is id.
+     * 
      * @param string $fieldName The field name
+     * 
      * @return string
      */
     public function getValidRelation($fieldName)
     {
         $relation = $this->relations[$fieldName]['relation'];
         $variable = Str::camel($relation);
-        return "'".$fieldName."' => ".'$'.$variable."->id";
+        return "'".$fieldName."' => ".'$'.$variable.'->id';
     }
 
     /**
@@ -219,44 +223,48 @@ class FactoryGenerator extends BaseGenerator
         if ($rule) {
             $max = $this->extractMinMax($rule, 'max') ?? 4096;
             $min = $this->extractMinMax($rule, 'min') ?? 0;
-            return "text(".'$this->faker->numberBetween('.$min.', '.$max.'))';
+
+            return 'text('.'$this->faker->numberBetween('.$min.', '.$max.'))';
         }
         else {
-            return "text";
+            return 'text';
         }
     }
 
     /**
-     * Extracts min or max rule for a laravel model
+     * Extracts min or max rule for a laravel model.
      */
-    public function extractMinMax($rule, $t = 'min'){
+    public function extractMinMax($rule, $t = 'min')
+    {
         $i = strpos($rule, $t);
-        $e = strpos($rule, "|",  $i);
+        $e = strpos($rule, '|',  $i);
         if ($e === FALSE) {
             $e = strlen($rule);
         }
         if ($i !== FALSE) {
-            $len = $e - ($i+4);
-            $result = substr($rule, $i+4, $len);
+            $len = $e - ($i + 4);
+            $result = substr($rule, $i + 4, $len);
+
             return $result;
         }
+
         return null;
     }
     
     /**
      * Generate valid model so we can use the id where applicable
-     * This method assumes the model has a factory
+     * This method assumes the model has a factory.
      */
     public function getRelationsBootstrap()
     {
-        $text = "";
-        $uses = "";
+        $text = '';
+        $uses = '';
         foreach ($this->relations as $field => $data) {
             $relation = $data['relation'];
             $qualifier = $data['model_class'];
             $variable = Str::camel($relation);
             $model = Str::studly($relation);
-            $text .= infy_nl_tab(1, 2).'$'.$relation. '= '.$variable."::first();".
+            $text .= infy_nl_tab(1, 2).'$'.$relation. '= '.$variable.'::first();'.
             infy_nl_tab(1, 2).
             'if (!$'.$relation.') {'.
             infy_nl_tab(1, 3).
@@ -266,7 +274,7 @@ class FactoryGenerator extends BaseGenerator
         }
         return [
             'text' => $text,
-            'uses' => $uses
+            'uses' => $uses,
         ];
     }
 
