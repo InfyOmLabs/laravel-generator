@@ -34,12 +34,12 @@ class FactoryGenerator extends BaseGenerator
         //setup relations if available
         //assumes relation fields are tailed with _id if not supplied
         if (property_exists($this->commandData, 'relations')) {
-            foreach ($this->commandData->relations as $relation) {
-                if ($relation->type == 'mt1') {
-                    $relation = (isset($relation->inputs[0])) ? $relation->inputs[0] : null;
+            foreach ($this->commandData->relations as $r) {
+                if ($r->type == 'mt1') {
+                    $relation = (isset($r->inputs[0])) ? $r->inputs[0] : null;
                     $field = false;
-                    if (isset($relations->inputs[1])) {
-                        $field = $relation->inputs[1];
+                    if (isset($r->inputs[1])) {
+                        $field = $r->inputs[1];
                     } else {
                         $field = Str::snake($relation).'_id';
                     }
@@ -125,11 +125,11 @@ class FactoryGenerator extends BaseGenerator
             switch ($field->fieldType) {
                 case 'integer':
                 case 'smallinteger':
-                    $fakerData = in_array($field->name, $relations) ? ':relation' : $this->getValidNumber($rule);
+                case 'float':
+                    $fakerData = in_array($field->name, $relations) ? ':relation' : $this->getValidNumber($rule, 999);
                     break;
                 case 'long':
                 case 'biginteger':
-                case 'float':
                 case 'double':
                 case 'decimal':
                     $fakerData = $this->getValidNumber($rule);
@@ -182,14 +182,15 @@ class FactoryGenerator extends BaseGenerator
     /**
      * Generates a valid number based on applicable model rule.
      *
-     * @param string $rule The applicable model rule
+     * @param string    $rule The applicable model rule
+     * @param integer   $max The maximum number to generate.
      *
      * @return string
      */
-    public function getValidNumber($rule = null)
+    public function getValidNumber($rule = null, $max = PHP_INT_MAX)
     {
         if ($rule) {
-            $max = $this->extractMinMax($rule, 'max') ?? PHP_INT_MAX;
+            $max = $this->extractMinMax($rule, 'max') ?? $max;
             $min = $this->extractMinMax($rule, 'min') ?? 0;
 
             return "numberBetween($min, $max)";
@@ -266,12 +267,12 @@ class FactoryGenerator extends BaseGenerator
             $qualifier = $data['model_class'];
             $variable = Str::camel($relation);
             $model = Str::studly($relation);
-            $text .= infy_nl_tab(1, 2).'$'.$relation.'= '.$variable.'::first();'.
+            $text .= infy_nl_tab(1, 2).'$'.$variable.' = '.$model.'::first();'.
             infy_nl_tab(1, 2).
-            'if (!$'.$relation.') {'.
+            'if (!$'.$variable.') {'.
             infy_nl_tab(1, 3).
-            '$'.$relation.' = '.$model.'::factory()->create();'.
-            infy_nl_tab(1, 2).'}';
+            '$'.$variable.' = '.$model.'::factory()->create();'.
+            infy_nl_tab(1, 2).'}'.infy_nl();
             $uses .= infy_nl()."Use $qualifier;";
         }
 
