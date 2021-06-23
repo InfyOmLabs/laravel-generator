@@ -18,7 +18,7 @@ class FactoryGenerator extends BaseGenerator
     private $path;
     /** @var string */
     private $fileName;
-
+    /** @var array */
     private $relations = [];
 
     /**
@@ -219,7 +219,7 @@ class FactoryGenerator extends BaseGenerator
         if ($rule) {
             $max = $this->extractMinMax($rule, 'max') ?? 4096;
             $min = $this->extractMinMax($rule, 'min') ?? 0;
-            return "text($this->faker->numberBetween($min, $max))";
+            return "text(".'$this->faker->numberBetween('.$min.', '.$max.'))';
         }
         else {
             return "text";
