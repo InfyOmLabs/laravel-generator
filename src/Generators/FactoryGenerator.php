@@ -182,8 +182,8 @@ class FactoryGenerator extends BaseGenerator
     /**
      * Generates a valid number based on applicable model rule.
      *
-     * @param string    $rule The applicable model rule
-     * @param integer   $max The maximum number to generate.
+     * @param string $rule The applicable model rule
+     * @param int    $max The maximum number to generate.
      *
      * @return string
      */
