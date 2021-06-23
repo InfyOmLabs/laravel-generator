@@ -146,11 +146,11 @@ class FactoryGenerator extends BaseGenerator
                         $fakerData = 'firstName';
                     } elseif (($firstChar == 's' || $firstChar == 'l') && strpos($lower, 'name') !== false) {
                         $fakerData = 'lastName';
-                    } elseif(strpos($lower, 'phone') !== false) {
+                    } elseif (strpos($lower, 'phone') !== false) {
                         $fakerData = "numerify('0##########')";
-                    } elseif(strpos($lower, 'password') !== false) {
+                    } elseif (strpos($lower, 'password') !== false) {
                         $fakerData = "lexify('1???@???A???')";
-                    } elseif(strpos($lower, 'address')) {
+                    } elseif (strpos($lower, 'address')) {
                         $fakerData = "address";
                     } else {
                         if (!$rule) {
