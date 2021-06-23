@@ -135,13 +135,29 @@ class FactoryGenerator extends BaseGenerator
                     $fakerData = $this->getValidNumber($rule);
                     break;
                 case 'char':
-                    $fakerData = 'text(1)';
+                    $fakerData = "lexify('?')";
                     break;
                 case 'string':
-                    if (!$rule) {
-                        $rule = 'max:255';
+                    $lower = strtolower($field->name);
+                    $firstChar = substr($lower, 0, 1);
+                    if (strpos($lower, 'email') !== false) {
+                        $fakerData = 'email';
+                    } elseif ($firstChar == 'f' && strpos($lower, 'name') !== false) {
+                        $fakerData = 'firstName';
+                    } elseif (($firstChar == 's' || $firstChar == 'l') && strpos($lower, 'name') !== false) {
+                        $fakerData = 'lastName';
+                    } elseif(strpos($lower, 'phone') !== false) {
+                        $fakerData = "numerify('0##########')";
+                    } elseif(strpos($lower, 'password') !== false) {
+                        $fakerData = "lexify('1???@???A???')";
+                    } elseif(strpos($lower, 'address')) {
+                        $fakerData = "address";
+                    } else {
+                        if (!$rule) {
+                            $rule = 'max:255';
+                        }
+                        $fakerData = $this->getValidText($rule);
                     }
-                    $fakerData = $this->getValidText($rule);
                     break;
                 case 'text':
                     $fakerData = $rule ? $this->getValidText($rule) : 'text(500)';
@@ -226,7 +242,16 @@ class FactoryGenerator extends BaseGenerator
     {
         if ($rule) {
             $max = $this->extractMinMax($rule, 'max') ?? 4096;
-            $min = $this->extractMinMax($rule, 'min') ?? 0;
+            $min = $this->extractMinMax($rule, 'min') ?? 5;
+
+            if ($max < 5) {
+                //faker text requires at least 5 characters
+                return "lexify('?????')";
+            }
+            if ($min < 5) {
+                //faker text requires at least 5 characters
+                $min = 5;
+            }
 
             return 'text('.'$this->faker->numberBetween('.$min.', '.$max.'))';
         } else {
