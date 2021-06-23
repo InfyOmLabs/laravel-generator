@@ -136,6 +136,9 @@ class BaseCommand extends Command
         if (!$this->isSkip('tests') and !$this->isSkip('scaffold_tests')) {
             $controllerTestGenerator = new ControllerTestGenerator($this->commandData);
             $controllerTestGenerator->generate();
+            
+            $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);
+            $repositoryTestGenerator->generate();
         }
 
         if (!$this->isSkip('views')) {
