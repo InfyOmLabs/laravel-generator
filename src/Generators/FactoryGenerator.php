@@ -298,7 +298,7 @@ class FactoryGenerator extends BaseGenerator
             infy_nl_tab(1, 3).
             '$'.$variable.' = '.$model.'::factory()->create();'.
             infy_nl_tab(1, 2).'}'.infy_nl();
-            $uses .= infy_nl()."Use $qualifier;";
+            $uses .= infy_nl()."use $qualifier;";
         }
 
         return [
