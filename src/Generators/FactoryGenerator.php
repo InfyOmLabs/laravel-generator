@@ -134,10 +134,8 @@ class FactoryGenerator extends BaseGenerator
                 case 'decimal':
                     $fakerData = $this->getValidNumber($rule);
                     break;
-                case 'char':
-                    $fakerData = "lexify('?')";
-                    break;
                 case 'string':
+                case 'char':
                     $lower = strtolower($field->name);
                     $firstChar = substr($lower, 0, 1);
                     if (strpos($lower, 'email') !== false) {
