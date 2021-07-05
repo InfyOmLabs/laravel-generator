@@ -28,9 +28,11 @@ class SwaggerGenerator
 
             if (!empty($fieldType)) {
                 $fieldType = [
-                    'name'   => $field->name,
-                    'type'   => $fieldType,
-                    'format' => $fieldFormat,
+                    'name'     => $field->name,
+                    'type'     => $fieldType,
+                    'format'   => $fieldFormat,
+                    'nullable' => !$field->isNotNull,
+                    'readOnly' => !$field->isFillable,
                 ];
 
                 $fieldType['description'] = (!empty($field->description)) ? $field->description : '';
@@ -132,7 +134,11 @@ class SwaggerGenerator
             $fieldName = $field['name'];
             $type = $field['type'];
             $format = $field['format'];
+            $nullable = $field['nullable'] ? 'true' : 'false';
+            $readOnly = $field['readOnly'] ? 'true' : 'false';
             $propertyTemplate = str_replace('$FIELD_NAME$', $fieldName, $template);
+            $propertyTemplate = str_replace('$FIELD_NULLABLE$', $nullable, $propertyTemplate);
+            $propertyTemplate = str_replace('$FIELD_READ_ONLY$', $readOnly, $propertyTemplate);
             $description = $field['description'];
             if (empty($description)) {
                 $description = $fieldName;
