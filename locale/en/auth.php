@@ -48,6 +48,18 @@ return [
         'reset_pwd_btn' => 'Reset Password',
     ],
 
+    'confirm_passwords' => [
+        'title'                => 'Please confirm your password before continuing.',
+        'forgot_your_password' => 'Forgot Your Password?',
+    ],
+
+    'verify_email' => [
+        'title'       => 'Verify Your Email Address',
+        'success'     => 'A fresh verification link has been sent to your email address',
+        'notice'      => 'Before proceeding, please check your email for a verification link.If you did not receive the email,',
+        'another_req' => 'click here to request another',
+    ],
+
     'emails' => [
         'password' => [
             'reset_link' => 'Click here to reset your password',
