@@ -45,7 +45,7 @@ class ControllerGenerator extends BaseGenerator
 
             $this->generateDataTable();
         } elseif ($this->commandData->jqueryDT()) {
-            $templateName = 'jquery_datatable_controller';
+            $templateName = ($this->commandData->isModal()) ? 'jquery_modal_datatable_controller' : 'jquery_datatable_controller';
             $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
 
             $this->generateDataTable();

@@ -37,7 +37,7 @@ class JQueryDatatableAssetsGenerator extends BaseGenerator
 
     public function generateJquery()
     {
-        $templateName = 'jquery';
+        $templateName = ($this->commandData->isModal()) ? 'jquery_modal' : 'jquery';
 
         if ($this->commandData->isLocalizedTemplates()) {
             $templateName .= '_locale';

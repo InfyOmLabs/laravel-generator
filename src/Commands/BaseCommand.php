@@ -314,6 +314,7 @@ class BaseCommand extends Command
             ['resources', null, InputOption::VALUE_REQUIRED, 'Resources'],
             ['connection', null, InputOption::VALUE_REQUIRED, 'Specify connection name'],
             ['jqueryDT', null, InputOption::VALUE_NONE, 'Generate listing screen into JQuery Datatables'],
+            ['modal', null, InputOption::VALUE_NONE, 'Generate Modals for jquery Datatables'],
         ];
     }
 
