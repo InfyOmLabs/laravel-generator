@@ -102,6 +102,7 @@ class GeneratorConfig
         'localized',
         'connection',
         'jqueryDT',
+        'modal',
     ];
 
     public $tableName;

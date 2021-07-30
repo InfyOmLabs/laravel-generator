@@ -78,6 +78,10 @@ class ViewGenerator extends BaseGenerator
             $this->generateShow();
         }
 
+        if ($this->commandData->isModal()) {
+            $this->generateCreateEditModalFiles();
+        }
+
         $this->commandData->commandComment('Views created: ');
     }
 
@@ -227,7 +231,7 @@ class ViewGenerator extends BaseGenerator
 
     private function generateIndex()
     {
-        $templateName = ($this->commandData->jqueryDT()) ? 'js_index' : 'index';
+        $templateName = ($this->commandData->jqueryDT()) ? ($this->commandData->isModal()) ? 'js_modal_index' : 'js_index' : 'index';
 
         if ($this->commandData->isLocalizedTemplates()) {
             $templateName .= '_locale';
@@ -256,6 +260,38 @@ class ViewGenerator extends BaseGenerator
         FileUtil::createFile($this->path, 'index.blade.php', $templateData);
 
         $this->commandData->commandInfo('index.blade.php created');
+    }
+
+    private function generateCreateEditModalFiles()
+    {
+        $templateName = 'js_modal_create';
+
+//        if ($this->commandData->isLocalizedTemplates()) {
+//            $templateName .= '_locale';
+//        }
+
+        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+
+        $templateData = str_replace('$FIELDS$', implode("\n\n", $this->htmlFields), $templateData);
+        FileUtil::createFile($this->path, 'create-modal.blade.php', $templateData);
+
+        $this->commandData->commandInfo('create-modal.blade.php created');
+
+        $templateName = 'js_modal_edit';
+
+//        if ($this->commandData->isLocalizedTemplates()) {
+//            $templateName .= '_locale';
+//        }
+
+        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+
+        $templateData = str_replace('$FIELDS$', implode("\n\n", $this->htmlFields), $templateData);
+
+        FileUtil::createFile($this->path, 'edit-modal.blade.php', $templateData);
+
+        $this->commandData->commandInfo('edit-modal.blade.php created');
     }
 
     private function generateFields()
@@ -294,6 +330,8 @@ class ViewGenerator extends BaseGenerator
                 $minMaxRules .= $size;
             }
             $this->commandData->addDynamicVariable('$SIZE$', $minMaxRules);
+
+            $field->htmlType = ($this->commandData->isModal()) ? $field->htmlType.'_modal' : $field->htmlType;
 
             $fieldTemplate = HTMLFieldGenerator::generateHTML($field, $this->templateType, $localized);
 

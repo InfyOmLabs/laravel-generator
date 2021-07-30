@@ -13,6 +13,7 @@ class HTMLFieldGenerator
         $localized = ($localized) ? '_locale' : '';
         switch ($field->htmlType) {
             case 'text':
+            case 'text_modal':
             case 'textarea':
             case 'date':
             case 'file':

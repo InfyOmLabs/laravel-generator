@@ -37,7 +37,7 @@ class JQueryDatatableAssetsGenerator extends BaseGenerator
 
     public function generateJquery()
     {
-        $templateName = 'jquery';
+        $templateName = ($this->commandData->isModal()) ? 'jquery_modal' : 'jquery';
 
         if ($this->commandData->isLocalizedTemplates()) {
             $templateName .= '_locale';
@@ -46,6 +46,7 @@ class JQueryDatatableAssetsGenerator extends BaseGenerator
         $columnsCount = 0;
 
         $fields = '';
+        $editFields = '';
         foreach ($this->commandData->fields as $field) {
             if (in_array($field->name, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
                 continue;
@@ -56,6 +57,9 @@ class JQueryDatatableAssetsGenerator extends BaseGenerator
             name: '$field->name'
         },";
 
+            $titleCase = \Str::title($field->name);
+            $editFields .= "$('#edit$titleCase').val(result.data.$field->name);\n";
+
             $columnsCount++;
         }
 
@@ -64,6 +68,7 @@ class JQueryDatatableAssetsGenerator extends BaseGenerator
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
         $templateData = str_replace('$ACTION_COLUMN_COUNT$', $columnsCount, $templateData);
         $templateData = str_replace('$JQUERY_FIELDS$', $fields, $templateData);
+        $templateData = str_replace('$JQUERY_EDIT_FIELDS$', $editFields, $templateData);
 
         $path = $this->path.$this->config->tableName.'/';
         if (!file_exists($path)) {
@@ -73,7 +78,7 @@ class JQueryDatatableAssetsGenerator extends BaseGenerator
         $this->commandData->commandComment("\n".$this->config->tableName.' assets added.');
 
         // Publish JS Rendere Template
-        $templateName = 'js_renderer_template';
+        $templateName = ($this->commandData->isModal()) ? 'js_modal_renderer_template' : 'js_renderer_template';
         $templateData = get_template('scaffold.'.$templateName, 'laravel-generator');
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 

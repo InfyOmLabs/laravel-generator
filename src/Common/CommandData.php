@@ -135,6 +135,11 @@ class CommandData
         return $this->getOption('jqueryDT') ? true : false;
     }
 
+    public function isModal()
+    {
+        return $this->getOption('modal') ? true : false;
+    }
+
     public function getFields()
     {
         $this->fields = [];
