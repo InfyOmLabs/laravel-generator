@@ -191,9 +191,9 @@ class PublishUserCommand extends PublishBaseCommand
      */
     private function fillTemplate($templateData)
     {
-        $templateData = str_replace('$NAMESPACE_CONTROLLER$', config('infyom.laravel_generator.namespace.controller'), $templateData);
+        $templateData = str_replace('$NAMESPACE_CONTROLLER$', config('infyom.laravel_generator.namespace.controller') ?? 'App\\Http\\Controllers', $templateData);
 
-        $templateData = str_replace('$NAMESPACE_REQUEST$', config('infyom.laravel_generator.namespace.request'), $templateData);
+        $templateData = str_replace('$NAMESPACE_REQUEST$', config('infyom.laravel_generator.namespace.request') ?? 'App\\Http\\Requests', $templateData);
 
         $templateData = str_replace('$NAMESPACE_REPOSITORY$', config('infyom.laravel_generator.namespace.repository'), $templateData);
         $templateData = str_replace('$NAMESPACE_USER$', config('auth.providers.users.model'), $templateData);
