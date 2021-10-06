@@ -142,7 +142,7 @@ class LayoutPublishCommand extends PublishBaseCommand
     {
         $templateData = str_replace(
             '$NAMESPACE_CONTROLLER$',
-            config('infyom.laravel_generator.namespace.controller'),
+            config('infyom.laravel_generator.namespace.controller') ?? 'App\\Http\Controllers',
             $templateData
         );
 
