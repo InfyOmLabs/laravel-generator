@@ -17,7 +17,7 @@ class $MODEL_NAME$ControllerTest extends TestCase
     }
 
     /**
-     * @test list $MODEL_NAME_PLURAL_SNAKE$
+     * @group $MODEL_NAME$
      */
     public function test_can_list_$MODEL_NAME_PLURAL_SNAKE$()
     {
@@ -26,7 +26,7 @@ class $MODEL_NAME$ControllerTest extends TestCase
     }
 
     /**
-     * @test create $MODEL_NAME_CAMEL$
+     * @group $MODEL_NAME$
      */
     public function test_can_create_$MODEL_NAME_CAMEL$()
     {
@@ -38,7 +38,7 @@ class $MODEL_NAME$ControllerTest extends TestCase
     }
 
     /**
-     * @test delete $MODEL_NAME_CAMEL$
+     * @group $MODEL_NAME$
      */
     public function test_can_delete_$MODEL_NAME_CAMEL$()
     {
@@ -52,7 +52,7 @@ class $MODEL_NAME$ControllerTest extends TestCase
     }
 
     /**
-     * @test update $MODEL_NAME_CAMEL$
+     * @group $MODEL_NAME$
      */
     public function test_can_update_$MODEL_NAME_CAMEL$()
     {
