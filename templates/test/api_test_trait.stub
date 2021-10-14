@@ -25,10 +25,18 @@ trait ApiTestTrait
     public function assertModelData(Array $actualData, Array $expectedData)
     {
         foreach ($actualData as $key => $value) {
-            if (in_array($key, $TIMESTAMPS$)) {
+            if (in_array($key,$this->getFullTimeStamps())) {
                 continue;
             }
             $this->assertEquals($actualData[$key], $expectedData[$key]);
         }
+    }
+
+    private function getFullTimeStamps(): array 
+    {
+        return array_merge(
+            $TIMESTAMPS$,
+            config('infyom.laravel_generator.timestamps.deleted_at', 'deleted_at');
+        );
     }
 }
