@@ -6,10 +6,15 @@ use Illuminate\Http\Response;
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use $NAMESPACE_TESTS$\TestCase;
+use $NAMESPACE_TESTS$\ModelTestTrait;
 
 class $MODEL_NAME$ControllerTest extends TestCase
 {
+    use ModelTestTrait;
     use RefreshDatabase;
+
+    const BASE_PATH = '/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_SNAKE$';
+    const MODEL_MAIN_PROPERTY_KEY = 'name';
 
     public function setUp() : void
     {
@@ -21,7 +26,7 @@ class $MODEL_NAME$ControllerTest extends TestCase
      */
     public function test_can_list_$MODEL_NAME_PLURAL_SNAKE$()
     {
-        $response = $this->get('/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_SNAKE$');
+        $response = $this->get(self::BASE_PATH);
         $response->assertStatus(Response::HTTP_OK);
     }
 
@@ -31,10 +36,18 @@ class $MODEL_NAME$ControllerTest extends TestCase
     public function test_can_create_$MODEL_NAME_CAMEL$()
     {
         $data = $MODEL_NAME$::factory()->make();
-        $response = $this->post('/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_SNAKE$', $data->toArray());
-        $MODEL_NAME$::query()->firstOrFail();
+        $response = $this->post(self::BASE_PATH, $data->toArray());
+
+        $response->assertSessionHasNoErrors();
         $response->assertStatus(Response::HTTP_FOUND);
-        $response->assertRedirect('/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_SNAKE$');
+        $response->assertRedirect(self::BASE_PATH);
+
+        $this->assertDatabaseHas(
+            $this->getModelTable(),
+            [
+                $this->getModelMainPropertyKey() => $data->{$this->getModelMainPropertyKey()},
+            ]
+        );
     }
 
     /**
@@ -43,11 +56,16 @@ class $MODEL_NAME$ControllerTest extends TestCase
     public function test_can_delete_$MODEL_NAME_CAMEL$()
     {
         $data = $MODEL_NAME$::factory()->create();
-        $response = $this->post('/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_SNAKE$/' . $data->$PRIMARY_KEY_NAME$, array_merge(['_method' => 'DELETE']));
+        $response = $this->post(
+            self::BASE_PATH . '/' . $data->{$this->getModelPrimaryKey()}, 
+            array_merge(['_method' => 'DELETE'])
+        );
+       
+        $response->assertSessionHasNoErrors();
         $response->assertStatus(Response::HTTP_FOUND);
-        $response->assertRedirect('/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_SNAKE$');
-        $this->assertSoftDeleted('$MODEL_NAME_PLURAL_SNAKE$', [
-            '$PRIMARY_KEY_NAME$' => $data->$PRIMARY_KEY_NAME$
+        $response->assertRedirect(self::BASE_PATH);
+        $this->assertSoftDeleted($this->getModelTable(), [
+            $this->getModelPrimaryKey() => $data->{$this->getModelPrimaryKey()}
         ]);
     }
 
@@ -59,8 +77,26 @@ class $MODEL_NAME$ControllerTest extends TestCase
         $data = $MODEL_NAME$::factory()->create();
         $updatedData = $MODEL_NAME$::factory()->make();
 
-        $response = $this->post('/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_SNAKE$/' . $data->$PRIMARY_KEY_NAME$, array_merge(['_method' => 'PATCH'], $updatedData->toArray()));
+        $response = $this->post(
+            self::BASE_PATH . '/' . $data->{$this->getModelPrimaryKey()}, 
+            array_merge(['_method' => 'PATCH'], $updatedData->toArray())
+        );
+        
+        $response->assertSessionHasNoErrors();
         $response->assertStatus(Response::HTTP_FOUND);
-        $response->assertRedirect('/$ROUTE_PREFIX$$MODEL_NAME_PLURAL_SNAKE$');
+        $response->assertRedirect(self::BASE_PATH);
+
+        $this->assertDatabaseHas(
+            $this->getModelTable(),
+            [
+                $this->getModelPrimaryKey() => $data->{$this->getModelPrimaryKey()},
+                $this->getModelMainPropertyKey() => $updatedData->{$this->getModelMainPropertyKey()},
+            ]
+        );
+    }
+
+    protected function getModelMainPropertyKey()
+    {
+        return self::MODEL_MAIN_PROPERTY_KEY;
     }
 }
