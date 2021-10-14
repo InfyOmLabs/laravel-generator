@@ -2,7 +2,9 @@
 
 trait ApiTestTrait
 {
+    /**  @var \Illuminate\Testing\TestResponse */
     private $response;
+    
     public function assertApiResponse(Array $actualData)
     {
         $this->assertApiSuccess();
