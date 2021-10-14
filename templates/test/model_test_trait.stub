@@ -12,7 +12,7 @@ trait ModelTestTrait
      *
      * @return  string
      */
-    public function getModelPrimaryKey()
+    protected function getModelPrimaryKey()
     {
         if (!$this->modelPrimaryKey) {
             $this->setModelPrimaryKey();
@@ -25,7 +25,7 @@ trait ModelTestTrait
      *
      * @return  self
      */
-    public function setModelPrimaryKey()
+    protected function setModelPrimaryKey()
     {
         $this->modelPrimaryKey = (new $MODEL_NAME$)->getKeyName();
 
@@ -37,7 +37,7 @@ trait ModelTestTrait
      *
      * @return  string
      */
-    public function getModelTable()
+    protected function getModelTable()
     {
         if (!$this->modelTable) {
             $this->setModelTable();
@@ -50,7 +50,7 @@ trait ModelTestTrait
      *
      * @return  self
      */
-    public function setModelTable()
+    protected function setModelTable()
     {
         $this->modelTable = (new $MODEL_NAME$)->getTableName();
 
