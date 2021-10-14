@@ -8,6 +8,13 @@ trait ModelTestTrait
     private $modelTable;
 
     /**
+     * The model main property
+     *
+     * @return string
+     */
+    abstract protected function getModelMainPropertyKey();
+
+    /**
      * Get the model primary key column name
      *
      * @return  string
