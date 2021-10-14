@@ -1,0 +1,59 @@
+<?php namespace fff;
+
+trait ModelTestTrait
+{
+    /** @var string */
+    private $modelPrimaryKey;
+    /** @var string */
+    private $modelTable;
+
+    /**
+     * Get the model primary key column name
+     *
+     * @return  string
+     */
+    public function getModelPrimaryKey()
+    {
+        if (!$this->modelPrimaryKey) {
+            $this->setModelPrimaryKey();
+        }
+        return $this->modelPrimaryKey;
+    }
+
+    /**
+     * Set the value of modelPrimaryKey
+     *
+     * @return  self
+     */
+    public function setModelPrimaryKey()
+    {
+        $this->modelPrimaryKey = (new $MODEL_NAME$)->getKeyName();
+
+        return $this;
+    }
+
+    /**
+     * Get model table name
+     *
+     * @return  string
+     */
+    public function getModelTable()
+    {
+        if (!$this->modelTable) {
+            $this->setModelTable();
+        }
+        return $this->modelTable;
+    }
+
+    /**
+     * Set the value of modelTable
+     *
+     * @return  self
+     */
+    public function setModelTable()
+    {
+        $this->modelTable = (new $MODEL_NAME$)->getTableName();
+
+        return $this;
+    }
+}
