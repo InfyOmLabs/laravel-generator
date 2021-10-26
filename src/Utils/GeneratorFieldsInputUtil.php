@@ -58,28 +58,44 @@ class GeneratorFieldsInputUtil
         return $field;
     }
 
+    /**
+     * Prepare string of associative array
+     *
+     * @param array $arr
+     * @return string
+     */
     public static function prepareKeyValueArrayStr($arr)
     {
         $arrStr = '[';
-        foreach ($arr as $key => $item) {
-            $arrStr .= "'$item' => '$key', ";
+        if(count($arr) > 0)
+        {
+            foreach ($arr as $key => $item) {
+                $arrStr .= "'$item' => '$key', ";
+            }
+            $arrStr = substr($arrStr, 0, strlen($arrStr) - 2);
         }
-
-        $arrStr = substr($arrStr, 0, strlen($arrStr) - 2);
 
         $arrStr .= ']';
 
         return $arrStr;
     }
 
+    /**
+     * Prepare string of array
+     *
+     * @param array $arr
+     * @return string
+     */
     public static function prepareValuesArrayStr($arr)
     {
         $arrStr = '[';
-        foreach ($arr as $item) {
-            $arrStr .= "'$item', ";
+        if(count($arr) > 0)
+        {
+            foreach ($arr as $item) {
+                $arrStr .= "'$item', ";
+            }
+            $arrStr = substr($arrStr, 0, strlen($arrStr) - 2);
         }
-
-        $arrStr = substr($arrStr, 0, strlen($arrStr) - 2);
 
         $arrStr .= ']';
 
@@ -89,17 +105,20 @@ class GeneratorFieldsInputUtil
     public static function prepareKeyValueArrFromLabelValueStr($values)
     {
         $arr = [];
-
-        foreach ($values as $value) {
-            $labelValue = explode(':', $value);
-
-            if (count($labelValue) > 1) {
-                $arr[$labelValue[0]] = $labelValue[1];
-            } else {
-                $arr[$labelValue[0]] = $labelValue[0];
+        if(count($values) > 0)
+        {
+            foreach ($values as $value) {
+                $labelValue = explode(':', $value);
+    
+                if (count($labelValue) > 1) {
+                    $arr[$labelValue[0]] = $labelValue[1];
+                } else {
+                    $arr[$labelValue[0]] = $labelValue[0];
+                }
             }
+    
         }
-
+        
         return $arr;
     }
 }

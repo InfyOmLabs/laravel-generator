@@ -11,7 +11,18 @@ class GeneratorFileDeleting
 {
     use SerializesModels;
 
+    /**
+     * Type of event
+     *
+     * @var string
+     */
     public $type;
+
+    /**
+     * Event payload
+     *
+     * @var array
+     */
     public $data;
 
     /**

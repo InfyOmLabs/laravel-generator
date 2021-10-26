@@ -24,6 +24,11 @@ class APIResourceGenerator extends BaseGenerator
         $this->fileName = $this->commandData->modelName.'Resource.php';
     }
 
+    /**
+     * Generate API Resources
+     *
+     * @return void
+     */
     public function generate()
     {
         $templateData = get_template('api.resource.api_resource', 'laravel-generator');
