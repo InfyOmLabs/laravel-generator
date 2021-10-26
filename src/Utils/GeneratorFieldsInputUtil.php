@@ -62,7 +62,7 @@ class GeneratorFieldsInputUtil
      * Prepare string of associative array.
      *
      * @param array $arr
-     * 
+     *
      * @return string
      */
     public static function prepareKeyValueArrayStr($arr)
@@ -84,7 +84,7 @@ class GeneratorFieldsInputUtil
      * Prepare string of array.
      *
      * @param array $arr
-     * 
+     *
      * @return string
      */
     public static function prepareValuesArrayStr($arr)
@@ -105,8 +105,7 @@ class GeneratorFieldsInputUtil
     public static function prepareKeyValueArrFromLabelValueStr($values)
     {
         $arr = [];
-        if (count($values) > 0)
-        {
+        if (count($values) > 0) {
             foreach ($values as $value) {
                 $labelValue = explode(':', $value);
 
@@ -116,9 +115,8 @@ class GeneratorFieldsInputUtil
                     $arr[$labelValue[0]] = $labelValue[0];
                 }
             }
-    
         }
-        
+
         return $arr;
     }
 }

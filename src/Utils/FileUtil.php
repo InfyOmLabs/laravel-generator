@@ -18,7 +18,7 @@ class FileUtil
      * @param string $path
      * @param string $fileName
      * @param string $contents
-     * 
+     *
      * @return bool|int
      */
     public static function createFile($path, $fileName, $contents)
@@ -58,7 +58,7 @@ class FileUtil
      *
      * @param string $path
      * @param string $fileName
-     * 
+     *
      * @return bool
      */
     public static function deleteFile($path, $fileName)
