@@ -30,7 +30,7 @@ class APIRequestGenerator extends BaseGenerator
     }
 
     /**
-     * Generate API Request Class
+     * Generate API Request Class.
      *
      * @return void
      */
@@ -41,7 +41,7 @@ class APIRequestGenerator extends BaseGenerator
     }
 
     /**
-     * Generate Create Request
+     * Generate Create Request.
      *
      * @return void
      */
@@ -58,7 +58,7 @@ class APIRequestGenerator extends BaseGenerator
     }
 
     /**
-     * Generate Update Request
+     * Generate Update Request.
      *
      * @return void
      */
@@ -79,7 +79,7 @@ class APIRequestGenerator extends BaseGenerator
     }
 
     /**
-     * Delete the generated Request Classes
+     * Delete the generated Request Classes.
      *
      * @return void
      */

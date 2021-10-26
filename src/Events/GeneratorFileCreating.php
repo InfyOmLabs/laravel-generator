@@ -12,14 +12,14 @@ class GeneratorFileCreating
     use SerializesModels;
 
     /**
-     * Type of event
+     * Type of event.
      *
      * @var string
      */
     public $type;
 
     /**
-     * Event payload
+     * Event payload.
      *
      * @var array
      */

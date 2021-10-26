@@ -25,7 +25,7 @@ class APIResourceGenerator extends BaseGenerator
     }
 
     /**
-     * Generate API Resources
+     * Generate API Resources.
      *
      * @return void
      */

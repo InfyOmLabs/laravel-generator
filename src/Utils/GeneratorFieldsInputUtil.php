@@ -59,16 +59,16 @@ class GeneratorFieldsInputUtil
     }
 
     /**
-     * Prepare string of associative array
+     * Prepare string of associative array.
      *
      * @param array $arr
+     * 
      * @return string
      */
     public static function prepareKeyValueArrayStr($arr)
     {
         $arrStr = '[';
-        if(count($arr) > 0)
-        {
+        if (count($arr) > 0) {
             foreach ($arr as $key => $item) {
                 $arrStr .= "'$item' => '$key', ";
             }
@@ -81,16 +81,16 @@ class GeneratorFieldsInputUtil
     }
 
     /**
-     * Prepare string of array
+     * Prepare string of array.
      *
      * @param array $arr
+     * 
      * @return string
      */
     public static function prepareValuesArrayStr($arr)
     {
         $arrStr = '[';
-        if(count($arr) > 0)
-        {
+        if (count($arr) > 0) {
             foreach ($arr as $item) {
                 $arrStr .= "'$item', ";
             }
@@ -105,11 +105,11 @@ class GeneratorFieldsInputUtil
     public static function prepareKeyValueArrFromLabelValueStr($values)
     {
         $arr = [];
-        if(count($values) > 0)
+        if (count($values) > 0)
         {
             foreach ($values as $value) {
                 $labelValue = explode(':', $value);
-    
+
                 if (count($labelValue) > 1) {
                     $arr[$labelValue[0]] = $labelValue[1];
                 } else {

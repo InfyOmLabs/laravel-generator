@@ -16,11 +16,6 @@ class MigrationGenerator extends BaseGenerator
     /** @var string */
     private $path;
 
-    /**
-     * Undocumented function
-     *
-     * @param array $commandData
-     */
     public function __construct($commandData)
     {
         $this->commandData = $commandData;
@@ -52,8 +47,7 @@ class MigrationGenerator extends BaseGenerator
         $createdAtField = null;
         $updatedAtField = null;
 
-        if(isset($this->commandData->fields) && !empty($this->commandData->fields))
-        {
+        if (isset($this->commandData->fields) && !empty($this->commandData->fields)) {
             foreach ($this->commandData->fields as $field) {
                 if ($field->name == 'created_at') {
                     $createdAtField = $field;
@@ -64,7 +58,7 @@ class MigrationGenerator extends BaseGenerator
                         continue;
                     }
                 }
-    
+
                 $fields[] = $field->migrationText;
                 if (!empty($field->foreignKeyText)) {
                     $foreignKeys[] = $field->foreignKeyText;
@@ -99,14 +93,13 @@ class MigrationGenerator extends BaseGenerator
 
         $files = [];
 
-        if(!empty($allFiles))
-        {
+        if (!empty($allFiles)) {
             foreach ($allFiles as $file) {
                 $files[] = $file->getFilename();
             }
-    
+
             $files = array_reverse($files);
-    
+            
             foreach ($files as $file) {
                 if (Str::contains($file, $fileName)) {
                     if ($this->rollbackFile($this->path, $file)) {

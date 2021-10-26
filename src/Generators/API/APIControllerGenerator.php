@@ -25,7 +25,7 @@ class APIControllerGenerator extends BaseGenerator
     }
 
     /**
-     * Generate API Controller Class
+     * Generate API Controller Class.
      *
      * @return void
      */
@@ -79,7 +79,7 @@ class APIControllerGenerator extends BaseGenerator
     }
 
     /**
-     * Delete API Controller
+     * Delete API Controller.
      *
      * @return void
      */

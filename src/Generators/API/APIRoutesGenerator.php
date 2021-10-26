@@ -37,7 +37,7 @@ class APIRoutesGenerator extends BaseGenerator
     }
 
     /**
-     * Generate API Routes
+     * Generate API Routes.
      *
      * @return void
      */
@@ -57,7 +57,7 @@ class APIRoutesGenerator extends BaseGenerator
     }
 
     /**
-     * Remove API Routes
+     * Remove API Routes.
      *
      * @return void
      */

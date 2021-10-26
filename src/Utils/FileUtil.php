@@ -5,7 +5,7 @@ namespace InfyOm\Generator\Utils;
 class FileUtil
 {
     /**
-     * File Operations
+     * Codes for File Operations.
      */
     const FILE_CREATING = 1;
     const FILE_CREATED = 2;
@@ -13,11 +13,12 @@ class FileUtil
     const FILE_DELETED = 4;
 
     /**
-     * Create a new File
+     * Create a new File.
      *
      * @param string $path
      * @param string $fileName
      * @param string $contents
+     * 
      * @return bool|int
      */
     public static function createFile($path, $fileName, $contents)
@@ -32,10 +33,11 @@ class FileUtil
     }
 
     /**
-     * Create a Directory if it does not exists
+     * Create a Directory if it does not exists.
      *
      * @param string $path
-     * @param boolean $replace
+     * @param bool $replace
+     * 
      * @return bool
      */
     public static function createDirectoryIfNotExist($path, $replace = false)
@@ -52,10 +54,11 @@ class FileUtil
     }
 
     /**
-     * Delete a file
+     * Delete a file.
      *
      * @param string $path
      * @param string $fileName
+     * 
      * @return bool
      */
     public static function deleteFile($path, $fileName)
