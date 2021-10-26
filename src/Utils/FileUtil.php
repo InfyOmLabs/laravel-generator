@@ -37,7 +37,7 @@ class FileUtil
      *
      * @param string $path
      * @param bool   $replace
-     * 
+     *
      * @return bool
      */
     public static function createDirectoryIfNotExist($path, $replace = false)

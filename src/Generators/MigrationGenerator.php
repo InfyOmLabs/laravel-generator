@@ -99,7 +99,7 @@ class MigrationGenerator extends BaseGenerator
             }
 
             $files = array_reverse($files);
-   
+
             foreach ($files as $file) {
                 if (Str::contains($file, $fileName)) {
                     if ($this->rollbackFile($this->path, $file)) {
