@@ -7,7 +7,6 @@ use $NAMESPACE_MODEL$\$MODEL_NAME$;
 
 class Create$MODEL_NAME$Request extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *

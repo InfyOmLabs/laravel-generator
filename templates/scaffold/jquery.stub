@@ -1,6 +1,6 @@
 'use strict';
 
-let tableName = '#$MODEL_NAME_PLURAL_CAMEL$Table';
+const tableName = '#$MODEL_NAME_PLURAL_CAMEL$Table';
 $(tableName).DataTable({
     scrollX: true,
     deferRender: true,
@@ -38,6 +38,6 @@ $(tableName).DataTable({
 });
 
 $(document).on('click', '.delete-btn', function (event) {
-    let recordId = $(event.currentTarget).data('id');
+    const recordId = $(event.currentTarget).data('id');
     deleteItem(recordsURL + recordId, tableName, '$MODEL_NAME_HUMAN$');
 });

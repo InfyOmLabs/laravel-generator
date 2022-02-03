@@ -15,7 +15,7 @@ use Datatables;
 
 class $MODEL_NAME$Controller extends AppBaseController
 {
-    /** @var  $MODEL_NAME$Repository */
+    /** @var $MODEL_NAME$Repository $$MODEL_NAME_CAMEL$Repository*/
     private $$MODEL_NAME_CAMEL$Repository;
 
     public function __construct($MODEL_NAME$Repository $$MODEL_NAME_CAMEL$Repo)
@@ -27,6 +27,7 @@ class $MODEL_NAME$Controller extends AppBaseController
      * Display a listing of the $MODEL_NAME$.
      *
      * @param Request $request
+     *
      * @return Response
      */
     public function index(Request $request)
@@ -69,7 +70,7 @@ class $MODEL_NAME$Controller extends AppBaseController
     /**
      * Display the specified $MODEL_NAME$.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -89,7 +90,7 @@ class $MODEL_NAME$Controller extends AppBaseController
     /**
      * Show the form for editing the specified $MODEL_NAME$.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -109,7 +110,7 @@ class $MODEL_NAME$Controller extends AppBaseController
     /**
      * Update the specified $MODEL_NAME$ in storage.
      *
-     * @param  int              $id
+     * @param int $id
      * @param Update$MODEL_NAME$Request $request
      *
      * @return Response
@@ -134,7 +135,7 @@ class $MODEL_NAME$Controller extends AppBaseController
     /**
      * Remove the specified $MODEL_NAME$ from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
