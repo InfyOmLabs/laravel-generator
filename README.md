@@ -8,7 +8,10 @@ InfyOm Laravel Generator
 [![Daily Downloads](https://poser.pugx.org/infyomlabs/laravel-generator/d/daily)](https://packagist.org/packages/infyomlabs/laravel-generator)
 [![License](https://poser.pugx.org/infyomlabs/laravel-generator/license)](https://packagist.org/packages/infyomlabs/laravel-generator)
 
-Generate Admin Panels CRUDs and APIs in Minutes with tons of other features and customizations with 3 different themes.  
+Generate Admin Panels CRUDs and APIs in Minutes with tons of other features and customizations with 3 different themes.
+
+## Documentation
+
 Read [Documentation](https://www.infyom.com/open-source) for detailed installation steps and usage.
 
 ## Support Us
@@ -16,6 +19,12 @@ Read [Documentation](https://www.infyom.com/open-source) for detailed installati
 We have created [14+ Laravel packages](https://github.com/InfyOmLabs) and invested a lot of resources into creating these all packages and maintaining them.
 
 You can support us by either sponsoring us or buying one of our paid products. Or help us by spreading the word about us on social platforms via tweets and posts.
+
+### Buy our Paid Products
+
+[![InfyHMS](https://assets.infyom.com/open-source/new/infyhms-banner.png)](https://1.envato.market/vnPqj3)
+
+You can also check out our other paid products on [CodeCanyon](https://1.envato.market/BXAnR1).
 
 ### Sponsors
 
@@ -28,12 +37,6 @@ You can support us by either sponsoring us or buying one of our paid products. O
 [Become a backer](https://opencollective.com/infyomlabs#backer) and get your image on our README on Github with a link to your site.
 
 <a href="https://opencollective.com/infyomlabs#backer"><img src="https://opencollective.com/infyomlabs/backers.svg?width=890"></a>
-
-### Buy our Paid Products
-
-[![InfyChat](https://assets.infyom.com/open-source/infychat-banner.png)](https://1.envato.market/jWeAmM)
-
-You can also check out our other paid products on [CodeCanyon](https://codecanyon.net/user/infyomlabs/portfolio).
 
 ### Follow Us
 
@@ -50,3 +53,16 @@ Also, Do not forget to add your website to [Made with InfyOm Generator List](htt
 ## Video Tutorials
 
 Checkout [Video Tutorials](https://github.com/shailesh-ladumor/infyom-laravel-generator-tutorial) - **By**: [Shailesh Ladumor](https://github.com/shailesh-ladumor)
+
+## Security
+
+If you discover any security-related issues, create an issue using the issue tracker.
+
+## Credits
+
+- [InfyOm Technologies](https://github.com/infyomlabs)
+- [All Contributors](../../contributors)
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
