@@ -30,11 +30,12 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $configPath = __DIR__.'/../config/laravel_generator.php';
-
-        $this->publishes([
-            $configPath => config_path('infyom/laravel_generator.php'),
-        ]);
+        if ($this->app->runningInConsole()) {
+            $configPath = __DIR__.'/../config/laravel_generator.php';
+            $this->publishes([
+                $configPath => config_path('infyom/laravel_generator.php'),
+            ]);
+        }
     }
 
     /**
@@ -44,6 +45,8 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->mergeConfigFrom(__DIR__.'/../config/laravel_generator.php', 'infyom.laravel_generator');
+
         $this->app->singleton('infyom.publish', function ($app) {
             return new GeneratorPublishCommand();
         });
