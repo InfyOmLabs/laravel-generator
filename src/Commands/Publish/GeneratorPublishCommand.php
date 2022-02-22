@@ -2,7 +2,6 @@
 
 namespace InfyOm\Generator\Commands\Publish;
 
-use Illuminate\Support\Str;
 use InfyOm\Generator\Utils\FileUtil;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -64,20 +63,21 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
     private function updateRouteServiceProvider()
     {
-        $routeServiceProviderPath = app_path('Providers'.DIRECTORY_SEPARATOR."RouteServiceProvider.php");
+        $routeServiceProviderPath = app_path('Providers'.DIRECTORY_SEPARATOR.'RouteServiceProvider.php');
 
         if (!file_exists($routeServiceProviderPath)) {
             $this->error("Route Service provider not found on $routeServiceProviderPath");
+
             return 1;
         }
 
         $fileContent = file_get_contents($routeServiceProviderPath);
 
-        $search = "Route::prefix('api')".PHP_EOL.str(" ")->repeat(16)."->middleware('api')";
+        $search = "Route::prefix('api')".PHP_EOL.str(' ')->repeat(16)."->middleware('api')";
         $beforeContent = str($fileContent)->before($search);
         $afterContent = str($fileContent)->after($search);
 
-        $finalContent = $beforeContent.$search.PHP_EOL.str(" ")->repeat(16)."->as('api.')".$afterContent;
+        $finalContent = $beforeContent.$search.PHP_EOL.str(' ')->repeat(16)."->as('api.')".$afterContent;
         file_put_contents($routeServiceProviderPath, $finalContent);
 
         return 0;
