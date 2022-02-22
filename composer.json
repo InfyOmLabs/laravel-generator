@@ -26,6 +26,7 @@
     "require": {
         "php": "^8.0",
         "illuminate/support": "^9.0",
+        "illuminate/console": "^9.0",
         "laracasts/flash": "^3.2",
         "laravelcollective/html": "^6.3"
     },
