@@ -56,7 +56,7 @@ class ViewGenerator extends BaseGenerator
                 $this->generateFields();
             }
 
-            if (in_array('create', $viewsToBeGenerated)) {
+            /* if (in_array('create', $viewsToBeGenerated)) {
                 $this->generateCreate();
             }
 
@@ -67,15 +67,15 @@ class ViewGenerator extends BaseGenerator
             if (in_array('show', $viewsToBeGenerated)) {
                 $this->generateShowFields();
                 $this->generateShow();
-            }
+            } */
         } else {
             $this->generateTable();
             $this->generateIndex();
             $this->generateFields();
-            $this->generateCreate();
-            $this->generateUpdate();
+            // $this->generateCreate();
+            // $this->generateUpdate();
             $this->generateShowFields();
-            $this->generateShow();
+            // $this->generateShow();
         }
 
         $this->commandData->commandComment('Views created: ');

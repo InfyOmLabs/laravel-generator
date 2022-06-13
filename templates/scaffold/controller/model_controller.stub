@@ -13,6 +13,7 @@ use Response;
 class $MODEL_NAME$Controller extends AppBaseController
 {
     /**
+    * 00
      * Display a listing of the $MODEL_NAME$.
      *
      * @param Request $request

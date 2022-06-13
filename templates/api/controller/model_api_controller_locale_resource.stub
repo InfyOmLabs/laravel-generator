@@ -15,7 +15,7 @@ class $MODEL_NAME$APIController extends AppBaseController
 {
     $DOC_INDEX$
     public function index(Request $request)
-    {
+    {/* 11 */
         $query = $MODEL_NAME$::query();
 
         if ($request->get('skip')) {
