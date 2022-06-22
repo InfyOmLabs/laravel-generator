@@ -74,7 +74,7 @@ class $MODEL_NAME$DataTable extends DataTable
      *
      * @return string
      */
-    protected function filename()
+    protected function filename(): string
     {
         return '$MODEL_NAME_PLURAL_SNAKE$_datatable_' . time();
     }
