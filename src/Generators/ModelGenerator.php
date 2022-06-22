@@ -65,13 +65,14 @@ class ModelGenerator extends BaseGenerator
 
         $fillables = [];
         $primaryKey = 'id';
-
-        foreach ($this->commandData->fields as $field) {
-            if ($field->isFillable) {
-                $fillables[] = "'".$field->name."'";
-            }
-            if ($field->isPrimary) {
-                $primaryKey = $field->name;
+        if (isset($this->commandData->fields) && !empty($this->commandData->fields)) {
+            foreach ($this->commandData->fields as $field) {
+                if ($field->isFillable) {
+                    $fillables[] = "'".$field->name."'";
+                }
+                if ($field->isPrimary) {
+                    $primaryKey = $field->name;
+                }
             }
         }
 
@@ -160,22 +161,27 @@ class ModelGenerator extends BaseGenerator
         $fillables = '';
         $fieldsArr = [];
         $count = 1;
-        foreach ($this->commandData->relations as $relation) {
-            $field = $relationText = (isset($relation->inputs[0])) ? $relation->inputs[0] : null;
-            if (in_array($field, $fieldsArr)) {
-                $relationText = $relationText.'_'.$count;
-                $count++;
-            }
+        if (isset($this->commandData->relations) && !empty($this->commandData->relations)) {
+            foreach ($this->commandData->relations as $relation) {
+                $field = $relationText = (isset($relation->inputs[0])) ? $relation->inputs[0] : null;
+                if (in_array($field, $fieldsArr)) {
+                    $relationText = $relationText.'_'.$count;
+                    $count++;
+                }
 
-            $fillables .= ' * @property '.$this->getPHPDocType($relation->type, $relation, $relationText).PHP_EOL;
-            $fieldsArr[] = $field;
-        }
-
-        foreach ($this->commandData->fields as $field) {
-            if ($field->isFillable) {
-                $fillables .= ' * @property '.$this->getPHPDocType($field->fieldType).' $'.$field->name.PHP_EOL;
+                $fillables .= ' * @property '.$this->getPHPDocType($relation->type, $relation, $relationText).PHP_EOL;
+                $fieldsArr[] = $field;
             }
         }
+
+        if (isset($this->commandData->fields) && !empty($this->commandData->fields)) {
+            foreach ($this->commandData->fields as $field) {
+                if ($field->isFillable) {
+                    $fillables .= ' * @property '.$this->getPHPDocType($field->fieldType).' $'.$field->name.PHP_EOL;
+                }
+            }
+        }
+
         $docsTemplate = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $docsTemplate);
         $docsTemplate = str_replace('$PHPDOC$', $fillables, $docsTemplate);
 
@@ -251,10 +257,12 @@ class ModelGenerator extends BaseGenerator
     {
         $requiredFields = [];
 
-        foreach ($this->commandData->fields as $field) {
-            if (!empty($field->validations)) {
-                if (Str::contains($field->validations, 'required')) {
-                    $requiredFields[] = $field->name;
+        if (isset($this->commandData->fields) && !empty($this->commandData->fields)) {
+            foreach ($this->commandData->fields as $field) {
+                if (!empty($field->validations)) {
+                    if (Str::contains($field->validations, 'required')) {
+                        $requiredFields[] = $field->name;
+                    }
                 }
             }
         }
@@ -436,19 +444,21 @@ class ModelGenerator extends BaseGenerator
 
         $count = 1;
         $fieldsArr = [];
-        foreach ($this->commandData->relations as $relation) {
-            $field = (isset($relation->inputs[0])) ? $relation->inputs[0] : null;
+        if (isset($this->commandData->relations) && !empty($this->commandData->relations)) {
+            foreach ($this->commandData->relations as $relation) {
+                $field = (isset($relation->inputs[0])) ? $relation->inputs[0] : null;
 
-            $relationShipText = $field;
-            if (in_array($field, $fieldsArr)) {
-                $relationShipText = $relationShipText.'_'.$count;
-                $count++;
-            }
+                $relationShipText = $field;
+                if (in_array($field, $fieldsArr)) {
+                    $relationShipText = $relationShipText.'_'.$count;
+                    $count++;
+                }
 
-            $relationText = $relation->getRelationFunctionText($relationShipText);
-            if (!empty($relationText)) {
-                $fieldsArr[] = $field;
-                $relations[] = $relationText;
+                $relationText = $relation->getRelationFunctionText($relationShipText);
+                if (!empty($relationText)) {
+                    $fieldsArr[] = $field;
+                    $relations[] = $relationText;
+                }
             }
         }
 

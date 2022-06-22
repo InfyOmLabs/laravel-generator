@@ -36,6 +36,11 @@ class APIRoutesGenerator extends BaseGenerator
         $this->routesTemplate = fill_template($this->commandData->dynamicVars, $routesTemplate);
     }
 
+    /**
+     * Generate API Routes.
+     *
+     * @return void
+     */
     public function generate()
     {
         $this->routeContents .= "\n\n".$this->routesTemplate;
@@ -51,6 +56,11 @@ class APIRoutesGenerator extends BaseGenerator
         $this->commandData->commandComment("\n".$this->commandData->config->mCamelPlural.' api routes added.');
     }
 
+    /**
+     * Remove API Routes.
+     *
+     * @return void
+     */
     public function rollback()
     {
         if (Str::contains($this->routeContents, $this->routesTemplate)) {
