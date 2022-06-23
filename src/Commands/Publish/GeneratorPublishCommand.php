@@ -73,7 +73,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
         $fileContent = file_get_contents($routeServiceProviderPath);
 
-        $search = "Route::prefix('api')".PHP_EOL.str(' ')->repeat(16)."->middleware('api')";
+        $search = "Route::middleware('api')".PHP_EOL.str(' ')->repeat(16)."->prefix('api')";
         $beforeContent = str($fileContent)->before($search);
         $afterContent = str($fileContent)->after($search);
 
