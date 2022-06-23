@@ -334,11 +334,6 @@ class GeneratorConfig
             config('infyom.laravel_generator.api_prefix', 'api')
         );
 
-        $commandData->addDynamicVariable(
-            '$API_VERSION$',
-            config('infyom.laravel_generator.api_version', 'v1')
-        );
-
         $commandData->addDynamicVariable('$SEARCHABLE$', '');
 
         return $commandData;

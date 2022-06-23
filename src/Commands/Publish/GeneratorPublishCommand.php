@@ -49,10 +49,8 @@ class GeneratorPublishCommand extends PublishBaseCommand
      */
     private function fillTemplate($templateData)
     {
-        $apiVersion = config('infyom.laravel_generator.api_version', 'v1');
         $apiPrefix = config('infyom.laravel_generator.api_prefix', 'api');
 
-        $templateData = str_replace('$API_VERSION$', $apiVersion, $templateData);
         $templateData = str_replace('$API_PREFIX$', $apiPrefix, $templateData);
         $appNamespace = $this->getLaravel()->getNamespace();
         $appNamespace = substr($appNamespace, 0, strlen($appNamespace) - 1);
