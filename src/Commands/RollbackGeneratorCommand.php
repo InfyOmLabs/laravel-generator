@@ -72,6 +72,7 @@ class RollbackGeneratorCommand extends Command
             CommandData::$COMMAND_TYPE_API_SCAFFOLD,
         ])) {
             $this->error('invalid rollback type');
+
             return 1;
         }
 
@@ -144,6 +145,7 @@ class RollbackGeneratorCommand extends Command
         $this->composer->dumpOptimized();
 
         $this->commandData->fireEvent($type, FileUtil::FILE_DELETED);
+
         return 0;
     }
 
