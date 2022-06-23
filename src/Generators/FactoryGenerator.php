@@ -122,15 +122,17 @@ class FactoryGenerator extends BaseGenerator
                 $rule = $rules[$field->name];
             }
 
-            switch ($field->fieldType) {
+            switch (strtolower($field->fieldType)) {
                 case 'integer':
+                case 'unsignedinteger':
                 case 'smallinteger':
-                case 'float':
+                case 'biginteger':
+                case 'unsignedbiginteger':
                     $fakerData = in_array($field->name, $relations) ? ':relation' : $this->getValidNumber($rule, 999);
                     break;
                 case 'long':
-                case 'biginteger':
                 case 'double':
+                case 'float':
                 case 'decimal':
                     $fakerData = $this->getValidNumber($rule);
                     break;
