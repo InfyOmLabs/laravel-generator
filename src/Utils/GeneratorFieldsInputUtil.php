@@ -55,6 +55,10 @@ class GeneratorFieldsInputUtil
 
         $field->validations = $validations;
 
+        if (str_contains($field->validations, 'required')) {
+            $field->isNotNull = true;
+        }
+
         return $field;
     }
 
