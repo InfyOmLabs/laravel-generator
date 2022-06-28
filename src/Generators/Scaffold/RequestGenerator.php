@@ -66,11 +66,11 @@ class RequestGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->createFileName)) {
-            $this->commandData->commandComment('Create API Request file deleted: '.$this->createFileName);
+            $this->commandData->commandComment('Create Request file deleted: '.$this->createFileName);
         }
 
         if ($this->rollbackFile($this->path, $this->updateFileName)) {
-            $this->commandData->commandComment('Update API Request file deleted: '.$this->updateFileName);
+            $this->commandData->commandComment('Update Request file deleted: '.$this->updateFileName);
         }
     }
 }

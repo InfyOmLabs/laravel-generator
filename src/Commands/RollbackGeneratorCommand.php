@@ -61,7 +61,7 @@ class RollbackGeneratorCommand extends Command
     /**
      * Execute the command.
      *
-     * @return void
+     * @return int
      */
     public function handle()
     {
@@ -72,6 +72,8 @@ class RollbackGeneratorCommand extends Command
             CommandData::$COMMAND_TYPE_API_SCAFFOLD,
         ])) {
             $this->error('invalid rollback type');
+
+            return 1;
         }
 
         $this->commandData = new CommandData($this, $this->argument('type'));
@@ -90,7 +92,7 @@ class RollbackGeneratorCommand extends Command
             $this->composer->dumpOptimized();
             $this->commandData->fireEvent($type, FileUtil::FILE_DELETED);
 
-            return;
+            return 0;
         }
 
         $migrationGenerator = new MigrationGenerator($this->commandData);
@@ -143,6 +145,8 @@ class RollbackGeneratorCommand extends Command
         $this->composer->dumpOptimized();
 
         $this->commandData->fireEvent($type, FileUtil::FILE_DELETED);
+
+        return 0;
     }
 
     /**

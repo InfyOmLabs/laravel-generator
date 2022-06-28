@@ -169,6 +169,10 @@ class GeneratorField
         $field->inIndex = isset($fieldInput['inIndex']) ? $fieldInput['inIndex'] : true;
         $field->inView = isset($fieldInput['inView']) ? $fieldInput['inView'] : true;
 
+        if (str_contains($field->validations, 'required')) {
+            $field->isNotNull = true;
+        }
+
         return $field;
     }
 

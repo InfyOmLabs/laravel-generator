@@ -49,10 +49,8 @@ class GeneratorPublishCommand extends PublishBaseCommand
      */
     private function fillTemplate($templateData)
     {
-        $apiVersion = config('infyom.laravel_generator.api_version', 'v1');
         $apiPrefix = config('infyom.laravel_generator.api_prefix', 'api');
 
-        $templateData = str_replace('$API_VERSION$', $apiVersion, $templateData);
         $templateData = str_replace('$API_PREFIX$', $apiPrefix, $templateData);
         $appNamespace = $this->getLaravel()->getNamespace();
         $appNamespace = substr($appNamespace, 0, strlen($appNamespace) - 1);
@@ -73,7 +71,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
         $fileContent = file_get_contents($routeServiceProviderPath);
 
-        $search = "Route::prefix('api')".PHP_EOL.str(' ')->repeat(16)."->middleware('api')";
+        $search = "Route::middleware('api')".PHP_EOL.str(' ')->repeat(16)."->prefix('api')";
         $beforeContent = str($fileContent)->before($search);
         $afterContent = str($fileContent)->after($search);
 

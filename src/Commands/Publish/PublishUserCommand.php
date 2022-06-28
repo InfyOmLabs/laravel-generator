@@ -79,6 +79,7 @@ class PublishUserCommand extends PublishBaseCommand
         $routeContents = file_get_contents($path);
 
         $routesTemplate = get_template('routes.user', 'laravel-generator');
+        $routesTemplate = $this->fillTemplate($routesTemplate);
 
         $routeContents .= "\n\n".$routesTemplate;
 
