@@ -20,6 +20,6 @@ class APIRequest extends FormRequest
     {
         $messages = implode(' ', Arr::flatten($errors));
 
-        return Response::json(ResponseUtil::makeError($messages), 400);
+        return Response::json(ResponseUtil::makeError($messages), Response::HTTP_BAD_REQUEST);
     }
 }

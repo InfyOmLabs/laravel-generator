@@ -27,8 +27,8 @@ class LimitOffsetCriteria implements CriteriaInterface
      */
     public function apply($model, \Prettus\Repository\Contracts\RepositoryInterface $repository)
     {
-        $limit = $this->request->get('limit', null);
-        $offset = $this->request->get('offset', null);
+        $limit = (int) $this->request->get('limit', null);
+        $offset = (int) $this->request->get('offset', null);
 
         if ($limit) {
             $model = $model->limit($limit);
