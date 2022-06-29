@@ -79,7 +79,7 @@ class ViewGenerator extends BaseGenerator
 
     private function generateTable()
     {
-        switch($this->config->tableType) {
+        switch ($this->config->tableType) {
             case 'blade':
                 $templateData = $this->generateBladeTableBody();
                 $tableString = 'blade_tables';

@@ -54,6 +54,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
         $templateData = str_replace('$API_PREFIX$', $apiPrefix, $templateData);
         $appNamespace = $this->getLaravel()->getNamespace();
         $appNamespace = substr($appNamespace, 0, strlen($appNamespace) - 1);
+
         return str_replace('$NAMESPACE_APP$', $appNamespace, $templateData);
     }
 
