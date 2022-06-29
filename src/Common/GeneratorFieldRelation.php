@@ -6,10 +6,9 @@ use Illuminate\Support\Str;
 
 class GeneratorFieldRelation
 {
-    /** @var string */
     public $type;
-    public $inputs;
-    public $relationName;
+    public array $inputs;
+    public string $relationName;
 
     public static function parseRelation($relationInput)
     {
@@ -96,8 +95,6 @@ class GeneratorFieldRelation
             $inputFields = '';
         }
 
-        $template = str_replace('$INPUT_FIELDS$', $inputFields, $template);
-
-        return $template;
+        return str_replace('$INPUT_FIELDS$', $inputFields, $template);
     }
 }

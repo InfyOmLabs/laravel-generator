@@ -4,40 +4,38 @@ namespace InfyOm\Generator\Generators;
 
 use File;
 use Illuminate\Support\Str;
-use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Utils\FileUtil;
 use SplFileInfo;
 
 class MigrationGenerator extends BaseGenerator
 {
-    /** @var CommandData */
-    private $commandData;
+    private GeneratorConfig $config;
 
-    /** @var string */
-    private $path;
+    private string $path;
 
-    public function __construct($commandData)
+    public function __construct(GeneratorConfig $config)
     {
-        $this->commandData = $commandData;
-        $this->path = config('infyom.laravel_generator.path.migration', database_path('migrations/'));
+        $this->config = $config;
+        $this->path = config('laravel_generator.path.migration', database_path('migrations/'));
     }
 
     public function generate()
     {
         $templateData = get_template('migration', 'laravel-generator');
 
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->config->dynamicVars, $templateData);
 
         $templateData = str_replace('$FIELDS$', $this->generateFields(), $templateData);
 
-        $tableName = $this->commandData->dynamicVars['$TABLE_NAME$'];
+        $tableName = $this->config->dynamicVars['$TABLE_NAME$'];
 
         $fileName = date('Y_m_d_His').'_'.'create_'.strtolower($tableName).'_table.php';
 
         FileUtil::createFile($this->path, $fileName, $templateData);
 
-        $this->commandData->commandComment("\nMigration created: ");
-        $this->commandData->commandInfo($fileName);
+        $this->config->commandComment("\nMigration created: ");
+        $this->config->commandInfo($fileName);
     }
 
     private function generateFields()
@@ -47,8 +45,8 @@ class MigrationGenerator extends BaseGenerator
         $createdAtField = null;
         $updatedAtField = null;
 
-        if (isset($this->commandData->fields) && !empty($this->commandData->fields)) {
-            foreach ($this->commandData->fields as $field) {
+        if (isset($this->config->fields) && !empty($this->config->fields)) {
+            foreach ($this->config->fields as $field) {
                 if ($field->name == 'created_at') {
                     $createdAtField = $field;
                     continue;
@@ -77,7 +75,7 @@ class MigrationGenerator extends BaseGenerator
             }
         }
 
-        if ($this->commandData->getOption('softDelete')) {
+        if ($this->config->options->softDelete) {
             $fields[] = '$table->softDeletes();';
         }
 
@@ -86,7 +84,7 @@ class MigrationGenerator extends BaseGenerator
 
     public function rollback()
     {
-        $fileName = 'create_'.$this->commandData->config->tableName.'_table.php';
+        $fileName = 'create_'.$this->config->tableName.'_table.php';
 
         /** @var SplFileInfo $allFiles */
         $allFiles = File::allFiles($this->path);
@@ -103,7 +101,7 @@ class MigrationGenerator extends BaseGenerator
             foreach ($files as $file) {
                 if (Str::contains($file, $fileName)) {
                     if ($this->rollbackFile($this->path, $file)) {
-                        $this->commandData->commandComment('Migration file deleted: '.$file);
+                        $this->config->commandComment('Migration file deleted: '.$file);
                     }
                     break;
                 }

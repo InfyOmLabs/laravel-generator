@@ -31,7 +31,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
         $this->updateRouteServiceProvider();
         $this->publishTestCases();
         $this->publishBaseController();
-        $repositoryPattern = config('infyom.laravel_generator.options.repository_pattern', true);
+        $repositoryPattern = config('laravel_generator.options.repository_pattern', true);
         if ($repositoryPattern) {
             $this->publishBaseRepository();
         }
@@ -49,14 +49,12 @@ class GeneratorPublishCommand extends PublishBaseCommand
      */
     private function fillTemplate($templateData)
     {
-        $apiPrefix = config('infyom.laravel_generator.api_prefix', 'api');
+        $apiPrefix = config('laravel_generator.api_prefix', 'api');
 
         $templateData = str_replace('$API_PREFIX$', $apiPrefix, $templateData);
         $appNamespace = $this->getLaravel()->getNamespace();
         $appNamespace = substr($appNamespace, 0, strlen($appNamespace) - 1);
-        $templateData = str_replace('$NAMESPACE_APP$', $appNamespace, $templateData);
-
-        return $templateData;
+        return str_replace('$NAMESPACE_APP$', $appNamespace, $templateData);
     }
 
     private function updateRouteServiceProvider()
@@ -83,10 +81,10 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
     private function publishTestCases()
     {
-        $testsPath = config('infyom.laravel_generator.path.tests', base_path('tests/'));
-        $testsNameSpace = config('infyom.laravel_generator.namespace.tests', 'Tests');
-        $createdAtField = config('infyom.laravel_generator.timestamps.created_at', 'created_at');
-        $updatedAtField = config('infyom.laravel_generator.timestamps.updated_at', 'updated_at');
+        $testsPath = config('laravel_generator.path.tests', base_path('tests/'));
+        $testsNameSpace = config('laravel_generator.namespace.tests', 'Tests');
+        $createdAtField = config('laravel_generator.timestamps.created_at', 'created_at');
+        $updatedAtField = config('laravel_generator.timestamps.updated_at', 'updated_at');
 
         $templateData = get_template('test.api_test_trait', 'laravel-generator');
 
@@ -102,13 +100,13 @@ class GeneratorPublishCommand extends PublishBaseCommand
         FileUtil::createFile($testsPath, $fileName, $templateData);
         $this->info('ApiTestTrait created');
 
-        $testAPIsPath = config('infyom.laravel_generator.path.api_test', base_path('tests/APIs/'));
+        $testAPIsPath = config('laravel_generator.path.api_test', base_path('tests/APIs/'));
         if (!file_exists($testAPIsPath)) {
             FileUtil::createDirectoryIfNotExist($testAPIsPath);
             $this->info('APIs Tests directory created');
         }
 
-        $testRepositoriesPath = config('infyom.laravel_generator.path.repository_test', base_path('tests/Repositories/'));
+        $testRepositoriesPath = config('laravel_generator.path.repository_test', base_path('tests/Repositories/'));
         if (!file_exists($testRepositoriesPath)) {
             FileUtil::createDirectoryIfNotExist($testRepositoriesPath);
             $this->info('Repositories Tests directory created');

@@ -2,26 +2,23 @@
 
 namespace InfyOm\Generator\Generators\API;
 
-use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 
 class APIControllerGenerator extends BaseGenerator
 {
-    /** @var CommandData */
-    private $commandData;
+    private GeneratorConfig $config;
 
-    /** @var string */
-    private $path;
+    private string $path;
 
-    /** @var string */
-    private $fileName;
+    private string $fileName;
 
-    public function __construct(CommandData $commandData)
+    public function __construct(GeneratorConfig $config)
     {
-        $this->commandData = $commandData;
-        $this->path = $commandData->config->pathApiController;
-        $this->fileName = $this->commandData->modelName.'APIController.php';
+        $this->config = $config;
+        $this->path = $this->config->paths->apiController;
+        $this->fileName = $this->config->modelNames->name.'APIController.php';
     }
 
     /**
@@ -31,36 +28,36 @@ class APIControllerGenerator extends BaseGenerator
      */
     public function generate()
     {
-        if ($this->commandData->getOption('repositoryPattern')) {
+        if ($this->config->options->repositoryPattern) {
             $templateName = 'api_controller';
         } else {
             $templateName = 'model_api_controller';
         }
 
-        if ($this->commandData->isLocalizedTemplates()) {
+        if ($this->config->isLocalizedTemplates()) {
             $templateName .= '_locale';
         }
 
-        if ($this->commandData->getOption('resources')) {
+        if ($this->config->options->resources) {
             $templateName .= '_resource';
         }
 
         $templateData = get_template("api.controller.$templateName", 'laravel-generator');
 
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->config->dynamicVars, $templateData);
         $templateData = $this->fillDocs($templateData);
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
-        $this->commandData->commandComment("\nAPI Controller created: ");
-        $this->commandData->commandInfo($this->fileName);
+        $this->config->commandComment("\nAPI Controller created: ");
+        $this->config->commandInfo($this->fileName);
     }
 
     private function fillDocs($templateData)
     {
         $methods = ['controller', 'index', 'store', 'show', 'update', 'destroy'];
 
-        if ($this->commandData->getAddOn('swagger')) {
+        if ($this->config->addons->swagger) {
             $templatePrefix = 'controller_docs';
             $templateType = 'swagger-generator';
         } else {
@@ -71,7 +68,7 @@ class APIControllerGenerator extends BaseGenerator
         foreach ($methods as $method) {
             $key = '$DOC_'.strtoupper($method).'$';
             $docTemplate = get_template($templatePrefix.'.'.$method, $templateType);
-            $docTemplate = fill_template($this->commandData->dynamicVars, $docTemplate);
+            $docTemplate = fill_template($this->config->dynamicVars, $docTemplate);
             $templateData = str_replace($key, $docTemplate, $templateData);
         }
 
@@ -86,7 +83,7 @@ class APIControllerGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('API Controller file deleted: '.$this->fileName);
+            $this->config->commandComment('API Controller file deleted: '.$this->fileName);
         }
     }
 }

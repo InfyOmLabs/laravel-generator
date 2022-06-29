@@ -3,37 +3,33 @@
 namespace InfyOm\Generator\Generators\API;
 
 use Illuminate\Support\Str;
-use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Generators\BaseGenerator;
 
 class APIRoutesGenerator extends BaseGenerator
 {
-    /** @var CommandData */
-    private $commandData;
+    private GeneratorConfig $config;
 
-    /** @var string */
-    private $path;
+    private string $path;
 
-    /** @var string */
-    private $routeContents;
+    private string $routeContents;
 
-    /** @var string */
-    private $routesTemplate;
+    private string $routesTemplate;
 
-    public function __construct(CommandData $commandData)
+    public function __construct(GeneratorConfig $config)
     {
-        $this->commandData = $commandData;
-        $this->path = $commandData->config->pathApiRoutes;
+        $this->config = $config;
+        $this->path = $this->config->paths->apiRoutes;
 
         $this->routeContents = file_get_contents($this->path);
 
-        if (!empty($this->commandData->config->prefixes['route'])) {
+        if (!empty($this->config->prefixes->route)) {
             $routesTemplate = get_template('api.routes.prefix_routes', 'laravel-generator');
         } else {
             $routesTemplate = get_template('api.routes.routes', 'laravel-generator');
         }
 
-        $this->routesTemplate = fill_template($this->commandData->dynamicVars, $routesTemplate);
+        $this->routesTemplate = fill_template($this->config->dynamicVars, $routesTemplate);
     }
 
     /**
@@ -45,15 +41,15 @@ class APIRoutesGenerator extends BaseGenerator
     {
         $this->routeContents .= "\n\n".$this->routesTemplate;
         $existingRouteContents = file_get_contents($this->path);
-        if (Str::contains($existingRouteContents, "Route::resource('".$this->commandData->config->mDashedPlural."',")) {
-            $this->commandData->commandObj->info('Menu '.$this->commandData->config->mDashedPlural.'is already exists, Skipping Adjustment.');
+        if (Str::contains($existingRouteContents, "Route::resource('".$this->config->modelNames->dashedPlural."',")) {
+            $this->config->commandInfo('Menu '.$this->config->modelNames->dashedPlural.'is already exists, Skipping Adjustment.');
 
             return;
         }
 
         file_put_contents($this->path, $this->routeContents);
 
-        $this->commandData->commandComment("\n".$this->commandData->config->mCamelPlural.' api routes added.');
+        $this->config->commandComment("\n".$this->config->modelNames->dashedPlural.' api routes added.');
     }
 
     /**
@@ -66,7 +62,7 @@ class APIRoutesGenerator extends BaseGenerator
         if (Str::contains($this->routeContents, $this->routesTemplate)) {
             $this->routeContents = str_replace($this->routesTemplate, '', $this->routeContents);
             file_put_contents($this->path, $this->routeContents);
-            $this->commandData->commandComment('api routes deleted');
+            $this->config->commandComment('api routes deleted');
         }
     }
 }

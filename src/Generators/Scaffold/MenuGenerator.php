@@ -3,48 +3,38 @@
 namespace InfyOm\Generator\Generators\Scaffold;
 
 use Illuminate\Support\Str;
-use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Generators\BaseGenerator;
 
 class MenuGenerator extends BaseGenerator
 {
-    /** @var CommandData */
-    private $commandData;
+    private GeneratorConfig $config;
 
-    /** @var string */
-    private $path;
+    private string $path;
 
-    /** @var string */
-    private $templateType;
+    private string $templateType;
 
-    /** @var string */
-    private $menuContents;
+    private string $menuContents;
 
-    /** @var string */
-    private $menuTemplate;
+    private string $menuTemplate;
 
-    public function __construct(CommandData $commandData)
+    public function __construct(GeneratorConfig $config)
     {
-        $this->commandData = $commandData;
-        $this->path = config(
-            'infyom.laravel_generator.path.views',
-            resource_path(
-                'views/'
-            )
-        ).$commandData->getAddOn('menu.menu_file');
-        $this->templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
+        $this->config = $config;
+        $this->path = config('laravel_generator.path.menu_file', resource_path('views/layouts/menu.blade.php'));
+        $this->templateType = config('laravel_generator.templates', 'adminlte-templates');
 
         $this->menuContents = file_get_contents($this->path);
 
         $templateName = 'menu_template';
 
-        if ($this->commandData->isLocalizedTemplates()) {
+        if ($this->config->isLocalizedTemplates()) {
             $templateName .= '_locale';
         }
 
         $this->menuTemplate = get_template('scaffold.layouts.'.$templateName, $this->templateType);
 
-        $this->menuTemplate = fill_template($this->commandData->dynamicVars, $this->menuTemplate);
+        $this->menuTemplate = fill_template($this->config->dynamicVars, $this->menuTemplate);
     }
 
     public function generate()
@@ -52,22 +42,22 @@ class MenuGenerator extends BaseGenerator
         $this->menuContents .= $this->menuTemplate.infy_nl();
         $existingMenuContents = file_get_contents($this->path);
         // adminlte uses <p> tab and coreui+stisla uses <span> tag for menu
-        if (Str::contains($existingMenuContents, '<p>'.$this->commandData->config->mHumanPlural.'</p>') or
-            Str::contains($existingMenuContents, '<span>'.$this->commandData->config->mHumanPlural.'</span>')) {
-            $this->commandData->commandObj->info('Menu '.$this->commandData->config->mHumanPlural.' is already exists, Skipping Adjustment.');
+        if (Str::contains($existingMenuContents, '<p>'.$this->config->modelNames->humanPlural.'</p>') or
+            Str::contains($existingMenuContents, '<span>'.$this->config->modelNames->humanPlural.'</span>')) {
+            $this->config->commandInfo('Menu '.$this->config->modelNames->humanPlural.' is already exists, Skipping Adjustment.');
 
             return;
         }
 
         file_put_contents($this->path, $this->menuContents);
-        $this->commandData->commandComment("\n".$this->commandData->config->mCamelPlural.' menu added.');
+        $this->config->commandComment("\n".$this->config->modelNames->dashedPlural.' menu added.');
     }
 
     public function rollback()
     {
         if (Str::contains($this->menuContents, $this->menuTemplate)) {
             file_put_contents($this->path, str_replace($this->menuTemplate, '', $this->menuContents));
-            $this->commandData->commandComment('menu deleted');
+            $this->config->commandComment('menu deleted');
         }
     }
 }

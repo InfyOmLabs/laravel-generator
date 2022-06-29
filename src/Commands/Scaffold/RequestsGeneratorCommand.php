@@ -3,7 +3,6 @@
 namespace InfyOm\Generator\Commands\Scaffold;
 
 use InfyOm\Generator\Commands\BaseCommand;
-use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
 
 class RequestsGeneratorCommand extends BaseCommand
@@ -23,16 +22,6 @@ class RequestsGeneratorCommand extends BaseCommand
     protected $description = 'Create a full CRUD views for given model';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->commandData = new CommandData($this, CommandData::$COMMAND_TYPE_SCAFFOLD);
-    }
-
-    /**
      * Execute the command.
      *
      * @return void
@@ -41,7 +30,7 @@ class RequestsGeneratorCommand extends BaseCommand
     {
         parent::handle();
 
-        $requestGenerator = new RequestGenerator($this->commandData);
+        $requestGenerator = new RequestGenerator($this->config);
         $requestGenerator->generate();
 
         $this->performPostActions();

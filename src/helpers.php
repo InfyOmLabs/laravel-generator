@@ -90,7 +90,7 @@ if (!function_exists('get_template_file_path')) {
         $templateName = str_replace('.', '/', $templateName);
 
         $templatesPath = config(
-            'infyom.laravel_generator.path.templates_dir',
+            'laravel_generator.path.templates_dir',
             resource_path('infyom/infyom-generator-templates/')
         );
 

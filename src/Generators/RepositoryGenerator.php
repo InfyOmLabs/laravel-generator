@@ -2,36 +2,33 @@
 
 namespace InfyOm\Generator\Generators;
 
-use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Utils\FileUtil;
 
 class RepositoryGenerator extends BaseGenerator
 {
-    /** @var CommandData */
-    private $commandData;
+    private GeneratorConfig $config;
 
-    /** @var string */
-    private $path;
+    private string $path;
 
-    /** @var string */
-    private $fileName;
+    private string $fileName;
 
-    public function __construct(CommandData $commandData)
+    public function __construct(GeneratorConfig $config)
     {
-        $this->commandData = $commandData;
-        $this->path = $commandData->config->pathRepository;
-        $this->fileName = $this->commandData->modelName.'Repository.php';
+        $this->config = $config;
+        $this->path = $this->config->paths->repository;
+        $this->fileName = $this->config->modelNames->name.'Repository.php';
     }
 
     public function generate()
     {
         $templateData = get_template('repository', 'laravel-generator');
 
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->config->dynamicVars, $templateData);
 
         $searchables = [];
 
-        foreach ($this->commandData->fields as $field) {
+        foreach ($this->config->fields as $field) {
             if ($field->isSearchable) {
                 $searchables[] = "'".$field->name."'";
             }
@@ -40,21 +37,21 @@ class RepositoryGenerator extends BaseGenerator
         $templateData = str_replace('$FIELDS$', implode(','.infy_nl_tab(1, 2), $searchables), $templateData);
 
         $docsTemplate = get_template('docs.repository', 'laravel-generator');
-        $docsTemplate = fill_template($this->commandData->dynamicVars, $docsTemplate);
+        $docsTemplate = fill_template($this->config->dynamicVars, $docsTemplate);
         $docsTemplate = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $docsTemplate);
 
         $templateData = str_replace('$DOCS$', $docsTemplate, $templateData);
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
-        $this->commandData->commandComment("\nRepository created: ");
-        $this->commandData->commandInfo($this->fileName);
+        $this->config->commandComment("\nRepository created: ");
+        $this->config->commandInfo($this->fileName);
     }
 
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('Repository file deleted: '.$this->fileName);
+            $this->config->commandComment('Repository file deleted: '.$this->fileName);
         }
     }
 }

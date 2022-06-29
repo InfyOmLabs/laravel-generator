@@ -2,25 +2,22 @@
 
 namespace InfyOm\Generator\Generators;
 
-use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Utils\FileUtil;
 
 class RepositoryTestGenerator extends BaseGenerator
 {
-    /** @var CommandData */
-    private $commandData;
+    private GeneratorConfig $config;
 
-    /** @var string */
-    private $path;
+    private string $path;
 
-    /** @var string */
-    private $fileName;
+    private string $fileName;
 
-    public function __construct($commandData)
+    public function __construct($config)
     {
-        $this->commandData = $commandData;
-        $this->path = config('infyom.laravel_generator.path.repository_test', base_path('tests/Repositories/'));
-        $this->fileName = $this->commandData->modelName.'RepositoryTest.php';
+        $this->config = $config;
+        $this->path = config('laravel_generator.path.repository_test', base_path('tests/Repositories/'));
+        $this->fileName = $this->config->modelNames->name.'RepositoryTest.php';
     }
 
     public function generate()
@@ -31,13 +28,13 @@ class RepositoryTestGenerator extends BaseGenerator
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
-        $this->commandData->commandObj->comment("\nRepositoryTest created: ");
-        $this->commandData->commandObj->info($this->fileName);
+        $this->config->commandComment("\nRepositoryTest created: ");
+        $this->config->commandInfo($this->fileName);
     }
 
     private function fillTemplate($templateData)
     {
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->config->dynamicVars, $templateData);
 
         return $templateData;
     }
@@ -45,7 +42,7 @@ class RepositoryTestGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('Repository Test file deleted: '.$this->fileName);
+            $this->config->commandComment('Repository Test file deleted: '.$this->fileName);
         }
     }
 }

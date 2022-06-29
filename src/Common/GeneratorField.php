@@ -7,32 +7,28 @@ use Illuminate\Support\Str;
 class GeneratorField
 {
     /** @var string */
-    public $name;
-    public $dbInput;
-    public $htmlInput;
-    public $htmlType;
-    public $fieldType;
-    public $description;
+    public string $name;
+    public string $dbInput;
+    public string $htmlInput;
+    public string $htmlType;
+    public string $fieldType;
+    public string $description;
 
-    /** @var array */
-    public $htmlValues;
+    public array $htmlValues;
 
-    /** @var string */
-    public $migrationText;
-    public $foreignKeyText;
-    public $validations;
+    public string $migrationText;
+    public string $foreignKeyText;
+    public string $validations;
 
-    /** @var bool */
-    public $isSearchable = true;
-    public $isFillable = true;
-    public $isPrimary = false;
-    public $inForm = true;
-    public $inIndex = true;
-    public $inView = true;
-    public $isNotNull = false;
+    public bool $isSearchable = true;
+    public bool $isFillable = true;
+    public bool $isPrimary = false;
+    public bool $inForm = true;
+    public bool $inIndex = true;
+    public bool $inView = true;
+    public bool $isNotNull = false;
 
-    /** @var int */
-    public $numberDecimalPoints = 2;
+    public int $numberDecimalPoints = 2;
 
     /**
      * @param Column $column

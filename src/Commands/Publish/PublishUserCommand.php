@@ -31,7 +31,7 @@ class PublishUserCommand extends PublishBaseCommand
         $this->updateRoutes();
         $this->updateMenu();
         $this->publishUserController();
-        if (config('infyom.laravel_generator.options.repository_pattern')) {
+        if (config('laravel_generator.options.repository_pattern')) {
             $this->publishUserRepository();
         }
         $this->publishCreateUserRequest();
@@ -40,8 +40,8 @@ class PublishUserCommand extends PublishBaseCommand
 
     private function copyViews()
     {
-        $viewsPath = config('infyom.laravel_generator.path.views', resource_path('views/'));
-        $templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
+        $viewsPath = config('laravel_generator.path.views', resource_path('views/'));
+        $templateType = config('laravel_generator.templates', 'adminlte-templates');
 
         $this->createDirectories($viewsPath.'users');
 
@@ -74,7 +74,7 @@ class PublishUserCommand extends PublishBaseCommand
 
     private function updateRoutes()
     {
-        $path = config('infyom.laravel_generator.path.routes', base_path('routes/web.php'));
+        $path = config('laravel_generator.path.routes', base_path('routes/web.php'));
 
         $routeContents = file_get_contents($path);
 
@@ -89,8 +89,8 @@ class PublishUserCommand extends PublishBaseCommand
 
     private function updateMenu()
     {
-        $viewsPath = config('infyom.laravel_generator.path.views', resource_path('views/'));
-        $templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
+        $viewsPath = config('laravel_generator.path.views', resource_path('views/'));
+        $templateType = config('laravel_generator.templates', 'adminlte-templates');
         $path = $viewsPath.'layouts/menu.blade.php';
         $menuContents = file_get_contents($path);
         $sourceFile = file_get_contents(get_template_file_path('scaffold/users/menu', $templateType));
@@ -103,14 +103,14 @@ class PublishUserCommand extends PublishBaseCommand
     private function publishUserController()
     {
         $templateData = get_template('user/user_controller', 'laravel-generator');
-        if (!config('infyom.laravel_generator.options.repository_pattern')) {
+        if (!config('laravel_generator.options.repository_pattern')) {
             $templateData = get_template('user/user_controller_without_repository', 'laravel-generator');
             $templateData = $this->fillTemplate($templateData);
         }
 
         $templateData = $this->fillTemplate($templateData);
 
-        $controllerPath = config('infyom.laravel_generator.path.controller', app_path('Http/Controllers/'));
+        $controllerPath = config('laravel_generator.path.controller', app_path('Http/Controllers/'));
 
         $fileName = 'UserController.php';
 
@@ -129,7 +129,7 @@ class PublishUserCommand extends PublishBaseCommand
 
         $templateData = $this->fillTemplate($templateData);
 
-        $repositoryPath = config('infyom.laravel_generator.path.repository', app_path('Repositories/'));
+        $repositoryPath = config('laravel_generator.path.repository', app_path('Repositories/'));
 
         $fileName = 'UserRepository.php';
 
@@ -150,7 +150,7 @@ class PublishUserCommand extends PublishBaseCommand
 
         $templateData = $this->fillTemplate($templateData);
 
-        $requestPath = config('infyom.laravel_generator.path.request', app_path('Http/Requests/'));
+        $requestPath = config('laravel_generator.path.request', app_path('Http/Requests/'));
 
         $fileName = 'CreateUserRequest.php';
 
@@ -171,7 +171,7 @@ class PublishUserCommand extends PublishBaseCommand
 
         $templateData = $this->fillTemplate($templateData);
 
-        $requestPath = config('infyom.laravel_generator.path.request', app_path('Http/Requests/'));
+        $requestPath = config('laravel_generator.path.request', app_path('Http/Requests/'));
 
         $fileName = 'UpdateUserRequest.php';
         if (file_exists($requestPath.$fileName) && !$this->confirmOverwrite($fileName)) {
@@ -192,11 +192,11 @@ class PublishUserCommand extends PublishBaseCommand
      */
     private function fillTemplate($templateData)
     {
-        $templateData = str_replace('$NAMESPACE_CONTROLLER$', config('infyom.laravel_generator.namespace.controller'), $templateData);
+        $templateData = str_replace('$NAMESPACE_CONTROLLER$', config('laravel_generator.namespace.controller'), $templateData);
 
-        $templateData = str_replace('$NAMESPACE_REQUEST$', config('infyom.laravel_generator.namespace.request'), $templateData);
+        $templateData = str_replace('$NAMESPACE_REQUEST$', config('laravel_generator.namespace.request'), $templateData);
 
-        $templateData = str_replace('$NAMESPACE_REPOSITORY$', config('infyom.laravel_generator.namespace.repository'), $templateData);
+        $templateData = str_replace('$NAMESPACE_REPOSITORY$', config('laravel_generator.namespace.repository'), $templateData);
         $templateData = str_replace('$NAMESPACE_USER$', config('auth.providers.users.model'), $templateData);
 
         return $templateData;

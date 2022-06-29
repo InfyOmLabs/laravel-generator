@@ -3,7 +3,6 @@
 namespace InfyOm\Generator\Commands\Common;
 
 use InfyOm\Generator\Commands\BaseCommand;
-use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\RepositoryGenerator;
 
 class RepositoryGeneratorCommand extends BaseCommand
@@ -23,16 +22,6 @@ class RepositoryGeneratorCommand extends BaseCommand
     protected $description = 'Create repository command';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->commandData = new CommandData($this, CommandData::$COMMAND_TYPE_API);
-    }
-
-    /**
      * Execute the command.
      *
      * @return void
@@ -41,7 +30,7 @@ class RepositoryGeneratorCommand extends BaseCommand
     {
         parent::handle();
 
-        $repositoryGenerator = new RepositoryGenerator($this->commandData);
+        $repositoryGenerator = new RepositoryGenerator($this->config);
         $repositoryGenerator->generate();
 
         $this->performPostActions();

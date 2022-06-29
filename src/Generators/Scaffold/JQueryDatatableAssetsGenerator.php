@@ -2,7 +2,7 @@
 
 namespace InfyOm\Generator\Generators\Scaffold;
 
-use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 
@@ -11,42 +11,31 @@ use InfyOm\Generator\Utils\FileUtil;
  */
 class JQueryDatatableAssetsGenerator extends BaseGenerator
 {
-    /** @var CommandData */
-    private $commandData;
+    private GeneratorConfig $config;
 
-    /** @var string */
-    private $path;
+    private string $path;
 
-    /** @var string */
-    private $fileName;
+    private string $fileName;
 
-    private $config;
-
-    public function __construct(CommandData $commandData)
+    public function __construct(GeneratorConfig $config)
     {
-        $this->commandData = $commandData;
-        $this->path = $commandData->config->pathAssets.'js/';
-        $this->config = $this->commandData->config;
+        $this->config = $config;
+        $this->path = $this->config->paths->assets.'js/';
         $this->fileName = $this->config->tableName.'.js';
     }
 
     public function generate()
     {
-        $this->generateJquery();
-    }
-
-    public function generateJquery()
-    {
         $templateName = 'jquery';
 
-        if ($this->commandData->isLocalizedTemplates()) {
+        if ($this->config->isLocalizedTemplates()) {
             $templateName .= '_locale';
         }
 
         $columnsCount = 0;
 
         $fields = '';
-        foreach ($this->commandData->fields as $field) {
+        foreach ($this->config->fields as $field) {
             if (in_array($field->name, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
                 continue;
             }
@@ -61,7 +50,7 @@ class JQueryDatatableAssetsGenerator extends BaseGenerator
 
         // Publish Datatable JS file
         $templateData = get_template('scaffold.'.$templateName, 'laravel-generator');
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->config->dynamicVars, $templateData);
         $templateData = str_replace('$ACTION_COLUMN_COUNT$', $columnsCount, $templateData);
         $templateData = str_replace('$JQUERY_FIELDS$', $fields, $templateData);
 
@@ -70,29 +59,29 @@ class JQueryDatatableAssetsGenerator extends BaseGenerator
             FileUtil::createDirectoryIfNotExist($path);
         }
         file_put_contents($path.$this->fileName, $templateData);
-        $this->commandData->commandComment("\n".$this->config->tableName.' assets added.');
+        $this->config->commandComment("\n".$this->config->tableName.' assets added.');
 
         // Publish JS Rendere Template
         $templateName = 'js_renderer_template';
         $templateData = get_template('scaffold.'.$templateName, 'laravel-generator');
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->config->dynamicVars, $templateData);
 
-        $path = $this->config->pathViews.'templates/';
+        $path = $this->config->paths->views.'templates/';
         if (!file_exists($path)) {
             FileUtil::createDirectoryIfNotExist($path);
         }
 
         file_put_contents($path.'templates.php', $templateData);
-        $this->commandData->commandComment("\n".'JS Render Templates added.');
+        $this->config->commandComment("\n".'JS Render Templates added.');
 
         // Publish Webpack mix lines
         $webpackMixContents = file_get_contents(base_path('webpack.mix.js'));
         $templateName = 'webpack_mix_js';
         $templateData = get_template('scaffold.'.$templateName, 'laravel-generator');
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->config->dynamicVars, $templateData);
         $webpackMixContents .= "\n\n".$templateData;
 
         file_put_contents(base_path('webpack.mix.js'), $webpackMixContents);
-        $this->commandData->commandComment("\n".$this->commandData->config->mCamelPlural.' webpack.mix.js updated.');
+        $this->config->commandComment("\n".$this->config->modelNames->camelPlural.' webpack.mix.js updated.');
     }
 }

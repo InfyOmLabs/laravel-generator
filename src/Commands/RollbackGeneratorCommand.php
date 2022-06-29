@@ -3,7 +3,7 @@
 namespace InfyOm\Generator\Commands;
 
 use Illuminate\Console\Command;
-use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Generators\API\APIControllerGenerator;
 use InfyOm\Generator\Generators\API\APIRequestGenerator;
 use InfyOm\Generator\Generators\API\APIRoutesGenerator;
@@ -24,12 +24,8 @@ use Symfony\Component\Console\Input\InputOption;
 
 class RollbackGeneratorCommand extends Command
 {
-    /**
-     * The command Data.
-     *
-     * @var CommandData
-     */
-    public $commandData;
+    public GeneratorConfig $config;
+
     /**
      * The console command name.
      *
@@ -66,85 +62,79 @@ class RollbackGeneratorCommand extends Command
     public function handle()
     {
         $type = $this->argument('type');
-        if (!in_array($type, [
-            CommandData::$COMMAND_TYPE_API,
-            CommandData::$COMMAND_TYPE_SCAFFOLD,
-            CommandData::$COMMAND_TYPE_API_SCAFFOLD,
-        ])) {
+        if (!in_array($type, ['api', 'scaffold', 'api_scaffold'])) {
             $this->error('invalid rollback type');
 
             return 1;
         }
 
-        $this->commandData = new CommandData($this, $this->argument('type'));
-        $this->commandData->fireEvent($type, FileUtil::FILE_DELETING);
-        $this->commandData->config->mName = $this->commandData->modelName = $this->argument('model');
+        $this->config = new GeneratorConfig($this);
+        $this->config->init();
 
-        $this->commandData->config->init($this->commandData, ['tableName', 'prefix', 'plural', 'views']);
-
-        $views = $this->commandData->getOption('views');
+        $this->config->command->fireEvent($type, FileUtil::FILE_DELETING);
+        $views = $this->option('views');
         if (!empty($views)) {
             $views = explode(',', $views);
-            $viewGenerator = new ViewGenerator($this->commandData);
+            $viewGenerator = new ViewGenerator($this->config);
             $viewGenerator->rollback($views);
 
             $this->info('Generating autoload files');
             $this->composer->dumpOptimized();
-            $this->commandData->fireEvent($type, FileUtil::FILE_DELETED);
+            $this->config->fireEvent($type, FileUtil::FILE_DELETED);
 
             return 0;
         }
 
-        $migrationGenerator = new MigrationGenerator($this->commandData);
+        $migrationGenerator = new MigrationGenerator($this->config);
         $migrationGenerator->rollback();
 
-        $modelGenerator = new ModelGenerator($this->commandData);
+        $modelGenerator = new ModelGenerator($this->config);
         $modelGenerator->rollback();
 
-        $repositoryGenerator = new RepositoryGenerator($this->commandData);
+        $repositoryGenerator = new RepositoryGenerator($this->config);
         $repositoryGenerator->rollback();
 
-        $requestGenerator = new APIRequestGenerator($this->commandData);
+        $requestGenerator = new APIRequestGenerator($this->config);
         $requestGenerator->rollback();
 
-        $controllerGenerator = new APIControllerGenerator($this->commandData);
+        $controllerGenerator = new APIControllerGenerator($this->config);
         $controllerGenerator->rollback();
 
-        $routesGenerator = new APIRoutesGenerator($this->commandData);
+        $routesGenerator = new APIRoutesGenerator($this->config);
         $routesGenerator->rollback();
 
-        $requestGenerator = new RequestGenerator($this->commandData);
+        $requestGenerator = new RequestGenerator($this->config);
         $requestGenerator->rollback();
 
-        $controllerGenerator = new ControllerGenerator($this->commandData);
+        $controllerGenerator = new ControllerGenerator($this->config);
         $controllerGenerator->rollback();
 
-        $viewGenerator = new ViewGenerator($this->commandData);
+        $viewGenerator = new ViewGenerator($this->config);
         $viewGenerator->rollback();
 
-        $routeGenerator = new RoutesGenerator($this->commandData);
+        $routeGenerator = new RoutesGenerator($this->config);
         $routeGenerator->rollback();
 
-        if ($this->commandData->getAddOn('tests')) {
-            $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);
+        if ($this->config->getAddOn('tests')) {
+            $repositoryTestGenerator = new RepositoryTestGenerator($this->config);
             $repositoryTestGenerator->rollback();
 
-            $apiTestGenerator = new APITestGenerator($this->commandData);
+            $apiTestGenerator = new APITestGenerator($this->config);
             $apiTestGenerator->rollback();
         }
 
-        $factoryGenerator = new FactoryGenerator($this->commandData);
+        $factoryGenerator = new FactoryGenerator($this->config);
         $factoryGenerator->rollback();
 
-        if ($this->commandData->config->getAddOn('menu.enabled')) {
-            $menuGenerator = new MenuGenerator($this->commandData);
+        if ($this->config->config->getAddOn('menu.enabled')) {
+            $menuGenerator = new MenuGenerator($this->config);
             $menuGenerator->rollback();
         }
 
         $this->info('Generating autoload files');
         $this->composer->dumpOptimized();
 
-        $this->commandData->fireEvent($type, FileUtil::FILE_DELETED);
+        $this->config->fireEvent($type, FileUtil::FILE_DELETED);
 
         return 0;
     }

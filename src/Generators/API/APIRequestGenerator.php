@@ -2,31 +2,27 @@
 
 namespace InfyOm\Generator\Generators\API;
 
-use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Generators\ModelGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 
 class APIRequestGenerator extends BaseGenerator
 {
-    /** @var CommandData */
-    private $commandData;
+    private GeneratorConfig $config;
 
-    /** @var string */
-    private $path;
+    private string $path;
 
-    /** @var string */
-    private $createFileName;
+    private string $createFileName;
 
-    /** @var string */
-    private $updateFileName;
+    private string $updateFileName;
 
-    public function __construct(CommandData $commandData)
+    public function __construct(GeneratorConfig $config)
     {
-        $this->commandData = $commandData;
-        $this->path = $commandData->config->pathApiRequest;
-        $this->createFileName = 'Create'.$this->commandData->modelName.'APIRequest.php';
-        $this->updateFileName = 'Update'.$this->commandData->modelName.'APIRequest.php';
+        $this->config = $config;
+        $this->path = $this->config->paths->apiRequest;
+        $this->createFileName = 'Create'.$this->config->modelNames->name.'APIRequest.php';
+        $this->updateFileName = 'Update'.$this->config->modelNames->name.'APIRequest.php';
     }
 
     /**
@@ -49,12 +45,12 @@ class APIRequestGenerator extends BaseGenerator
     {
         $templateData = get_template('api.request.create_request', 'laravel-generator');
 
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->config->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, $this->createFileName, $templateData);
 
-        $this->commandData->commandComment("\nCreate Request created: ");
-        $this->commandData->commandInfo($this->createFileName);
+        $this->config->commandComment("\nCreate Request created: ");
+        $this->config->commandInfo($this->createFileName);
     }
 
     /**
@@ -64,18 +60,18 @@ class APIRequestGenerator extends BaseGenerator
      */
     private function generateUpdateRequest()
     {
-        $modelGenerator = new ModelGenerator($this->commandData);
+        $modelGenerator = new ModelGenerator($this->config);
         $rules = $modelGenerator->generateUniqueRules();
-        $this->commandData->addDynamicVariable('$UNIQUE_RULES$', $rules);
+        $this->config->addDynamicVariable('$UNIQUE_RULES$', $rules);
 
         $templateData = get_template('api.request.update_request', 'laravel-generator');
 
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->config->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, $this->updateFileName, $templateData);
 
-        $this->commandData->commandComment("\nUpdate Request created: ");
-        $this->commandData->commandInfo($this->updateFileName);
+        $this->config->commandComment("\nUpdate Request created: ");
+        $this->config->commandInfo($this->updateFileName);
     }
 
     /**
@@ -86,11 +82,11 @@ class APIRequestGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->createFileName)) {
-            $this->commandData->commandComment('Create API Request file deleted: '.$this->createFileName);
+            $this->config->commandComment('Create API Request file deleted: '.$this->createFileName);
         }
 
         if ($this->rollbackFile($this->path, $this->updateFileName)) {
-            $this->commandData->commandComment('Update API Request file deleted: '.$this->updateFileName);
+            $this->config->commandComment('Update API Request file deleted: '.$this->updateFileName);
         }
     }
 }

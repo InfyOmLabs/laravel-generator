@@ -3,7 +3,7 @@
 namespace InfyOm\Generator\Generators;
 
 use Illuminate\Support\Str;
-use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
 
@@ -12,29 +12,23 @@ use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
  */
 class FactoryGenerator extends BaseGenerator
 {
-    /** @var CommandData */
-    private $commandData;
-    /** @var string */
-    private $path;
-    /** @var string */
-    private $fileName;
-    /** @var array */
-    private $relations = [];
+    private GeneratorConfig $config;
 
-    /**
-     * FactoryGenerator constructor.
-     *
-     * @param CommandData $commandData
-     */
-    public function __construct(CommandData $commandData)
+    private string $path;
+
+    private string $fileName;
+
+    private array $relations = [];
+
+    public function __construct(GeneratorConfig $config)
     {
-        $this->commandData = $commandData;
-        $this->path = $commandData->config->pathFactory;
-        $this->fileName = $this->commandData->modelName.'Factory.php';
+        $this->config = $config;
+        $this->path = $this->config->paths->factory;
+        $this->fileName = $this->config->modelNames->name.'Factory.php';
         //setup relations if available
         //assumes relation fields are tailed with _id if not supplied
-        if (property_exists($this->commandData, 'relations')) {
-            foreach ($this->commandData->relations as $r) {
+        if (property_exists($this->config, 'relations')) {
+            foreach ($this->config->relations as $r) {
                 if ($r->type == 'mt1') {
                     $relation = (isset($r->inputs[0])) ? $r->inputs[0] : null;
                     $field = false;
@@ -47,7 +41,7 @@ class FactoryGenerator extends BaseGenerator
                         $rel = $relation;
                         $this->relations[$field] = [
                             'relation'      => $rel,
-                            'model_class'   => $this->commandData->config->nsModel.'\\'.$relation,
+                            'model_class'   => $this->config->config->nsModel.'\\'.$relation,
                         ];
                     }
                 }
@@ -63,8 +57,8 @@ class FactoryGenerator extends BaseGenerator
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
-        $this->commandData->commandObj->comment("\nFactory created: ");
-        $this->commandData->commandObj->info($this->fileName);
+        $this->config->commandComment("\nFactory created: ");
+        $this->config->commandInfo($this->fileName);
     }
 
     /**
@@ -74,7 +68,7 @@ class FactoryGenerator extends BaseGenerator
      */
     private function fillTemplate($templateData)
     {
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $templateData = fill_template($this->config->dynamicVars, $templateData);
 
         $templateData = str_replace(
             '$FIELDS$',
@@ -107,11 +101,11 @@ class FactoryGenerator extends BaseGenerator
         $fields = [];
 
         //get model validation rules
-        $class = $this->commandData->config->nsModel.'\\'.$this->commandData->modelName;
+        $class = $this->config->namespaces->model.'\\'.$this->config->modelNames->name;
         $rules = $class::$rules;
         $relations = array_keys($this->relations);
 
-        foreach ($this->commandData->fields as $field) {
+        foreach ($this->config->fields as $field) {
             if ($field->isPrimary) {
                 continue;
             }
@@ -310,7 +304,7 @@ class FactoryGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('Factory file deleted: '.$this->fileName);
+            $this->config->commandComment('Factory file deleted: '.$this->fileName);
         }
     }
 }
