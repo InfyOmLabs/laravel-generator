@@ -3,7 +3,6 @@
 namespace InfyOm\Generator\Commands\Common;
 
 use InfyOm\Generator\Commands\BaseCommand;
-use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Generators\MigrationGenerator;
 
 class MigrationGeneratorCommand extends BaseCommand

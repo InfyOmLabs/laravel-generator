@@ -21,7 +21,7 @@ class ControllerGenerator extends BaseGenerator
         $this->config = $config;
         $this->path = $this->config->paths->controller;
         $this->templateType = config('laravel_generator.templates', 'adminlte-templates');
-        $this->fileName = $this->config->modelNames->name . 'Controller.php';
+        $this->fileName = $this->config->modelNames->name.'Controller.php';
     }
 
     public function generate()
@@ -66,7 +66,7 @@ class ControllerGenerator extends BaseGenerator
 
             $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
 
-            $templateData = str_replace('$RENDER_TYPE$', 'paginate(' . $paginate . ')', $templateData);
+            $templateData = str_replace('$RENDER_TYPE$', 'paginate('.$paginate.')', $templateData);
 
             $templateData = fill_template($this->config->dynamicVars, $templateData);
 
@@ -84,19 +84,19 @@ class ControllerGenerator extends BaseGenerator
             $templateName .= '_locale';
         }
 
-        $templateData = get_template('scaffold.' . $templateName, 'laravel-generator');
+        $templateData = get_template('scaffold.'.$templateName, 'laravel-generator');
 
         $templateData = fill_template($this->config->dynamicVars, $templateData);
 
         $templateData = str_replace(
             '$DATATABLE_COLUMNS$',
-            implode(',' . infy_nl_tab(1, 3), $this->generateDataTableColumns()),
+            implode(','.infy_nl_tab(1, 3), $this->generateDataTableColumns()),
             $templateData
         );
 
         $path = $this->config->paths->dataTables;
 
-        $fileName = $this->config->modelNames->name . 'DataTable.php';
+        $fileName = $this->config->modelNames->name.'DataTable.php';
 
         FileUtil::createFile($path, $fileName, $templateData);
 
@@ -110,7 +110,7 @@ class ControllerGenerator extends BaseGenerator
         if ($this->config->isLocalizedTemplates()) {
             $templateName .= '_locale';
         }
-        $headerFieldTemplate = get_template('scaffold.views.' . $templateName, $this->templateType);
+        $headerFieldTemplate = get_template('scaffold.views.'.$templateName, $this->templateType);
 
         $dataTableColumns = [];
         foreach ($this->config->fields as $field) {
@@ -124,7 +124,7 @@ class ControllerGenerator extends BaseGenerator
 
             $fieldTemplate = fill_template_with_field_data(
                 $this->config->dynamicVars,
-                ['$FIELD_NAME_TITLE$' => 'fieldTitle','$FIELD_NAME$' => 'name'],
+                ['$FIELD_NAME_TITLE$' => 'fieldTitle', '$FIELD_NAME$' => 'name'],
                 $headerFieldTemplate,
                 $field
             );
@@ -135,7 +135,7 @@ class ControllerGenerator extends BaseGenerator
                 if ($this->config->isLocalizedTemplates()) {
                     $dataTableColumns[] = $fieldTemplate;
                 } else {
-                    $dataTableColumns[] = "'" . $field->name . "' => ['searchable' => false]";
+                    $dataTableColumns[] = "'".$field->name."' => ['searchable' => false]";
                 }
             }
         }
@@ -146,15 +146,15 @@ class ControllerGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->config->commandComment('Controller file deleted: ' . $this->fileName);
+            $this->config->commandComment('Controller file deleted: '.$this->fileName);
         }
 
         if ($this->config->tableType === 'datatables') {
             if ($this->rollbackFile(
                 $this->config->paths->dataTables,
-                $this->config->modelNames->name . 'DataTable.php'
+                $this->config->modelNames->name.'DataTable.php'
             )) {
-                $this->config->commandComment('DataTable file deleted: ' . $this->fileName);
+                $this->config->commandComment('DataTable file deleted: '.$this->fileName);
             }
         }
     }

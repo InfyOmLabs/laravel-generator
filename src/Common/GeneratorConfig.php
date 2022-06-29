@@ -104,31 +104,31 @@ class GeneratorConfig
         $viewPrefix = $this->prefixes->view;
 
         $paths->repository = config(
-                'laravel_generator.path.repository',
-                app_path('Repositories/')
-            ).$pathPrefix;
+            'laravel_generator.path.repository',
+            app_path('Repositories/')
+        ).$pathPrefix;
 
         $paths->model = config('laravel_generator.path.model', app_path('Models/')).$pathPrefix;
 
         $paths->dataTables = config(
-                'laravel_generator.path.datatables',
-                app_path('DataTables/')
-            ).$pathPrefix;
+            'laravel_generator.path.datatables',
+            app_path('DataTables/')
+        ).$pathPrefix;
 
         $paths->apiController = config(
-                'laravel_generator.path.api_controller',
-                app_path('Http/Controllers/API/')
-            ).$pathPrefix;
+            'laravel_generator.path.api_controller',
+            app_path('Http/Controllers/API/')
+        ).$pathPrefix;
 
         $paths->apiResource = config(
-                'laravel_generator.path.api_resource',
-                app_path('Http/Resources/')
-            ).$pathPrefix;
+            'laravel_generator.path.api_resource',
+            app_path('Http/Resources/')
+        ).$pathPrefix;
 
         $paths->apiRequest = config(
-                'laravel_generator.path.api_request',
-                app_path('Http/Requests/API/')
-            ).$pathPrefix;
+            'laravel_generator.path.api_request',
+            app_path('Http/Requests/API/')
+        ).$pathPrefix;
 
         $paths->apiRoutes = config(
             'laravel_generator.path.api_routes',
@@ -138,9 +138,9 @@ class GeneratorConfig
         $paths->apiTests = config('laravel_generator.path.api_test', base_path('tests/APIs/'));
 
         $paths->controller = config(
-                'laravel_generator.path.controller',
-                app_path('Http/Controllers/')
-            ).$pathPrefix;
+            'laravel_generator.path.controller',
+            app_path('Http/Controllers/')
+        ).$pathPrefix;
 
         $paths->request = config('laravel_generator.path.request', app_path('Http/Requests/')).$pathPrefix;
 
@@ -148,9 +148,9 @@ class GeneratorConfig
         $paths->factory = config('laravel_generator.path.factory', database_path('factories/'));
 
         $paths->views = config(
-                'laravel_generator.path.views',
-                resource_path('views/')
-            ).$viewPrefix.$this->modelNames->snakePlural.'/';
+            'laravel_generator.path.views',
+            resource_path('views/')
+        ).$viewPrefix.$this->modelNames->snakePlural.'/';
 
         $paths->assets = config(
             'laravel_generator.path.assets',

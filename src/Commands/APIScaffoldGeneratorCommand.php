@@ -2,7 +2,6 @@
 
 namespace InfyOm\Generator\Commands;
 
-use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Utils\FileUtil;
 
 class APIScaffoldGeneratorCommand extends BaseCommand

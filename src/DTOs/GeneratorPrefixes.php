@@ -15,7 +15,6 @@ class GeneratorPrefixes
     public function mergeRoutePrefix(array $prefixes)
     {
         foreach ($prefixes as $prefix) {
-
             if (emprty($prefix)) {
                 continue;
             }
@@ -29,7 +28,6 @@ class GeneratorPrefixes
     public function mergeNamespacePrefix(array $prefixes)
     {
         foreach ($prefixes as $prefix) {
-
             if (emprty($prefix)) {
                 continue;
             }
@@ -45,7 +43,6 @@ class GeneratorPrefixes
         $initialString = '';
 
         foreach ($prefixes as $prefix) {
-
             if (emprty($prefix)) {
                 continue;
             }

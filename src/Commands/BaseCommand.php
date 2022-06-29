@@ -320,16 +320,19 @@ class BaseCommand extends Command
 
         if ($this->getOption('fieldsFile')) {
             $this->parseFieldsFromJsonFile();
+
             return;
         }
 
-        if($this->getOption('jsonFromGUI')) {
+        if ($this->getOption('jsonFromGUI')) {
             $this->parseFieldsFromGUI();
+
             return;
         }
 
         if ($this->getOption('fromTable')) {
             $this->parseFieldsFromTable();
+
             return;
         }
 

@@ -133,6 +133,7 @@ class ModelGenerator extends BaseGenerator
         if (!$this->config->addons->tests) {
             $templateData = str_replace('$HAS_FACTORY_IMPORT$', '', $templateData);
             $templateData = str_replace('$HAS_FACTORY$', '', $templateData);
+
             return $templateData;
         }
 
