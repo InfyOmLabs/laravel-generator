@@ -40,7 +40,7 @@ class APIResourceGenerator extends BaseGenerator
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
-        $this->config->commandComment(PHP_EOL."API Resource created: ");
+        $this->config->commandComment(PHP_EOL.'API Resource created: ');
         $this->config->commandInfo($this->fileName);
     }
 

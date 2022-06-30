@@ -4,7 +4,6 @@ use Illuminate\Support\Str;
 use InfyOm\Generator\Common\GeneratorField;
 
 if (!function_exists('infy_tab')) {
-
     function infy_tab(int $spaces = 4): string
     {
         return str_repeat(' ', $spaces);
@@ -12,7 +11,6 @@ if (!function_exists('infy_tab')) {
 }
 
 if (!function_exists('infy_tabs')) {
-
     function infy_tabs(int $tabs, int $spaces = 4): string
     {
         return str_repeat(infy_tab($spaces), $tabs);
@@ -20,7 +18,6 @@ if (!function_exists('infy_tabs')) {
 }
 
 if (!function_exists('infy_nl')) {
-
     function infy_nl(int $count = 1): string
     {
         return str_repeat(PHP_EOL, $count);
@@ -28,7 +25,6 @@ if (!function_exists('infy_nl')) {
 }
 
 if (!function_exists('infy_nls')) {
-
     function infy_nls(int $count, int $nls = 1): string
     {
         return str_repeat(infy_nl($nls), $count);
@@ -36,7 +32,6 @@ if (!function_exists('infy_nls')) {
 }
 
 if (!function_exists('infy_nl_tab')) {
-
     function infy_nl_tab(int $lns = 1, int $tabs = 1): string
     {
         return infy_nls($lns).infy_tabs($tabs);
@@ -44,7 +39,6 @@ if (!function_exists('infy_nl_tab')) {
 }
 
 if (!function_exists('get_template_file_path')) {
-
     function get_template_file_path(string $templateName, string $templateType): string
     {
         $templateName = str_replace('.', '/', $templateName);
@@ -65,7 +59,6 @@ if (!function_exists('get_template_file_path')) {
 }
 
 if (!function_exists('get_templates_package_path')) {
-
     function get_templates_package_path(string $templateType): string
     {
         if (!str_contains($templateType, '/')) {
@@ -77,7 +70,6 @@ if (!function_exists('get_templates_package_path')) {
 }
 
 if (!function_exists('get_template')) {
-
     function get_template(string $templateName, string $templateType): string
     {
         $path = get_template_file_path($templateName, $templateType);
@@ -87,7 +79,6 @@ if (!function_exists('get_template')) {
 }
 
 if (!function_exists('fill_template')) {
-
     function fill_template(array $variables, string $template): string
     {
         foreach ($variables as $variable => $value) {
@@ -99,7 +90,6 @@ if (!function_exists('fill_template')) {
 }
 
 if (!function_exists('fill_field_template')) {
-
     function fill_field_template(array $variables, string $template, GeneratorField $field): string
     {
         foreach ($variables as $variable => $key) {
@@ -111,7 +101,6 @@ if (!function_exists('fill_field_template')) {
 }
 
 if (!function_exists('fill_template_with_field_data')) {
-
     function fill_template_with_field_data(array $variables, array $fieldVariables, string $template, GeneratorField $field): string
     {
         $template = fill_template($variables, $template);
@@ -121,7 +110,6 @@ if (!function_exists('fill_template_with_field_data')) {
 }
 
 if (!function_exists('fill_template_with_field_data_locale')) {
-
     function fill_template_with_field_data_locale(array $variables, array $fieldVariables, string $template, GeneratorField $field): string
     {
         $template = fill_template($variables, $template);
@@ -132,7 +120,6 @@ if (!function_exists('fill_template_with_field_data_locale')) {
 }
 
 if (!function_exists('fill_field_template_locale')) {
-
     function fill_field_template_locale(array $variables, string $template, GeneratorField $field, string $modelName): string
     {
         foreach ($variables as $variable => $key) {
@@ -145,7 +132,6 @@ if (!function_exists('fill_field_template_locale')) {
 }
 
 if (!function_exists('model_name_from_table_name')) {
-
     function model_name_from_table_name(string $tableName): string
     {
         return Str::ucfirst(Str::camel(Str::singular($tableName)));

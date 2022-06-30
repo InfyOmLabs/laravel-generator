@@ -30,7 +30,7 @@ class SeederGenerator extends BaseGenerator
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
-        $this->config->commandComment(PHP_EOL."Seeder created: ");
+        $this->config->commandComment(PHP_EOL.'Seeder created: ');
         $this->config->commandInfo($this->fileName);
     }
 }

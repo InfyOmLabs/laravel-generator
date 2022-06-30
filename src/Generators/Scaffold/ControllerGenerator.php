@@ -66,14 +66,14 @@ class ControllerGenerator extends BaseGenerator
                 break;
 
             default:
-                throw new \Exception("Invalid Table Type");
+                throw new \Exception('Invalid Table Type');
         }
 
         $templateData = fill_template($this->config->dynamicVars, $templateData);
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
-        $this->config->commandComment(PHP_EOL."Controller created: ");
+        $this->config->commandComment(PHP_EOL.'Controller created: ');
         $this->config->commandInfo($this->fileName);
     }
 
@@ -100,7 +100,7 @@ class ControllerGenerator extends BaseGenerator
 
         FileUtil::createFile($path, $fileName, $templateData);
 
-        $this->config->commandComment(PHP_EOL."DataTable created: ");
+        $this->config->commandComment(PHP_EOL.'DataTable created: ');
         $this->config->commandInfo($fileName);
     }
 
