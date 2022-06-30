@@ -66,7 +66,7 @@ class ControllerGenerator extends BaseGenerator
 
             $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
 
-            $templateData = str_replace('$RENDER_TYPE$', 'paginate('.$paginate.')', $templateData);
+            $templateData = str_replace('$RENDER_TYPE$', 'paginate(10)', $templateData);
 
             $templateData = fill_template($this->config->dynamicVars, $templateData);
 

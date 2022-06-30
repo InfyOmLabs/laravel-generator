@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Common;
 
+use Doctrine\DBAL\Schema\Column;
 use Illuminate\Support\Str;
 
 class GeneratorField
@@ -10,8 +11,8 @@ class GeneratorField
     public string $name;
     public string $dbInput;
     public string $htmlInput;
-    public string $htmlType;
-    public string $fieldType;
+    public $htmlType;
+    public $fieldType;
     public string $description;
 
     public array $htmlValues;
@@ -125,6 +126,7 @@ class GeneratorField
         }
 
         $this->migrationText .= ')';
+        $this->foreignKeyText = '';
 
         foreach ($inputsArr as $input) {
             $inputParams = explode(',', $input);

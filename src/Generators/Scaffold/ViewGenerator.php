@@ -256,17 +256,11 @@ class ViewGenerator extends BaseGenerator
                 break;
 
             case 'blade':
-                $paginate = $this->config->getOption('paginate');
+                $paginateTemplate = get_template('scaffold.views.paginate', $this->templateType);
 
-                if ($paginate) {
-                    $paginateTemplate = get_template('scaffold.views.paginate', $this->templateType);
+                $paginateTemplate = fill_template($this->config->dynamicVars, $paginateTemplate);
 
-                    $paginateTemplate = fill_template($this->config->dynamicVars, $paginateTemplate);
-
-                    $templateData = str_replace('$PAGINATE$', $paginateTemplate, $templateData);
-                } else {
-                    $templateData = str_replace('$PAGINATE$', '', $templateData);
-                }
+                $templateData = str_replace('$PAGINATE$', $paginateTemplate, $templateData);
 
                 $tableReplaceString = fill_template(
                     $this->config->dynamicVars,

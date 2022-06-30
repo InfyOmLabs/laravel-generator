@@ -48,6 +48,9 @@ class GeneratorConfig
         $this->loadNamespaces();
         $this->prepareTableName();
         $this->preparePrimaryName();
+        $this->prepareAddons();
+        $this->prepareOptions();
+        $this->loadDynamicVariables();
     }
 
     public function loadModelNames()
@@ -341,8 +344,8 @@ class GeneratorConfig
     public function prepareAddons()
     {
         $addons = new GeneratorAddons();
-        $addons->swagger = config('laravel_generator.add_on.swagger', flase);
-        $addons->tests = config('laravel_generator.add_on.tests', flase);
+        $addons->swagger = config('laravel_generator.add_on.swagger', false);
+        $addons->tests = config('laravel_generator.add_on.tests', false);
 
         $this->addons = $addons;
     }

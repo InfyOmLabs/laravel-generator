@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Composer;
 use Illuminate\Support\Str;
 use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Common\GeneratorField;
@@ -150,7 +151,7 @@ class BaseCommand extends Command
 
     public function performPostActions($runMigration = false)
     {
-        if ($this->option('save')) {
+        if ($this->config->options->saveSchemaFile) {
             $this->saveSchemaFile();
         }
 
@@ -167,7 +168,7 @@ class BaseCommand extends Command
             }
         }
 
-        if ($this->option('localized')) {
+        if ($this->config->options->localized) {
             $this->saveLocaleFile();
         }
 
@@ -189,7 +190,7 @@ class BaseCommand extends Command
     public function isSkip($skip)
     {
         if ($this->option('skip')) {
-            return in_array($skip, (array) $this->config->getOption('skip'));
+            return in_array($skip, (array) $this->option('skip'));
         }
 
         return false;
@@ -318,28 +319,28 @@ class BaseCommand extends Command
     {
         $this->fields = [];
 
-        if ($this->getOption('fieldsFile')) {
+        if ($this->option('fieldsFile')) {
             $this->parseFieldsFromJsonFile();
 
             return;
         }
 
-        if ($this->getOption('jsonFromGUI')) {
+        if ($this->option('jsonFromGUI')) {
             $this->parseFieldsFromGUI();
 
             return;
         }
 
-        if ($this->getOption('fromTable')) {
+        if ($this->option('fromTable')) {
             $this->parseFieldsFromTable();
 
             return;
         }
 
-        $this->getFieldsFromConsle();
+        $this->getFieldsFromConsole();
     }
 
-    private function getFieldsFromConsle()
+    private function getFieldsFromConsole()
     {
         $this->info('Specify fields for the model (skip id & timestamp fields, we will add it automatically)');
         $this->info('Read docs carefully to specify field inputs)');
@@ -387,7 +388,7 @@ class BaseCommand extends Command
     {
         $primaryKey = new GeneratorField();
         if ($this->option('primary')) {
-            $primaryKey->name = $this->getOption('primary');
+            $primaryKey->name = $this->option('primary') ?? 'id';
         } else {
             $primaryKey->name = 'id';
         }
@@ -414,7 +415,7 @@ class BaseCommand extends Command
 
     private function parseFieldsFromJsonFile()
     {
-        $fieldsFileValue = $this->getOption('fieldsFile');
+        $fieldsFileValue = $this->option('fieldsFile');
         if (file_exists($fieldsFileValue)) {
             $filePath = $fieldsFileValue;
         } elseif (file_exists(base_path($fieldsFileValue))) {
@@ -428,7 +429,7 @@ class BaseCommand extends Command
         }
 
         if (!file_exists($filePath)) {
-            $this->commandError('Fields file not found');
+            $this->error('Fields file not found');
             exit;
         }
 
@@ -446,7 +447,7 @@ class BaseCommand extends Command
 
     private function parseFieldsFromGUI()
     {
-        $fileContents = $this->getOption('jsonFromGUI');
+        $fileContents = $this->option('jsonFromGUI');
         $jsonData = json_decode($fileContents, true);
 
         // override config options from jsonFromGUI
@@ -467,11 +468,11 @@ class BaseCommand extends Command
 
         foreach ($jsonData['fields'] as $field) {
             if (isset($field['type']) && $field['relation']) {
-                $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
+                $this->config->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
             } else {
-                $this->fields[] = GeneratorField::parseFieldFromFile($field);
+                $this->config->fields[] = GeneratorField::parseFieldFromFile($field);
                 if (isset($field['relation'])) {
-                    $this->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
+                    $this->config->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
                 }
             }
         }
@@ -481,7 +482,7 @@ class BaseCommand extends Command
     {
         $tableName = $this->config->tableName;
 
-        $ignoredFields = $this->getOption('ignoreFields');
+        $ignoredFields = $this->option('ignoreFields');
         if (!empty($ignoredFields)) {
             $ignoredFields = explode(',', trim($ignoredFields));
         } else {
@@ -492,13 +493,13 @@ class BaseCommand extends Command
         $tableFieldsGenerator->prepareFieldsFromTable();
         $tableFieldsGenerator->prepareRelations();
 
-        $this->fields = $tableFieldsGenerator->fields;
-        $this->relations = $tableFieldsGenerator->relations;
+        $this->config->fields = $tableFieldsGenerator->fields;
+        $this->config->relations = $tableFieldsGenerator->relations;
     }
 
     private function prepareEventsData()
     {
-        $data['modelName'] = $this->modelName;
+        $data['modelName'] = $this->config->modelNames->name;
         $data['tableName'] = $this->config->tableName;
         $data['nsModel'] = $this->config->namespaces->model;
 

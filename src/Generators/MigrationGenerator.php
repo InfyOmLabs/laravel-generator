@@ -28,7 +28,7 @@ class MigrationGenerator extends BaseGenerator
 
         $templateData = str_replace('$FIELDS$', $this->generateFields(), $templateData);
 
-        $tableName = $this->config->dynamicVars['$TABLE_NAME$'];
+        $tableName = $this->config->tableName;
 
         $fileName = date('Y_m_d_His').'_'.'create_'.strtolower($tableName).'_table.php';
 
