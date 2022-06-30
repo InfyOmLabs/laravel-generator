@@ -118,6 +118,11 @@ class GeneratorConfig
             app_path('DataTables/')
         ).$pathPrefix;
 
+        $paths->livewireTables = config(
+            'laravel_generator.path.livewire_tables',
+            app_path('Http/Livewire/')
+        );
+
         $paths->apiController = config(
             'laravel_generator.path.api_controller',
             app_path('Http/Controllers/API/')
@@ -188,6 +193,7 @@ class GeneratorConfig
         $namespaces->seeder = config('laravel_generator.namespace.seeder', 'Database\Seeders').$prefix;
         $namespaces->factory = config('laravel_generator.namespace.factory', 'Database\Factories').$prefix;
         $namespaces->dataTables = config('laravel_generator.namespace.datatables', 'App\DataTables').$prefix;
+        $namespaces->livewireTables = config('laravel_generator.namespace.livewire_tables', 'App\Http\Livewire');
         $namespaces->modelExtend = config(
             'laravel_generator.model_extend_class',
             'Illuminate\Database\Eloquent\Model'
@@ -231,6 +237,7 @@ class GeneratorConfig
         $this->addDynamicVariable('$NAMESPACE_REPOSITORY$', $this->namespaces->repository);
         $this->addDynamicVariable('$NAMESPACE_MODEL$', $this->namespaces->model);
         $this->addDynamicVariable('$NAMESPACE_DATATABLES$', $this->namespaces->dataTables);
+        $this->addDynamicVariable('$NAMESPACE_LIVEWIRE_TABLES$', $this->namespaces->livewireTables);
         $this->addDynamicVariable('$NAMESPACE_MODEL_EXTEND$', $this->namespaces->modelExtend);
 
         $this->addDynamicVariable('$NAMESPACE_SEEDER$', $this->namespaces->seeder);
@@ -271,6 +278,8 @@ class GeneratorConfig
             $connectionText = infy_tab(4).'public $connection = "'.$connection.'";';
         }
         $this->addDynamicVariable('$CONNECTION$', $connectionText);
+
+        $this->addDynamicVariable('$PRIMARY_KEY_NAME$', $this->primaryName);
 
         if (!empty($this->prefixes->route)) {
             $this->addDynamicVariable('$ROUTE_NAMED_PREFIX$', $this->prefixes->route.'.');

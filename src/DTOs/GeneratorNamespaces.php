@@ -8,6 +8,7 @@ class GeneratorNamespaces
     public string $repository;
     public string $model;
     public string $dataTables;
+    public string $livewireTables;
     public string $modelExtend;
 
     public string $seeder;

@@ -29,9 +29,9 @@ class APIControllerGenerator extends BaseGenerator
     public function generate()
     {
         if ($this->config->options->repositoryPattern) {
-            $templateName = 'api_controller';
+            $templateName = 'repository.controller';
         } else {
-            $templateName = 'model_api_controller';
+            $templateName = 'model.controller';
         }
 
         if ($this->config->isLocalizedTemplates()) {

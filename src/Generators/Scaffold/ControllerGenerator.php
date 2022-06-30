@@ -26,14 +26,12 @@ class ControllerGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = '';
-
         switch ($this->config->tableType) {
             case 'blade':
                 if ($this->config->options->repositoryPattern) {
-                    $templateName = 'controller';
+                    $templateName = 'repository.controller';
                 } else {
-                    $templateName = 'model_controller';
+                    $templateName = 'model.controller';
                 }
                 if ($this->config->isLocalizedTemplates()) {
                     $templateName .= '_locale';
@@ -41,14 +39,14 @@ class ControllerGenerator extends BaseGenerator
 
                 $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
 
-                $templateData = str_replace('$RENDER_TYPE$', 'paginate(10))', $templateData);
+                $templateData = str_replace('$RENDER_TYPE$', 'paginate(10)', $templateData);
                 break;
 
             case 'datatables':
                 if ($this->config->options->repositoryPattern) {
-                    $templateName = 'datatable_controller';
+                    $templateName = 'repository.datatable.controller';
                 } else {
-                    $templateName = 'model_datatable_controller';
+                    $templateName = 'model.datatable.controller';
                 }
 
                 if ($this->config->isLocalizedTemplates()) {
@@ -61,7 +59,7 @@ class ControllerGenerator extends BaseGenerator
                 break;
 
             case 'jqueryDT':
-                $templateName = 'jquery_datatable_controller';
+                $templateName = 'repository.datatable.jquery_controller';
                 $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
 
                 $this->generateDataTable();
@@ -81,7 +79,7 @@ class ControllerGenerator extends BaseGenerator
 
     private function generateDataTable()
     {
-        $templateName = ($this->config->tableType == 'jqueryDT') ? 'jquery_datatable' : 'datatable';
+        $templateName = ($this->config->tableType == 'jqueryDT') ? 'table.jquery_datatable' : 'table.datatable';
         if ($this->config->isLocalizedTemplates()) {
             $templateName .= '_locale';
         }
