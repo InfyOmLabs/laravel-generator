@@ -26,15 +26,17 @@ class PublishTablesCommand extends PublishBaseCommand
 
         if ($tableType === 'datatable') {
             $this->publishDataTableViews();
+
             return;
         }
 
         if ($tableType === 'livewire') {
             $this->publishLivewireTableViews();
+
             return;
         }
 
-        throw new \Exception("Invalid Table Type");
+        throw new \Exception('Invalid Table Type');
     }
 
     public function publishLivewireTableViews()
