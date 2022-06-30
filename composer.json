@@ -32,7 +32,10 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5.10",
-        "mockery/mockery": "^1.4.4"
+        "mockery/mockery": "^1.4.4",
+        "orchestra/testbench": "^7.5",
+        "pestphp/pest": "^1.21",
+        "pestphp/pest-plugin-laravel": "^1.2"
     },
     "autoload": {
         "psr-4": {
@@ -61,5 +64,10 @@
         }
     ],
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
 }

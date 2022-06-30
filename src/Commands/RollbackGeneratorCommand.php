@@ -63,7 +63,7 @@ class RollbackGeneratorCommand extends Command
     {
         $type = $this->argument('type');
         if (!in_array($type, ['api', 'scaffold', 'api_scaffold'])) {
-            $this->error('invalid rollback type');
+            $this->error('Invalid rollback type');
 
             return 1;
         }
