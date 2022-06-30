@@ -42,7 +42,9 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
 
     private function registerCommands()
     {
-        if (! $this->app->runningInConsole()) return;
+        if (!$this->app->runningInConsole()) {
+            return;
+        }
 
         $this->commands([
             APIScaffoldGeneratorCommand::class,
