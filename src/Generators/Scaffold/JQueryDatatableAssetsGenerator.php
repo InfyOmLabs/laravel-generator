@@ -59,7 +59,7 @@ class JQueryDatatableAssetsGenerator extends BaseGenerator
             FileUtil::createDirectoryIfNotExist($path);
         }
         file_put_contents($path.$this->fileName, $templateData);
-        $this->config->commandComment("\n".$this->config->tableName.' assets added.');
+        $this->config->commandComment(PHP_EOL.$this->config->tableName.' assets added.');
 
         // Publish JS Rendere Template
         $templateName = 'js_renderer_template';
@@ -72,7 +72,7 @@ class JQueryDatatableAssetsGenerator extends BaseGenerator
         }
 
         file_put_contents($path.'templates.php', $templateData);
-        $this->config->commandComment("\n".'JS Render Templates added.');
+        $this->config->commandComment(PHP_EOL.'JS Render Templates added.');
 
         // Publish Webpack mix lines
         $webpackMixContents = file_get_contents(base_path('webpack.mix.js'));
@@ -82,6 +82,6 @@ class JQueryDatatableAssetsGenerator extends BaseGenerator
         $webpackMixContents .= "\n\n".$templateData;
 
         file_put_contents(base_path('webpack.mix.js'), $webpackMixContents);
-        $this->config->commandComment("\n".$this->config->modelNames->camelPlural.' webpack.mix.js updated.');
+        $this->config->commandComment(PHP_EOL.$this->config->modelNames->camelPlural.' webpack.mix.js updated.');
     }
 }

@@ -44,7 +44,7 @@ class RepositoryGenerator extends BaseGenerator
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
-        $this->config->commandComment("\nRepository created: ");
+        $this->config->commandComment(PHP_EOL."Repository created: ");
         $this->config->commandInfo($this->fileName);
     }
 

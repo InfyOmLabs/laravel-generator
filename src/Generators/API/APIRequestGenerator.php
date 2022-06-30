@@ -49,7 +49,7 @@ class APIRequestGenerator extends BaseGenerator
 
         FileUtil::createFile($this->path, $this->createFileName, $templateData);
 
-        $this->config->commandComment("\nCreate Request created: ");
+        $this->config->commandComment(PHP_EOL."Create Request created: ");
         $this->config->commandInfo($this->createFileName);
     }
 
@@ -70,7 +70,7 @@ class APIRequestGenerator extends BaseGenerator
 
         FileUtil::createFile($this->path, $this->updateFileName, $templateData);
 
-        $this->config->commandComment("\nUpdate Request created: ");
+        $this->config->commandComment(PHP_EOL."Update Request created: ");
         $this->config->commandInfo($this->updateFileName);
     }
 

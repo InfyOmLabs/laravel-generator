@@ -49,7 +49,7 @@ class APIControllerGenerator extends BaseGenerator
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
-        $this->config->commandComment("\nAPI Controller created: ");
+        $this->config->commandComment(PHP_EOL."API Controller created: ");
         $this->config->commandInfo($this->fileName);
     }
 

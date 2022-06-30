@@ -28,7 +28,7 @@ class RepositoryTestGenerator extends BaseGenerator
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
-        $this->config->commandComment("\nRepositoryTest created: ");
+        $this->config->commandComment(PHP_EOL."RepositoryTest created: ");
         $this->config->commandInfo($this->fileName);
     }
 

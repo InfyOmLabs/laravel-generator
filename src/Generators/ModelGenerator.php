@@ -44,7 +44,7 @@ class ModelGenerator extends BaseGenerator
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
-        $this->config->commandComment("\nModel created: ");
+        $this->config->commandComment(PHP_EOL."Model created: ");
         $this->config->commandInfo($this->fileName);
     }
 

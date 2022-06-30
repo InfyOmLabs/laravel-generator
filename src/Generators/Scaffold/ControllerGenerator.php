@@ -26,55 +26,57 @@ class ControllerGenerator extends BaseGenerator
 
     public function generate()
     {
+        $templateData = '';
+
         switch ($this->config->tableType) {
             case 'blade':
-                $templateName = 'model_datatable_controller';
+                if ($this->config->options->repositoryPattern) {
+                    $templateName = 'controller';
+                } else {
+                    $templateName = 'model_controller';
+                }
+                if ($this->config->isLocalizedTemplates()) {
+                    $templateName .= '_locale';
+                }
+
+                $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
+
+                $templateData = str_replace('$RENDER_TYPE$', 'paginate(10))', $templateData);
                 break;
 
             case 'datatables':
-                $templateName = 'datatable_controller';
+                if ($this->config->options->repositoryPattern) {
+                    $templateName = 'datatable_controller';
+                } else {
+                    $templateName = 'model_datatable_controller';
+                }
+
+                if ($this->config->isLocalizedTemplates()) {
+                    $templateName .= '_locale';
+                }
+
+                $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
+
+                $this->generateDataTable();
                 break;
 
-            case 'livewire':
-                $templateName = 'livewire_table_controller';
+            case 'jqueryDT':
+                $templateName = 'jquery_datatable_controller';
+                $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
+
+                $this->generateDataTable();
                 break;
 
+            default:
+                throw new \Exception("Invalid Table Type");
         }
 
-        if ($this->config->isLocalizedTemplates()) {
-            $templateName .= '_locale';
-        }
+        $templateData = fill_template($this->config->dynamicVars, $templateData);
 
-        $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
+        FileUtil::createFile($this->path, $this->fileName, $templateData);
 
-        $this->generateDataTable();
-
-        if ($this->config->tableType == 'jqueryDT') {
-            $templateName = 'jquery_datatable_controller';
-            $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
-
-            $this->generateDataTable();
-        } else {
-            if ($this->config->options->repositoryPattern) {
-                $templateName = 'controller';
-            } else {
-                $templateName = 'model_controller';
-            }
-            if ($this->config->isLocalizedTemplates()) {
-                $templateName .= '_locale';
-            }
-
-            $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
-
-            $templateData = str_replace('$RENDER_TYPE$', 'paginate(10)', $templateData);
-
-            $templateData = fill_template($this->config->dynamicVars, $templateData);
-
-            FileUtil::createFile($this->path, $this->fileName, $templateData);
-
-            $this->config->commandComment("\nController created: ");
-            $this->config->commandInfo($this->fileName);
-        }
+        $this->config->commandComment(PHP_EOL."Controller created: ");
+        $this->config->commandInfo($this->fileName);
     }
 
     private function generateDataTable()
@@ -100,7 +102,7 @@ class ControllerGenerator extends BaseGenerator
 
         FileUtil::createFile($path, $fileName, $templateData);
 
-        $this->config->commandComment("\nDataTable created: ");
+        $this->config->commandComment(PHP_EOL."DataTable created: ");
         $this->config->commandInfo($fileName);
     }
 

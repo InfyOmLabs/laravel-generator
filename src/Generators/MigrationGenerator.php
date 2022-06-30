@@ -34,7 +34,7 @@ class MigrationGenerator extends BaseGenerator
 
         FileUtil::createFile($this->path, $fileName, $templateData);
 
-        $this->config->commandComment("\nMigration created: ");
+        $this->config->commandComment(PHP_EOL."Migration created: ");
         $this->config->commandInfo($fileName);
     }
 

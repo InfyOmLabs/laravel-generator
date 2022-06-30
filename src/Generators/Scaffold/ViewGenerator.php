@@ -38,7 +38,7 @@ class ViewGenerator extends BaseGenerator
             $this->config->addDynamicVariable('$FILES$', ", 'files' => true");
         }
 
-        $this->config->commandComment("\nGenerating Views...");
+        $this->config->commandComment(PHP_EOL."Generating Views...");
 
         if ($this->config->getOption('views')) {
             $viewsToBeGenerated = explode(',', $this->config->getOption('views'));

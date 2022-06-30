@@ -44,13 +44,13 @@ class MenuGenerator extends BaseGenerator
         // adminlte uses <p> tab and coreui+stisla uses <span> tag for menu
         if (Str::contains($existingMenuContents, '<p>'.$this->config->modelNames->humanPlural.'</p>') or
             Str::contains($existingMenuContents, '<span>'.$this->config->modelNames->humanPlural.'</span>')) {
-            $this->config->commandInfo('Menu '.$this->config->modelNames->humanPlural.' is already exists, Skipping Adjustment.');
+            $this->config->commandInfo(PHP_EOL.'Menu '.$this->config->modelNames->humanPlural.' already exists, Skipping Adjustment.');
 
             return;
         }
 
         file_put_contents($this->path, $this->menuContents);
-        $this->config->commandComment("\n".$this->config->modelNames->dashedPlural.' menu added.');
+        $this->config->commandComment(PHP_EOL.$this->config->modelNames->dashedPlural.' menu added.');
     }
 
     public function rollback()

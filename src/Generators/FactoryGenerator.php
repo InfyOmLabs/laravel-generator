@@ -57,7 +57,7 @@ class FactoryGenerator extends BaseGenerator
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
-        $this->config->commandComment("\nFactory created: ");
+        $this->config->commandComment(PHP_EOL."Factory created: ");
         $this->config->commandInfo($this->fileName);
     }
 

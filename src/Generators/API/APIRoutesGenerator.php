@@ -39,17 +39,17 @@ class APIRoutesGenerator extends BaseGenerator
      */
     public function generate()
     {
-        $this->routeContents .= "\n\n".$this->routesTemplate;
+        $this->routeContents .= PHP_EOL.PHP_EOL.$this->routesTemplate;
         $existingRouteContents = file_get_contents($this->path);
         if (Str::contains($existingRouteContents, "Route::resource('".$this->config->modelNames->dashedPlural."',")) {
-            $this->config->commandInfo('Menu '.$this->config->modelNames->dashedPlural.'is already exists, Skipping Adjustment.');
+            $this->config->commandInfo(PHP_EOL.'Menu '.$this->config->modelNames->dashedPlural.' already exists, Skipping Adjustment.');
 
             return;
         }
 
         file_put_contents($this->path, $this->routeContents);
 
-        $this->config->commandComment("\n".$this->config->modelNames->dashedPlural.' api routes added.');
+        $this->config->commandComment(PHP_EOL.$this->config->modelNames->dashedPlural.' api routes added.');
     }
 
     /**
