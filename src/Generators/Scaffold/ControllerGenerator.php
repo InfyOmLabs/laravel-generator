@@ -58,6 +58,22 @@ class ControllerGenerator extends BaseGenerator
                 $this->generateDataTable();
                 break;
 
+            case 'livewire':
+                if ($this->config->options->repositoryPattern) {
+                    $templateName = 'repository.livewire.controller';
+                } else {
+                    $templateName = 'model.livewire.controller';
+                }
+
+                if ($this->config->isLocalizedTemplates()) {
+                    $templateName .= '_locale';
+                }
+
+                $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
+
+                $this->generateLivewireTable();
+                break;
+
             default:
                 throw new \Exception('Invalid Table Type');
         }
@@ -94,6 +110,33 @@ class ControllerGenerator extends BaseGenerator
         FileUtil::createFile($path, $fileName, $templateData);
 
         $this->config->commandComment(PHP_EOL.'DataTable created: ');
+        $this->config->commandInfo($fileName);
+    }
+
+    private function generateLivewireTable()
+    {
+        $templateName = 'table.livewire';
+        if ($this->config->isLocalizedTemplates()) {
+            $templateName .= '_locale';
+        }
+
+        $templateData = get_template('scaffold.'.$templateName, 'laravel-generator');
+
+        $templateData = fill_template($this->config->dynamicVars, $templateData);
+
+        $templateData = str_replace(
+            '$LIVEWIRE_COLUMNS$',
+            implode(','.infy_nl_tab(1, 3), $this->generateLivewireTableColumns()),
+            $templateData
+        );
+
+        $path = $this->config->paths->livewireTables;
+
+        $fileName = $this->config->modelNames->plural.'Table.php';
+
+        FileUtil::createFile($path, $fileName, $templateData);
+
+        $this->config->commandComment(PHP_EOL.'LivewireTable created: ');
         $this->config->commandInfo($fileName);
     }
 
@@ -134,6 +177,34 @@ class ControllerGenerator extends BaseGenerator
         }
 
         return $dataTableColumns;
+    }
+
+    private function generateLivewireTableColumns()
+    {
+        $livewireTableColumns = [];
+
+        foreach ($this->config->fields as $field) {
+            if (!$field->inIndex) {
+                continue;
+            }
+
+            $fieldTemplate = 'Column::make("$FIELD_NAME_TITLE$", "$FIELD_NAME$")'.PHP_EOL.infy_tabs(4).'->sortable()';
+
+            $fieldTemplate = fill_template_with_field_data(
+                $this->config->dynamicVars,
+                ['$FIELD_NAME_TITLE$' => 'fieldTitle', '$FIELD_NAME$' => 'name'],
+                $fieldTemplate,
+                $field
+            );
+
+            if ($field->isSearchable) {
+                $fieldTemplate .= PHP_EOL.infy_tabs(4).'->searchable()';
+            }
+
+            $livewireTableColumns[] = $fieldTemplate;
+        }
+
+        return $livewireTableColumns;
     }
 
     public function rollback()

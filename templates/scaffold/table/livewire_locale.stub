@@ -11,9 +11,9 @@ class $MODEL_NAME_PLURAL$Table extends DataTableComponent
 {
     protected $model = $MODEL_NAME$::class;
 
-    protected $listeners = ['deleteRecord' => 'deleteRecord'];
+    protected $listeners = ['delete$MODEL_NAME$' => 'delete$MODEL_NAME$'];
 
-    public function deleteRecord($id)
+    public function delete$MODEL_NAME$($id)
     {
         $MODEL_NAME$::find($id)->delete();
         Flash::success('$MODEL_NAME_HUMAN$ deleted successfully.');

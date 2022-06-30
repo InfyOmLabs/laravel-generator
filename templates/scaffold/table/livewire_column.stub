@@ -7,13 +7,13 @@ use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
 
-class $MODEL_NAME_PLURAL$Table extends DataTableComponent
+class $MODEL_NAME$Table extends DataTableComponent
 {
     protected $model = $MODEL_NAME$::class;
 
-    protected $listeners = ['deleteRecord' => 'deleteRecord'];
+    protected $listeners = ['delete$MODEL_NAME$' => 'delete$MODEL_NAME$'];
 
-    public function deleteRecord($id)
+    public function delete$MODEL_NAME$($id)
     {
         $MODEL_NAME$::find($id)->delete();
         Flash::success('$MODEL_NAME_HUMAN$ deleted successfully.');
@@ -28,7 +28,7 @@ class $MODEL_NAME_PLURAL$Table extends DataTableComponent
     public function columns(): array
     {
         return [
-            $LIVEWIRE_COLUMNS$,
+            $LIVEWIRE_COLUMNS$
             Column::make("Actions", '$PRIMARY_KEY_NAME$')
                 ->format(
                     fn($value, $row, Column $column) => view('common.livewire-tables.actions', [

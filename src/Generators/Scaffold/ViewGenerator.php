@@ -82,6 +82,11 @@ class ViewGenerator extends BaseGenerator
         switch ($this->config->tableType) {
             case 'blade':
                 $templateData = $this->generateBladeTableBody();
+                $paginateTemplate = get_template('scaffold.views.paginate', $this->templateType);
+
+                $paginateTemplate = fill_template($this->config->dynamicVars, $paginateTemplate);
+
+                $templateData = str_replace('$PAGINATE$', $paginateTemplate, $templateData);
                 break;
 
             case 'datatables':
@@ -90,7 +95,7 @@ class ViewGenerator extends BaseGenerator
                 break;
 
             case 'livewire':
-                break;
+                return;
         }
 
         FileUtil::createFile($this->path, 'table.blade.php', $templateData);
@@ -160,20 +165,6 @@ class ViewGenerator extends BaseGenerator
         return str_replace('$FIELD_BODY$', $tableBodyFields, $templateData);
     }
 
-    private function generateJSTableHeaderFields()
-    {
-        $fields = '';
-        foreach ($this->config->fields as $field) {
-            if (in_array($field->name, ['id', 'created_at', 'updated_at', 'deleted_at'])) {
-                continue;
-            }
-
-            $fields .= '<th scope="col">'.str_replace("'", '', $field->name).'</th>';
-        }
-
-        return $fields;
-    }
-
     private function generateTableHeaderFields()
     {
         $templateName = 'table.blade.header';
@@ -238,7 +229,7 @@ class ViewGenerator extends BaseGenerator
 
         switch ($this->config->tableType) {
             case 'datatables':
-                $templateData = str_replace('$PAGINATE$', '', $templateData);
+            case 'blade':
                 $tableReplaceString = fill_template(
                     $this->config->dynamicVars,
                     "@include('\$VIEW_PREFIX$\$MODEL_NAME_PLURAL_SNAKE$.table')"
@@ -246,22 +237,16 @@ class ViewGenerator extends BaseGenerator
                 break;
 
             case 'livewire':
-                $templateData = str_replace('$PAGINATE$', '', $templateData);
-                $tableReplaceString = '<livewire:users-table />';
-                break;
-
-            case 'blade':
-                $paginateTemplate = get_template('scaffold.views.paginate', $this->templateType);
-
-                $paginateTemplate = fill_template($this->config->dynamicVars, $paginateTemplate);
-
-                $templateData = str_replace('$PAGINATE$', $paginateTemplate, $templateData);
+                $tableTemplate = get_template('scaffold.views.table.livewire.body', $this->templateType);
 
                 $tableReplaceString = fill_template(
                     $this->config->dynamicVars,
-                    "@include('\$VIEW_PREFIX$\$MODEL_NAME_PLURAL_SNAKE$.table')"
+                    $tableTemplate
                 );
                 break;
+
+            default:
+                throw new \Exception("Invalid table type");
         }
 
         $templateData = str_replace('$TABLE$', $tableReplaceString, $templateData);

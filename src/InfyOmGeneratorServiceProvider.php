@@ -11,7 +11,7 @@ use InfyOm\Generator\Commands\Common\MigrationGeneratorCommand;
 use InfyOm\Generator\Commands\Common\ModelGeneratorCommand;
 use InfyOm\Generator\Commands\Common\RepositoryGeneratorCommand;
 use InfyOm\Generator\Commands\Publish\GeneratorPublishCommand;
-use InfyOm\Generator\Commands\Publish\PublishDataTablesCommand;
+use InfyOm\Generator\Commands\Publish\PublishTablesCommand;
 use InfyOm\Generator\Commands\Publish\PublishTemplatesCommand;
 use InfyOm\Generator\Commands\Publish\PublishUserCommand;
 use InfyOm\Generator\Commands\RollbackGeneratorCommand;
@@ -57,7 +57,7 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
             RepositoryGeneratorCommand::class,
 
             GeneratorPublishCommand::class,
-            PublishDataTablesCommand::class,
+            PublishTablesCommand::class,
             PublishTemplatesCommand::class,
             PublishUserCommand::class,
 
