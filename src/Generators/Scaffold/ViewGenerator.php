@@ -82,7 +82,6 @@ class ViewGenerator extends BaseGenerator
         switch ($this->config->tableType) {
             case 'blade':
                 $templateData = $this->generateBladeTableBody();
-                $tableString = 'blade_tables';
                 break;
 
             case 'datatables':
@@ -101,14 +100,14 @@ class ViewGenerator extends BaseGenerator
 
     private function generateDataTableBody()
     {
-        $templateData = get_template('scaffold.views.datatable_body', $this->templateType);
+        $templateData = get_template('scaffold.views.table.datatable.body', $this->templateType);
 
         return fill_template($this->config->dynamicVars, $templateData);
     }
 
     private function generateDataTableActions()
     {
-        $templateName = 'datatables_actions';
+        $templateName = 'table.datatable.actions';
 
         if ($this->config->isLocalizedTemplates()) {
             $templateName .= '_locale';
@@ -125,7 +124,7 @@ class ViewGenerator extends BaseGenerator
 
     private function generateBladeTableBody()
     {
-        $templateName = 'blade_table_body';
+        $templateName = 'table.blade.body';
 
         $tableFields = $this->generateTableHeaderFields();
         if ($this->config->tableType === 'jqueryDT') {
@@ -143,7 +142,7 @@ class ViewGenerator extends BaseGenerator
 
         $templateData = str_replace('$FIELD_HEADERS$', $tableFields, $templateData);
 
-        $cellFieldTemplate = get_template('scaffold.views.table_cell', $this->templateType);
+        $cellFieldTemplate = get_template('scaffold.views.table.blade.cell', $this->templateType);
 
         $tableBodyFields = [];
 
@@ -181,7 +180,7 @@ class ViewGenerator extends BaseGenerator
 
     private function generateTableHeaderFields()
     {
-        $templateName = 'table_header';
+        $templateName = 'table.blade.header';
 
         $localized = false;
         if ($this->config->isLocalizedTemplates()) {

@@ -2,7 +2,7 @@
 
 namespace InfyOm\Generator\Commands\Publish;
 
-class PublishTemplateCommand extends PublishBaseCommand
+class PublishTemplatesCommand extends PublishBaseCommand
 {
     /**
      * The console command name.

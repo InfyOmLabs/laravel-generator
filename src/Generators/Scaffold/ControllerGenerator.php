@@ -106,7 +106,7 @@ class ControllerGenerator extends BaseGenerator
 
     private function generateDataTableColumns()
     {
-        $templateName = 'datatable_column';
+        $templateName = 'table.datatable.column';
         if ($this->config->isLocalizedTemplates()) {
             $templateName .= '_locale';
         }
