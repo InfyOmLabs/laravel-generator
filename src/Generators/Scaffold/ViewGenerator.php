@@ -246,7 +246,7 @@ class ViewGenerator extends BaseGenerator
                 break;
 
             default:
-                throw new \Exception("Invalid table type");
+                throw new \Exception('Invalid table type');
         }
 
         $templateData = str_replace('$TABLE$', $tableReplaceString, $templateData);
