@@ -16,7 +16,7 @@ class $MODEL_NAME_PLURAL$Table extends DataTableComponent
     public function delete$MODEL_NAME$($id)
     {
         $MODEL_NAME$::find($id)->delete();
-        Flash::success('$MODEL_NAME_HUMAN$ deleted successfully.');
+        Flash::success(__('messages.deleted', ['model' => __('models/$MODEL_NAME_PLURAL_CAMEL$.singular')]));
         $this->emit('refreshDatatable');
     }
 
