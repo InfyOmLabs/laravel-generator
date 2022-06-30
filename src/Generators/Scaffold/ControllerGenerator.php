@@ -58,13 +58,6 @@ class ControllerGenerator extends BaseGenerator
                 $this->generateDataTable();
                 break;
 
-            case 'jqueryDT':
-                $templateName = 'repository.datatable.jquery_controller';
-                $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
-
-                $this->generateDataTable();
-                break;
-
             default:
                 throw new \Exception('Invalid Table Type');
         }
@@ -79,7 +72,7 @@ class ControllerGenerator extends BaseGenerator
 
     private function generateDataTable()
     {
-        $templateName = ($this->config->tableType == 'jqueryDT') ? 'table.jquery_datatable' : 'table.datatable';
+        $templateName = 'table.datatable';
         if ($this->config->isLocalizedTemplates()) {
             $templateName .= '_locale';
         }

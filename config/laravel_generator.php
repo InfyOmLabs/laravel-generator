@@ -173,7 +173,7 @@ return [
     |--------------------------------------------------------------------------
     | Table Types
     |
-    | Possible Options: blade, datatables, livewire, jqueryDT
+    | Possible Options: blade, datatables, livewire
     |--------------------------------------------------------------------------
     |
     */

@@ -127,10 +127,6 @@ class ViewGenerator extends BaseGenerator
         $templateName = 'table.blade.body';
 
         $tableFields = $this->generateTableHeaderFields();
-        if ($this->config->tableType === 'jqueryDT') {
-            $templateName = 'js_table';
-            $tableFields = $this->generateJSTableHeaderFields();
-        }
 
         if ($this->config->isLocalizedTemplates()) {
             $templateName .= '_locale';
@@ -230,7 +226,7 @@ class ViewGenerator extends BaseGenerator
 
     private function generateIndex()
     {
-        $templateName = ($this->config->tableType === 'jqueryDT') ? 'js_index' : 'index';
+        $templateName = 'index';
 
         if ($this->config->isLocalizedTemplates()) {
             $templateName .= '_locale';

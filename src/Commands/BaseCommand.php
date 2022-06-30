@@ -23,7 +23,6 @@ use InfyOm\Generator\Generators\ModelGenerator;
 use InfyOm\Generator\Generators\RepositoryGenerator;
 use InfyOm\Generator\Generators\RepositoryTestGenerator;
 use InfyOm\Generator\Generators\Scaffold\ControllerGenerator;
-use InfyOm\Generator\Generators\Scaffold\JQueryDatatableAssetsGenerator;
 use InfyOm\Generator\Generators\Scaffold\MenuGenerator;
 use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
 use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
@@ -141,11 +140,6 @@ class BaseCommand extends Command
         if (!$this->isSkip('menu')) {
             $menuGenerator = new MenuGenerator($this->config);
             $menuGenerator->generate();
-        }
-
-        if ($this->config->tableType == 'jqueryDT') {
-            $assetsGenerator = new JQueryDatatableAssetsGenerator($this->config);
-            $assetsGenerator->generate();
         }
     }
 
