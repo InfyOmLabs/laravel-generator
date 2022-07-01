@@ -1,8 +1,9 @@
 <?php namespace $NAMESPACE_REPOSITORIES_TESTS$;
 
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
 use $NAMESPACE_REPOSITORY$\$MODEL_NAME$Repository;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use $NAMESPACE_TESTS$\TestCase;
 use $NAMESPACE_TESTS$\ApiTestTrait;
 

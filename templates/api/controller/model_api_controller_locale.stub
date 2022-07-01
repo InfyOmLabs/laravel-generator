@@ -2,12 +2,14 @@
 
 namespace $NAMESPACE_API_CONTROLLER$;
 
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+
+use $NAMESPACE_MODEL$\$MODEL_NAME$;
 use $NAMESPACE_API_REQUEST$\Create$MODEL_NAME$APIRequest;
 use $NAMESPACE_API_REQUEST$\Update$MODEL_NAME$APIRequest;
-use $NAMESPACE_MODEL$\$MODEL_NAME$;
-use Illuminate\Http\Request;
+
 use $NAMESPACE_APP$\Http\Controllers\AppBaseController;
-use Response;
 
 $DOC_CONTROLLER$
 class $MODEL_NAME$APIController extends AppBaseController

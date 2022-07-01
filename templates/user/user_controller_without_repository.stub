@@ -2,14 +2,17 @@
 
 namespace $NAMESPACE_CONTROLLER$;
 
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
+
+use Laracasts\Flash\Flash;
+
 use $NAMESPACE_REQUEST$\CreateUserRequest;
 use $NAMESPACE_REQUEST$\UpdateUserRequest;
 use $NAMESPACE_CONTROLLER$\AppBaseController;
-use Illuminate\Http\Request;
-use Flash;
-use Response;
-use Hash;
 use $NAMESPACE_USER$;
+
 class UserController extends AppBaseController
 {
     /**

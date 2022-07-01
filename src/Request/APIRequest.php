@@ -5,7 +5,7 @@ namespace InfyOm\Generator\Request;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 use InfyOm\Generator\Utils\ResponseUtil;
-use Response;
+use Illuminate\Http\Response;
 
 class APIRequest extends FormRequest
 {

@@ -3,6 +3,7 @@
 namespace $NAMESPACE_DATATABLES$;
 
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
+
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 

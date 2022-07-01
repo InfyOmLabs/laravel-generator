@@ -2,8 +2,9 @@
 
 namespace $NAMESPACE_FACTORY$;
 
-use $NAMESPACE_MODEL$\$MODEL_NAME$;
 use Illuminate\Database\Eloquent\Factories\Factory;
+
+use $NAMESPACE_MODEL$\$MODEL_NAME$;
 $RELATION_USES$
 
 class $MODEL_NAME$Factory extends Factory

@@ -2,16 +2,20 @@
 
 namespace $NAMESPACE_CONTROLLER$;
 
-use $NAMESPACE_DATATABLES$\$MODEL_NAME$DataTable;
-use $NAMESPACE_REQUEST$;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+
+use Laracasts\Flash\Flash;
+
+use Datatables;
+
+use $NAMESPACE_REQUEST$;
+use $NAMESPACE_DATATABLES$\$MODEL_NAME$DataTable;
 use $NAMESPACE_REQUEST$\Create$MODEL_NAME$Request;
 use $NAMESPACE_REQUEST$\Update$MODEL_NAME$Request;
 use $NAMESPACE_REPOSITORY$\$MODEL_NAME$Repository;
-use Flash;
+
 use $NAMESPACE_APP$\Http\Controllers\AppBaseController;
-use Response;
-use Datatables;
 
 class $MODEL_NAME$Controller extends AppBaseController
 {

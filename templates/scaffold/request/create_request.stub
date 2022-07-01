@@ -3,6 +3,7 @@
 namespace $NAMESPACE_REQUEST$;
 
 use Illuminate\Foundation\Http\FormRequest;
+
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
 
 class Create$MODEL_NAME$Request extends FormRequest
