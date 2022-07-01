@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Generators\Scaffold;
 
+use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use InfyOm\Generator\Generators\BaseGenerator;
@@ -12,8 +13,6 @@ use InfyOm\Generator\Utils\HTMLFieldGenerator;
 class ViewGenerator extends BaseGenerator
 {
     private string $templateType;
-
-    private array $htmlFields;
 
     public function __construct()
     {
@@ -75,6 +74,10 @@ class ViewGenerator extends BaseGenerator
 
     private function generateTable()
     {
+        if ($this->config->tableType === 'livewire') {
+            return;
+        }
+
         switch ($this->config->tableType) {
             case 'blade':
                 $templateData = $this->generateBladeTableBody();
@@ -90,8 +93,8 @@ class ViewGenerator extends BaseGenerator
                 $this->generateDataTableActions();
                 break;
 
-            case 'livewire':
-                return;
+            default:
+                throw new Exception("Invalid Table Type");
         }
 
         FileUtil::createFile($this->path, 'table.blade.php', $templateData);
@@ -99,7 +102,7 @@ class ViewGenerator extends BaseGenerator
         $this->config->commandInfo('table.blade.php created');
     }
 
-    private function generateDataTableBody()
+    private function generateDataTableBody(): string
     {
         $templateData = get_template('scaffold.views.table.datatable.body', $this->templateType);
 
@@ -123,7 +126,7 @@ class ViewGenerator extends BaseGenerator
         $this->config->commandInfo('datatables_actions.blade.php created');
     }
 
-    private function generateBladeTableBody()
+    private function generateBladeTableBody(): string
     {
         $templateName = 'table.blade.body';
 
@@ -161,7 +164,7 @@ class ViewGenerator extends BaseGenerator
         return str_replace('$FIELD_BODY$', $tableBodyFields, $templateData);
     }
 
-    private function generateTableHeaderFields()
+    private function generateTableHeaderFields(): string
     {
         $templateName = 'table.blade.header';
 
@@ -192,14 +195,14 @@ class ViewGenerator extends BaseGenerator
                  */
                 $preFilledHeaderFieldTemplate = str_replace('$FIELD_NAME$', $field->name, $headerFieldTemplate);
 
-                $headerFields[] = $fieldTemplate = fill_template_with_field_data_locale(
+                $headerFields[] = fill_template_with_field_data_locale(
                     $this->config->dynamicVars,
                     ['$FIELD_NAME_TITLE$' => 'fieldTitle', '$FIELD_NAME$' => 'name'],
                     $preFilledHeaderFieldTemplate,
                     $field
                 );
             } else {
-                $headerFields[] = $fieldTemplate = fill_template_with_field_data(
+                $headerFields[] = fill_template_with_field_data(
                     $this->config->dynamicVars,
                     ['$FIELD_NAME_TITLE$' => 'fieldTitle', '$FIELD_NAME$' => 'name'],
                     $headerFieldTemplate,
@@ -242,7 +245,7 @@ class ViewGenerator extends BaseGenerator
                 break;
 
             default:
-                throw new \Exception('Invalid table type');
+                throw new Exception('Invalid table type');
         }
 
         $templateData = str_replace('$TABLE$', $tableReplaceString, $templateData);
@@ -261,7 +264,7 @@ class ViewGenerator extends BaseGenerator
             $localized = true;
         }
 
-        $this->htmlFields = [];
+        $htmlFields = [];
 
         foreach ($this->config->fields as $field) {
             if (!$field->inForm) {
@@ -323,20 +326,20 @@ class ViewGenerator extends BaseGenerator
                     $fieldTemplate,
                     $field
                 );
-                $this->htmlFields[] = $fieldTemplate;
+                $htmlFields[] = $fieldTemplate;
             }
         }
 
         $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
         $templateData = fill_template($this->config->dynamicVars, $templateData);
 
-        $templateData = str_replace('$FIELDS$', implode("\n\n", $this->htmlFields), $templateData);
+        $templateData = str_replace('$FIELDS$', implode("\n\n", $htmlFields), $templateData);
 
         FileUtil::createFile($this->path, 'fields.blade.php', $templateData);
         $this->config->commandInfo('field.blade.php created');
     }
 
-    private function generateViewComposer($tableName, $variableName, $columns, $selectTable, $modelName = null)
+    private function generateViewComposer($tableName, $variableName, $columns, $selectTable, $modelName = null): string
     {
         $templateName = 'scaffold.fields.select';
         if ($this->config->isLocalizedTemplates()) {
@@ -348,13 +351,11 @@ class ViewGenerator extends BaseGenerator
         $viewServiceProvider->generate();
         $viewServiceProvider->addViewVariables($tableName.'.fields', $variableName, $columns, $selectTable, $modelName);
 
-        $fieldTemplate = str_replace(
+        return str_replace(
             '$INPUT_ARR$',
             '$'.$variableName,
             $fieldTemplate
         );
-
-        return $fieldTemplate;
     }
 
     private function generateCreate()

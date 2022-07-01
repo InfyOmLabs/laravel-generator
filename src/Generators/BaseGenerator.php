@@ -16,7 +16,7 @@ class BaseGenerator
         $this->config = app(GeneratorConfig::class);
     }
 
-    public function rollbackFile($path, $fileName)
+    public function rollbackFile($path, $fileName): bool
     {
         if (file_exists($path.$fileName)) {
             return FileUtil::deleteFile($path, $fileName);

@@ -15,7 +15,7 @@ class GeneratorPrefixes
     public function mergeRoutePrefix(array $prefixes)
     {
         foreach ($prefixes as $prefix) {
-            if (emprty($prefix)) {
+            if (empty($prefix)) {
                 continue;
             }
 
@@ -28,7 +28,7 @@ class GeneratorPrefixes
     public function mergeNamespacePrefix(array $prefixes)
     {
         foreach ($prefixes as $prefix) {
-            if (emprty($prefix)) {
+            if (empty($prefix)) {
                 continue;
             }
 
@@ -38,12 +38,10 @@ class GeneratorPrefixes
         $this->namespace = ltrim($this->namespace, '\\');
     }
 
-    private function mergeForwardSlashPrefix(string $initialString, array $prefixes)
+    private function mergeForwardSlashPrefix(string $initialString, array $prefixes): string
     {
-        $initialString = '';
-
         foreach ($prefixes as $prefix) {
-            if (emprty($prefix)) {
+            if (empty($prefix)) {
                 continue;
             }
 

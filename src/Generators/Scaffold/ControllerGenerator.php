@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Generators\Scaffold;
 
+use Exception;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 
@@ -71,7 +72,7 @@ class ControllerGenerator extends BaseGenerator
                 break;
 
             default:
-                throw new \Exception('Invalid Table Type');
+                throw new Exception('Invalid Table Type');
         }
 
         $templateData = fill_template($this->config->dynamicVars, $templateData);
@@ -136,7 +137,7 @@ class ControllerGenerator extends BaseGenerator
         $this->config->commandInfo($fileName);
     }
 
-    private function generateDataTableColumns()
+    private function generateDataTableColumns(): array
     {
         $templateName = 'table.datatable.column';
         if ($this->config->isLocalizedTemplates()) {
@@ -175,7 +176,7 @@ class ControllerGenerator extends BaseGenerator
         return $dataTableColumns;
     }
 
-    private function generateLivewireTableColumns()
+    private function generateLivewireTableColumns(): array
     {
         $livewireTableColumns = [];
 

@@ -2,7 +2,6 @@
 
 namespace InfyOm\Generator\Commands;
 
-use Illuminate\Console\Command;
 use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Generators\API\APIControllerGenerator;
 use InfyOm\Generator\Generators\API\APIRequestGenerator;

@@ -10,7 +10,7 @@ class GeneratorFieldRelation
     public array $inputs;
     public string $relationName;
 
-    public static function parseRelation($relationInput)
+    public static function parseRelation($relationInput): self
     {
         $inputs = explode(',', $relationInput);
 
@@ -26,7 +26,7 @@ class GeneratorFieldRelation
         return $relation;
     }
 
-    public function getRelationFunctionText($relationText = null)
+    public function getRelationFunctionText(string $relationText = null): string
     {
         $singularRelation = (!empty($this->relationName)) ? $this->relationName : Str::camel($relationText);
         $pluralRelation = (!empty($this->relationName)) ? $this->relationName : Str::camel(Str::plural($relationText));

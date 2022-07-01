@@ -21,11 +21,6 @@ class ModelGeneratorCommand extends BaseCommand
      */
     protected $description = 'Create model command';
 
-    /**
-     * Execute the command.
-     *
-     * @return void
-     */
     public function handle()
     {
         parent::handle();

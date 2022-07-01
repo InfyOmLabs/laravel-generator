@@ -18,13 +18,8 @@ class PublishTemplatesCommand extends PublishBaseCommand
      */
     protected $description = 'Publishes api generator templates.';
 
-    private $templatesDir;
+    private string $templatesDir;
 
-    /**
-     * Execute the command.
-     *
-     * @return void
-     */
     public function handle()
     {
         $this->templatesDir = config(
@@ -38,20 +33,14 @@ class PublishTemplatesCommand extends PublishBaseCommand
         }
     }
 
-    /**
-     * Publishes templates.
-     */
-    public function publishGeneratorTemplates()
+    public function publishGeneratorTemplates(): bool
     {
         $templatesPath = __DIR__.'/../../../templates';
 
         return $this->publishDirectory($templatesPath, $this->templatesDir, 'infyom-generator-templates');
     }
 
-    /**
-     * Publishes scaffold stemplates.
-     */
-    public function publishScaffoldTemplates()
+    public function publishScaffoldTemplates(): bool
     {
         $templateType = config('laravel_generator.templates', 'adminlte-templates');
 
@@ -60,10 +49,7 @@ class PublishTemplatesCommand extends PublishBaseCommand
         return $this->publishDirectory($templatesPath, $this->templatesDir.'scaffold', 'infyom-generator-templates/scaffold', true);
     }
 
-    /**
-     * Publishes swagger stemplates.
-     */
-    public function publishSwaggerTemplates()
+    public function publishSwaggerTemplates(): bool
     {
         $templatesPath = base_path('vendor/infyomlabs/swagger-generator/templates');
 

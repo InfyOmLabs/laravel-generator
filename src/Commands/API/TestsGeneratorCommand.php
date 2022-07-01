@@ -22,11 +22,6 @@ class TestsGeneratorCommand extends BaseCommand
      */
     protected $description = 'Create tests command';
 
-    /**
-     * Execute the command.
-     *
-     * @return void
-     */
     public function handle()
     {
         parent::handle();

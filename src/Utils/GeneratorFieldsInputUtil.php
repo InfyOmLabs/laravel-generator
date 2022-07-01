@@ -6,7 +6,7 @@ use InfyOm\Generator\Common\GeneratorField;
 
 class GeneratorFieldsInputUtil
 {
-    public static function validateFieldInput($fieldInputStr)
+    public static function validateFieldInput($fieldInputStr): bool
     {
         $fieldInputs = explode(' ', $fieldInputStr);
 
@@ -17,13 +17,7 @@ class GeneratorFieldsInputUtil
         return true;
     }
 
-    /**
-     * @param string $fieldInput
-     * @param string $validations
-     *
-     * @return GeneratorField
-     */
-    public static function processFieldInput($fieldInput, $validations)
+    public static function processFieldInput(string $fieldInput, string $validations): GeneratorField
     {
         /*
          * Field Input Format: field_name <space> db_type <space> html_type(optional) <space> options(optional)
@@ -64,12 +58,8 @@ class GeneratorFieldsInputUtil
 
     /**
      * Prepare string of associative array.
-     *
-     * @param array $arr
-     *
-     * @return string
      */
-    public static function prepareKeyValueArrayStr($arr)
+    public static function prepareKeyValueArrayStr(array $arr): string
     {
         $arrStr = '[';
         if (count($arr) > 0) {
@@ -86,12 +76,8 @@ class GeneratorFieldsInputUtil
 
     /**
      * Prepare string of array.
-     *
-     * @param array $arr
-     *
-     * @return string
      */
-    public static function prepareValuesArrayStr($arr)
+    public static function prepareValuesArrayStr(array $arr): string
     {
         $arrStr = '[';
         if (count($arr) > 0) {
@@ -106,7 +92,7 @@ class GeneratorFieldsInputUtil
         return $arrStr;
     }
 
-    public static function prepareKeyValueArrFromLabelValueStr($values)
+    public static function prepareKeyValueArrFromLabelValueStr($values): array
     {
         $arr = [];
         if (count($values) > 0) {

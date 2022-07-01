@@ -154,7 +154,7 @@ class BaseCommand extends Command
             if ($this->option('forceMigrate')) {
                 $this->runMigration();
             } elseif (!$this->option('fromTable') and !$this->isSkip('migration')) {
-                $requestFromConsole = (php_sapi_name() == 'cli') ? true : false;
+                $requestFromConsole = (php_sapi_name() == 'cli');
                 if ($this->option('jsonFromGUI') && $requestFromConsole) {
                     $this->runMigration();
                 } elseif ($requestFromConsole && $this->confirm("\nDo you want to migrate database? [y|N]", false)) {
@@ -173,7 +173,7 @@ class BaseCommand extends Command
         }
     }
 
-    public function runMigration()
+    public function runMigration(): bool
     {
         $migrationPath = config('laravel_generator.path.migration', database_path('migrations/'));
         $path = Str::after($migrationPath, base_path()); // get path after base_path
@@ -182,7 +182,7 @@ class BaseCommand extends Command
         return true;
     }
 
-    public function isSkip($skip)
+    public function isSkip($skip): bool
     {
         if ($this->option('skip')) {
             return in_array($skip, (array) $this->option('skip'));
@@ -253,19 +253,13 @@ class BaseCommand extends Command
         if (file_exists($path.$fileName) && !$this->confirmOverwrite($fileName)) {
             return;
         }
-        $content = "<?php\n\nreturn ".var_export($locales, true).';'.\PHP_EOL;
+        $content = "<?php\n\nreturn ".var_export($locales, true).';'.PHP_EOL;
         FileUtil::createFile($path, $fileName, $content);
         $this->comment("\nModel Locale File saved: ");
         $this->info($fileName);
     }
 
-    /**
-     * @param $fileName
-     * @param string $prompt
-     *
-     * @return bool
-     */
-    protected function confirmOverwrite($fileName, $prompt = '')
+    protected function confirmOverwrite(string $fileName, string $prompt = ''): bool
     {
         $prompt = (empty($prompt))
             ? $fileName.' already exists. Do you want to overwrite it? [y|N]'
@@ -312,7 +306,7 @@ class BaseCommand extends Command
 
     public function getFields()
     {
-        $this->fields = [];
+        $this->config->fields = [];
 
         if ($this->option('fieldsFile')) {
             $this->parseFieldsFromJsonFile();
@@ -492,13 +486,13 @@ class BaseCommand extends Command
         $this->config->relations = $tableFieldsGenerator->relations;
     }
 
-    private function prepareEventsData()
+    private function prepareEventsData(): array
     {
-        $data['modelName'] = $this->config->modelNames->name;
-        $data['tableName'] = $this->config->tableName;
-        $data['nsModel'] = $this->config->namespaces->model;
-
-        return $data;
+        return [
+            'modelName' => $this->config->modelNames->name,
+            'tableName' => $this->config->tableName,
+            'nsModel' => $this->config->namespaces->model,
+        ];
     }
 
     public function fireEvent(string $commandType, int $eventType)

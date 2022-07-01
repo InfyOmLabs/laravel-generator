@@ -11,10 +11,8 @@ class ModelGenerator extends BaseGenerator
 {
     /**
      * Fields not included in the generator by default.
-     *
-     * @var array
      */
-    protected $excluded_fields = [
+    protected array $excluded_fields = [
         'created_at',
         'updated_at',
         'deleted_at',
@@ -42,7 +40,7 @@ class ModelGenerator extends BaseGenerator
         $this->config->commandInfo($this->fileName);
     }
 
-    private function fillTemplate($templateData)
+    private function fillTemplate(string $templateData): string
     {
         $rules = $this->generateRules();
         $templateData = fill_template($this->config->dynamicVars, $templateData);
@@ -87,23 +85,19 @@ class ModelGenerator extends BaseGenerator
 
         $templateData = str_replace(
             '$RELATIONS$',
-            fill_template($this->config->dynamicVars, implode(PHP_EOL.infy_nl_tab(1, 1), $this->generateRelations())),
+            fill_template($this->config->dynamicVars, implode(PHP_EOL.infy_nl_tab(), $this->generateRelations())),
             $templateData
         );
 
-        $templateData = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $templateData);
-
-        return $templateData;
+        return str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $templateData);
     }
 
-    private function fillSoftDeletes($templateData)
+    private function fillSoftDeletes($templateData): string
     {
         if (!$this->config->options->softDelete) {
             $templateData = str_replace('$SOFT_DELETE_IMPORT$', '', $templateData);
             $templateData = str_replace('$SOFT_DELETE$', '', $templateData);
-            $templateData = str_replace('$SOFT_DELETE_DATES$', '', $templateData);
-
-            return $templateData;
+            return str_replace('$SOFT_DELETE_DATES$', '', $templateData);
         }
 
         $templateData = str_replace(
@@ -113,22 +107,18 @@ class ModelGenerator extends BaseGenerator
         );
         $templateData = str_replace('$SOFT_DELETE$', infy_tab()."use SoftDeletes;\n", $templateData);
         $deletedAtTimestamp = config('laravel_generator.timestamps.deleted_at', 'deleted_at');
-        $templateData = str_replace(
+        return str_replace(
             '$SOFT_DELETE_DATES$',
             infy_nl_tab()."protected \$dates = ['".$deletedAtTimestamp."'];\n",
             $templateData
         );
-
-        return $templateData;
     }
 
-    private function fillHasFactory($templateData)
+    private function fillHasFactory($templateData): string
     {
         if (!$this->config->addons->tests) {
             $templateData = str_replace('$HAS_FACTORY_IMPORT$', '', $templateData);
-            $templateData = str_replace('$HAS_FACTORY$', '', $templateData);
-
-            return $templateData;
+            return str_replace('$HAS_FACTORY$', '', $templateData);
         }
 
         $templateData = str_replace(
@@ -136,9 +126,8 @@ class ModelGenerator extends BaseGenerator
             'use Illuminate\Database\Eloquent\Factories\HasFactory;',
             $templateData
         );
-        $templateData = str_replace('$HAS_FACTORY$', infy_tab()."use HasFactory;\n", $templateData);
 
-        return $templateData;
+        return str_replace('$HAS_FACTORY$', infy_tab()."use HasFactory;\n", $templateData);
     }
 
     private function fillDocs($templateData)
@@ -177,24 +166,15 @@ class ModelGenerator extends BaseGenerator
         $docsTemplate = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $docsTemplate);
         $docsTemplate = str_replace('$PHPDOC$', $fillables, $docsTemplate);
 
-        $templateData = str_replace('$DOCS$', $docsTemplate, $templateData);
-
-        return $templateData;
+        return str_replace('$DOCS$', $docsTemplate, $templateData);
     }
 
-    /**
-     * @param $db_type
-     * @param GeneratorFieldRelation|null $relation
-     * @param string|null                 $relationText
-     *
-     * @return string
-     */
-    private function getPHPDocType($db_type, $relation = null, $relationText = null)
+    private function getPHPDocType(string $dbType, GeneratorFieldRelation $relation = null, string $relationText = null): string
     {
         $relationText = (!empty($relationText)) ? $relationText : null;
         $modelNamespace = $this->config->namespaces->model;
 
-        switch ($db_type) {
+        switch ($dbType) {
             case 'datetime':
                 return 'string|\Carbon\Carbon';
             case '1t1':
@@ -212,16 +192,16 @@ class ModelGenerator extends BaseGenerator
             case 'hmt':
                 return '\Illuminate\Database\Eloquent\Collection $'.Str::camel(Str::plural($relationText));
             default:
-                $fieldData = SwaggerGenerator::getFieldType($db_type);
+                $fieldData = SwaggerGenerator::getFieldType($dbType);
                 if (!empty($fieldData['fieldType'])) {
                     return $fieldData['fieldType'];
                 }
 
-                return $db_type;
+                return $dbType;
         }
     }
 
-    public function generateSwagger($templateData)
+    public function generateSwagger($templateData): string
     {
         $fieldTypes = SwaggerGenerator::generateTypes($this->config->fields);
 
@@ -241,12 +221,10 @@ class ModelGenerator extends BaseGenerator
 
         $template = str_replace('$PROPERTIES$', implode(",\n", $properties), $template);
 
-        $templateData = str_replace('$DOCS$', $template, $templateData);
-
-        return $templateData;
+        return str_replace('$DOCS$', $template, $templateData);
     }
 
-    private function generateRequiredFields()
+    private function generateRequiredFields(): array
     {
         $requiredFields = [];
 
@@ -263,7 +241,7 @@ class ModelGenerator extends BaseGenerator
         return $requiredFields;
     }
 
-    private function fillTimestamps($templateData)
+    private function fillTimestamps($templateData): string
     {
         $timestamps = TableFieldsGenerator::getTimestampFieldNames();
 
@@ -284,7 +262,7 @@ class ModelGenerator extends BaseGenerator
         return str_replace('$TIMESTAMPS$', $replace, $templateData);
     }
 
-    private function generateRules()
+    private function generateRules(): array
     {
         $dont_require_fields = config('laravel_generator.options.hidden_fields', [])
                 + config('laravel_generator.options.excluded_fields', $this->excluded_fields);
@@ -356,7 +334,7 @@ class ModelGenerator extends BaseGenerator
         return $rules;
     }
 
-    public function generateUniqueRules()
+    public function generateUniqueRules(): string
     {
         $tableNameSingular = Str::singular($this->config->tableName);
         $uniqueRules = '';
@@ -372,7 +350,7 @@ class ModelGenerator extends BaseGenerator
         return $uniqueRules;
     }
 
-    public function generateCasts()
+    public function generateCasts(): array
     {
         $casts = [];
 
@@ -431,7 +409,7 @@ class ModelGenerator extends BaseGenerator
         return $casts;
     }
 
-    private function generateRelations()
+    private function generateRelations(): array
     {
         $relations = [];
 

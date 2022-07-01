@@ -21,11 +21,6 @@ class ViewsGeneratorCommand extends BaseCommand
      */
     protected $description = 'Create views file command';
 
-    /**
-     * Execute the command.
-     *
-     * @return void
-     */
     public function handle()
     {
         parent::handle();

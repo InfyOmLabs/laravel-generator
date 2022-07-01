@@ -21,11 +21,6 @@ class APIControllerGeneratorCommand extends BaseCommand
      */
     protected $description = 'Create an api controller command';
 
-    /**
-     * Execute the command.
-     *
-     * @return void
-     */
     public function handle()
     {
         parent::handle();

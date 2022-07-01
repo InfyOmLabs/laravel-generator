@@ -6,14 +6,9 @@ use InfyOm\Generator\Common\GeneratorField;
 
 class SwaggerGenerator
 {
-    public static $swaggerTypes = [];
+    public static array $swaggerTypes = [];
 
-    /**
-     * @param GeneratorField[] $inputFields
-     *
-     * @return array
-     */
-    public static function generateTypes($inputFields)
+    public static function generateTypes(array $inputFields): array
     {
         if (!empty(self::$swaggerTypes)) {
             return self::$swaggerTypes;
@@ -21,6 +16,7 @@ class SwaggerGenerator
 
         $fieldTypes = [];
 
+        /** @var GeneratorField $field */
         foreach ($inputFields as $field) {
             $fieldData = self::getFieldType($field->fieldType);
             $fieldType = $fieldData['fieldType'];
@@ -46,7 +42,7 @@ class SwaggerGenerator
         return self::$swaggerTypes;
     }
 
-    public static function getFieldType($type)
+    public static function getFieldType($type): array
     {
         $fieldType = null;
         $fieldFormat = null;
@@ -103,7 +99,7 @@ class SwaggerGenerator
         return ['fieldType' => $fieldType, 'fieldFormat' => $fieldFormat];
     }
 
-    public static function generateSwagger($fields, $fillables, $variables)
+    public static function generateSwagger($fields, $fillables, $variables): string
     {
         $template = get_template('model_docs.model', 'swagger-generator');
 
@@ -115,18 +111,10 @@ class SwaggerGenerator
 
         $properties = self::preparePropertyFields($propertyTemplate, $fields);
 
-        $templateData = str_replace('$PROPERTIES$', implode(",\n", $properties), $templateData);
-
-        return $templateData;
+        return str_replace('$PROPERTIES$', implode(",\n", $properties), $templateData);
     }
 
-    /**
-     * @param $template
-     * @param $fields
-     *
-     * @return array
-     */
-    public static function preparePropertyFields($template, $fields)
+    public static function preparePropertyFields($template, array $fields): array
     {
         $templates = [];
 

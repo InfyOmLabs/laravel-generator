@@ -28,11 +28,9 @@ class RepositoryTestGenerator extends BaseGenerator
         $this->config->commandInfo($this->fileName);
     }
 
-    private function fillTemplate($templateData)
+    private function fillTemplate($templateData): string
     {
-        $templateData = fill_template($this->config->dynamicVars, $templateData);
-
-        return $templateData;
+        return fill_template($this->config->dynamicVars, $templateData);
     }
 
     public function rollback()

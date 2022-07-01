@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Commands\Publish;
 
+use Exception;
 use Symfony\Component\Console\Input\InputArgument;
 
 class PublishTablesCommand extends PublishBaseCommand
@@ -36,7 +37,7 @@ class PublishTablesCommand extends PublishBaseCommand
             return;
         }
 
-        throw new \Exception('Invalid Table Type');
+        throw new Exception('Invalid Table Type');
     }
 
     public function publishLivewireTableViews()
@@ -71,6 +72,11 @@ class PublishTablesCommand extends PublishBaseCommand
         }
     }
 
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
     public function getArguments()
     {
         return [

@@ -17,11 +17,6 @@ class APIControllerGenerator extends BaseGenerator
         $this->fileName = $this->config->modelNames->name.'APIController.php';
     }
 
-    /**
-     * Generate API Controller Class.
-     *
-     * @return void
-     */
     public function generate()
     {
         if ($this->config->options->repositoryPattern) {
@@ -49,7 +44,7 @@ class APIControllerGenerator extends BaseGenerator
         $this->config->commandInfo($this->fileName);
     }
 
-    private function fillDocs($templateData)
+    private function fillDocs(string $templateData): string
     {
         $methods = ['controller', 'index', 'store', 'show', 'update', 'destroy'];
 
@@ -71,11 +66,6 @@ class APIControllerGenerator extends BaseGenerator
         return $templateData;
     }
 
-    /**
-     * Delete API Controller.
-     *
-     * @return void
-     */
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {

@@ -275,7 +275,7 @@ class GeneratorConfig
         $connectionText = '';
         if ($connection = $this->getOption('connection')) {
             $this->connection = $connection;
-            $connectionText = infy_tab(4).'public $connection = "'.$connection.'";';
+            $connectionText = infy_tabs(4).'public $connection = "'.$connection.'";';
         }
         $this->addDynamicVariable('$CONNECTION$', $connectionText);
 
@@ -361,29 +361,29 @@ class GeneratorConfig
 
     public function overrideOptionsFromJsonFile($jsonData)
     {
-        $options = self::$availableOptions;
-
-        foreach ($options as $option) {
-            if (isset($jsonData['options'][$option])) {
-                $this->setOption($option, $jsonData['options'][$option]);
-            }
-        }
-
-        // prepare prefixes than reload namespaces, paths and dynamic variables
-        if (!empty($this->getOption('prefix'))) {
-            $this->preparePrefixes();
-            $this->loadPaths();
-            $this->loadNamespaces();
-            $this->loadDynamicVariables();
-        }
-
-        $addOns = ['swagger', 'tests', 'datatables'];
-
-        foreach ($addOns as $addOn) {
-            if (isset($jsonData['addOns'][$addOn])) {
-                $this->addOns[$addOn] = $jsonData['addOns'][$addOn];
-            }
-        }
+//        $options = self::$availableOptions;
+//
+//        foreach ($options as $option) {
+//            if (isset($jsonData['options'][$option])) {
+//                $this->setOption($option, $jsonData['options'][$option]);
+//            }
+//        }
+//
+//        // prepare prefixes than reload namespaces, paths and dynamic variables
+//        if (!empty($this->getOption('prefix'))) {
+//            $this->preparePrefixes();
+//            $this->loadPaths();
+//            $this->loadNamespaces();
+//            $this->loadDynamicVariables();
+//        }
+//
+//        $addOns = ['swagger', 'tests', 'datatables'];
+//
+//        foreach ($addOns as $addOn) {
+//            if (isset($jsonData['addOns'][$addOn])) {
+//                $this->addOns[$addOn] = $jsonData['addOns'][$addOn];
+//            }
+//        }
     }
 
     public function getOption($option)

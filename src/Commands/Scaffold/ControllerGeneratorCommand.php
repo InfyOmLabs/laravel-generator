@@ -21,11 +21,6 @@ class ControllerGeneratorCommand extends BaseCommand
      */
     protected $description = 'Create controller command';
 
-    /**
-     * Execute the command.
-     *
-     * @return void
-     */
     public function handle()
     {
         parent::handle();

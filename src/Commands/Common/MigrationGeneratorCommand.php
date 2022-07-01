@@ -21,11 +21,6 @@ class MigrationGeneratorCommand extends BaseCommand
      */
     protected $description = 'Create migration command';
 
-    /**
-     * Execute the command.
-     *
-     * @return void
-     */
     public function handle()
     {
         parent::handle();

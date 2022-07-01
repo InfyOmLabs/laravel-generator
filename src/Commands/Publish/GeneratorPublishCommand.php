@@ -21,11 +21,6 @@ class GeneratorPublishCommand extends PublishBaseCommand
      */
     protected $description = 'Publishes & init api routes, base controller, base test cases traits.';
 
-    /**
-     * Execute the command.
-     *
-     * @return void
-     */
     public function handle()
     {
         $this->updateRouteServiceProvider();
@@ -40,14 +35,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
         }
     }
 
-    /**
-     * Replaces dynamic variables of template.
-     *
-     * @param string $templateData
-     *
-     * @return string
-     */
-    private function fillTemplate($templateData)
+    private function fillTemplate(string $templateData): string
     {
         $apiPrefix = config('laravel_generator.api_prefix', 'api');
 
@@ -64,8 +52,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
         if (!file_exists($routeServiceProviderPath)) {
             $this->error("Route Service provider not found on $routeServiceProviderPath");
-
-            return 1;
+            return;
         }
 
         $fileContent = file_get_contents($routeServiceProviderPath);
@@ -76,8 +63,6 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
         $finalContent = $beforeContent.$search.PHP_EOL.str(' ')->repeat(16)."->as('api.')".$afterContent;
         file_put_contents($routeServiceProviderPath, $finalContent);
-
-        return 0;
     }
 
     private function publishTestCases()

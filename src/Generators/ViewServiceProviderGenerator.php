@@ -2,7 +2,7 @@
 
 namespace InfyOm\Generator\Generators;
 
-use File;
+use Illuminate\Support\Facades\File;
 
 class ViewServiceProviderGenerator extends BaseGenerator
 {
@@ -56,27 +56,25 @@ class ViewServiceProviderGenerator extends BaseGenerator
         $this->config->commandComment('View service provider file updated.');
     }
 
-    public function addViewComposer()
+    public function addViewComposer(): string
     {
         $mainViewContent = file_get_contents($this->config->paths->viewProvider);
         $newViewStatement = get_template('scaffold.view_composer', 'laravel-generator');
         $newViewStatement = fill_template($this->config->dynamicVars, $newViewStatement);
 
-        $newViewStatement = infy_nl(1).$newViewStatement;
+        $newViewStatement = infy_nl().$newViewStatement;
         preg_match_all('/public function boot(.*)/', $mainViewContent, $matches);
 
         $totalMatches = count($matches[0]);
         $lastSeederStatement = $matches[0][$totalMatches - 1];
 
         $replacePosition = strpos($mainViewContent, $lastSeederStatement);
-        $mainViewContent = substr_replace(
+        return substr_replace(
             $mainViewContent,
             $newViewStatement,
             $replacePosition + strlen($lastSeederStatement) + 6,
             0
         );
-
-        return $mainViewContent;
     }
 
     public function addCustomProvider()

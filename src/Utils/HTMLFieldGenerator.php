@@ -6,7 +6,7 @@ use InfyOm\Generator\Common\GeneratorField;
 
 class HTMLFieldGenerator
 {
-    public static function generateHTML(GeneratorField $field, $templateType, $localized = false)
+    public static function generateHTML(GeneratorField $field, $templateType, $localized = false): string
     {
         $fieldTemplate = '';
 

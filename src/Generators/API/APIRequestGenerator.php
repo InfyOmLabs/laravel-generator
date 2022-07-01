@@ -21,22 +21,12 @@ class APIRequestGenerator extends BaseGenerator
         $this->updateFileName = 'Update'.$this->config->modelNames->name.'APIRequest.php';
     }
 
-    /**
-     * Generate API Request Class.
-     *
-     * @return void
-     */
     public function generate()
     {
         $this->generateCreateRequest();
         $this->generateUpdateRequest();
     }
 
-    /**
-     * Generate Create Request.
-     *
-     * @return void
-     */
     private function generateCreateRequest()
     {
         $templateData = get_template('api.request.create_request', 'laravel-generator');
@@ -49,11 +39,6 @@ class APIRequestGenerator extends BaseGenerator
         $this->config->commandInfo($this->createFileName);
     }
 
-    /**
-     * Generate Update Request.
-     *
-     * @return void
-     */
     private function generateUpdateRequest()
     {
         $modelGenerator = new ModelGenerator();
@@ -70,11 +55,6 @@ class APIRequestGenerator extends BaseGenerator
         $this->config->commandInfo($this->updateFileName);
     }
 
-    /**
-     * Delete the generated Request Classes.
-     *
-     * @return void
-     */
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->createFileName)) {

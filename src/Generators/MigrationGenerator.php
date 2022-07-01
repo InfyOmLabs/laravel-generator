@@ -2,9 +2,8 @@
 
 namespace InfyOm\Generator\Generators;
 
-use File;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Utils\FileUtil;
 use SplFileInfo;
 
@@ -35,7 +34,7 @@ class MigrationGenerator extends BaseGenerator
         $this->config->commandInfo($fileName);
     }
 
-    private function generateFields()
+    private function generateFields(): string
     {
         $fields = [];
         $foreignKeys = [];

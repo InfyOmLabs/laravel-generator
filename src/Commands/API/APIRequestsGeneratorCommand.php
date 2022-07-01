@@ -21,11 +21,6 @@ class APIRequestsGeneratorCommand extends BaseCommand
      */
     protected $description = 'Create an api request command';
 
-    /**
-     * Execute the command.
-     *
-     * @return void
-     */
     public function handle()
     {
         parent::handle();

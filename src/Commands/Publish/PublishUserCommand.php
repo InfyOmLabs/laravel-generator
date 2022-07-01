@@ -20,11 +20,6 @@ class PublishUserCommand extends PublishBaseCommand
      */
     protected $description = 'Publishes Users CRUD file';
 
-    /**
-     * Execute the command.
-     *
-     * @return void
-     */
     public function handle()
     {
         $this->copyViews();
@@ -59,7 +54,7 @@ class PublishUserCommand extends PublishBaseCommand
         FileUtil::createDirectoryIfNotExist($dir);
     }
 
-    private function getViews()
+    private function getViews(): array
     {
         return [
             'users/create'      => 'users/create.blade.php',
@@ -183,23 +178,14 @@ class PublishUserCommand extends PublishBaseCommand
         $this->info('UpdateUserRequest created');
     }
 
-    /**
-     * Replaces dynamic variables of template.
-     *
-     * @param string $templateData
-     *
-     * @return string
-     */
-    private function fillTemplate($templateData)
+    private function fillTemplate(string $templateData): string
     {
         $templateData = str_replace('$NAMESPACE_CONTROLLER$', config('laravel_generator.namespace.controller'), $templateData);
 
         $templateData = str_replace('$NAMESPACE_REQUEST$', config('laravel_generator.namespace.request'), $templateData);
 
         $templateData = str_replace('$NAMESPACE_REPOSITORY$', config('laravel_generator.namespace.repository'), $templateData);
-        $templateData = str_replace('$NAMESPACE_USER$', config('auth.providers.users.model'), $templateData);
-
-        return $templateData;
+        return str_replace('$NAMESPACE_USER$', config('auth.providers.users.model'), $templateData);
     }
 
     /**

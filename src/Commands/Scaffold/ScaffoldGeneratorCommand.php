@@ -21,11 +21,6 @@ class ScaffoldGeneratorCommand extends BaseCommand
      */
     protected $description = 'Create a full CRUD views for given model';
 
-    /**
-     * Execute the command.
-     *
-     * @return void
-     */
     public function handle()
     {
         parent::handle();
@@ -63,15 +58,12 @@ class ScaffoldGeneratorCommand extends BaseCommand
         return array_merge(parent::getArguments(), []);
     }
 
-    /**
-     * Check if there is anything to generate.
-     *
-     * @return bool
-     */
-    protected function checkIsThereAnyDataToGenerate()
+    protected function checkIsThereAnyDataToGenerate(): bool
     {
         if (count($this->config->fields) > 1) {
             return true;
         }
+
+        return false;
     }
 }

@@ -21,11 +21,6 @@ class APIGeneratorCommand extends BaseCommand
      */
     protected $description = 'Create a full CRUD API for given model';
 
-    /**
-     * Execute the command.
-     *
-     * @return void
-     */
     public function handle()
     {
         parent::handle();

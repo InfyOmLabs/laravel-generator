@@ -2,13 +2,14 @@
 
 namespace InfyOm\Generator\Commands\Publish;
 
-use File;
+use Illuminate\Support\Facades\File;
 use InfyOm\Generator\Commands\BaseCommand;
 
 class PublishBaseCommand extends BaseCommand
 {
     public function handle()
     {
+        // Do Nothing
     }
 
     public function publishFile($sourceFile, $destinationFile, $fileName)
@@ -23,18 +24,10 @@ class PublishBaseCommand extends BaseCommand
         $this->info($destinationFile);
     }
 
-    /**
-     * @param $sourceDir
-     * @param $destinationDir
-     * @param $dirName
-     * @param bool $force
-     *
-     * @return bool|void
-     */
-    public function publishDirectory($sourceDir, $destinationDir, $dirName, $force = false)
+    public function publishDirectory(string $sourceDir, string $destinationDir, string $dirName, bool $force = false): bool
     {
         if (file_exists($destinationDir) && !$force && !$this->confirmOverwrite($destinationDir)) {
-            return;
+            return false;
         }
 
         File::makeDirectory($destinationDir, 493, true, true);

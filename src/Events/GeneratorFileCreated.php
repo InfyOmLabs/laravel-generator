@@ -4,34 +4,15 @@ namespace InfyOm\Generator\Events;
 
 use Illuminate\Queue\SerializesModels;
 
-/**
- * Class GeneratorFileCreated.
- */
 class GeneratorFileCreated
 {
     use SerializesModels;
 
-    /**
-     * Type of event.
-     *
-     * @var string
-     */
-    public $type;
+    public string $type;
 
-    /**
-     * Event payload.
-     *
-     * @var array
-     */
-    public $data;
+    public array $data;
 
-    /**
-     * Create a new event instance.
-     *
-     * @param string $type
-     * @param array  $data
-     */
-    public function __construct($type, $data)
+    public function __construct(string $type, array $data)
     {
         $this->type = $type;
         $this->data = $data;

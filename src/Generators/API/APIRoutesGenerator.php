@@ -29,11 +29,6 @@ class APIRoutesGenerator extends BaseGenerator
         $this->routesTemplate = fill_template($this->config->dynamicVars, $routesTemplate);
     }
 
-    /**
-     * Generate API Routes.
-     *
-     * @return void
-     */
     public function generate()
     {
         $this->routeContents .= PHP_EOL.PHP_EOL.$this->routesTemplate;
@@ -49,11 +44,6 @@ class APIRoutesGenerator extends BaseGenerator
         $this->config->commandComment(PHP_EOL.$this->config->modelNames->dashedPlural.' api routes added.');
     }
 
-    /**
-     * Remove API Routes.
-     *
-     * @return void
-     */
     public function rollback()
     {
         if (Str::contains($this->routeContents, $this->routesTemplate)) {

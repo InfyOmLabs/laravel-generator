@@ -21,11 +21,6 @@ class RequestsGeneratorCommand extends BaseCommand
      */
     protected $description = 'Create a full CRUD views for given model';
 
-    /**
-     * Execute the command.
-     *
-     * @return void
-     */
     public function handle()
     {
         parent::handle();

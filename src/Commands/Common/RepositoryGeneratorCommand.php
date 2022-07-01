@@ -21,11 +21,6 @@ class RepositoryGeneratorCommand extends BaseCommand
      */
     protected $description = 'Create repository command';
 
-    /**
-     * Execute the command.
-     *
-     * @return void
-     */
     public function handle()
     {
         parent::handle();

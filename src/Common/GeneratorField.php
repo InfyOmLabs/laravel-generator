@@ -153,19 +153,19 @@ class GeneratorField
         $this->migrationText .= ';';
     }
 
-    public static function parseFieldFromFile($fieldInput)
+    public static function parseFieldFromFile($fieldInput): self
     {
         $field = new self();
         $field->name = $fieldInput['name'];
         $field->parseDBType($fieldInput['dbType']);
-        $field->parseHtmlInput(isset($fieldInput['htmlType']) ? $fieldInput['htmlType'] : '');
-        $field->validations = isset($fieldInput['validations']) ? $fieldInput['validations'] : '';
-        $field->isSearchable = isset($fieldInput['searchable']) ? $fieldInput['searchable'] : false;
-        $field->isFillable = isset($fieldInput['fillable']) ? $fieldInput['fillable'] : true;
-        $field->isPrimary = isset($fieldInput['primary']) ? $fieldInput['primary'] : false;
-        $field->inForm = isset($fieldInput['inForm']) ? $fieldInput['inForm'] : true;
-        $field->inIndex = isset($fieldInput['inIndex']) ? $fieldInput['inIndex'] : true;
-        $field->inView = isset($fieldInput['inView']) ? $fieldInput['inView'] : true;
+        $field->parseHtmlInput($fieldInput['htmlType'] ?? '');
+        $field->validations = $fieldInput['validations'] ?? '';
+        $field->isSearchable = $fieldInput['searchable'] ?? false;
+        $field->isFillable = $fieldInput['fillable'] ?? true;
+        $field->isPrimary = $fieldInput['primary'] ?? false;
+        $field->inForm = $fieldInput['inForm'] ?? true;
+        $field->inIndex = $fieldInput['inIndex'] ?? true;
+        $field->inView = $fieldInput['inView'] ?? true;
 
         if (str_contains($field->validations, 'required')) {
             $field->isNotNull = true;

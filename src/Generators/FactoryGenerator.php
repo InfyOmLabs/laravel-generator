@@ -24,7 +24,6 @@ class FactoryGenerator extends BaseGenerator
             foreach ($this->config->relations as $r) {
                 if ($r->type == 'mt1') {
                     $relation = (isset($r->inputs[0])) ? $r->inputs[0] : null;
-                    $field = false;
                     if (isset($r->inputs[1])) {
                         $field = $r->inputs[1];
                     } else {
@@ -54,12 +53,7 @@ class FactoryGenerator extends BaseGenerator
         $this->config->commandInfo($this->fileName);
     }
 
-    /**
-     * @param string $templateData
-     *
-     * @return mixed|string
-     */
-    private function fillTemplate($templateData)
+    private function fillTemplate(string $templateData): string
     {
         $templateData = fill_template($this->config->dynamicVars, $templateData);
 
@@ -77,19 +71,14 @@ class FactoryGenerator extends BaseGenerator
             $templateData
         );
 
-        $templateData = str_replace(
+        return str_replace(
             '$RELATIONS$',
             $extra['text'],
             $templateData
         );
-
-        return $templateData;
     }
 
-    /**
-     * @return array
-     */
-    private function generateFields()
+    private function generateFields(): array
     {
         $fields = [];
 
@@ -127,15 +116,15 @@ class FactoryGenerator extends BaseGenerator
                 case 'char':
                     $lower = strtolower($field->name);
                     $firstChar = substr($lower, 0, 1);
-                    if (strpos($lower, 'email') !== false) {
+                    if (str_contains($lower, 'email')) {
                         $fakerData = 'email';
-                    } elseif ($firstChar == 'f' && strpos($lower, 'name') !== false) {
+                    } elseif ($firstChar == 'f' && str_contains($lower, 'name')) {
                         $fakerData = 'firstName';
-                    } elseif (($firstChar == 's' || $firstChar == 'l') && strpos($lower, 'name') !== false) {
+                    } elseif (($firstChar == 's' || $firstChar == 'l') && str_contains($lower, 'name')) {
                         $fakerData = 'lastName';
-                    } elseif (strpos($lower, 'phone') !== false) {
+                    } elseif (str_contains($lower, 'phone')) {
                         $fakerData = "numerify('0##########')";
-                    } elseif (strpos($lower, 'password') !== false) {
+                    } elseif (str_contains($lower, 'password')) {
                         $fakerData = "lexify('1???@???A???')";
                     } elseif (strpos($lower, 'address')) {
                         $fakerData = 'address';
@@ -148,6 +137,7 @@ class FactoryGenerator extends BaseGenerator
                     break;
                 case 'text':
                     $fakerData = $rule ? $this->getValidText($rule) : 'text(500)';
+                    break;
                 case 'boolean':
                     $fakerData = 'boolean';
                     break;
@@ -190,7 +180,7 @@ class FactoryGenerator extends BaseGenerator
      *
      * @return string
      */
-    public function getValidNumber($rule = null, $max = PHP_INT_MAX)
+    public function getValidNumber($rule = null, $max = PHP_INT_MAX): string
     {
         if ($rule) {
             $max = $this->extractMinMax($rule, 'max') ?? $max;
@@ -205,12 +195,8 @@ class FactoryGenerator extends BaseGenerator
     /**
      * Generates a valid relation if applicable
      * This method assumes the related field primary key is id.
-     *
-     * @param string $fieldName The field name
-     *
-     * @return string
      */
-    public function getValidRelation($fieldName)
+    public function getValidRelation(string $fieldName): string
     {
         $relation = $this->relations[$fieldName]['relation'];
         $variable = Str::camel($relation);
@@ -222,14 +208,12 @@ class FactoryGenerator extends BaseGenerator
      * Generates a valid text based on applicable model rule.
      *
      * @param string $rule The applicable model rule.
-     *
-     * @return string
      */
-    public function getValidText($rule = null)
+    public function getValidText($rule = null): string
     {
         if ($rule) {
             $max = $this->extractMinMax($rule, 'max') ?? 4096;
-            $min = $this->extractMinMax($rule, 'min') ?? 5;
+            $min = $this->extractMinMax($rule) ?? 5;
 
             if ($max < 5) {
                 //faker text requires at least 5 characters
@@ -258,9 +242,7 @@ class FactoryGenerator extends BaseGenerator
         }
         if ($i !== false) {
             $len = $e - ($i + 4);
-            $result = substr($rule, $i + 4, $len);
-
-            return $result;
+            return substr($rule, $i + 4, $len);
         }
 
         return null;
@@ -270,7 +252,7 @@ class FactoryGenerator extends BaseGenerator
      * Generate valid model so we can use the id where applicable
      * This method assumes the model has a factory.
      */
-    public function getRelationsBootstrap()
+    public function getRelationsBootstrap(): array
     {
         $text = '';
         $uses = '';
