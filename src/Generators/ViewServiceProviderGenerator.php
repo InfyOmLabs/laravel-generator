@@ -69,6 +69,7 @@ class ViewServiceProviderGenerator extends BaseGenerator
         $lastSeederStatement = $matches[0][$totalMatches - 1];
 
         $replacePosition = strpos($mainViewContent, $lastSeederStatement);
+
         return substr_replace(
             $mainViewContent,
             $newViewStatement,

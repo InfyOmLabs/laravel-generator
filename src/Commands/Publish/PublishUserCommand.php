@@ -185,6 +185,7 @@ class PublishUserCommand extends PublishBaseCommand
         $templateData = str_replace('$NAMESPACE_REQUEST$', config('laravel_generator.namespace.request'), $templateData);
 
         $templateData = str_replace('$NAMESPACE_REPOSITORY$', config('laravel_generator.namespace.repository'), $templateData);
+
         return str_replace('$NAMESPACE_USER$', config('auth.providers.users.model'), $templateData);
     }
 

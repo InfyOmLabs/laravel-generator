@@ -52,6 +52,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
         if (!file_exists($routeServiceProviderPath)) {
             $this->error("Route Service provider not found on $routeServiceProviderPath");
+
             return;
         }
 

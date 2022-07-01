@@ -97,6 +97,7 @@ class ModelGenerator extends BaseGenerator
         if (!$this->config->options->softDelete) {
             $templateData = str_replace('$SOFT_DELETE_IMPORT$', '', $templateData);
             $templateData = str_replace('$SOFT_DELETE$', '', $templateData);
+
             return str_replace('$SOFT_DELETE_DATES$', '', $templateData);
         }
 
@@ -107,6 +108,7 @@ class ModelGenerator extends BaseGenerator
         );
         $templateData = str_replace('$SOFT_DELETE$', infy_tab()."use SoftDeletes;\n", $templateData);
         $deletedAtTimestamp = config('laravel_generator.timestamps.deleted_at', 'deleted_at');
+
         return str_replace(
             '$SOFT_DELETE_DATES$',
             infy_nl_tab()."protected \$dates = ['".$deletedAtTimestamp."'];\n",
@@ -118,6 +120,7 @@ class ModelGenerator extends BaseGenerator
     {
         if (!$this->config->addons->tests) {
             $templateData = str_replace('$HAS_FACTORY_IMPORT$', '', $templateData);
+
             return str_replace('$HAS_FACTORY$', '', $templateData);
         }
 
