@@ -109,7 +109,7 @@ class SwaggerGenerator
 
         $templateData = fill_template($variables, $template);
 
-        $templateData = str_replace('$REQUIRED_FIELDS$', '"'.implode('", "', $fillables).'"', $templateData);
+        $templateData = str_replace('$REQUIRED_FIELDS$', '"' . implode('", "', $fillables) . '"', $templateData);
 
         $propertyTemplate = get_template('model_docs.property', 'swagger-generator');
 
@@ -146,7 +146,7 @@ class SwaggerGenerator
             $propertyTemplate = str_replace('$DESCRIPTION$', $description, $propertyTemplate);
             $propertyTemplate = str_replace('$FIELD_TYPE$', $type, $propertyTemplate);
             if (!empty($format)) {
-                $format = ",\n *          format=\"".$format.'"';
+                $format = ",\n *          format=\"" . $format . '"';
             }
             $propertyTemplate = str_replace('$FIELD_FORMAT$', $format, $propertyTemplate);
             $templates[] = $propertyTemplate;

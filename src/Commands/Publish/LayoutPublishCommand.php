@@ -3,8 +3,10 @@
 namespace InfyOm\Generator\Commands\Publish;
 
 use Illuminate\Support\Str;
-use InfyOm\Generator\Utils\FileUtil;
+
 use Symfony\Component\Console\Input\InputOption;
+
+use InfyOm\Generator\Utils\FileUtil;
 
 class LayoutPublishCommand extends PublishBaseCommand
 {
@@ -47,19 +49,19 @@ class LayoutPublishCommand extends PublishBaseCommand
         }
 
         foreach ($files as $stub => $blade) {
-            $sourceFile = get_template_file_path('scaffold/'.$stub, $templateType);
-            $destinationFile = $viewsPath.$blade;
+            $sourceFile = get_template_file_path('scaffold/' . $stub, $templateType);
+            $destinationFile = $viewsPath . $blade;
             $this->publishFile($sourceFile, $destinationFile, $blade);
         }
     }
 
     private function createDirectories($viewsPath)
     {
-        FileUtil::createDirectoryIfNotExist($viewsPath.'layouts');
-        FileUtil::createDirectoryIfNotExist($viewsPath.'auth');
+        FileUtil::createDirectoryIfNotExist($viewsPath . 'layouts');
+        FileUtil::createDirectoryIfNotExist($viewsPath . 'auth');
 
-        FileUtil::createDirectoryIfNotExist($viewsPath.'auth/passwords');
-        FileUtil::createDirectoryIfNotExist($viewsPath.'auth/emails');
+        FileUtil::createDirectoryIfNotExist($viewsPath . 'auth/passwords');
+        FileUtil::createDirectoryIfNotExist($viewsPath . 'auth/emails');
     }
 
     private function getViews()
@@ -122,7 +124,7 @@ class LayoutPublishCommand extends PublishBaseCommand
 
         $fileName = 'HomeController.php';
 
-        if (file_exists($controllerPath.$fileName) && !$this->confirmOverwrite($fileName)) {
+        if (file_exists($controllerPath . $fileName) && !$this->confirmOverwrite($fileName)) {
             return;
         }
 

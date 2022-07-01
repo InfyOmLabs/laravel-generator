@@ -21,7 +21,7 @@ class APITestGenerator extends BaseGenerator
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathApiTests;
-        $this->fileName = $this->commandData->modelName.'ApiTest.php';
+        $this->fileName = $this->commandData->modelName . 'ApiTest.php';
     }
 
     public function generate()
@@ -39,7 +39,7 @@ class APITestGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('API Test file deleted: '.$this->fileName);
+            $this->commandData->commandComment('API Test file deleted: ' . $this->fileName);
         }
     }
 }

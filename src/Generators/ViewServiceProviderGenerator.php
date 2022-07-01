@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Generators;
 
 use File;
+
 use InfyOm\Generator\Common\CommandData;
 
 /**
@@ -38,7 +39,7 @@ class ViewServiceProviderGenerator extends BaseGenerator
         }
         File::copy($templateData, $destination);
 
-        $this->commandData->commandComment($fileName.' published');
+        $this->commandData->commandComment($fileName . ' published');
         $this->commandData->commandInfo($fileName);
     }
 
@@ -61,7 +62,7 @@ class ViewServiceProviderGenerator extends BaseGenerator
         $this->commandData->addDynamicVariable('$COMPOSER_VIEW_VARIABLE$', $variableName);
         $this->commandData->addDynamicVariable(
             '$COMPOSER_VIEW_VARIABLE_VALUES$',
-            $model."::pluck($columns)->toArray()"
+            $model . "::pluck($columns)->toArray()"
         );
 
         $mainViewContent = $this->addViewComposer();
@@ -78,7 +79,7 @@ class ViewServiceProviderGenerator extends BaseGenerator
         $newViewStatement = get_template('scaffold.view_composer', 'laravel-generator');
         $newViewStatement = fill_template($this->commandData->dynamicVars, $newViewStatement);
 
-        $newViewStatement = infy_nl(1).$newViewStatement;
+        $newViewStatement = infy_nl(1) . $newViewStatement;
         preg_match_all('/public function boot(.*)/', $mainViewContent, $matches);
 
         $totalMatches = count($matches[0]);
@@ -97,7 +98,7 @@ class ViewServiceProviderGenerator extends BaseGenerator
 
     public function addCustomProvider()
     {
-        $configFile = base_path().'/config/app.php';
+        $configFile = base_path() . '/config/app.php';
         $file = file_get_contents($configFile);
         $searchFor = 'Illuminate\View\ViewServiceProvider::class,';
         $customProviders = strpos($file, $searchFor);
@@ -106,7 +107,7 @@ class ViewServiceProviderGenerator extends BaseGenerator
         if ($customProviders && !$isExist) {
             $newChanges = substr_replace(
                 $file,
-                infy_nl().infy_tab(8).'\App\Providers\ViewServiceProvider::class,',
+                infy_nl() . infy_tab(8) . '\App\Providers\ViewServiceProvider::class,',
                 $customProviders + strlen($searchFor),
                 0
             );
@@ -116,9 +117,9 @@ class ViewServiceProviderGenerator extends BaseGenerator
 
     public function addNamespace($model, $mainViewContent)
     {
-        $newModelStatement = 'use '.$this->commandData->config->nsModel.'\\'.$model.';';
+        $newModelStatement = 'use ' . $this->commandData->config->nsModel . '\\' . $model . ';';
         $isNameSpaceExist = strpos($mainViewContent, $newModelStatement);
-        $newModelStatement = infy_nl().$newModelStatement;
+        $newModelStatement = infy_nl() . $newModelStatement;
         if (!$isNameSpaceExist) {
             preg_match_all('/namespace(.*)/', $mainViewContent, $matches);
             $totalMatches = count($matches[0]);

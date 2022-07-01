@@ -91,7 +91,7 @@ class GeneratorFieldRelation
 
         if (count($inputs) > 0) {
             $inputFields = implode("', '", $inputs);
-            $inputFields = ", '".$inputFields."'";
+            $inputFields = ", '" . $inputFields . "'";
         } else {
             $inputFields = '';
         }

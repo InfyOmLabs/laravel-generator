@@ -19,7 +19,7 @@ class PublishBaseCommand extends BaseCommand
 
         copy($sourceFile, $destinationFile);
 
-        $this->comment($fileName.' published');
+        $this->comment($fileName . ' published');
         $this->info($destinationFile);
     }
 
@@ -40,7 +40,7 @@ class PublishBaseCommand extends BaseCommand
         File::makeDirectory($destinationDir, 493, true, true);
         File::copyDirectory($sourceDir, $destinationDir);
 
-        $this->comment($dirName.' published');
+        $this->comment($dirName . ' published');
         $this->info($destinationDir);
 
         return true;

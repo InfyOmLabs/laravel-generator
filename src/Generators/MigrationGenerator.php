@@ -3,10 +3,12 @@
 namespace InfyOm\Generator\Generators;
 
 use File;
+use SplFileInfo;
+
 use Illuminate\Support\Str;
+
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Utils\FileUtil;
-use SplFileInfo;
 
 class MigrationGenerator extends BaseGenerator
 {
@@ -32,7 +34,7 @@ class MigrationGenerator extends BaseGenerator
 
         $tableName = $this->commandData->dynamicVars['$TABLE_NAME$'];
 
-        $fileName = date('Y_m_d_His').'_'.'create_'.strtolower($tableName).'_table.php';
+        $fileName = date('Y_m_d_His') . '_' . 'create_' . strtolower($tableName) . '_table.php';
 
         FileUtil::createFile($this->path, $fileName, $templateData);
 
@@ -86,7 +88,7 @@ class MigrationGenerator extends BaseGenerator
 
     public function rollback()
     {
-        $fileName = 'create_'.$this->commandData->config->tableName.'_table.php';
+        $fileName = 'create_' . $this->commandData->config->tableName . '_table.php';
 
         /** @var SplFileInfo $allFiles */
         $allFiles = File::allFiles($this->path);
@@ -103,7 +105,7 @@ class MigrationGenerator extends BaseGenerator
             foreach ($files as $file) {
                 if (Str::contains($file, $fileName)) {
                     if ($this->rollbackFile($this->path, $file)) {
-                        $this->commandData->commandComment('Migration file deleted: '.$file);
+                        $this->commandData->commandComment('Migration file deleted: ' . $file);
                     }
                     break;
                 }

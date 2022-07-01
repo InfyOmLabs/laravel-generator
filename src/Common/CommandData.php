@@ -3,8 +3,10 @@
 namespace InfyOm\Generator\Common;
 
 use Exception;
-use Illuminate\Console\Command;
+
 use Illuminate\Support\Str;
+use Illuminate\Console\Command;
+
 use InfyOm\Generator\Events\GeneratorFileCreated;
 use InfyOm\Generator\Events\GeneratorFileCreating;
 use InfyOm\Generator\Events\GeneratorFileDeleted;
@@ -236,7 +238,7 @@ class CommandData
                         'infyom.laravel_generator.path.schema_files',
                         resource_path('model_schemas/')
                     );
-                    $filePath = $schemaFileDirector.$fieldsFileValue;
+                    $filePath = $schemaFileDirector . $fieldsFileValue;
                 }
 
                 if (!file_exists($filePath)) {

@@ -4,6 +4,7 @@ namespace InfyOm\Generator\Generators\Scaffold;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Generators\ViewServiceProviderGenerator;
@@ -110,7 +111,7 @@ class ViewGenerator extends BaseGenerator
             $templateName .= '_locale';
         }
 
-        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
+        $templateData = get_template('scaffold.views.' . $templateName, $this->templateType);
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
@@ -133,7 +134,7 @@ class ViewGenerator extends BaseGenerator
             $templateName .= '_locale';
         }
 
-        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
+        $templateData = get_template('scaffold.views.' . $templateName, $this->templateType);
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
@@ -169,7 +170,7 @@ class ViewGenerator extends BaseGenerator
                 continue;
             }
 
-            $fields .= '<th scope="col">'.str_replace("'", '', $field->name).'</th>';
+            $fields .= '<th scope="col">' . str_replace("'", '', $field->name) . '</th>';
         }
 
         return $fields;
@@ -185,7 +186,7 @@ class ViewGenerator extends BaseGenerator
             $localized = true;
         }
 
-        $headerFieldTemplate = get_template('scaffold.views.'.$templateName, $this->templateType);
+        $headerFieldTemplate = get_template('scaffold.views.' . $templateName, $this->templateType);
 
         $headerFields = [];
 
@@ -233,7 +234,7 @@ class ViewGenerator extends BaseGenerator
             $templateName .= '_locale';
         }
 
-        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
+        $templateData = get_template('scaffold.views.' . $templateName, $this->templateType);
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
@@ -301,7 +302,7 @@ class ViewGenerator extends BaseGenerator
                 $inputArr = explode(',', $field->htmlValues[1]);
                 $columns = '';
                 foreach ($inputArr as $item) {
-                    $columns .= "'$item'".',';  //e.g 'email,id,'
+                    $columns .= "'$item'" . ',';  //e.g 'email,id,'
                 }
                 $columns = substr_replace($columns, '', -1); // remove last ,
 
@@ -315,10 +316,10 @@ class ViewGenerator extends BaseGenerator
                 $tableName = $this->commandData->config->tableName;
                 $viewPath = $this->commandData->config->prefixes['view'];
                 if (!empty($viewPath)) {
-                    $tableName = $viewPath.'.'.$tableName;
+                    $tableName = $viewPath . '.' . $tableName;
                 }
 
-                $variableName = Str::singular($selectTable).'Items'; // e.g $userItems
+                $variableName = Str::singular($selectTable) . 'Items'; // e.g $userItems
 
                 $fieldTemplate = $this->generateViewComposer($tableName, $variableName, $columns, $selectTable, $modalName);
             }
@@ -334,7 +335,7 @@ class ViewGenerator extends BaseGenerator
             }
         }
 
-        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
+        $templateData = get_template('scaffold.views.' . $templateName, $this->templateType);
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         $templateData = str_replace('$FIELDS$', implode("\n\n", $this->htmlFields), $templateData);
@@ -353,11 +354,11 @@ class ViewGenerator extends BaseGenerator
 
         $viewServiceProvider = new ViewServiceProviderGenerator($this->commandData);
         $viewServiceProvider->generate();
-        $viewServiceProvider->addViewVariables($tableName.'.fields', $variableName, $columns, $selectTable, $modelName);
+        $viewServiceProvider->addViewVariables($tableName . '.fields', $variableName, $columns, $selectTable, $modelName);
 
         $fieldTemplate = str_replace(
             '$INPUT_ARR$',
-            '$'.$variableName,
+            '$' . $variableName,
             $fieldTemplate
         );
 
@@ -372,7 +373,7 @@ class ViewGenerator extends BaseGenerator
             $templateName .= '_locale';
         }
 
-        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
+        $templateData = get_template('scaffold.views.' . $templateName, $this->templateType);
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
@@ -388,7 +389,7 @@ class ViewGenerator extends BaseGenerator
             $templateName .= '_locale';
         }
 
-        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
+        $templateData = get_template('scaffold.views.' . $templateName, $this->templateType);
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
@@ -402,7 +403,7 @@ class ViewGenerator extends BaseGenerator
         if ($this->commandData->isLocalizedTemplates()) {
             $templateName .= '_locale';
         }
-        $fieldTemplate = get_template('scaffold.views.'.$templateName, $this->templateType);
+        $fieldTemplate = get_template('scaffold.views.' . $templateName, $this->templateType);
 
         $fieldsStr = '';
 
@@ -418,7 +419,7 @@ class ViewGenerator extends BaseGenerator
             $singleFieldStr = str_replace('$FIELD_NAME$', $field->name, $singleFieldStr);
             $singleFieldStr = fill_template($this->commandData->dynamicVars, $singleFieldStr);
 
-            $fieldsStr .= $singleFieldStr."\n\n";
+            $fieldsStr .= $singleFieldStr . "\n\n";
         }
 
         FileUtil::createFile($this->path, 'show_fields.blade.php', $fieldsStr);
@@ -433,7 +434,7 @@ class ViewGenerator extends BaseGenerator
             $templateName .= '_locale';
         }
 
-        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
+        $templateData = get_template('scaffold.views.' . $templateName, $this->templateType);
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
@@ -456,7 +457,7 @@ class ViewGenerator extends BaseGenerator
         if (!empty($views)) {
             $files = [];
             foreach ($views as $view) {
-                $files[] = $view.'.blade.php';
+                $files[] = $view . '.blade.php';
             }
         }
 
@@ -466,7 +467,7 @@ class ViewGenerator extends BaseGenerator
 
         foreach ($files as $file) {
             if ($this->rollbackFile($this->path, $file)) {
-                $this->commandData->commandComment($file.' file deleted');
+                $this->commandData->commandComment($file . ' file deleted');
             }
         }
     }

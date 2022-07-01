@@ -43,7 +43,7 @@ class PublishTemplateCommand extends PublishBaseCommand
      */
     public function publishGeneratorTemplates()
     {
-        $templatesPath = __DIR__.'/../../../templates';
+        $templatesPath = __DIR__ . '/../../../templates';
 
         return $this->publishDirectory($templatesPath, $this->templatesDir, 'infyom-generator-templates');
     }
@@ -55,9 +55,9 @@ class PublishTemplateCommand extends PublishBaseCommand
     {
         $templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
 
-        $templatesPath = get_templates_package_path($templateType).'/templates/scaffold';
+        $templatesPath = get_templates_package_path($templateType) . '/templates/scaffold';
 
-        return $this->publishDirectory($templatesPath, $this->templatesDir.'scaffold', 'infyom-generator-templates/scaffold', true);
+        return $this->publishDirectory($templatesPath, $this->templatesDir . 'scaffold', 'infyom-generator-templates/scaffold', true);
     }
 
     /**

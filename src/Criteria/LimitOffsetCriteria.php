@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Criteria;
 
 use Illuminate\Http\Request;
+
 use Prettus\Repository\Contracts\CriteriaInterface;
 
 class LimitOffsetCriteria implements CriteriaInterface

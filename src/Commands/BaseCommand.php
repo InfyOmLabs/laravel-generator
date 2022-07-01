@@ -4,6 +4,10 @@ namespace InfyOm\Generator\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
+
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
+
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\API\APIControllerGenerator;
 use InfyOm\Generator\Generators\API\APIRequestGenerator;
@@ -23,8 +27,6 @@ use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
 use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
 use InfyOm\Generator\Generators\SeederGenerator;
 use InfyOm\Generator\Utils\FileUtil;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 
 class BaseCommand extends Command
 {
@@ -75,8 +77,7 @@ class BaseCommand extends Command
             $repositoryGenerator->generate();
         }
 
-        if ($this->commandData->getOption('factory') || (
-            !$this->isSkip('tests') and $this->commandData->getAddOn('tests')
+        if ($this->commandData->getOption('factory') || (!$this->isSkip('tests') and $this->commandData->getAddOn('tests')
         )) {
             $factoryGenerator = new FactoryGenerator($this->commandData);
             $factoryGenerator->generate();
@@ -227,15 +228,15 @@ class BaseCommand extends Command
         foreach ($this->commandData->relations as $relation) {
             $fileFields[] = [
                 'type'     => 'relation',
-                'relation' => $relation->type.','.implode(',', $relation->inputs),
+                'relation' => $relation->type . ',' . implode(',', $relation->inputs),
             ];
         }
 
         $path = config('infyom.laravel_generator.path.schema_files', resource_path('model_schemas/'));
 
-        $fileName = $this->commandData->modelName.'.json';
+        $fileName = $this->commandData->modelName . '.json';
 
-        if (file_exists($path.$fileName) && !$this->confirmOverwrite($fileName)) {
+        if (file_exists($path . $fileName) && !$this->confirmOverwrite($fileName)) {
             return;
         }
         FileUtil::createFile($path, $fileName, json_encode($fileFields, JSON_PRETTY_PRINT));
@@ -257,12 +258,12 @@ class BaseCommand extends Command
 
         $path = config('infyom.laravel_generator.path.models_locale_files', base_path('resources/lang/en/models/'));
 
-        $fileName = $this->commandData->config->mCamelPlural.'.php';
+        $fileName = $this->commandData->config->mCamelPlural . '.php';
 
-        if (file_exists($path.$fileName) && !$this->confirmOverwrite($fileName)) {
+        if (file_exists($path . $fileName) && !$this->confirmOverwrite($fileName)) {
             return;
         }
-        $content = "<?php\n\nreturn ".var_export($locales, true).';'.\PHP_EOL;
+        $content = "<?php\n\nreturn " . var_export($locales, true) . ';' . \PHP_EOL;
         FileUtil::createFile($path, $fileName, $content);
         $this->commandData->commandComment("\nModel Locale File saved: ");
         $this->commandData->commandInfo($fileName);
@@ -277,7 +278,7 @@ class BaseCommand extends Command
     protected function confirmOverwrite($fileName, $prompt = '')
     {
         $prompt = (empty($prompt))
-            ? $fileName.' already exists. Do you want to overwrite it? [y|N]'
+            ? $fileName . ' already exists. Do you want to overwrite it? [y|N]'
             : $prompt;
 
         return $this->confirm($prompt, false);

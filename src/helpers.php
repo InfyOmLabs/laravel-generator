@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Str;
+
 use InfyOm\Generator\Common\GeneratorField;
 
 if (!function_exists('infy_tab')) {
@@ -72,7 +73,7 @@ if (!function_exists('infy_nl_tab')) {
      */
     function infy_nl_tab($lns = 1, $tabs = 1)
     {
-        return infy_nls($lns).infy_tabs($tabs);
+        return infy_nls($lns) . infy_tabs($tabs);
     }
 }
 
@@ -94,13 +95,13 @@ if (!function_exists('get_template_file_path')) {
             resource_path('infyom/infyom-generator-templates/')
         );
 
-        $path = $templatesPath.$templateName.'.stub';
+        $path = $templatesPath . $templateName . '.stub';
 
         if (file_exists($path)) {
             return $path;
         }
 
-        return get_templates_package_path($templateType).'/templates/'.$templateName.'.stub';
+        return get_templates_package_path($templateType) . '/templates/' . $templateName . '.stub';
     }
 }
 
@@ -115,7 +116,7 @@ if (!function_exists('get_templates_package_path')) {
     function get_templates_package_path($templateType)
     {
         if (strpos($templateType, '/') === false) {
-            $templateType = base_path('vendor/infyomlabs/').$templateType;
+            $templateType = base_path('vendor/infyomlabs/') . $templateType;
         }
 
         return $templateType;

@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Generators;
 
 use Illuminate\Support\Str;
+
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
@@ -30,7 +31,7 @@ class FactoryGenerator extends BaseGenerator
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathFactory;
-        $this->fileName = $this->commandData->modelName.'Factory.php';
+        $this->fileName = $this->commandData->modelName . 'Factory.php';
         //setup relations if available
         //assumes relation fields are tailed with _id if not supplied
         if (property_exists($this->commandData, 'relations')) {
@@ -41,13 +42,13 @@ class FactoryGenerator extends BaseGenerator
                     if (isset($r->inputs[1])) {
                         $field = $r->inputs[1];
                     } else {
-                        $field = Str::snake($relation).'_id';
+                        $field = Str::snake($relation) . '_id';
                     }
                     if ($field) {
                         $rel = $relation;
                         $this->relations[$field] = [
                             'relation'      => $rel,
-                            'model_class'   => $this->commandData->config->nsModel.'\\'.$relation,
+                            'model_class'   => $this->commandData->config->nsModel . '\\' . $relation,
                         ];
                     }
                 }
@@ -78,7 +79,7 @@ class FactoryGenerator extends BaseGenerator
 
         $templateData = str_replace(
             '$FIELDS$',
-            implode(','.infy_nl_tab(1, 3), $this->generateFields()),
+            implode(',' . infy_nl_tab(1, 3), $this->generateFields()),
             $templateData
         );
 
@@ -107,7 +108,7 @@ class FactoryGenerator extends BaseGenerator
         $fields = [];
 
         //get model validation rules
-        $class = $this->commandData->config->nsModel.'\\'.$this->commandData->modelName;
+        $class = $this->commandData->config->nsModel . '\\' . $this->commandData->modelName;
         $rules = $class::$rules;
         $relations = array_keys($this->relations);
 
@@ -116,7 +117,7 @@ class FactoryGenerator extends BaseGenerator
                 continue;
             }
 
-            $fieldData = "'".$field->name."' => ".'$this->faker->';
+            $fieldData = "'" . $field->name . "' => " . '$this->faker->';
             $rule = null;
             if (isset($rules[$field->name])) {
                 $rule = $rules[$field->name];
@@ -175,8 +176,8 @@ class FactoryGenerator extends BaseGenerator
                     $fakerData = "date('H:i:s')";
                     break;
                 case 'enum':
-                    $fakerData = 'randomElement('.
-                        GeneratorFieldsInputUtil::prepareValuesArrayStr($field->htmlValues).
+                    $fakerData = 'randomElement(' .
+                        GeneratorFieldsInputUtil::prepareValuesArrayStr($field->htmlValues) .
                         ')';
                     break;
                 default:
@@ -228,7 +229,7 @@ class FactoryGenerator extends BaseGenerator
         $relation = $this->relations[$fieldName]['relation'];
         $variable = Str::camel($relation);
 
-        return "'".$fieldName."' => ".'$'.$variable.'->id';
+        return "'" . $fieldName . "' => " . '$' . $variable . '->id';
     }
 
     /**
@@ -253,7 +254,7 @@ class FactoryGenerator extends BaseGenerator
                 $min = 5;
             }
 
-            return 'text('.'$this->faker->numberBetween('.$min.', '.$max.'))';
+            return 'text(' . '$this->faker->numberBetween(' . $min . ', ' . $max . '))';
         } else {
             return 'text';
         }
@@ -292,13 +293,13 @@ class FactoryGenerator extends BaseGenerator
             $qualifier = $data['model_class'];
             $variable = Str::camel($relation);
             $model = Str::studly($relation);
-            $text .= infy_nl_tab(1, 2).'$'.$variable.' = '.$model.'::first();'.
-            infy_nl_tab(1, 2).
-            'if (!$'.$variable.') {'.
-            infy_nl_tab(1, 3).
-            '$'.$variable.' = '.$model.'::factory()->create();'.
-            infy_nl_tab(1, 2).'}'.infy_nl();
-            $uses .= infy_nl()."use $qualifier;";
+            $text .= infy_nl_tab(1, 2) . '$' . $variable . ' = ' . $model . '::first();' .
+                infy_nl_tab(1, 2) .
+                'if (!$' . $variable . ') {' .
+                infy_nl_tab(1, 3) .
+                '$' . $variable . ' = ' . $model . '::factory()->create();' .
+                infy_nl_tab(1, 2) . '}' . infy_nl();
+            $uses .= infy_nl() . "use $qualifier;";
         }
 
         return [
@@ -310,7 +311,7 @@ class FactoryGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('Factory file deleted: '.$this->fileName);
+            $this->commandData->commandComment('Factory file deleted: ' . $this->fileName);
         }
     }
 }
