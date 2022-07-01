@@ -39,6 +39,7 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function orchestra_testbench_laravel() {
+function orchestra_testbench_laravel()
+{
     return __DIR__.'/../vendor/orchestra/testbench-core/laravel/';
 }

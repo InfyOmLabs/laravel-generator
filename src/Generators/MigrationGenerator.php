@@ -4,7 +4,6 @@ namespace InfyOm\Generator\Generators;
 
 use File;
 use Illuminate\Support\Str;
-use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Utils\FileUtil;
 use SplFileInfo;
 
