@@ -4,7 +4,6 @@ use InfyOm\Generator\Commands\RollbackGeneratorCommand;
 use InfyOm\Generator\Generators\API\APIControllerGenerator;
 use InfyOm\Generator\Generators\API\APIRequestGenerator;
 use InfyOm\Generator\Generators\API\APIRoutesGenerator;
-use InfyOm\Generator\Generators\FactoryGenerator;
 use InfyOm\Generator\Generators\MigrationGenerator;
 use InfyOm\Generator\Generators\ModelGenerator;
 use InfyOm\Generator\Generators\RepositoryGenerator;
@@ -20,10 +19,10 @@ beforeEach(function () {
     Mockery::getConfiguration()->setConstantsMap([
         FileUtil::class => [
             'FILE_CREATING' => 1,
-            'FILE_CREATED' => 2,
+            'FILE_CREATED'  => 2,
             'FILE_DELETING' => 3,
-            'FILE_DELETED' => 4,
-        ]
+            'FILE_DELETED'  => 4,
+        ],
     ]);
 });
 
