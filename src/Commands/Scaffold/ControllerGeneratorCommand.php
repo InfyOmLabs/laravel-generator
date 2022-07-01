@@ -30,7 +30,7 @@ class ControllerGeneratorCommand extends BaseCommand
     {
         parent::handle();
 
-        $controllerGenerator = new ControllerGenerator($this->config);
+        $controllerGenerator = new ControllerGenerator();
         $controllerGenerator->generate();
 
         $this->performPostActions();

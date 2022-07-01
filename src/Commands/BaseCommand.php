@@ -45,12 +45,13 @@ class BaseCommand extends Command
         parent::__construct();
 
         $this->composer = app()['composer'];
-
-        $this->config = new GeneratorConfig($this);
     }
 
     public function handle()
     {
+        $this->config = app(GeneratorConfig::class);
+        $this->config->setCommand($this);
+
         $this->config->init();
         $this->getFields();
     }
@@ -58,27 +59,27 @@ class BaseCommand extends Command
     public function generateCommonItems()
     {
         if (!$this->option('fromTable') and !$this->isSkip('migration')) {
-            $migrationGenerator = new MigrationGenerator($this->config);
+            $migrationGenerator = new MigrationGenerator();
             $migrationGenerator->generate();
         }
 
         if (!$this->isSkip('model')) {
-            $modelGenerator = new ModelGenerator($this->config);
+            $modelGenerator = new ModelGenerator();
             $modelGenerator->generate();
         }
 
         if (!$this->isSkip('repository') && $this->config->options->repositoryPattern) {
-            $repositoryGenerator = new RepositoryGenerator($this->config);
+            $repositoryGenerator = new RepositoryGenerator();
             $repositoryGenerator->generate();
         }
 
         if ($this->config->options->factory || (!$this->isSkip('tests') and $this->config->addons->tests)) {
-            $factoryGenerator = new FactoryGenerator($this->config);
+            $factoryGenerator = new FactoryGenerator();
             $factoryGenerator->generate();
         }
 
         if ($this->config->options->seeder) {
-            $seederGenerator = new SeederGenerator($this->config);
+            $seederGenerator = new SeederGenerator();
             $seederGenerator->generate();
         }
     }
@@ -86,31 +87,31 @@ class BaseCommand extends Command
     public function generateAPIItems()
     {
         if (!$this->isSkip('requests') and !$this->isSkip('api_requests')) {
-            $requestGenerator = new APIRequestGenerator($this->config);
+            $requestGenerator = new APIRequestGenerator();
             $requestGenerator->generate();
         }
 
         if (!$this->isSkip('controllers') and !$this->isSkip('api_controller')) {
-            $controllerGenerator = new APIControllerGenerator($this->config);
+            $controllerGenerator = new APIControllerGenerator();
             $controllerGenerator->generate();
         }
 
         if (!$this->isSkip('routes') and !$this->isSkip('api_routes')) {
-            $routesGenerator = new APIRoutesGenerator($this->config);
+            $routesGenerator = new APIRoutesGenerator();
             $routesGenerator->generate();
         }
 
         if (!$this->isSkip('tests') and $this->config->addons->tests) {
             if ($this->config->options->repositoryPattern) {
-                $repositoryTestGenerator = new RepositoryTestGenerator($this->config);
+                $repositoryTestGenerator = new RepositoryTestGenerator();
                 $repositoryTestGenerator->generate();
             }
 
-            $apiTestGenerator = new APITestGenerator($this->config);
+            $apiTestGenerator = new APITestGenerator();
             $apiTestGenerator->generate();
         }
         if ($this->config->options->resources) {
-            $apiResourceGenerator = new APIResourceGenerator($this->config);
+            $apiResourceGenerator = new APIResourceGenerator();
             $apiResourceGenerator->generate();
         }
     }
@@ -118,27 +119,27 @@ class BaseCommand extends Command
     public function generateScaffoldItems()
     {
         if (!$this->isSkip('requests') and !$this->isSkip('scaffold_requests')) {
-            $requestGenerator = new RequestGenerator($this->config);
+            $requestGenerator = new RequestGenerator();
             $requestGenerator->generate();
         }
 
         if (!$this->isSkip('controllers') and !$this->isSkip('scaffold_controller')) {
-            $controllerGenerator = new ControllerGenerator($this->config);
+            $controllerGenerator = new ControllerGenerator();
             $controllerGenerator->generate();
         }
 
         if (!$this->isSkip('views')) {
-            $viewGenerator = new ViewGenerator($this->config);
+            $viewGenerator = new ViewGenerator();
             $viewGenerator->generate();
         }
 
         if (!$this->isSkip('routes') and !$this->isSkip('scaffold_routes')) {
-            $routeGenerator = new RoutesGenerator($this->config);
+            $routeGenerator = new RoutesGenerator();
             $routeGenerator->generate();
         }
 
         if (!$this->isSkip('menu')) {
-            $menuGenerator = new MenuGenerator($this->config);
+            $menuGenerator = new MenuGenerator();
             $menuGenerator->generate();
         }
     }
@@ -500,7 +501,7 @@ class BaseCommand extends Command
         return $data;
     }
 
-    public function fireEvent($commandType, $eventType)
+    public function fireEvent(string $commandType, int $eventType)
     {
         switch ($eventType) {
             case FileUtil::FILE_CREATING:

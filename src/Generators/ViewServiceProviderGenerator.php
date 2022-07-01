@@ -3,20 +3,9 @@
 namespace InfyOm\Generator\Generators;
 
 use File;
-use InfyOm\Generator\Common\GeneratorConfig;
 
-/**
- * Class ViewServiceProviderGenerator.
- */
 class ViewServiceProviderGenerator extends BaseGenerator
 {
-    private GeneratorConfig $config;
-
-    public function __construct(GeneratorConfig $config)
-    {
-        $this->config = $config;
-    }
-
     /**
      * Generate ViewServiceProvider.
      */

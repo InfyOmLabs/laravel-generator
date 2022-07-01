@@ -3,7 +3,6 @@
 namespace InfyOm\Generator\Generators;
 
 use Illuminate\Support\Str;
-use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Common\GeneratorFieldRelation;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\TableFieldsGenerator;
@@ -21,19 +20,14 @@ class ModelGenerator extends BaseGenerator
         'deleted_at',
     ];
 
-    private GeneratorConfig $config;
+    private string $fileName;
 
-    /** @var string */
-    private $path;
-    private $fileName;
-    private $table;
-
-    public function __construct(GeneratorConfig $config)
+    public function __construct()
     {
-        $this->config = $config;
+        parent::__construct();
+
         $this->path = $this->config->paths->model;
         $this->fileName = $this->config->modelNames->name.'.php';
-        $this->table = $this->config->tableName;
     }
 
     public function generate()

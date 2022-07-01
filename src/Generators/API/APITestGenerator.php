@@ -2,21 +2,17 @@
 
 namespace InfyOm\Generator\Generators\API;
 
-use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 
 class APITestGenerator extends BaseGenerator
 {
-    private GeneratorConfig $config;
-
-    private string $path;
-
     private string $fileName;
 
-    public function __construct(GeneratorConfig $config)
+    public function __construct()
     {
-        $this->config = $config;
+        parent::__construct();
+
         $this->path = $this->config->paths->apiTests;
         $this->fileName = $this->config->modelNames->name.'ApiTest.php';
     }

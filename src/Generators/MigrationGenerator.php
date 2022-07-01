@@ -10,13 +10,10 @@ use SplFileInfo;
 
 class MigrationGenerator extends BaseGenerator
 {
-    private GeneratorConfig $config;
-
-    private string $path;
-
-    public function __construct(GeneratorConfig $config)
+    public function __construct()
     {
-        $this->config = $config;
+        parent::__construct();
+
         $this->path = config('laravel_generator.path.migration', database_path('migrations/'));
     }
 

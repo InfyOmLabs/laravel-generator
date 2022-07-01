@@ -34,11 +34,6 @@ class GeneratorConfig
     public string $primaryName;
     public string $connection;
 
-    public function __construct(Command &$command)
-    {
-        $this->command = &$command;
-    }
-
     public function init()
     {
         $this->loadModelNames();
@@ -51,6 +46,11 @@ class GeneratorConfig
         $this->prepareAddons();
         $this->prepareOptions();
         $this->loadDynamicVariables();
+    }
+
+    public function setCommand(Command &$command)
+    {
+        $this->command = &$command;
     }
 
     public function loadModelNames()

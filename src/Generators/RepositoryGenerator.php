@@ -2,20 +2,16 @@
 
 namespace InfyOm\Generator\Generators;
 
-use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Utils\FileUtil;
 
 class RepositoryGenerator extends BaseGenerator
 {
-    private GeneratorConfig $config;
-
-    private string $path;
-
     private string $fileName;
 
-    public function __construct(GeneratorConfig $config)
+    public function __construct()
     {
-        $this->config = $config;
+        parent::__construct();
+
         $this->path = $this->config->paths->repository;
         $this->fileName = $this->config->modelNames->name.'Repository.php';
     }

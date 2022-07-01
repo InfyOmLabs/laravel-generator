@@ -2,20 +2,16 @@
 
 namespace InfyOm\Generator\Generators;
 
-use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Utils\FileUtil;
 
 class RepositoryTestGenerator extends BaseGenerator
 {
-    private GeneratorConfig $config;
-
-    private string $path;
-
     private string $fileName;
 
-    public function __construct($config)
+    public function __construct()
     {
-        $this->config = $config;
+        parent::__construct();
+
         $this->path = config('laravel_generator.path.repository_test', base_path('tests/Repositories/'));
         $this->fileName = $this->config->modelNames->name.'RepositoryTest.php';
     }

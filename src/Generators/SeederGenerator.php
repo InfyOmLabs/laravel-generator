@@ -2,22 +2,16 @@
 
 namespace InfyOm\Generator\Generators;
 
-use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Utils\FileUtil;
 
-/**
- * Class SeederGenerator.
- */
 class SeederGenerator extends BaseGenerator
 {
-    private GeneratorConfig $config;
-
-    private string $path;
     private string $fileName;
 
-    public function __construct(GeneratorConfig $config)
+    public function __construct()
     {
-        $this->config = $config;
+        parent::__construct();
+
         $this->path = $this->config->paths->seeder;
         $this->fileName = $this->config->modelNames->plural.'TableSeeder.php';
     }
@@ -32,5 +26,12 @@ class SeederGenerator extends BaseGenerator
 
         $this->config->commandComment(PHP_EOL.'Seeder created: ');
         $this->config->commandInfo($this->fileName);
+    }
+
+    public function rollback()
+    {
+        if ($this->rollbackFile($this->path, $this->fileName)) {
+            $this->config->commandComment('Seeder file deleted: '.$this->fileName);
+        }
     }
 }

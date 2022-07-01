@@ -31,10 +31,10 @@ class TestsGeneratorCommand extends BaseCommand
     {
         parent::handle();
 
-        $repositoryTestGenerator = new RepositoryTestGenerator($this->config);
+        $repositoryTestGenerator = new RepositoryTestGenerator();
         $repositoryTestGenerator->generate();
 
-        $apiTestGenerator = new APITestGenerator($this->config);
+        $apiTestGenerator = new APITestGenerator();
         $apiTestGenerator->generate();
 
         $this->performPostActions();

@@ -30,7 +30,7 @@ class ModelGeneratorCommand extends BaseCommand
     {
         parent::handle();
 
-        $modelGenerator = new ModelGenerator($this->config);
+        $modelGenerator = new ModelGenerator();
         $modelGenerator->generate();
 
         $this->performPostActions();

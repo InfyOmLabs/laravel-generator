@@ -36,7 +36,7 @@ class MigrationGeneratorCommand extends BaseCommand
             return;
         }
 
-        $migrationGenerator = new MigrationGenerator($this->config);
+        $migrationGenerator = new MigrationGenerator();
         $migrationGenerator->generate();
 
         $this->performPostActionsWithMigration();

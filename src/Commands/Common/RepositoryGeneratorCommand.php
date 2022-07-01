@@ -30,7 +30,7 @@ class RepositoryGeneratorCommand extends BaseCommand
     {
         parent::handle();
 
-        $repositoryGenerator = new RepositoryGenerator($this->config);
+        $repositoryGenerator = new RepositoryGenerator();
         $repositoryGenerator->generate();
 
         $this->performPostActions();

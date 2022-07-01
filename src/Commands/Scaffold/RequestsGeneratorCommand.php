@@ -30,7 +30,7 @@ class RequestsGeneratorCommand extends BaseCommand
     {
         parent::handle();
 
-        $requestGenerator = new RequestGenerator($this->config);
+        $requestGenerator = new RequestGenerator();
         $requestGenerator->generate();
 
         $this->performPostActions();

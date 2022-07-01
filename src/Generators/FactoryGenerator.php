@@ -3,26 +3,19 @@
 namespace InfyOm\Generator\Generators;
 
 use Illuminate\Support\Str;
-use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
 
-/**
- * Class FactoryGenerator.
- */
 class FactoryGenerator extends BaseGenerator
 {
-    private GeneratorConfig $config;
-
-    private string $path;
-
     private string $fileName;
 
     private array $relations = [];
 
-    public function __construct(GeneratorConfig $config)
+    public function __construct()
     {
-        $this->config = $config;
+        parent::__construct();
+
         $this->path = $this->config->paths->factory;
         $this->fileName = $this->config->modelNames->name.'Factory.php';
         //setup relations if available

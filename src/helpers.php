@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Str;
 use InfyOm\Generator\Common\GeneratorField;
+use InfyOm\Generator\Utils\FileUtil;
 
 if (!function_exists('infy_tab')) {
     function infy_tab(int $spaces = 4): string
@@ -74,7 +75,7 @@ if (!function_exists('get_template')) {
     {
         $path = get_template_file_path($templateName, $templateType);
 
-        return file_get_contents($path);
+        return FileUtil::getFile($path);
     }
 }
 

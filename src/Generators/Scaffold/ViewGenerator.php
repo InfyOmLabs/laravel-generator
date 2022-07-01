@@ -4,7 +4,6 @@ namespace InfyOm\Generator\Generators\Scaffold;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Generators\ViewServiceProviderGenerator;
 use InfyOm\Generator\Utils\FileUtil;
@@ -12,17 +11,14 @@ use InfyOm\Generator\Utils\HTMLFieldGenerator;
 
 class ViewGenerator extends BaseGenerator
 {
-    private GeneratorConfig $config;
-
-    private string $path;
-
     private string $templateType;
 
     private array $htmlFields;
 
-    public function __construct(GeneratorConfig $config)
+    public function __construct()
     {
-        $this->config = $config;
+        parent::__construct();
+
         $this->path = $this->config->paths->views;
         $this->templateType = config('laravel_generator.templates', 'adminlte-templates');
     }
@@ -348,7 +344,7 @@ class ViewGenerator extends BaseGenerator
         }
         $fieldTemplate = get_template($templateName, $this->templateType);
 
-        $viewServiceProvider = new ViewServiceProviderGenerator($this->config);
+        $viewServiceProvider = new ViewServiceProviderGenerator();
         $viewServiceProvider->generate();
         $viewServiceProvider->addViewVariables($tableName.'.fields', $variableName, $columns, $selectTable, $modelName);
 

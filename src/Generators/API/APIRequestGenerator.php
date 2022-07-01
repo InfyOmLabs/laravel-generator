@@ -2,24 +2,20 @@
 
 namespace InfyOm\Generator\Generators\API;
 
-use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Generators\ModelGenerator;
 use InfyOm\Generator\Utils\FileUtil;
 
 class APIRequestGenerator extends BaseGenerator
 {
-    private GeneratorConfig $config;
-
-    private string $path;
-
     private string $createFileName;
 
     private string $updateFileName;
 
-    public function __construct(GeneratorConfig $config)
+    public function __construct()
     {
-        $this->config = $config;
+        parent::__construct();
+
         $this->path = $this->config->paths->apiRequest;
         $this->createFileName = 'Create'.$this->config->modelNames->name.'APIRequest.php';
         $this->updateFileName = 'Update'.$this->config->modelNames->name.'APIRequest.php';
@@ -60,7 +56,7 @@ class APIRequestGenerator extends BaseGenerator
      */
     private function generateUpdateRequest()
     {
-        $modelGenerator = new ModelGenerator($this->config);
+        $modelGenerator = new ModelGenerator();
         $rules = $modelGenerator->generateUniqueRules();
         $this->config->addDynamicVariable('$UNIQUE_RULES$', $rules);
 

@@ -30,7 +30,7 @@ class ViewsGeneratorCommand extends BaseCommand
     {
         parent::handle();
 
-        $viewGenerator = new ViewGenerator($this->config);
+        $viewGenerator = new ViewGenerator();
         $viewGenerator->generate();
 
         $this->performPostActions();

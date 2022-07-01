@@ -12,16 +12,16 @@ class FileUtil
     const FILE_DELETING = 3;
     const FILE_DELETED = 4;
 
-    /**
-     * Create a new File.
-     *
-     * @param string $path
-     * @param string $fileName
-     * @param string $contents
-     *
-     * @return bool|int
-     */
-    public static function createFile($path, $fileName, $contents)
+    public static function getFile(string $path)
+    {
+        if (!file_exists($path)) {
+            return '';
+        }
+
+        return file_get_contents($path);
+    }
+
+    public static function createFile(string $path, string $fileName, string $contents)
     {
         if (!empty($path) && !file_exists($path)) {
             return mkdir($path, 0755, true);
@@ -32,15 +32,7 @@ class FileUtil
         return file_put_contents($path, $contents);
     }
 
-    /**
-     * Create a Directory if it does not exists.
-     *
-     * @param string $path
-     * @param bool   $replace
-     *
-     * @return bool
-     */
-    public static function createDirectoryIfNotExist($path, $replace = false)
+    public static function createDirectoryIfNotExist(string $path, bool $replace = false)
     {
         if (!empty($path) && file_exists($path) && $replace) {
             return rmdir($path);
@@ -53,15 +45,7 @@ class FileUtil
         return false;
     }
 
-    /**
-     * Delete a file.
-     *
-     * @param string $path
-     * @param string $fileName
-     *
-     * @return bool
-     */
-    public static function deleteFile($path, $fileName)
+    public static function deleteFile(string $path, string $fileName)
     {
         if (file_exists($path.$fileName)) {
             return unlink($path.$fileName);
