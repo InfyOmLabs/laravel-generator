@@ -94,7 +94,7 @@ class ViewGenerator extends BaseGenerator
                 break;
 
             default:
-                throw new Exception("Invalid Table Type");
+                throw new Exception('Invalid Table Type');
         }
 
         FileUtil::createFile($this->path, 'table.blade.php', $templateData);

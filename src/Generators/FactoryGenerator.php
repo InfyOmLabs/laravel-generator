@@ -242,6 +242,7 @@ class FactoryGenerator extends BaseGenerator
         }
         if ($i !== false) {
             $len = $e - ($i + 4);
+
             return substr($rule, $i + 4, $len);
         }
 

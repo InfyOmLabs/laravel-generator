@@ -491,7 +491,7 @@ class BaseCommand extends Command
         return [
             'modelName' => $this->config->modelNames->name,
             'tableName' => $this->config->tableName,
-            'nsModel' => $this->config->namespaces->model,
+            'nsModel'   => $this->config->namespaces->model,
         ];
     }
 
