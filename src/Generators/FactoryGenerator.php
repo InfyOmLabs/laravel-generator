@@ -32,7 +32,7 @@ class FactoryGenerator extends BaseGenerator
                         $rel = $relation;
                         $this->relations[$field] = [
                             'relation'      => $rel,
-                            'model_class'   => $this->config->config->nsModel.'\\'.$relation,
+                            'model_class'   => $this->config->namespaces->model.'\\'.$relation,
                         ];
                     }
                 }
@@ -83,7 +83,10 @@ class FactoryGenerator extends BaseGenerator
 
         //get model validation rules
         $class = $this->config->namespaces->model.'\\'.$this->config->modelNames->name;
-        $rules = $class::$rules;
+        $rules = [];
+        if (class_exists($class)) {
+            $rules = $class::$rules;
+        }
         $relations = array_keys($this->relations);
 
         foreach ($this->config->fields as $field) {

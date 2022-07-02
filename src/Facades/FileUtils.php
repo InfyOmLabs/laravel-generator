@@ -13,16 +13,18 @@ class FileUtils extends Facade
         return FileSystem::class;
     }
 
-    public static function fake()
+    public static function fake($allowedMethods = [])
     {
-        $fake = Mockery::mock()->allows([
-            'getFile'                   => '',
-            'createFile'                => true,
-            'createDirectoryIfNotExist' => true,
-            'deleteFile'                => true,
-        ]);
+        if (empty($allowedMethods)) {
+            $allowedMethods = [
+                'getFile' => '',
+                'createFile' => true,
+                'createDirectoryIfNotExist' => true,
+                'deleteFile' => true,
+            ];
+        }
 
-        static::swap($fake);
+        static::swap($fake = Mockery::mock()->allows($allowedMethods));
 
         return $fake;
     }
