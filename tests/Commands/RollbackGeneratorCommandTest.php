@@ -28,7 +28,7 @@ it('fails with invalid rollback type', function () {
         ->assertExitCode(1);
 });
 
-function mockShouldHaveCalledGenerator(array $shouldHaveCalledGenerators): array
+function mockShouldHaveCalledRollbackGenerator(array $shouldHaveCalledGenerators): array
 {
     $mockedObjects = [];
 
@@ -49,7 +49,7 @@ function mockShouldHaveCalledGenerator(array $shouldHaveCalledGenerators): array
     return $mockedObjects;
 }
 
-function mockShouldNotHaveCalledGenerators(array $shouldNotHaveCalledGenerator): array
+function mockShouldNotHaveCalledRollbackGenerators(array $shouldNotHaveCalledGenerator): array
 {
     $mockedObjects = [];
 
@@ -86,13 +86,13 @@ it('validates that all files are rolled back for api_scaffold', function () {
         APITestGenerator::class,
     ];
 
-    mockShouldHaveCalledGenerator($shouldHaveCalledGenerators);
+    mockShouldHaveCalledRollbackGenerator($shouldHaveCalledGenerators);
 
     $shouldNotHaveCalledGenerator = [
         SeederGenerator::class,
     ];
 
-    mockShouldNotHaveCalledGenerators($shouldNotHaveCalledGenerator);
+    mockShouldNotHaveCalledRollbackGenerators($shouldNotHaveCalledGenerator);
 
     config()->set('laravel_generator.add_ons.tests', true);
 
@@ -110,7 +110,7 @@ it('validates that all files are rolled back for api', function () {
         SeederGenerator::class,
     ];
 
-    mockShouldHaveCalledGenerator($shouldHaveCalledGenerators);
+    mockShouldHaveCalledRollbackGenerator($shouldHaveCalledGenerators);
 
     $shouldNotHaveCalledGenerator = [
         RepositoryGenerator::class,
@@ -121,7 +121,7 @@ it('validates that all files are rolled back for api', function () {
         MenuGenerator::class,
     ];
 
-    mockShouldNotHaveCalledGenerators($shouldNotHaveCalledGenerator);
+    mockShouldNotHaveCalledRollbackGenerators($shouldNotHaveCalledGenerator);
 
     config()->set('laravel_generator.options.repository_pattern', false);
     config()->set('laravel_generator.options.factory', true);
@@ -142,7 +142,7 @@ it('validates that all files are rolled back for scaffold', function () {
         MenuGenerator::class,
     ];
 
-    mockShouldHaveCalledGenerator($shouldHaveCalledGenerators);
+    mockShouldHaveCalledRollbackGenerator($shouldHaveCalledGenerators);
 
     $shouldNotHaveCalledGenerator = [
         APIRequestGenerator::class,
@@ -150,7 +150,7 @@ it('validates that all files are rolled back for scaffold', function () {
         APIRoutesGenerator::class,
     ];
 
-    mockShouldNotHaveCalledGenerators($shouldNotHaveCalledGenerator);
+    mockShouldNotHaveCalledRollbackGenerators($shouldNotHaveCalledGenerator);
 
     config()->set('laravel_generator.add_ons.tests', true);
 

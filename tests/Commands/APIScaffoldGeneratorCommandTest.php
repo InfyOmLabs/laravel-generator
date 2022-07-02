@@ -27,7 +27,7 @@ afterEach(function () {
     m::close();
 });
 
-function mockShouldHaveCalledGenerator(array $shouldHaveCalledGenerators): array
+function mockShouldHaveCalledAPIScaffoldGenerator(array $shouldHaveCalledGenerators): array
 {
     $mockedObjects = [];
 
@@ -48,7 +48,7 @@ function mockShouldHaveCalledGenerator(array $shouldHaveCalledGenerators): array
     return $mockedObjects;
 }
 
-function mockShouldNotHaveCalledGenerators(array $shouldNotHaveCalledGenerator): array
+function mockShouldNotHaveCalledAPIScaffoldGenerators(array $shouldNotHaveCalledGenerator): array
 {
     $mockedObjects = [];
 
@@ -82,7 +82,7 @@ it('generates all files for api_scaffold', function () {
         MenuGenerator::class,
     ];
 
-    mockShouldHaveCalledGenerator($shouldHaveCalledGenerators);
+    mockShouldHaveCalledAPIScaffoldGenerator($shouldHaveCalledGenerators);
 
     $shouldNotHaveCalledGenerator = [
         RepositoryTestGenerator::class,
@@ -91,7 +91,7 @@ it('generates all files for api_scaffold', function () {
         SeederGenerator::class,
     ];
 
-    mockShouldNotHaveCalledGenerators($shouldNotHaveCalledGenerator);
+    mockShouldNotHaveCalledAPIScaffoldGenerators($shouldNotHaveCalledGenerator);
 
     artisan(APIScaffoldGeneratorCommand::class, ['model' => 'Post'])
         ->expectsQuestion('Field: (name db_type html_type options)', 'title body text')
