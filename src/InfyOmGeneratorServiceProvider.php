@@ -4,6 +4,7 @@ namespace InfyOm\Generator;
 
 use Illuminate\Support\ServiceProvider;
 use InfyOm\Generator\Commands\API\APIControllerGeneratorCommand;
+use InfyOm\Generator\Commands\API\APIGeneratorCommand;
 use InfyOm\Generator\Commands\API\APIRequestsGeneratorCommand;
 use InfyOm\Generator\Commands\API\TestsGeneratorCommand;
 use InfyOm\Generator\Commands\APIScaffoldGeneratorCommand;
@@ -64,6 +65,8 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
 
         $this->commands([
             APIScaffoldGeneratorCommand::class,
+
+            APIGeneratorCommand::class,
             APIControllerGeneratorCommand::class,
             APIRequestsGeneratorCommand::class,
             TestsGeneratorCommand::class,

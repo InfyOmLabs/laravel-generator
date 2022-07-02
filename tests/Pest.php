@@ -38,3 +38,5 @@ expect()->extend('toBeOne', function () {
 | global functions to help you to reduce the number of lines of code in your test files.
 |
 */
+
+include_once 'TestHelpers.php';

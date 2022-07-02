@@ -1,6 +1,6 @@
 <?php
 
-use InfyOm\Generator\Commands\APIScaffoldGeneratorCommand;
+use InfyOm\Generator\Commands\API\APIGeneratorCommand;
 use InfyOm\Generator\Facades\FileUtils;
 use InfyOm\Generator\Generators\API\APIControllerGenerator;
 use InfyOm\Generator\Generators\API\APIRequestGenerator;
@@ -24,27 +24,27 @@ afterEach(function () {
     m::close();
 });
 
-it('generates all files for api_scaffold from console', function () {
+it('generates all files for api from console', function () {
     FileUtils::fake();
 
     $shouldHaveCalledGenerators = [
         MigrationGenerator::class,
         ModelGenerator::class,
-        RepositoryGenerator::class,
         APIRequestGenerator::class,
         APIControllerGenerator::class,
         APIRoutesGenerator::class,
-        RequestGenerator::class,
-        ControllerGenerator::class,
-        ViewGenerator::class,
-        RoutesGenerator::class,
-        MenuGenerator::class,
         SeederGenerator::class,
     ];
 
     mockShouldHaveCalledGenerateMethod($shouldHaveCalledGenerators);
 
     $shouldNotHaveCalledGenerator = [
+        RepositoryGenerator::class,
+        RequestGenerator::class,
+        ControllerGenerator::class,
+        ViewGenerator::class,
+        RoutesGenerator::class,
+        MenuGenerator::class,
         RepositoryTestGenerator::class,
         APITestGenerator::class,
         FactoryGenerator::class,
@@ -53,8 +53,9 @@ it('generates all files for api_scaffold from console', function () {
     mockShouldNotHaveCalledGenerateMethod($shouldNotHaveCalledGenerator);
 
     config()->set('laravel_generator.options.seeder', true);
+    config()->set('laravel_generator.options.repository_pattern', false);
 
-    artisan(APIScaffoldGeneratorCommand::class, ['model' => 'Post'])
+    artisan(APIGeneratorCommand::class, ['model' => 'Post'])
         ->expectsQuestion('Field: (name db_type html_type options)', 'title body text')
         ->expectsQuestion('Enter validations: ', 'required')
         ->expectsQuestion('Field: (name db_type html_type options)', 'exit')
@@ -62,7 +63,7 @@ it('generates all files for api_scaffold from console', function () {
         ->assertSuccessful();
 });
 
-it('generates all files for api_scaffold from fields file', function () {
+it('generates all files for api from fields file', function () {
     $fileUtils = FileUtils::fake([
         'createFile'                => true,
         'createDirectoryIfNotExist' => true,
@@ -76,6 +77,11 @@ it('generates all files for api_scaffold from fields file', function () {
         APIRequestGenerator::class,
         APIControllerGenerator::class,
         APIRoutesGenerator::class,
+    ];
+
+    mockShouldHaveCalledGenerateMethod($shouldHaveCalledGenerators);
+
+    $shouldNotHaveCalledGenerator = [
         RequestGenerator::class,
         ControllerGenerator::class,
         ViewGenerator::class,
@@ -84,17 +90,10 @@ it('generates all files for api_scaffold from fields file', function () {
         RepositoryTestGenerator::class,
         APITestGenerator::class,
         FactoryGenerator::class,
-    ];
-
-    mockShouldHaveCalledGenerateMethod($shouldHaveCalledGenerators);
-
-    $shouldNotHaveCalledGenerator = [
         SeederGenerator::class,
     ];
 
     mockShouldNotHaveCalledGenerateMethod($shouldNotHaveCalledGenerator);
-
-    config()->set('laravel_generator.add_ons.tests', true);
 
     $modelSchemaFile = __DIR__.'/../fixtures/model_schema/Post.json';
 
@@ -104,7 +103,7 @@ it('generates all files for api_scaffold from fields file', function () {
     $fileUtils->shouldReceive('getFile')
         ->andReturn('');
 
-    artisan(APIScaffoldGeneratorCommand::class, ['model' => 'Post', '--fieldsFile' => $modelSchemaFile])
+    artisan(APIGeneratorCommand::class, ['model' => 'Post', '--fieldsFile' => $modelSchemaFile])
         ->expectsQuestion(PHP_EOL.'Do you want to migrate database? [y|N]', false)
         ->assertSuccessful();
 });
