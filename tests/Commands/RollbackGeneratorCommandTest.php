@@ -42,7 +42,6 @@ it('fails with invalid rollback type', function () {
 });
 
 it('validates that all files are rolled back for api_scaffold', function () {
-
     $shouldHaveCalledGenerators = [
         MigrationGenerator::class,
         ModelGenerator::class,
