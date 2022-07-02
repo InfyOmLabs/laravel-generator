@@ -20,7 +20,7 @@ use Mockery as m;
 use function Pest\Laravel\artisan;
 
 beforeEach(function () {
-   FileUtils::fake();
+    FileUtils::fake();
 });
 
 afterEach(function () {
