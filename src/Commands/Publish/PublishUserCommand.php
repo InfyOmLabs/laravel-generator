@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpUnusedAliasInspection */
+<?php
 
 namespace InfyOm\Generator\Commands\Publish;
 
