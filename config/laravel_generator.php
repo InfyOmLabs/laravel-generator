@@ -187,7 +187,7 @@ return [
     |
     */
 
-    'add_on' => [
+    'add_ons' => [
 
         'swagger'       => false, // generate swagger for your APIs
 

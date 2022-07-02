@@ -19,20 +19,7 @@ use InfyOm\Generator\Generators\SeederGenerator;
 use Mockery as m;
 use function Pest\Laravel\artisan;
 
-//beforeEach(function () {
-//    m::getConfiguration()->setConstantsMap([
-//        FileUtil::class => [
-//            'FILE_CREATING' => 1,
-//            'FILE_CREATED' => 2,
-//            'FILE_DELETING' => 3,
-//            'FILE_DELETED' => 4,
-//        ],
-//    ]);
-//});
-
 afterEach(function () {
-    m::getConfiguration()->setConstantsMap([]);
-
     m::close();
 });
 
@@ -91,7 +78,7 @@ it('validates that all files are rolled back for api_scaffold', function () {
         $mockedObjects[] = $mock;
     }
 
-    config()->set('laravel_generator.add_on.tests', true);
+    config()->set('laravel_generator.add_ons.tests', true);
 
     artisan(RollbackGeneratorCommand::class, ['model' => 'User', 'type' => 'api_scaffold']);
 });

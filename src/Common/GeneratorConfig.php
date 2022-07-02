@@ -353,8 +353,8 @@ class GeneratorConfig
     public function prepareAddons()
     {
         $addons = new GeneratorAddons();
-        $addons->swagger = config('laravel_generator.add_on.swagger', false);
-        $addons->tests = config('laravel_generator.add_on.tests', false);
+        $addons->swagger = config('laravel_generator.add_ons.swagger', false);
+        $addons->tests = config('laravel_generator.add_ons.tests', false);
 
         $this->addons = $addons;
     }
