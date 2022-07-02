@@ -52,13 +52,13 @@ class ViewServiceProviderGenerator extends BaseGenerator
         $mainViewContent = $this->addNamespace($model, $mainViewContent);
         $this->addCustomProvider();
 
-        file_put_contents($this->config->paths->viewProvider, $mainViewContent);
+        g_filesystem()->createFile($this->config->paths->viewProvider, $mainViewContent);
         $this->config->commandComment('View service provider file updated.');
     }
 
     public function addViewComposer(): string
     {
-        $mainViewContent = file_get_contents($this->config->paths->viewProvider);
+        $mainViewContent = g_filesystem()->getFile($this->config->paths->viewProvider);
         $newViewStatement = get_template('scaffold.view_composer', 'laravel-generator');
         $newViewStatement = fill_template($this->config->dynamicVars, $newViewStatement);
 
@@ -81,7 +81,7 @@ class ViewServiceProviderGenerator extends BaseGenerator
     public function addCustomProvider()
     {
         $configFile = base_path().'/config/app.php';
-        $file = file_get_contents($configFile);
+        $file = g_filesystem()->getFile($configFile);
         $searchFor = 'Illuminate\View\ViewServiceProvider::class,';
         $customProviders = strpos($file, $searchFor);
 
@@ -93,7 +93,7 @@ class ViewServiceProviderGenerator extends BaseGenerator
                 $customProviders + strlen($searchFor),
                 0
             );
-            file_put_contents($configFile, $newChanges);
+            g_filesystem()->createFile($configFile, $newChanges);
         }
     }
 

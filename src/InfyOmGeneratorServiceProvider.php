@@ -99,7 +99,7 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
             return new GeneratorConfig();
         });
 
-        $this->app->singleton('generator_filesystem', function () {
+        $this->app->singleton(FileSystem::class, function () {
             return new FileSystem();
         });
 

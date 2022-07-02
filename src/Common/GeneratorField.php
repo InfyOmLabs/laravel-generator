@@ -10,7 +10,6 @@ class GeneratorField
     /** @var string */
     public string $name;
     public string $dbInput;
-    public string $htmlInput;
     public $htmlType;
     public $fieldType;
     public string $description;
@@ -19,7 +18,7 @@ class GeneratorField
 
     public string $migrationText;
     public string $foreignKeyText;
-    public string $validations;
+    public string $validations = '';
 
     public bool $isSearchable = true;
     public bool $isFillable = true;
@@ -47,7 +46,6 @@ class GeneratorField
 
     public function parseHtmlInput($htmlInput)
     {
-        $this->htmlInput = $htmlInput;
         $this->htmlValues = [];
 
         if (empty($htmlInput)) {

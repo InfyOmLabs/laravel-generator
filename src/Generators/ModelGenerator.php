@@ -33,7 +33,7 @@ class ModelGenerator extends BaseGenerator
 
         $templateData = $this->fillTemplate($templateData);
 
-        g_filesystem()->createFile($this->path, $this->fileName, $templateData);
+        g_filesystem()->createFile($this->path.$this->fileName, $templateData);
 
         $this->config->commandComment(PHP_EOL.'Model created: ');
         $this->config->commandInfo($this->fileName);

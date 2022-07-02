@@ -36,7 +36,7 @@ class MenuGenerator extends BaseGenerator
     public function generate()
     {
         $this->menuContents .= $this->menuTemplate.infy_nl();
-        $existingMenuContents = file_get_contents($this->path);
+        $existingMenuContents = g_filesystem()->getFile($this->path);
         // adminlte uses <p> tab and coreui+stisla uses <span> tag for menu
         if (Str::contains($existingMenuContents, '<p>'.$this->config->modelNames->humanPlural.'</p>') or
             Str::contains($existingMenuContents, '<span>'.$this->config->modelNames->humanPlural.'</span>')) {
@@ -45,14 +45,14 @@ class MenuGenerator extends BaseGenerator
             return;
         }
 
-        file_put_contents($this->path, $this->menuContents);
+        g_filesystem()->createFile($this->path, $this->menuContents);
         $this->config->commandComment(PHP_EOL.$this->config->modelNames->dashedPlural.' menu added.');
     }
 
     public function rollback()
     {
         if (Str::contains($this->menuContents, $this->menuTemplate)) {
-            file_put_contents($this->path, str_replace($this->menuTemplate, '', $this->menuContents));
+            g_filesystem()->createFile($this->path, str_replace($this->menuTemplate, '', $this->menuContents));
             $this->config->commandComment('menu deleted');
         }
     }

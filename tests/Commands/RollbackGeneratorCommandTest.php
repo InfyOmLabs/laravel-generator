@@ -30,7 +30,6 @@ it('fails with invalid rollback type', function () {
 
 function mockShouldHaveCalledGenerator(array $shouldHaveCalledGenerators): array
 {
-
     $mockedObjects = [];
 
     foreach ($shouldHaveCalledGenerators as $generator) {
@@ -50,8 +49,8 @@ function mockShouldHaveCalledGenerator(array $shouldHaveCalledGenerators): array
     return $mockedObjects;
 }
 
-function mockShouldNotHaveCalledGenerators(array $shouldNotHaveCalledGenerator): array {
-
+function mockShouldNotHaveCalledGenerators(array $shouldNotHaveCalledGenerator): array
+{
     $mockedObjects = [];
 
     foreach ($shouldNotHaveCalledGenerator as $generator) {
@@ -82,6 +81,7 @@ it('validates that all files are rolled back for api_scaffold', function () {
         ViewGenerator::class,
         RoutesGenerator::class,
         MenuGenerator::class,
+        FactoryGenerator::class,
         RepositoryTestGenerator::class,
         APITestGenerator::class,
     ];
@@ -89,7 +89,6 @@ it('validates that all files are rolled back for api_scaffold', function () {
     mockShouldHaveCalledGenerator($shouldHaveCalledGenerators);
 
     $shouldNotHaveCalledGenerator = [
-        FactoryGenerator::class,
         SeederGenerator::class,
     ];
 
@@ -104,7 +103,6 @@ it('validates that all files are rolled back for api', function () {
     $shouldHaveCalledGenerators = [
         MigrationGenerator::class,
         ModelGenerator::class,
-        RepositoryGenerator::class,
         APIRequestGenerator::class,
         APIControllerGenerator::class,
         APIRoutesGenerator::class,
@@ -115,6 +113,7 @@ it('validates that all files are rolled back for api', function () {
     mockShouldHaveCalledGenerator($shouldHaveCalledGenerators);
 
     $shouldNotHaveCalledGenerator = [
+        RepositoryGenerator::class,
         RequestGenerator::class,
         ControllerGenerator::class,
         ViewGenerator::class,
@@ -124,6 +123,7 @@ it('validates that all files are rolled back for api', function () {
 
     mockShouldNotHaveCalledGenerators($shouldNotHaveCalledGenerator);
 
+    config()->set('laravel_generator.options.repository_pattern', false);
     config()->set('laravel_generator.options.factory', true);
     config()->set('laravel_generator.options.seeder', true);
 

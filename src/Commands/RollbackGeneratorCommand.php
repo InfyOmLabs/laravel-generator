@@ -102,7 +102,7 @@ class RollbackGeneratorCommand extends BaseCommand
             $apiTestGenerator->rollback();
         }
 
-        if ($this->config->options->factory) {
+        if ($this->config->options->factory or $this->config->addons->tests) {
             $factoryGenerator = app(FactoryGenerator::class);
             $factoryGenerator->rollback();
         }

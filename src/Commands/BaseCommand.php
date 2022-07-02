@@ -58,27 +58,27 @@ class BaseCommand extends Command
     public function generateCommonItems()
     {
         if (!$this->option('fromTable') and !$this->isSkip('migration')) {
-            $migrationGenerator = new MigrationGenerator();
+            $migrationGenerator = app(MigrationGenerator::class);
             $migrationGenerator->generate();
         }
 
         if (!$this->isSkip('model')) {
-            $modelGenerator = new ModelGenerator();
+            $modelGenerator = app(ModelGenerator::class);
             $modelGenerator->generate();
         }
 
         if (!$this->isSkip('repository') && $this->config->options->repositoryPattern) {
-            $repositoryGenerator = new RepositoryGenerator();
+            $repositoryGenerator = app(RepositoryGenerator::class);
             $repositoryGenerator->generate();
         }
 
         if ($this->config->options->factory || (!$this->isSkip('tests') and $this->config->addons->tests)) {
-            $factoryGenerator = new FactoryGenerator();
+            $factoryGenerator = app(FactoryGenerator::class);
             $factoryGenerator->generate();
         }
 
         if ($this->config->options->seeder) {
-            $seederGenerator = new SeederGenerator();
+            $seederGenerator = app(SeederGenerator::class);
             $seederGenerator->generate();
         }
     }
@@ -86,31 +86,31 @@ class BaseCommand extends Command
     public function generateAPIItems()
     {
         if (!$this->isSkip('requests') and !$this->isSkip('api_requests')) {
-            $requestGenerator = new APIRequestGenerator();
+            $requestGenerator = app(APIRequestGenerator::class);
             $requestGenerator->generate();
         }
 
         if (!$this->isSkip('controllers') and !$this->isSkip('api_controller')) {
-            $controllerGenerator = new APIControllerGenerator();
+            $controllerGenerator = app(APIControllerGenerator::class);
             $controllerGenerator->generate();
         }
 
         if (!$this->isSkip('routes') and !$this->isSkip('api_routes')) {
-            $routesGenerator = new APIRoutesGenerator();
+            $routesGenerator = app(APIRoutesGenerator::class);
             $routesGenerator->generate();
         }
 
         if (!$this->isSkip('tests') and $this->config->addons->tests) {
             if ($this->config->options->repositoryPattern) {
-                $repositoryTestGenerator = new RepositoryTestGenerator();
+                $repositoryTestGenerator = app(RepositoryTestGenerator::class);
                 $repositoryTestGenerator->generate();
             }
 
-            $apiTestGenerator = new APITestGenerator();
+            $apiTestGenerator = app(APITestGenerator::class);
             $apiTestGenerator->generate();
         }
         if ($this->config->options->resources) {
-            $apiResourceGenerator = new APIResourceGenerator();
+            $apiResourceGenerator = app(APIResourceGenerator::class);
             $apiResourceGenerator->generate();
         }
     }
@@ -118,27 +118,27 @@ class BaseCommand extends Command
     public function generateScaffoldItems()
     {
         if (!$this->isSkip('requests') and !$this->isSkip('scaffold_requests')) {
-            $requestGenerator = new RequestGenerator();
+            $requestGenerator = app(RequestGenerator::class);
             $requestGenerator->generate();
         }
 
         if (!$this->isSkip('controllers') and !$this->isSkip('scaffold_controller')) {
-            $controllerGenerator = new ControllerGenerator();
+            $controllerGenerator = app(ControllerGenerator::class);
             $controllerGenerator->generate();
         }
 
         if (!$this->isSkip('views')) {
-            $viewGenerator = new ViewGenerator();
+            $viewGenerator = app(ViewGenerator::class);
             $viewGenerator->generate();
         }
 
         if (!$this->isSkip('routes') and !$this->isSkip('scaffold_routes')) {
-            $routeGenerator = new RoutesGenerator();
+            $routeGenerator = app(RoutesGenerator::class);
             $routeGenerator->generate();
         }
 
         if (!$this->isSkip('menu')) {
-            $menuGenerator = new MenuGenerator();
+            $menuGenerator = app(MenuGenerator::class);
             $menuGenerator->generate();
         }
     }
@@ -156,7 +156,7 @@ class BaseCommand extends Command
                 $requestFromConsole = (php_sapi_name() == 'cli');
                 if ($this->option('jsonFromGUI') && $requestFromConsole) {
                     $this->runMigration();
-                } elseif ($requestFromConsole && $this->confirm("\nDo you want to migrate database? [y|N]", false)) {
+                } elseif ($requestFromConsole && $this->confirm(PHP_EOL.'Do you want to migrate database? [y|N]', false)) {
                     $this->runMigration();
                 }
             }
@@ -203,7 +203,7 @@ class BaseCommand extends Command
             $fileFields[] = [
                 'name'        => $field->name,
                 'dbType'      => $field->dbInput,
-                'htmlType'    => $field->htmlInput,
+                'htmlType'    => $field->htmlType,
                 'validations' => $field->validations,
                 'searchable'  => $field->isSearchable,
                 'fillable'    => $field->isFillable,
@@ -228,7 +228,7 @@ class BaseCommand extends Command
         if (file_exists($path.$fileName) && !$this->confirmOverwrite($fileName)) {
             return;
         }
-        g_filesystem()->createFile($path, $fileName, json_encode($fileFields, JSON_PRETTY_PRINT));
+        g_filesystem()->createFile($path.$fileName, json_encode($fileFields, JSON_PRETTY_PRINT));
         $this->comment("\nSchema File saved: ");
         $this->info($fileName);
     }
@@ -253,7 +253,7 @@ class BaseCommand extends Command
             return;
         }
         $content = "<?php\n\nreturn ".var_export($locales, true).';'.PHP_EOL;
-        FileUtil::createFile($path, $fileName, $content);
+        g_filesystem()->createFile($path.$fileName, $content);
         $this->comment("\nModel Locale File saved: ");
         $this->info($fileName);
     }
@@ -421,7 +421,7 @@ class BaseCommand extends Command
             exit;
         }
 
-        $fileContents = file_get_contents($filePath);
+        $fileContents = g_filesystem()->getFile($filePath);
         $jsonData = json_decode($fileContents, true);
         $this->config->fields = [];
         foreach ($jsonData as $field) {

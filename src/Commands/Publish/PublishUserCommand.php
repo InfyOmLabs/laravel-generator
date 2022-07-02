@@ -69,14 +69,14 @@ class PublishUserCommand extends PublishBaseCommand
     {
         $path = config('laravel_generator.path.routes', base_path('routes/web.php'));
 
-        $routeContents = file_get_contents($path);
+        $routeContents = g_filesystem()->getFile($path);
 
         $routesTemplate = get_template('routes.user', 'laravel-generator');
         $routesTemplate = $this->fillTemplate($routesTemplate);
 
         $routeContents .= "\n\n".$routesTemplate;
 
-        file_put_contents($path, $routeContents);
+        g_filesystem()->createFile($path, $routeContents);
         $this->comment("\nUser route added");
     }
 
@@ -85,11 +85,11 @@ class PublishUserCommand extends PublishBaseCommand
         $viewsPath = config('laravel_generator.path.views', resource_path('views/'));
         $templateType = config('laravel_generator.templates', 'adminlte-templates');
         $path = $viewsPath.'layouts/menu.blade.php';
-        $menuContents = file_get_contents($path);
-        $sourceFile = file_get_contents(get_template_file_path('scaffold/users/menu', $templateType));
+        $menuContents = g_filesystem()->getFile($path);
+        $sourceFile = g_filesystem()->getFile(get_template_file_path('scaffold/users/menu', $templateType));
         $menuContents .= "\n".$sourceFile;
 
-        file_put_contents($path, $menuContents);
+        g_filesystem()->createFile($path, $menuContents);
         $this->comment("\nUser Menu added");
     }
 
@@ -111,7 +111,7 @@ class PublishUserCommand extends PublishBaseCommand
             return;
         }
 
-        g_filesystem()->createFile($controllerPath, $fileName, $templateData);
+        g_filesystem()->createFile($controllerPath.$fileName, $templateData);
 
         $this->info('UserController created');
     }
@@ -132,7 +132,7 @@ class PublishUserCommand extends PublishBaseCommand
             return;
         }
 
-        g_filesystem()->createFile($repositoryPath, $fileName, $templateData);
+        g_filesystem()->createFile($repositoryPath.$fileName, $templateData);
 
         $this->info('UserRepository created');
     }
@@ -153,7 +153,7 @@ class PublishUserCommand extends PublishBaseCommand
             return;
         }
 
-        g_filesystem()->createFile($requestPath, $fileName, $templateData);
+        g_filesystem()->createFile($requestPath.$fileName, $templateData);
 
         $this->info('CreateUserRequest created');
     }
@@ -171,7 +171,7 @@ class PublishUserCommand extends PublishBaseCommand
             return;
         }
 
-        g_filesystem()->createFile($requestPath, $fileName, $templateData);
+        g_filesystem()->createFile($requestPath.$fileName, $templateData);
 
         $this->info('UpdateUserRequest created');
     }

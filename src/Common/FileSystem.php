@@ -13,15 +13,15 @@ class FileSystem
         return file_get_contents($path);
     }
 
-    public function createFile(string $path, string $fileName, string $contents): bool|int
+    public function createFile(string $file, string $contents): bool|int
     {
+        $path = dirname($file);
+
         if (!empty($path) && !file_exists($path)) {
             return mkdir($path, 0755, true);
         }
 
-        $path = $path.$fileName;
-
-        return file_put_contents($path, $contents);
+        return file_put_contents($file, $contents);
     }
 
     public function createDirectoryIfNotExist(string $path, bool $replace = false): bool

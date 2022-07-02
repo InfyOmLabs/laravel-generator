@@ -25,7 +25,8 @@ class RequestsGeneratorCommand extends BaseCommand
     {
         parent::handle();
 
-        $requestGenerator = new RequestGenerator();
+        /** @var RequestGenerator $requestGenerator */
+        $requestGenerator = app(RequestGenerator::class);
         $requestGenerator->generate();
 
         $this->performPostActions();

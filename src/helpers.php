@@ -5,7 +5,10 @@ use InfyOm\Generator\Common\FileSystem;
 use InfyOm\Generator\Common\GeneratorField;
 
 if (!function_exists('g_filesystem')) {
-    function g_filesystem(): FileSystem
+    /**
+     * @return FileSystem
+     */
+    function g_filesystem()
     {
         return app(FileSystem::class);
     }

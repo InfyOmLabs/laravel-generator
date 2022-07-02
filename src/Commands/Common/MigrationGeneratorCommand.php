@@ -31,7 +31,8 @@ class MigrationGeneratorCommand extends BaseCommand
             return;
         }
 
-        $migrationGenerator = new MigrationGenerator();
+        /** @var MigrationGenerator $migrationGenerator */
+        $migrationGenerator = app(MigrationGenerator::class);
         $migrationGenerator->generate();
 
         $this->performPostActionsWithMigration();

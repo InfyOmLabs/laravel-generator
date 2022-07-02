@@ -76,7 +76,7 @@ class ControllerGenerator extends BaseGenerator
 
         $templateData = fill_template($this->config->dynamicVars, $templateData);
 
-        g_filesystem()->createFile($this->path, $this->fileName, $templateData);
+        g_filesystem()->createFile($this->path.$this->fileName, $templateData);
 
         $this->config->commandComment(PHP_EOL.'Controller created: ');
         $this->config->commandInfo($this->fileName);
@@ -103,7 +103,7 @@ class ControllerGenerator extends BaseGenerator
 
         $fileName = $this->config->modelNames->name.'DataTable.php';
 
-        g_filesystem()->createFile($path, $fileName, $templateData);
+        g_filesystem()->createFile($path.$fileName, $templateData);
 
         $this->config->commandComment(PHP_EOL.'DataTable created: ');
         $this->config->commandInfo($fileName);
@@ -130,7 +130,7 @@ class ControllerGenerator extends BaseGenerator
 
         $fileName = $this->config->modelNames->plural.'Table.php';
 
-        g_filesystem()->createFile($path, $fileName, $templateData);
+        g_filesystem()->createFile($path.$fileName, $templateData);
 
         $this->config->commandComment(PHP_EOL.'LivewireTable created: ');
         $this->config->commandInfo($fileName);

@@ -26,10 +26,12 @@ class TestsGeneratorCommand extends BaseCommand
     {
         parent::handle();
 
-        $repositoryTestGenerator = new RepositoryTestGenerator();
+        /** @var RepositoryTestGenerator $repositoryTestGenerator */
+        $repositoryTestGenerator = app(RepositoryTestGenerator::class);
         $repositoryTestGenerator->generate();
 
-        $apiTestGenerator = new APITestGenerator();
+        /** @var APITestGenerator $apiTestGenerator */
+        $apiTestGenerator = app(APITestGenerator::class);
         $apiTestGenerator->generate();
 
         $this->performPostActions();

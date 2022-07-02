@@ -25,7 +25,8 @@ class ControllerGeneratorCommand extends BaseCommand
     {
         parent::handle();
 
-        $controllerGenerator = new ControllerGenerator();
+        /** @var ControllerGenerator $controllerGenerator */
+        $controllerGenerator = app(ControllerGenerator::class);
         $controllerGenerator->generate();
 
         $this->performPostActions();

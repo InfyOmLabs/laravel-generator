@@ -25,7 +25,8 @@ class ViewsGeneratorCommand extends BaseCommand
     {
         parent::handle();
 
-        $viewGenerator = new ViewGenerator();
+        /** @var ViewGenerator $viewGenerator */
+        $viewGenerator = app(ViewGenerator::class);
         $viewGenerator->generate();
 
         $this->performPostActions();

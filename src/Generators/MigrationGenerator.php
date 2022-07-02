@@ -27,7 +27,7 @@ class MigrationGenerator extends BaseGenerator
 
         $fileName = date('Y_m_d_His').'_'.'create_'.strtolower($tableName).'_table.php';
 
-        g_filesystem()->createFile($this->path, $fileName, $templateData);
+        g_filesystem()->createFile($this->path.$fileName, $templateData);
 
         $this->config->commandComment(PHP_EOL.'Migration created: ');
         $this->config->commandInfo($fileName);

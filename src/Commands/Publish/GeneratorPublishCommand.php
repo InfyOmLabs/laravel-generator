@@ -55,14 +55,14 @@ class GeneratorPublishCommand extends PublishBaseCommand
             return;
         }
 
-        $fileContent = file_get_contents($routeServiceProviderPath);
+        $fileContent = g_filesystem()->getFile($routeServiceProviderPath);
 
         $search = "Route::middleware('api')".PHP_EOL.str(' ')->repeat(16)."->prefix('api')";
         $beforeContent = str($fileContent)->before($search);
         $afterContent = str($fileContent)->after($search);
 
         $finalContent = $beforeContent.$search.PHP_EOL.str(' ')->repeat(16)."->as('api.')".$afterContent;
-        file_put_contents($routeServiceProviderPath, $finalContent);
+        g_filesystem()->createFile($routeServiceProviderPath, $finalContent);
     }
 
     private function publishTestCases()
@@ -83,7 +83,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
             return;
         }
 
-        g_filesystem()->createFile($testsPath, $fileName, $templateData);
+        g_filesystem()->createFile($testsPath.$fileName, $templateData);
         $this->info('ApiTestTrait created');
 
         $testAPIsPath = config('laravel_generator.path.api_test', base_path('tests/APIs/'));
@@ -113,7 +113,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
             return;
         }
 
-        g_filesystem()->createFile($controllerPath, $fileName, $templateData);
+        g_filesystem()->createFile($controllerPath.$fileName, $templateData);
 
         $this->info('AppBaseController created');
     }
@@ -134,7 +134,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
             return;
         }
 
-        g_filesystem()->createFile($repositoryPath, $fileName, $templateData);
+        g_filesystem()->createFile($repositoryPath.$fileName, $templateData);
 
         $this->info('BaseRepository created');
     }
