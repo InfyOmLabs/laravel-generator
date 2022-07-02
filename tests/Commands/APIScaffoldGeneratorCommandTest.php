@@ -103,11 +103,10 @@ it('generates all files for api_scaffold from console', function () {
 });
 
 it('generates all files for api_scaffold from fields file', function () {
-
     $fileUtils = FileUtils::fake([
-        'createFile' => true,
+        'createFile'                => true,
         'createDirectoryIfNotExist' => true,
-        'deleteFile' => true,
+        'deleteFile'                => true,
     ]);
 
     $shouldHaveCalledGenerators = [
