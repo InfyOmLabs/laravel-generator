@@ -19,6 +19,7 @@ use InfyOm\Generator\Commands\Scaffold\ControllerGeneratorCommand;
 use InfyOm\Generator\Commands\Scaffold\RequestsGeneratorCommand;
 use InfyOm\Generator\Commands\Scaffold\ScaffoldGeneratorCommand;
 use InfyOm\Generator\Commands\Scaffold\ViewsGeneratorCommand;
+use InfyOm\Generator\Common\FileSystem;
 use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Generators\API\APIControllerGenerator;
 use InfyOm\Generator\Generators\API\APIRequestGenerator;
@@ -35,7 +36,6 @@ use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
 use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
 use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
 use InfyOm\Generator\Generators\SeederGenerator;
-use InfyOm\Generator\Common\FileSystem;
 
 class InfyOmGeneratorServiceProvider extends ServiceProvider
 {
