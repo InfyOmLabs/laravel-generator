@@ -4,7 +4,6 @@ namespace InfyOm\Generator\Generators;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use InfyOm\Generator\Utils\FileUtil;
 use SplFileInfo;
 
 class MigrationGenerator extends BaseGenerator
@@ -28,7 +27,7 @@ class MigrationGenerator extends BaseGenerator
 
         $fileName = date('Y_m_d_His').'_'.'create_'.strtolower($tableName).'_table.php';
 
-        FileUtil::createFile($this->path, $fileName, $templateData);
+        g_filesystem()->createFile($this->path, $fileName, $templateData);
 
         $this->config->commandComment(PHP_EOL.'Migration created: ');
         $this->config->commandInfo($fileName);

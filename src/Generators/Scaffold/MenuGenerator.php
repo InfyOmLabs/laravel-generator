@@ -4,7 +4,6 @@ namespace InfyOm\Generator\Generators\Scaffold;
 
 use Illuminate\Support\Str;
 use InfyOm\Generator\Generators\BaseGenerator;
-use InfyOm\Generator\Utils\FileUtil;
 
 class MenuGenerator extends BaseGenerator
 {
@@ -21,7 +20,7 @@ class MenuGenerator extends BaseGenerator
         $this->path = config('laravel_generator.path.menu_file', resource_path('views/layouts/menu.blade.php'));
         $this->templateType = config('laravel_generator.templates', 'adminlte-templates');
 
-        $this->menuContents = FileUtil::getFile($this->path);
+        $this->menuContents = g_filesystem()->getFile($this->path);
 
         $templateName = 'menu_template';
 

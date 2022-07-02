@@ -1,8 +1,15 @@
 <?php
 
 use Illuminate\Support\Str;
+use InfyOm\Generator\Common\FileSystem;
 use InfyOm\Generator\Common\GeneratorField;
-use InfyOm\Generator\Utils\FileUtil;
+
+if (!function_exists('g_filesystem')) {
+    function g_filesystem(): FileSystem
+    {
+        return app(FileSystem::class);
+    }
+}
 
 if (!function_exists('infy_tab')) {
     function infy_tab(int $spaces = 4): string
@@ -75,7 +82,7 @@ if (!function_exists('get_template')) {
     {
         $path = get_template_file_path($templateName, $templateType);
 
-        return FileUtil::getFile($path);
+        return g_filesystem()->getFile($path);
     }
 }
 

@@ -1,18 +1,10 @@
 <?php
 
-namespace InfyOm\Generator\Utils;
+namespace InfyOm\Generator\Common;
 
-class FileUtil
+class FileSystem
 {
-    /**
-     * Codes for File Operations.
-     */
-    const FILE_CREATING = 1;
-    const FILE_CREATED = 2;
-    const FILE_DELETING = 3;
-    const FILE_DELETED = 4;
-
-    public static function getFile(string $path): bool|string
+    public function getFile(string $path): string
     {
         if (!file_exists($path)) {
             return '';
@@ -21,7 +13,7 @@ class FileUtil
         return file_get_contents($path);
     }
 
-    public static function createFile(string $path, string $fileName, string $contents): bool|int
+    public function createFile(string $path, string $fileName, string $contents): bool|int
     {
         if (!empty($path) && !file_exists($path)) {
             return mkdir($path, 0755, true);
@@ -32,7 +24,7 @@ class FileUtil
         return file_put_contents($path, $contents);
     }
 
-    public static function createDirectoryIfNotExist(string $path, bool $replace = false): bool
+    public function createDirectoryIfNotExist(string $path, bool $replace = false): bool
     {
         if (!empty($path) && file_exists($path) && $replace) {
             return rmdir($path);
@@ -45,7 +37,7 @@ class FileUtil
         return false;
     }
 
-    public static function deleteFile(string $path, string $fileName): bool
+    public function deleteFile(string $path, string $fileName): bool
     {
         if (file_exists($path.$fileName)) {
             return unlink($path.$fileName);

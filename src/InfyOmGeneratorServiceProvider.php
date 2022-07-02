@@ -20,6 +20,22 @@ use InfyOm\Generator\Commands\Scaffold\RequestsGeneratorCommand;
 use InfyOm\Generator\Commands\Scaffold\ScaffoldGeneratorCommand;
 use InfyOm\Generator\Commands\Scaffold\ViewsGeneratorCommand;
 use InfyOm\Generator\Common\GeneratorConfig;
+use InfyOm\Generator\Generators\API\APIControllerGenerator;
+use InfyOm\Generator\Generators\API\APIRequestGenerator;
+use InfyOm\Generator\Generators\API\APIRoutesGenerator;
+use InfyOm\Generator\Generators\API\APITestGenerator;
+use InfyOm\Generator\Generators\FactoryGenerator;
+use InfyOm\Generator\Generators\MigrationGenerator;
+use InfyOm\Generator\Generators\ModelGenerator;
+use InfyOm\Generator\Generators\RepositoryGenerator;
+use InfyOm\Generator\Generators\RepositoryTestGenerator;
+use InfyOm\Generator\Generators\Scaffold\ControllerGenerator;
+use InfyOm\Generator\Generators\Scaffold\MenuGenerator;
+use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
+use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
+use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
+use InfyOm\Generator\Generators\SeederGenerator;
+use InfyOm\Generator\Common\FileSystem;
 
 class InfyOmGeneratorServiceProvider extends ServiceProvider
 {
@@ -82,5 +98,29 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
         $this->app->singleton(GeneratorConfig::class, function () {
             return new GeneratorConfig();
         });
+
+        $this->app->singleton('generator_filesystem', function () {
+            return new FileSystem();
+        });
+
+        $this->app->singleton(MigrationGenerator::class);
+        $this->app->singleton(ModelGenerator::class);
+        $this->app->singleton(RepositoryGenerator::class);
+
+        $this->app->singleton(APIRequestGenerator::class);
+        $this->app->singleton(APIControllerGenerator::class);
+        $this->app->singleton(APIRoutesGenerator::class);
+
+        $this->app->singleton(RequestGenerator::class);
+        $this->app->singleton(ControllerGenerator::class);
+        $this->app->singleton(ViewGenerator::class);
+        $this->app->singleton(RoutesGenerator::class);
+        $this->app->singleton(MenuGenerator::class);
+
+        $this->app->singleton(RepositoryTestGenerator::class);
+        $this->app->singleton(APITestGenerator::class);
+
+        $this->app->singleton(FactoryGenerator::class);
+        $this->app->singleton(SeederGenerator::class);
     }
 }

@@ -3,7 +3,6 @@
 namespace InfyOm\Generator\Generators\API;
 
 use InfyOm\Generator\Generators\BaseGenerator;
-use InfyOm\Generator\Utils\FileUtil;
 
 class APIResourceGenerator extends BaseGenerator
 {
@@ -29,7 +28,7 @@ class APIResourceGenerator extends BaseGenerator
             $templateData
         );
 
-        FileUtil::createFile($this->path, $this->fileName, $templateData);
+        g_filesystem()->createFile($this->path, $this->fileName, $templateData);
 
         $this->config->commandComment(PHP_EOL.'API Resource created: ');
         $this->config->commandInfo($this->fileName);

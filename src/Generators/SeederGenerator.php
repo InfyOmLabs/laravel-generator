@@ -1,8 +1,6 @@
-<?php
+<?php /** @noinspection PhpUnusedAliasInspection */
 
 namespace InfyOm\Generator\Generators;
-
-use InfyOm\Generator\Utils\FileUtil;
 
 class SeederGenerator extends BaseGenerator
 {
@@ -22,7 +20,7 @@ class SeederGenerator extends BaseGenerator
 
         $templateData = fill_template($this->config->dynamicVars, $templateData);
 
-        FileUtil::createFile($this->path, $this->fileName, $templateData);
+        g_filesystem()->createFile($this->path, $this->fileName, $templateData);
 
         $this->config->commandComment(PHP_EOL.'Seeder created: ');
         $this->config->commandInfo($this->fileName);

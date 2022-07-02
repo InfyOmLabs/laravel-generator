@@ -2,7 +2,6 @@
 
 namespace InfyOm\Generator\Commands\Publish;
 
-use InfyOm\Generator\Utils\FileUtil;
 use Symfony\Component\Console\Input\InputOption;
 
 class GeneratorPublishCommand extends PublishBaseCommand
@@ -84,18 +83,18 @@ class GeneratorPublishCommand extends PublishBaseCommand
             return;
         }
 
-        FileUtil::createFile($testsPath, $fileName, $templateData);
+        g_filesystem()->createFile($testsPath, $fileName, $templateData);
         $this->info('ApiTestTrait created');
 
         $testAPIsPath = config('laravel_generator.path.api_test', base_path('tests/APIs/'));
         if (!file_exists($testAPIsPath)) {
-            FileUtil::createDirectoryIfNotExist($testAPIsPath);
+            g_filesystem()->createDirectoryIfNotExist($testAPIsPath);
             $this->info('APIs Tests directory created');
         }
 
         $testRepositoriesPath = config('laravel_generator.path.repository_test', base_path('tests/Repositories/'));
         if (!file_exists($testRepositoriesPath)) {
-            FileUtil::createDirectoryIfNotExist($testRepositoriesPath);
+            g_filesystem()->createDirectoryIfNotExist($testRepositoriesPath);
             $this->info('Repositories Tests directory created');
         }
     }
@@ -114,7 +113,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
             return;
         }
 
-        FileUtil::createFile($controllerPath, $fileName, $templateData);
+        g_filesystem()->createFile($controllerPath, $fileName, $templateData);
 
         $this->info('AppBaseController created');
     }
@@ -127,7 +126,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
         $repositoryPath = app_path('Repositories/');
 
-        FileUtil::createDirectoryIfNotExist($repositoryPath);
+        g_filesystem()->createDirectoryIfNotExist($repositoryPath);
 
         $fileName = 'BaseRepository.php';
 
@@ -135,7 +134,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
             return;
         }
 
-        FileUtil::createFile($repositoryPath, $fileName, $templateData);
+        g_filesystem()->createFile($repositoryPath, $fileName, $templateData);
 
         $this->info('BaseRepository created');
     }

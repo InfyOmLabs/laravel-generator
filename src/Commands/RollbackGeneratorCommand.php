@@ -18,7 +18,6 @@ use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
 use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
 use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
 use InfyOm\Generator\Generators\SeederGenerator;
-use InfyOm\Generator\Utils\FileUtil;
 use Symfony\Component\Console\Input\InputArgument;
 
 class RollbackGeneratorCommand extends BaseCommand
@@ -42,7 +41,7 @@ class RollbackGeneratorCommand extends BaseCommand
             return 1;
         }
 
-        $this->fireEvent($type, FileUtil::FILE_DELETING);
+        $this->fireFileDeletingEvent($type);
         $views = $this->option('views');
         if (!empty($views)) {
             $views = explode(',', $views);
@@ -51,72 +50,72 @@ class RollbackGeneratorCommand extends BaseCommand
 
             $this->info('Generating autoload files');
             $this->composer->dumpOptimized();
-            $this->fireEvent($type, FileUtil::FILE_DELETED);
+            $this->fireFileDeletedEvent($type);
 
             return 0;
         }
 
-        $migrationGenerator = new MigrationGenerator();
+        $migrationGenerator = app(MigrationGenerator::class);
         $migrationGenerator->rollback();
 
-        $modelGenerator = new ModelGenerator();
+        $modelGenerator = app(ModelGenerator::class);
         $modelGenerator->rollback();
 
         if ($this->config->options->repositoryPattern) {
-            $repositoryGenerator = new RepositoryGenerator();
+            $repositoryGenerator = app(RepositoryGenerator::class);
             $repositoryGenerator->rollback();
         }
 
         if (in_array($type, ['api', 'api_scaffold'])) {
-            $requestGenerator = new APIRequestGenerator();
+            $requestGenerator = app(APIRequestGenerator::class);
             $requestGenerator->rollback();
 
-            $controllerGenerator = new APIControllerGenerator();
+            $controllerGenerator = app(APIControllerGenerator::class);
             $controllerGenerator->rollback();
 
-            $routesGenerator = new APIRoutesGenerator();
+            $routesGenerator = app(APIRoutesGenerator::class);
             $routesGenerator->rollback();
         }
 
         if (in_array($type, ['scaffold', 'api_scaffold'])) {
-            $requestGenerator = new RequestGenerator();
+            $requestGenerator = app(RequestGenerator::class);
             $requestGenerator->rollback();
 
-            $controllerGenerator = new ControllerGenerator();
+            $controllerGenerator = app(ControllerGenerator::class);
             $controllerGenerator->rollback();
 
-            $viewGenerator = new ViewGenerator();
+            $viewGenerator = app(ViewGenerator::class);
             $viewGenerator->rollback();
 
-            $routeGenerator = new RoutesGenerator();
+            $routeGenerator = app(RoutesGenerator::class);
             $routeGenerator->rollback();
 
-            $menuGenerator = new MenuGenerator();
+            $menuGenerator = app(MenuGenerator::class);
             $menuGenerator->rollback();
         }
 
         if ($this->config->addons->tests) {
-            $repositoryTestGenerator = new RepositoryTestGenerator();
+            $repositoryTestGenerator = app(RepositoryTestGenerator::class);
             $repositoryTestGenerator->rollback();
 
-            $apiTestGenerator = new APITestGenerator();
+            $apiTestGenerator = app(APITestGenerator::class);
             $apiTestGenerator->rollback();
         }
 
         if ($this->config->options->factory) {
-            $factoryGenerator = new FactoryGenerator();
+            $factoryGenerator = app(FactoryGenerator::class);
             $factoryGenerator->rollback();
         }
 
         if ($this->config->options->seeder) {
-            $seederGenerator = new SeederGenerator();
+            $seederGenerator = app(SeederGenerator::class);
             $seederGenerator->rollback();
         }
 
         $this->info('Generating autoload files');
         $this->composer->dumpOptimized();
 
-        $this->fireEvent($type, FileUtil::FILE_DELETED);
+        $this->fireFileDeletedEvent($type);
 
         return 0;
     }

@@ -7,7 +7,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Generators\ViewServiceProviderGenerator;
-use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\HTMLFieldGenerator;
 
 class ViewGenerator extends BaseGenerator
@@ -97,7 +96,7 @@ class ViewGenerator extends BaseGenerator
                 throw new Exception('Invalid Table Type');
         }
 
-        FileUtil::createFile($this->path, 'table.blade.php', $templateData);
+        g_filesystem()->createFile($this->path, 'table.blade.php', $templateData);
 
         $this->config->commandInfo('table.blade.php created');
     }
@@ -121,7 +120,7 @@ class ViewGenerator extends BaseGenerator
 
         $templateData = fill_template($this->config->dynamicVars, $templateData);
 
-        FileUtil::createFile($this->path, 'datatables_actions.blade.php', $templateData);
+        g_filesystem()->createFile($this->path, 'datatables_actions.blade.php', $templateData);
 
         $this->config->commandInfo('datatables_actions.blade.php created');
     }
@@ -249,7 +248,7 @@ class ViewGenerator extends BaseGenerator
         }
 
         $templateData = str_replace('$TABLE$', $tableReplaceString, $templateData);
-        FileUtil::createFile($this->path, 'index.blade.php', $templateData);
+        g_filesystem()->createFile($this->path, 'index.blade.php', $templateData);
 
         $this->config->commandInfo('index.blade.php created');
     }
@@ -335,7 +334,7 @@ class ViewGenerator extends BaseGenerator
 
         $templateData = str_replace('$FIELDS$', implode("\n\n", $htmlFields), $templateData);
 
-        FileUtil::createFile($this->path, 'fields.blade.php', $templateData);
+        g_filesystem()->createFile($this->path, 'fields.blade.php', $templateData);
         $this->config->commandInfo('field.blade.php created');
     }
 
@@ -370,7 +369,7 @@ class ViewGenerator extends BaseGenerator
 
         $templateData = fill_template($this->config->dynamicVars, $templateData);
 
-        FileUtil::createFile($this->path, 'create.blade.php', $templateData);
+        g_filesystem()->createFile($this->path, 'create.blade.php', $templateData);
         $this->config->commandInfo('create.blade.php created');
     }
 
@@ -386,7 +385,7 @@ class ViewGenerator extends BaseGenerator
 
         $templateData = fill_template($this->config->dynamicVars, $templateData);
 
-        FileUtil::createFile($this->path, 'edit.blade.php', $templateData);
+        g_filesystem()->createFile($this->path, 'edit.blade.php', $templateData);
         $this->config->commandInfo('edit.blade.php created');
     }
 
@@ -415,7 +414,7 @@ class ViewGenerator extends BaseGenerator
             $fieldsStr .= $singleFieldStr."\n\n";
         }
 
-        FileUtil::createFile($this->path, 'show_fields.blade.php', $fieldsStr);
+        g_filesystem()->createFile($this->path, 'show_fields.blade.php', $fieldsStr);
         $this->config->commandInfo('show_fields.blade.php created');
     }
 
@@ -431,7 +430,7 @@ class ViewGenerator extends BaseGenerator
 
         $templateData = fill_template($this->config->dynamicVars, $templateData);
 
-        FileUtil::createFile($this->path, 'show.blade.php', $templateData);
+        g_filesystem()->createFile($this->path, 'show.blade.php', $templateData);
         $this->config->commandInfo('show.blade.php created');
     }
 

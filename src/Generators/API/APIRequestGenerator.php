@@ -4,7 +4,6 @@ namespace InfyOm\Generator\Generators\API;
 
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Generators\ModelGenerator;
-use InfyOm\Generator\Utils\FileUtil;
 
 class APIRequestGenerator extends BaseGenerator
 {
@@ -33,7 +32,7 @@ class APIRequestGenerator extends BaseGenerator
 
         $templateData = fill_template($this->config->dynamicVars, $templateData);
 
-        FileUtil::createFile($this->path, $this->createFileName, $templateData);
+        g_filesystem()->createFile($this->path, $this->createFileName, $templateData);
 
         $this->config->commandComment(PHP_EOL.'Create Request created: ');
         $this->config->commandInfo($this->createFileName);
@@ -49,7 +48,7 @@ class APIRequestGenerator extends BaseGenerator
 
         $templateData = fill_template($this->config->dynamicVars, $templateData);
 
-        FileUtil::createFile($this->path, $this->updateFileName, $templateData);
+        g_filesystem()->createFile($this->path, $this->updateFileName, $templateData);
 
         $this->config->commandComment(PHP_EOL.'Update Request created: ');
         $this->config->commandInfo($this->updateFileName);

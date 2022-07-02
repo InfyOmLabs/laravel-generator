@@ -2,8 +2,6 @@
 
 namespace InfyOm\Generator\Commands;
 
-use InfyOm\Generator\Utils\FileUtil;
-
 class APIScaffoldGeneratorCommand extends BaseCommand
 {
     /**
@@ -28,7 +26,7 @@ class APIScaffoldGeneratorCommand extends BaseCommand
     public function handle()
     {
         parent::handle();
-        $this->fireEvent('api_scaffold', FileUtil::FILE_CREATING);
+        $this->fireFileCreatingEvent('api_scaffold');
 
         $this->generateCommonItems();
 
@@ -37,7 +35,7 @@ class APIScaffoldGeneratorCommand extends BaseCommand
         $this->generateScaffoldItems();
 
         $this->performPostActionsWithMigration();
-        $this->fireEvent('api_scaffold', FileUtil::FILE_CREATED);
+        $this->fireFileCreatedEvent('api_scaffold');
     }
 
     /**

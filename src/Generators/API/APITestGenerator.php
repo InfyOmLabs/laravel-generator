@@ -3,7 +3,6 @@
 namespace InfyOm\Generator\Generators\API;
 
 use InfyOm\Generator\Generators\BaseGenerator;
-use InfyOm\Generator\Utils\FileUtil;
 
 class APITestGenerator extends BaseGenerator
 {
@@ -23,7 +22,7 @@ class APITestGenerator extends BaseGenerator
 
         $templateData = fill_template($this->config->dynamicVars, $templateData);
 
-        FileUtil::createFile($this->path, $this->fileName, $templateData);
+        g_filesystem()->createFile($this->path, $this->fileName, $templateData);
 
         $this->config->commandComment(PHP_EOL.'ApiTest created: ');
         $this->config->commandInfo($this->fileName);

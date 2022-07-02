@@ -28,7 +28,6 @@ use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
 use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
 use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
 use InfyOm\Generator\Generators\SeederGenerator;
-use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
 use InfyOm\Generator\Utils\TableFieldsGenerator;
 use Symfony\Component\Console\Input\InputArgument;
@@ -229,7 +228,7 @@ class BaseCommand extends Command
         if (file_exists($path.$fileName) && !$this->confirmOverwrite($fileName)) {
             return;
         }
-        FileUtil::createFile($path, $fileName, json_encode($fileFields, JSON_PRETTY_PRINT));
+        g_filesystem()->createFile($path, $fileName, json_encode($fileFields, JSON_PRETTY_PRINT));
         $this->comment("\nSchema File saved: ");
         $this->info($fileName);
     }
@@ -495,21 +494,23 @@ class BaseCommand extends Command
         ];
     }
 
-    public function fireEvent(string $commandType, int $eventType)
+    public function fireFileCreatingEvent($commandType)
     {
-        switch ($eventType) {
-            case FileUtil::FILE_CREATING:
-                event(new GeneratorFileCreating($commandType, $this->prepareEventsData()));
-                break;
-            case FileUtil::FILE_CREATED:
-                event(new GeneratorFileCreated($commandType, $this->prepareEventsData()));
-                break;
-            case FileUtil::FILE_DELETING:
-                event(new GeneratorFileDeleting($commandType, $this->prepareEventsData()));
-                break;
-            case FileUtil::FILE_DELETED:
-                event(new GeneratorFileDeleted($commandType, $this->prepareEventsData()));
-                break;
-        }
+        event(new GeneratorFileCreating($commandType, $this->prepareEventsData()));
+    }
+
+    public function fireFileCreatedEvent($commandType)
+    {
+        event(new GeneratorFileCreated($commandType, $this->prepareEventsData()));
+    }
+
+    public function fireFileDeletingEvent($commandType)
+    {
+        event(new GeneratorFileDeleting($commandType, $this->prepareEventsData()));
+    }
+
+    public function fireFileDeletedEvent($commandType)
+    {
+        event(new GeneratorFileDeleted($commandType, $this->prepareEventsData()));
     }
 }

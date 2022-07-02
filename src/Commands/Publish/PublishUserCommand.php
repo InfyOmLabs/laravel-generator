@@ -1,8 +1,6 @@
-<?php
+<?php /** @noinspection PhpUnusedAliasInspection */
 
 namespace InfyOm\Generator\Commands\Publish;
-
-use InfyOm\Generator\Utils\FileUtil;
 
 class PublishUserCommand extends PublishBaseCommand
 {
@@ -51,7 +49,7 @@ class PublishUserCommand extends PublishBaseCommand
 
     private function createDirectories($dir)
     {
-        FileUtil::createDirectoryIfNotExist($dir);
+        g_filesystem()->createDirectoryIfNotExist($dir);
     }
 
     private function getViews(): array
@@ -113,7 +111,7 @@ class PublishUserCommand extends PublishBaseCommand
             return;
         }
 
-        FileUtil::createFile($controllerPath, $fileName, $templateData);
+        g_filesystem()->createFile($controllerPath, $fileName, $templateData);
 
         $this->info('UserController created');
     }
@@ -128,13 +126,13 @@ class PublishUserCommand extends PublishBaseCommand
 
         $fileName = 'UserRepository.php';
 
-        FileUtil::createDirectoryIfNotExist($repositoryPath);
+        g_filesystem()->createDirectoryIfNotExist($repositoryPath);
 
         if (file_exists($repositoryPath.$fileName) && !$this->confirmOverwrite($fileName)) {
             return;
         }
 
-        FileUtil::createFile($repositoryPath, $fileName, $templateData);
+        g_filesystem()->createFile($repositoryPath, $fileName, $templateData);
 
         $this->info('UserRepository created');
     }
@@ -149,13 +147,13 @@ class PublishUserCommand extends PublishBaseCommand
 
         $fileName = 'CreateUserRequest.php';
 
-        FileUtil::createDirectoryIfNotExist($requestPath);
+        g_filesystem()->createDirectoryIfNotExist($requestPath);
 
         if (file_exists($requestPath.$fileName) && !$this->confirmOverwrite($fileName)) {
             return;
         }
 
-        FileUtil::createFile($requestPath, $fileName, $templateData);
+        g_filesystem()->createFile($requestPath, $fileName, $templateData);
 
         $this->info('CreateUserRequest created');
     }
@@ -173,7 +171,7 @@ class PublishUserCommand extends PublishBaseCommand
             return;
         }
 
-        FileUtil::createFile($requestPath, $fileName, $templateData);
+        g_filesystem()->createFile($requestPath, $fileName, $templateData);
 
         $this->info('UpdateUserRequest created');
     }

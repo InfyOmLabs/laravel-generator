@@ -1,8 +1,6 @@
-<?php
+<?php /** @noinspection PhpUnusedAliasInspection */
 
 namespace InfyOm\Generator\Generators;
-
-use InfyOm\Generator\Utils\FileUtil;
 
 class RepositoryGenerator extends BaseGenerator
 {
@@ -38,7 +36,7 @@ class RepositoryGenerator extends BaseGenerator
 
         $templateData = str_replace('$DOCS$', $docsTemplate, $templateData);
 
-        FileUtil::createFile($this->path, $this->fileName, $templateData);
+        g_filesystem()->createFile($this->path, $this->fileName, $templateData);
 
         $this->config->commandComment(PHP_EOL.'Repository created: ');
         $this->config->commandInfo($this->fileName);

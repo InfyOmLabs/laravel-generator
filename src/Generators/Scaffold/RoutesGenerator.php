@@ -1,10 +1,9 @@
-<?php
+<?php /** @noinspection PhpUnusedAliasInspection */
 
 namespace InfyOm\Generator\Generators\Scaffold;
 
 use Illuminate\Support\Str;
 use InfyOm\Generator\Generators\BaseGenerator;
-use InfyOm\Generator\Utils\FileUtil;
 
 class RoutesGenerator extends BaseGenerator
 {
@@ -17,7 +16,7 @@ class RoutesGenerator extends BaseGenerator
         parent::__construct();
 
         $this->path = $this->config->paths->routes;
-        $this->routeContents = FileUtil::getFile($this->path);
+        $this->routeContents = g_filesystem()->getFile($this->path);
         if (!empty($this->config->prefixes->route)) {
             $this->routesTemplate = get_template('scaffold.routes.prefix_routes', 'laravel-generator');
         } else {
