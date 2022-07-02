@@ -16,10 +16,10 @@ class FileUtils extends Facade
     public static function fake()
     {
         $fake = Mockery::mock()->allows([
-            'getFile' => '',
-            'createFile' => true,
+            'getFile'                   => '',
+            'createFile'                => true,
             'createDirectoryIfNotExist' => true,
-            'deleteFile' => true,
+            'deleteFile'                => true,
         ]);
 
         static::swap($fake);
