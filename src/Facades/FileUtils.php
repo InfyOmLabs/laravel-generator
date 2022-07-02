@@ -17,10 +17,10 @@ class FileUtils extends Facade
     {
         if (empty($allowedMethods)) {
             $allowedMethods = [
-                'getFile' => '',
-                'createFile' => true,
+                'getFile'                   => '',
+                'createFile'                => true,
                 'createDirectoryIfNotExist' => true,
-                'deleteFile' => true,
+                'deleteFile'                => true,
             ];
         }
 
