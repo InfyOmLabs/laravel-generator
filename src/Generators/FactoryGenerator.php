@@ -17,6 +17,7 @@ class FactoryGenerator extends BaseGenerator
 
         $this->path = $this->config->paths->factory;
         $this->fileName = $this->config->modelNames->name.'Factory.php';
+
         //setup relations if available
         //assumes relation fields are tailed with _id if not supplied
         if (property_exists($this->config, 'relations')) {
@@ -40,11 +41,20 @@ class FactoryGenerator extends BaseGenerator
         }
     }
 
+    public function variables(): array
+    {
+        $relations = $this->getRelationsBootstrap();
+
+        return [
+            'fields' => $this->generateFields(),
+            'relations' => $relations['text'],
+            'usedRelations' => $relations['uses'],
+        ];
+    }
+
     public function generate()
     {
-        $templateData = get_template('factories.model_factory', 'laravel-generator');
-
-        $templateData = $this->fillTemplate($templateData);
+        $templateData = view('laravel-generator::model.factory', $this->variables())->render();
 
         g_filesystem()->createFile($this->path.$this->fileName, $templateData);
 
@@ -52,32 +62,7 @@ class FactoryGenerator extends BaseGenerator
         $this->config->commandInfo($this->fileName);
     }
 
-    private function fillTemplate(string $templateData): string
-    {
-        $templateData = fill_template($this->config->dynamicVars, $templateData);
-
-        $templateData = str_replace(
-            '$FIELDS$',
-            implode(','.infy_nl_tab(1, 3), $this->generateFields()),
-            $templateData
-        );
-
-        $extra = $this->getRelationsBootstrap();
-
-        $templateData = str_replace(
-            '$RELATION_USES$',
-            $extra['uses'],
-            $templateData
-        );
-
-        return str_replace(
-            '$RELATIONS$',
-            $extra['text'],
-            $templateData
-        );
-    }
-
-    private function generateFields(): array
+    private function generateFields(): string
     {
         $fields = [];
 
@@ -171,7 +156,7 @@ class FactoryGenerator extends BaseGenerator
             $fields[] = $fieldData;
         }
 
-        return $fields;
+        return implode(','.infy_nl_tab(1, 3), $fields);
     }
 
     /**
@@ -264,7 +249,10 @@ class FactoryGenerator extends BaseGenerator
             $qualifier = $data['model_class'];
             $variable = Str::camel($relation);
             $model = Str::studly($relation);
-            $text .= infy_nl_tab(1, 2).'$'.$variable.' = '.$model.'::first();'.
+            if (!empty($text)) {
+                $text = infy_nl_tab(1, 2);
+            }
+            $text .= '$'.$variable.' = '.$model.'::first();'.
             infy_nl_tab(1, 2).
             'if (!$'.$variable.') {'.
             infy_nl_tab(1, 3).
