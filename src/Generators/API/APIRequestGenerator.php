@@ -42,7 +42,7 @@ class APIRequestGenerator extends BaseGenerator
         $rules = $modelGenerator->generateUniqueRules();
 
         $templateData = view('laravel-generator::api.request.update', [
-            'uniqueRules' => $rules
+            'uniqueRules' => $rules,
         ])->render();
 
         g_filesystem()->createFile($this->path.$this->updateFileName, $templateData);
