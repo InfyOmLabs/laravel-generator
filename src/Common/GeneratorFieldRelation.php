@@ -90,10 +90,10 @@ class GeneratorFieldRelation
 
         return view('laravel-generator::model.relationship', [
             'relationClass' => $relationClass,
-            'functionName' => $functionName,
-            'relation' => $relation,
-            'relatedModel' => $relatedModelName,
-            'fields' => $inputFields,
+            'functionName'  => $functionName,
+            'relation'      => $relation,
+            'relatedModel'  => $relatedModelName,
+            'fields'        => $inputFields,
         ])->render();
     }
 }

@@ -40,16 +40,16 @@ class ModelGenerator extends BaseGenerator
     public function variables(): array
     {
         return [
-            'fillables' => implode(','.infy_nl_tab(1, 2), $this->generateFillables()),
-            'casts' => implode(','.infy_nl_tab(1, 2), $this->generateCasts()),
-            'rules' => implode(','.infy_nl_tab(1, 2), $this->generateRules()),
-            'docs' => $this->fillDocs(),
+            'fillables'        => implode(','.infy_nl_tab(1, 2), $this->generateFillables()),
+            'casts'            => implode(','.infy_nl_tab(1, 2), $this->generateCasts()),
+            'rules'            => implode(','.infy_nl_tab(1, 2), $this->generateRules()),
+            'docs'             => $this->fillDocs(),
             'customPrimaryKey' => $this->customPrimaryKey(),
-            'customCreatedAt' => $this->customCreatedAt(),
-            'customUpdatedAt' => $this->customUpdatedAt(),
+            'customCreatedAt'  => $this->customCreatedAt(),
+            'customUpdatedAt'  => $this->customUpdatedAt(),
             'customSoftDelete' => $this->customSoftDelete(),
-            'relations' => $this->generateRelations(),
-            'timestamps' => config('laravel_generator.timestamps.enabled', true),
+            'relations'        => $this->generateRelations(),
+            'timestamps'       => config('laravel_generator.timestamps.enabled', true),
         ];
     }
 

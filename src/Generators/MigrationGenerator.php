@@ -30,7 +30,7 @@ class MigrationGenerator extends BaseGenerator
     public function variables(): array
     {
         return [
-            'fields' => $this->generateFields()
+            'fields' => $this->generateFields(),
         ];
     }
 

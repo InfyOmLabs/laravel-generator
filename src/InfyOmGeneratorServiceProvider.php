@@ -64,7 +64,7 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
         });
 
         Blade::directive('tab', function () {
-            return "<?php echo infy_tab() ?>";
+            return '<?php echo infy_tab() ?>';
         });
 
         Blade::directive('tabs', function ($count) {
@@ -72,7 +72,7 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
         });
 
         Blade::directive('nl', function () {
-            return "<?php echo infy_nl() ?>";
+            return '<?php echo infy_nl() ?>';
         });
 
         Blade::directive('nls', function ($count) {
