@@ -29,10 +29,10 @@ class GeneratorConfig
 
     public array $dynamicVars = [];
 
-    public string $tableName;
+    public $tableName;
     public string $tableType;
-    public string $primaryName;
-    public string $connection;
+    public $primaryName;
+    public $connection;
 
     public function init()
     {
@@ -41,11 +41,9 @@ class GeneratorConfig
         $this->loadPaths();
         $this->tableType = config('laravel_generator.tables', 'blade');
         $this->loadNamespaces();
-        $this->prepareTableName();
-        $this->preparePrimaryName();
+        $this->prepareTable();
         $this->prepareAddons();
         $this->prepareOptions();
-        $this->loadDynamicVariables();
     }
 
     public function setCommand(Command &$command)
@@ -231,106 +229,22 @@ class GeneratorConfig
         $this->namespaces = $namespaces;
     }
 
-    public function loadDynamicVariables()
-    {
-        $this->addDynamicVariable('$NAMESPACE_APP$', $this->namespaces->app);
-        $this->addDynamicVariable('$NAMESPACE_REPOSITORY$', $this->namespaces->repository);
-        $this->addDynamicVariable('$NAMESPACE_MODEL$', $this->namespaces->model);
-        $this->addDynamicVariable('$NAMESPACE_DATATABLES$', $this->namespaces->dataTables);
-        $this->addDynamicVariable('$NAMESPACE_LIVEWIRE_TABLES$', $this->namespaces->livewireTables);
-        $this->addDynamicVariable('$NAMESPACE_MODEL_EXTEND$', $this->namespaces->modelExtend);
-
-        $this->addDynamicVariable('$NAMESPACE_SEEDER$', $this->namespaces->seeder);
-        $this->addDynamicVariable('$NAMESPACE_FACTORY$', $this->namespaces->factory);
-
-        $this->addDynamicVariable('$NAMESPACE_API_CONTROLLER$', $this->namespaces->apiController);
-        $this->addDynamicVariable('$NAMESPACE_API_RESOURCE$', $this->namespaces->apiResource);
-        $this->addDynamicVariable('$NAMESPACE_API_REQUEST$', $this->namespaces->apiRequest);
-
-        $this->addDynamicVariable('$NAMESPACE_BASE_CONTROLLER$', $this->namespaces->baseController);
-        $this->addDynamicVariable('$NAMESPACE_CONTROLLER$', $this->namespaces->controller);
-        $this->addDynamicVariable('$NAMESPACE_REQUEST$', $this->namespaces->request);
-        $this->addDynamicVariable('$NAMESPACE_REQUEST_BASE$', $this->namespaces->requestBase);
-
-        $this->addDynamicVariable('$NAMESPACE_API_TESTS$', $this->namespaces->apiTests);
-        $this->addDynamicVariable('$NAMESPACE_REPOSITORIES_TESTS$', $this->namespaces->repositoryTests);
-        $this->addDynamicVariable('$NAMESPACE_TESTS$', $this->namespaces->tests);
-
-        $this->addDynamicVariable('$TABLE_NAME$', $this->tableName);
-        $this->addDynamicVariable('$TABLE_NAME_TITLE$', Str::studly($this->tableName));
-        $this->addDynamicVariable('$PRIMARY_KEY_NAME$', $this->primaryName);
-
-        $this->addDynamicVariable('$MODEL_NAME$', $this->modelNames->name);
-        $this->addDynamicVariable('$MODEL_NAME_CAMEL$', $this->modelNames->camel);
-        $this->addDynamicVariable('$MODEL_NAME_PLURAL$', $this->modelNames->plural);
-        $this->addDynamicVariable('$MODEL_NAME_PLURAL_CAMEL$', $this->modelNames->camelPlural);
-        $this->addDynamicVariable('$MODEL_NAME_SNAKE$', $this->modelNames->snake);
-        $this->addDynamicVariable('$MODEL_NAME_PLURAL_SNAKE$', $this->modelNames->snakePlural);
-        $this->addDynamicVariable('$MODEL_NAME_DASHED$', $this->modelNames->dashed);
-        $this->addDynamicVariable('$MODEL_NAME_PLURAL_DASHED$', $this->modelNames->dashedPlural);
-        $this->addDynamicVariable('$MODEL_NAME_HUMAN$', $this->modelNames->human);
-        $this->addDynamicVariable('$MODEL_NAME_PLURAL_HUMAN$', $this->modelNames->humanPlural);
-        $this->addDynamicVariable('$FILES$', '');
-
-        $connectionText = '';
-        if ($connection = $this->getOption('connection')) {
-            $this->connection = $connection;
-            $connectionText = infy_tabs(4).'public $connection = "'.$connection.'";';
-        }
-        $this->addDynamicVariable('$CONNECTION$', $connectionText);
-
-        $this->addDynamicVariable('$PRIMARY_KEY_NAME$', $this->primaryName);
-
-        if (!empty($this->prefixes->route)) {
-            $this->addDynamicVariable('$ROUTE_NAMED_PREFIX$', $this->prefixes->route.'.');
-            $this->addDynamicVariable('$ROUTE_PREFIX$', str_replace('.', '/', $this->prefixes->route).'/');
-            $this->addDynamicVariable('$RAW_ROUTE_PREFIX$', $this->prefixes->route);
-        } else {
-            $this->addDynamicVariable('$ROUTE_PREFIX$', '');
-            $this->addDynamicVariable('$ROUTE_NAMED_PREFIX$', '');
-        }
-
-        if (!empty($this->prefixes->namespace)) {
-            $this->addDynamicVariable('$PATH_PREFIX$', $this->prefixes->namespace.'\\');
-        } else {
-            $this->addDynamicVariable('$PATH_PREFIX$', '');
-        }
-
-        if (!empty($this->prefixes->view)) {
-            $this->addDynamicVariable('$VIEW_PREFIX$', str_replace('/', '.', $this->prefixes->view).'.');
-        } else {
-            $this->addDynamicVariable('$VIEW_PREFIX$', '');
-        }
-
-        if (!empty($this->prefixes->public)) {
-            $this->addDynamicVariable('$PUBLIC_PREFIX$', $this->prefixes->public);
-        } else {
-            $this->addDynamicVariable('$PUBLIC_PREFIX$', '');
-        }
-
-        $this->addDynamicVariable(
-            '$API_PREFIX$',
-            config('laravel_generator.api_prefix', 'api')
-        );
-
-        $this->addDynamicVariable('$SEARCHABLE$', '');
-    }
-
-    public function prepareTableName()
+    public function prepareTable()
     {
         if ($this->getOption('table')) {
             $this->tableName = $this->getOption('table');
         } else {
             $this->tableName = $this->modelNames->snakePlural;
         }
-    }
 
-    public function preparePrimaryName()
-    {
         if ($this->getOption('primary')) {
             $this->primaryName = $this->getOption('primary');
         } else {
             $this->primaryName = 'id';
+        }
+
+        if ($this->getOption('connection')) {
+            $this->connection = $this->getOption('connection');
         }
     }
 

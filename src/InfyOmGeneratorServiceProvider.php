@@ -2,6 +2,8 @@
 
 namespace InfyOm\Generator;
 
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use InfyOm\Generator\Commands\API\APIControllerGeneratorCommand;
 use InfyOm\Generator\Commands\API\APIGeneratorCommand;
@@ -55,6 +57,27 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
         }
 
         $this->registerCommands();
+        $this->loadViewsFrom(__DIR__.'/../views', 'laravel-generator');
+
+        View::composer('*', function ($view) {
+            $view->with(['config' => app(GeneratorConfig::class)]);
+        });
+
+        Blade::directive('tab', function () {
+            return "<?php echo infy_tab() ?>";
+        });
+
+        Blade::directive('tabs', function ($count) {
+            return "<?php echo infy_tabs($count) ?>";
+        });
+
+        Blade::directive('nl', function () {
+            return "<?php echo infy_nl() ?>";
+        });
+
+        Blade::directive('nls', function ($count) {
+            return "<?php echo infy_nls($count) ?>";
+        });
     }
 
     private function registerCommands()
