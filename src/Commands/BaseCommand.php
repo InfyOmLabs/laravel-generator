@@ -109,6 +109,7 @@ class BaseCommand extends Command
             $apiTestGenerator = app(APITestGenerator::class);
             $apiTestGenerator->generate();
         }
+
         if ($this->config->options->resources) {
             $apiResourceGenerator = app(APIResourceGenerator::class);
             $apiResourceGenerator->generate();

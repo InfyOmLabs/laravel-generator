@@ -28,9 +28,7 @@ class APIRequestGenerator extends BaseGenerator
 
     private function generateCreateRequest()
     {
-        $templateData = get_template('api.request.create_request', 'laravel-generator');
-
-        $templateData = fill_template($this->config->dynamicVars, $templateData);
+        $templateData = view('laravel-generator::api.request.create', $this->variables())->render();
 
         g_filesystem()->createFile($this->path.$this->createFileName, $templateData);
 
@@ -40,13 +38,12 @@ class APIRequestGenerator extends BaseGenerator
 
     private function generateUpdateRequest()
     {
-        $modelGenerator = new ModelGenerator();
+        $modelGenerator = app(ModelGenerator::class);
         $rules = $modelGenerator->generateUniqueRules();
-        $this->config->addDynamicVariable('$UNIQUE_RULES$', $rules);
 
-        $templateData = get_template('api.request.update_request', 'laravel-generator');
-
-        $templateData = fill_template($this->config->dynamicVars, $templateData);
+        $templateData = view('laravel-generator::api.request.update', [
+            'uniqueRules' => $rules
+        ])->render();
 
         g_filesystem()->createFile($this->path.$this->updateFileName, $templateData);
 

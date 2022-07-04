@@ -136,11 +136,11 @@ return [
 
         'save_schema_file' => true,
 
-        'localized' => false,
+        'localized' => true,
 
         'repository_pattern' => true,
 
-        'resources' => false,
+        'resources' => true,
 
         'factory' => false,
 
