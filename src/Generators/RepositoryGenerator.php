@@ -14,12 +14,25 @@ class RepositoryGenerator extends BaseGenerator
         $this->fileName = $this->config->modelNames->name.'Repository.php';
     }
 
+    public function variables(): array
+    {
+        return [
+            'fieldSearchable' => $this->getSearchableFields(),
+        ];
+    }
+
     public function generate()
     {
-        $templateData = get_template('repository', 'laravel-generator');
+        $templateData = view('laravel-generator::repository', $this->variables())->render();
 
-        $templateData = fill_template($this->config->dynamicVars, $templateData);
+        g_filesystem()->createFile($this->path.$this->fileName, $templateData);
 
+        $this->config->commandComment(PHP_EOL.'Repository created: ');
+        $this->config->commandInfo($this->fileName);
+    }
+
+    protected function getSearchableFields()
+    {
         $searchables = [];
 
         foreach ($this->config->fields as $field) {
@@ -28,18 +41,7 @@ class RepositoryGenerator extends BaseGenerator
             }
         }
 
-        $templateData = str_replace('$FIELDS$', implode(','.infy_nl_tab(1, 2), $searchables), $templateData);
-
-        $docsTemplate = get_template('docs.repository', 'laravel-generator');
-        $docsTemplate = fill_template($this->config->dynamicVars, $docsTemplate);
-        $docsTemplate = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $docsTemplate);
-
-        $templateData = str_replace('$DOCS$', $docsTemplate, $templateData);
-
-        g_filesystem()->createFile($this->path.$this->fileName, $templateData);
-
-        $this->config->commandComment(PHP_EOL.'Repository created: ');
-        $this->config->commandInfo($this->fileName);
+        return implode(','.infy_nl_tab(1, 2), $searchables);
     }
 
     public function rollback()
