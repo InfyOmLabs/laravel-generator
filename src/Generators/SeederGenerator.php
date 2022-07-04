@@ -16,9 +16,7 @@ class SeederGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = get_template('seeds.model_seeder', 'laravel-generator');
-
-        $templateData = fill_template($this->config->dynamicVars, $templateData);
+        $templateData = view('laravel-generator::model.seeder', $this->variables())->render();
 
         g_filesystem()->createFile($this->path.$this->fileName, $templateData);
 
