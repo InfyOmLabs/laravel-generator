@@ -46,8 +46,8 @@ class FactoryGenerator extends BaseGenerator
         $relations = $this->getRelationsBootstrap();
 
         return [
-            'fields' => $this->generateFields(),
-            'relations' => $relations['text'],
+            'fields'        => $this->generateFields(),
+            'relations'     => $relations['text'],
             'usedRelations' => $relations['uses'],
         ];
     }
