@@ -19,11 +19,11 @@ class SwaggerGenerator
             }
 
             $fieldTypes[] = [
-                'fieldName' => $field->name,
-                'type'     => $fieldData['fieldType'],
-                'format'   => $fieldData['fieldFormat'],
-                'nullable' => !$field->isNotNull ? 'true': 'false',
-                'readOnly' => !$field->isFillable ? 'true': 'false',
+                'fieldName'   => $field->name,
+                'type'        => $fieldData['fieldType'],
+                'format'      => $fieldData['fieldFormat'],
+                'nullable'    => !$field->isNotNull ? 'true' : 'false',
+                'readOnly'    => !$field->isFillable ? 'true' : 'false',
                 'description' => (!empty($field->description)) ? $field->description : '',
             ];
         }
