@@ -94,7 +94,7 @@ it('generates all files for api_scaffold from fields file', function () {
 
     mockShouldNotHaveCalledGenerateMethod($shouldNotHaveCalledGenerator);
 
-    config()->set('laravel_generator.add_ons.tests', true);
+    config()->set('laravel_generator.options.tests', true);
 
     $modelSchemaFile = __DIR__.'/../fixtures/model_schema/Post.json';
 

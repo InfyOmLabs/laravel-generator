@@ -6,13 +6,13 @@ namespace {{ $config->namespaces->model }};
 
 use Illuminate\Database\Eloquent\Model;
 @if($config->options->softDelete) {{ 'use Illuminate\Database\Eloquent\SoftDeletes;' }};@endif
-@if($config->addons->tests) {{ 'use Illuminate\Database\Eloquent\Factories\HasFactory;' }};@endif
+@if($config->options->tests) {{ 'use Illuminate\Database\Eloquent\Factories\HasFactory;' }};@endif
 
 @if(isset($swaggerDocs)){{ $swaggerDocs }}@endif
 class {{ $config->modelNames->name }} extends Model
 {
-@if($config->options->softDelete) {{ infy_tab().'use SoftDeletes;' }};@endif
-@if($config->addons->tests){{ infy_tab().'use HasFactory;' }};@endif
+@if($config->options->softDelete) {{ infy_tab().'use SoftDeletes;' }}@endif
+@if($config->options->tests){{ infy_tab().'use HasFactory;' }}@endif
     public $table = '{{ $config->tableName }}';
 
 @if($customPrimaryKey)@tab()protected $primaryKey = '{{ $customPrimaryKey }}';@nls(2)@endif

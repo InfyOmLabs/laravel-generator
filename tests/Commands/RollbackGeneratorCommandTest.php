@@ -94,7 +94,7 @@ it('validates that all files are rolled back for api_scaffold', function () {
 
     mockShouldNotHaveCalledRollbackGenerators($shouldNotHaveCalledGenerator);
 
-    config()->set('laravel_generator.add_ons.tests', true);
+    config()->set('laravel_generator.options.tests', true);
 
     artisan(RollbackGeneratorCommand::class, ['model' => 'User', 'type' => 'api_scaffold']);
 });
@@ -152,7 +152,7 @@ it('validates that all files are rolled back for scaffold', function () {
 
     mockShouldNotHaveCalledRollbackGenerators($shouldNotHaveCalledGenerator);
 
-    config()->set('laravel_generator.add_ons.tests', true);
+    config()->set('laravel_generator.options.tests', true);
 
     artisan(RollbackGeneratorCommand::class, ['model' => 'User', 'type' => 'scaffold']);
 });

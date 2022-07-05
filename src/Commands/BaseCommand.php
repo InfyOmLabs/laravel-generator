@@ -72,7 +72,7 @@ class BaseCommand extends Command
             $repositoryGenerator->generate();
         }
 
-        if ($this->config->options->factory || (!$this->isSkip('tests') and $this->config->addons->tests)) {
+        if ($this->config->options->factory || (!$this->isSkip('tests') and $this->config->options->tests)) {
             $factoryGenerator = app(FactoryGenerator::class);
             $factoryGenerator->generate();
         }
@@ -100,7 +100,7 @@ class BaseCommand extends Command
             $routesGenerator->generate();
         }
 
-        if (!$this->isSkip('tests') and $this->config->addons->tests) {
+        if (!$this->isSkip('tests') and $this->config->options->tests) {
             if ($this->config->options->repositoryPattern) {
                 $repositoryTestGenerator = app(RepositoryTestGenerator::class);
                 $repositoryTestGenerator->generate();

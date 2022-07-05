@@ -23,7 +23,7 @@ class RepositoryGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = view('laravel-generator::repository', $this->variables())->render();
+        $templateData = view('laravel-generator::repository.repository', $this->variables())->render();
 
         g_filesystem()->createFile($this->path.$this->fileName, $templateData);
 

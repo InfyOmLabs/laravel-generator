@@ -146,6 +146,10 @@ return [
 
         'seeder' => false,
 
+        'swagger' => false, // generate swagger for your APIs
+
+        'tests' => false, // generate test cases for your APIs
+
         'excluded_fields' => ['id'], // Array of columns that doesn't required while creating module
     ],
 
@@ -179,20 +183,6 @@ return [
     */
 
     'tables' => 'blade',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Add-Ons
-    |--------------------------------------------------------------------------
-    |
-    */
-
-    'add_ons' => [
-
-        'swagger'       => false, // generate swagger for your APIs
-
-        'tests'         => false, // generate test cases for your APIs
-    ],
 
     /*
     |--------------------------------------------------------------------------

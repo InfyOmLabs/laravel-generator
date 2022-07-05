@@ -117,7 +117,7 @@ class ModelGenerator extends BaseGenerator
 
     private function fillDocs(): string
     {
-        if (!$this->config->addons->swagger) {
+        if (!$this->config->options->swagger) {
             return '';
         }
 

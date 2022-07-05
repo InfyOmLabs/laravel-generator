@@ -18,9 +18,7 @@ class APITestGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = get_template('api.test.api_test', 'laravel-generator');
-
-        $templateData = fill_template($this->config->dynamicVars, $templateData);
+        $templateData = view('laravel-generator::api.test.api_test', $this->variables())->render();
 
         g_filesystem()->createFile($this->path.$this->fileName, $templateData);
 

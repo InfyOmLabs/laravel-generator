@@ -16,19 +16,12 @@ class RepositoryTestGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = get_template('test.repository_test', 'laravel-generator');
-
-        $templateData = $this->fillTemplate($templateData);
+        $templateData = view('laravel-generator::repository.repository_test', $this->variables())->render();
 
         g_filesystem()->createFile($this->path.$this->fileName, $templateData);
 
         $this->config->commandComment(PHP_EOL.'RepositoryTest created: ');
         $this->config->commandInfo($this->fileName);
-    }
-
-    private function fillTemplate($templateData): string
-    {
-        return fill_template($this->config->dynamicVars, $templateData);
     }
 
     public function rollback()

@@ -94,7 +94,7 @@ class RollbackGeneratorCommand extends BaseCommand
             $menuGenerator->rollback();
         }
 
-        if ($this->config->addons->tests) {
+        if ($this->config->options->tests) {
             $repositoryTestGenerator = app(RepositoryTestGenerator::class);
             $repositoryTestGenerator->rollback();
 
@@ -102,7 +102,7 @@ class RollbackGeneratorCommand extends BaseCommand
             $apiTestGenerator->rollback();
         }
 
-        if ($this->config->options->factory or $this->config->addons->tests) {
+        if ($this->config->options->factory or $this->config->options->tests) {
             $factoryGenerator = app(FactoryGenerator::class);
             $factoryGenerator->rollback();
         }

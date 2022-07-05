@@ -17,7 +17,6 @@ class GeneratorConfig
     public GeneratorPaths $paths;
     public ModelNames $modelNames;
     public GeneratorPrefixes $prefixes;
-    public GeneratorAddons $addons;
     public GeneratorOptions $options;
     public Command $command;
 
@@ -31,6 +30,7 @@ class GeneratorConfig
 
     public $tableName;
     public string $tableType;
+    public string $apiPrefix;
     public $primaryName;
     public $connection;
 
@@ -40,9 +40,9 @@ class GeneratorConfig
         $this->loadPrefixes();
         $this->loadPaths();
         $this->tableType = config('laravel_generator.tables', 'blade');
+        $this->apiPrefix = config('laravel_generator.api_prefix', 'api');
         $this->loadNamespaces();
         $this->prepareTable();
-        $this->prepareAddons();
         $this->prepareOptions();
     }
 
@@ -259,18 +259,11 @@ class GeneratorConfig
         $options->resources = config('laravel_generator.options.resources', false);
         $options->factory = config('laravel_generator.options.factory', false);
         $options->seeder = config('laravel_generator.options.seeder', false);
+        $options->swagger = config('laravel_generator.options.swagger', false);
+        $options->tests = config('laravel_generator.options.tests', false);
         $options->excludedFields = config('laravel_generator.options.excluded_fields', ['id']);
 
         $this->options = $options;
-    }
-
-    public function prepareAddons()
-    {
-        $addons = new GeneratorAddons();
-        $addons->swagger = config('laravel_generator.add_ons.swagger', false);
-        $addons->tests = config('laravel_generator.add_ons.tests', false);
-
-        $this->addons = $addons;
     }
 
     public function overrideOptionsFromJsonFile($jsonData)
