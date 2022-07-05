@@ -180,7 +180,7 @@ class GeneratorField
     public function variables()
     {
         return [
-            'fieldName' => $this->name,
+            'fieldName'  => $this->name,
             'fieldTitle' => $this->getTitle(),
         ];
     }
