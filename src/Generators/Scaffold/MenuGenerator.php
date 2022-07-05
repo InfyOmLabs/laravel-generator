@@ -24,7 +24,7 @@ class MenuGenerator extends BaseGenerator
         $menu = view($this->templateType.'::templates.layouts.menu_template')->render();
 
         if (Str::contains($menuContents, $menu)) {
-            $this->config->commandInfo(PHP_EOL.'Menu '.$this->config->modelNames->humanPlural.' already exists, Skipping Adjustment.');
+            $this->config->commandInfo(infy_nl().'Menu '.$this->config->modelNames->humanPlural.' already exists, Skipping Adjustment.');
 
             return;
         }
@@ -32,7 +32,7 @@ class MenuGenerator extends BaseGenerator
         $menuContents .= infy_nl().$menu;
 
         g_filesystem()->createFile($this->path, $menuContents);
-        $this->config->commandComment(PHP_EOL.$this->config->modelNames->dashedPlural.' menu added.');
+        $this->config->commandComment(infy_nl().$this->config->modelNames->dashedPlural.' menu added.');
     }
 
     public function rollback()

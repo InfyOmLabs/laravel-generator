@@ -23,7 +23,7 @@ class MigrationGenerator extends BaseGenerator
 
         g_filesystem()->createFile($this->path.$fileName, $templateData);
 
-        $this->config->commandComment(PHP_EOL.'Migration created: ');
+        $this->config->commandComment(infy_nl().'Migration created: ');
         $this->config->commandInfo($fileName);
     }
 

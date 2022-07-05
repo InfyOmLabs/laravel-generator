@@ -35,7 +35,7 @@ class ViewGenerator extends BaseGenerator
 //            $this->config->addDynamicVariable('$FILES$', ", 'files' => true");
 //        }
 
-        $this->config->commandComment(PHP_EOL.'Generating Views...');
+        $this->config->commandComment(infy_nl().'Generating Views...');
 
         if ($this->config->getOption('views')) {
             $viewsToBeGenerated = explode(',', $this->config->getOption('views'));
@@ -313,7 +313,7 @@ class ViewGenerator extends BaseGenerator
             }
 
             $fieldsStr .= view($this->templateViewPath.'.scaffold.show_field', $field->variables());
-            $fieldsStr .= PHP_EOL.PHP_EOL;
+            $fieldsStr .= infy_nls(2);
         }
 
         g_filesystem()->createFile($this->path.'show_fields.blade.php', $fieldsStr);

@@ -22,7 +22,7 @@ class APITestGenerator extends BaseGenerator
 
         g_filesystem()->createFile($this->path.$this->fileName, $templateData);
 
-        $this->config->commandComment(PHP_EOL.'ApiTest created: ');
+        $this->config->commandComment(infy_nl().'ApiTest created: ');
         $this->config->commandInfo($this->fileName);
     }
 

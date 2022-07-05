@@ -21,7 +21,7 @@ class RoutesGenerator extends BaseGenerator
         $routes = view('laravel-generator::templates.scaffold.routes')->render();
 
         if (Str::contains($routeContents, $routes)) {
-            $this->config->commandInfo(PHP_EOL.'Route '.$this->config->modelNames->dashedPlural.' already exists, Skipping Adjustment.');
+            $this->config->commandInfo(infy_nl().'Route '.$this->config->modelNames->dashedPlural.' already exists, Skipping Adjustment.');
 
             return;
         }
@@ -29,7 +29,7 @@ class RoutesGenerator extends BaseGenerator
         $routeContents .= infy_nl().$routes;
 
         g_filesystem()->createFile($this->path, $routeContents);
-        $this->config->commandComment(PHP_EOL.$this->config->modelNames->dashedPlural.' routes added.');
+        $this->config->commandComment(infy_nl().$this->config->modelNames->dashedPlural.' routes added.');
     }
 
     public function rollback()

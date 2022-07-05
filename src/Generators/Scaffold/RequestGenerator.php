@@ -32,7 +32,7 @@ class RequestGenerator extends BaseGenerator
 
         g_filesystem()->createFile($this->path.$this->createFileName, $templateData);
 
-        $this->config->commandComment(PHP_EOL.'Create Request created: ');
+        $this->config->commandComment(infy_nl().'Create Request created: ');
         $this->config->commandInfo($this->createFileName);
     }
 
@@ -47,7 +47,7 @@ class RequestGenerator extends BaseGenerator
 
         g_filesystem()->createFile($this->path.$this->updateFileName, $templateData);
 
-        $this->config->commandComment(PHP_EOL.'Update Request created: ');
+        $this->config->commandComment(infy_nl().'Update Request created: ');
         $this->config->commandInfo($this->updateFileName);
     }
 

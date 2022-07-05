@@ -45,7 +45,7 @@ class APIControllerGenerator extends BaseGenerator
 
         g_filesystem()->createFile($this->path.$this->fileName, $templateData);
 
-        $this->config->commandComment(PHP_EOL.'API Controller created: ');
+        $this->config->commandComment(infy_nl().'API Controller created: ');
         $this->config->commandInfo($this->fileName);
     }
 

@@ -21,16 +21,16 @@ class APIRoutesGenerator extends BaseGenerator
         $routes = view('laravel-generator::api.routes', $this->variables())->render();
 
         if (Str::contains($routeContents, $routes)) {
-            $this->config->commandInfo(PHP_EOL.'Menu '.$this->config->modelNames->dashedPlural.' already exists, Skipping Adjustment.');
+            $this->config->commandInfo(infy_nl().'Menu '.$this->config->modelNames->dashedPlural.' already exists, Skipping Adjustment.');
 
             return;
         }
 
-        $routeContents .= PHP_EOL.PHP_EOL.$routes;
+        $routeContents .= infy_nls(2).$routes;
 
         g_filesystem()->createFile($this->path, $routeContents);
 
-        $this->config->commandComment(PHP_EOL.$this->config->modelNames->dashedPlural.' api routes added.');
+        $this->config->commandComment(infy_nl().$this->config->modelNames->dashedPlural.' api routes added.');
     }
 
     public function rollback()

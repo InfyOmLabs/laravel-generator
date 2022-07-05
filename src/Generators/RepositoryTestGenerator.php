@@ -20,7 +20,7 @@ class RepositoryTestGenerator extends BaseGenerator
 
         g_filesystem()->createFile($this->path.$this->fileName, $templateData);
 
-        $this->config->commandComment(PHP_EOL.'RepositoryTest created: ');
+        $this->config->commandComment(infy_nl().'RepositoryTest created: ');
         $this->config->commandInfo($this->fileName);
     }
 

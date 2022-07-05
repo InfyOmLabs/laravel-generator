@@ -9,14 +9,14 @@ class PublishTemplatesCommand extends PublishBaseCommand
      *
      * @var string
      */
-    protected $name = 'infyom.publish:stubs';
+    protected $name = 'infyom.publish:templates';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Publishes api generator stubs.';
+    protected $description = 'Publishes api generator templates.';
 
     private string $templatesDir;
 
@@ -24,7 +24,7 @@ class PublishTemplatesCommand extends PublishBaseCommand
     {
         $this->templatesDir = config(
             'laravel_generator.path.templates_dir',
-            resource_path('infyom/infyom-generator-stubs/')
+            resource_path('infyom/infyom-generator-templates/')
         );
 
         if ($this->publishGeneratorTemplates()) {
@@ -35,23 +35,23 @@ class PublishTemplatesCommand extends PublishBaseCommand
 
     public function publishGeneratorTemplates(): bool
     {
-        $templatesPath = __DIR__ . '/../../../stubs';
+        $templatesPath = __DIR__ . '/../../../views';
 
-        return $this->publishDirectory($templatesPath, $this->templatesDir, 'infyom-generator-stubs');
+        return $this->publishDirectory($templatesPath, $this->templatesDir, 'infyom-generator-templates');
     }
 
     public function publishScaffoldTemplates(): bool
     {
-        $templateType = config('laravel_generator.stubs', 'adminlte-stubs');
+        $templateType = config('laravel_generator.templates', 'adminlte-templates');
 
-        $templatesPath = get_templates_package_path($templateType).'/stubs/scaffold';
+        $templatesPath = get_templates_package_path($templateType).'/templates/scaffold';
 
-        return $this->publishDirectory($templatesPath, $this->templatesDir.'scaffold', 'infyom-generator-stubs/scaffold', true);
+        return $this->publishDirectory($templatesPath, $this->templatesDir.'scaffold', 'infyom-generator-templates/scaffold', true);
     }
 
     public function publishSwaggerTemplates(): bool
     {
-        $templatesPath = base_path('vendor/infyomlabs/swagger-generator/stubs');
+        $templatesPath = base_path('vendor/infyomlabs/swagger-generator/templates');
 
         return $this->publishDirectory($templatesPath, $this->templatesDir, 'swagger-generator', true);
     }

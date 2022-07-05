@@ -58,7 +58,7 @@ class FactoryGenerator extends BaseGenerator
 
         g_filesystem()->createFile($this->path.$this->fileName, $templateData);
 
-        $this->config->commandComment(PHP_EOL.'Factory created: ');
+        $this->config->commandComment(infy_nl().'Factory created: ');
         $this->config->commandInfo($this->fileName);
     }
 

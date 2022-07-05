@@ -20,7 +20,7 @@ class SeederGenerator extends BaseGenerator
 
         g_filesystem()->createFile($this->path.$this->fileName, $templateData);
 
-        $this->config->commandComment(PHP_EOL.'Seeder created: ');
+        $this->config->commandComment(infy_nl().'Seeder created: ');
         $this->config->commandInfo($this->fileName);
     }
 

@@ -63,7 +63,7 @@ class ControllerGenerator extends BaseGenerator
 
         g_filesystem()->createFile($this->path.$this->fileName, $templateData);
 
-        $this->config->commandComment(PHP_EOL.'Controller created: ');
+        $this->config->commandComment(infy_nl().'Controller created: ');
         $this->config->commandInfo($this->fileName);
     }
 
@@ -79,7 +79,7 @@ class ControllerGenerator extends BaseGenerator
 
         g_filesystem()->createFile($path.$fileName, $templateData);
 
-        $this->config->commandComment(PHP_EOL.'DataTable created: ');
+        $this->config->commandComment(infy_nl().'DataTable created: ');
         $this->config->commandInfo($fileName);
     }
 
@@ -95,7 +95,7 @@ class ControllerGenerator extends BaseGenerator
 
         g_filesystem()->createFile($path.$fileName, $templateData);
 
-        $this->config->commandComment(PHP_EOL.'LivewireTable created: ');
+        $this->config->commandComment(infy_nl().'LivewireTable created: ');
         $this->config->commandInfo($fileName);
     }
 
@@ -125,11 +125,11 @@ class ControllerGenerator extends BaseGenerator
                 continue;
             }
 
-            $fieldTemplate = 'Column::make("'.$field->getTitle().'", "'.$field->name.'")'.PHP_EOL;
+            $fieldTemplate = 'Column::make("'.$field->getTitle().'", "'.$field->name.'")'.infy_nl();
             $fieldTemplate .= infy_tabs(4).'->sortable()';
 
             if ($field->isSearchable) {
-                $fieldTemplate .= PHP_EOL.infy_tabs(4).'->searchable()';
+                $fieldTemplate .= infy_nl().infy_tabs(4).'->searchable()';
             }
 
             $livewireTableColumns[] = $fieldTemplate;

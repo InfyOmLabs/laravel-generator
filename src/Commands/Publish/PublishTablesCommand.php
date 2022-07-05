@@ -43,7 +43,7 @@ class PublishTablesCommand extends PublishBaseCommand
     public function publishLivewireTableViews()
     {
         $viewsPath = config('laravel_generator.path.views', resource_path('views/'));
-        $templateType = config('infyom.laravel_generator.stubs', 'adminlte-stubs');
+        $templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
 
         $files = [
             'views/table/livewire/actions' => 'common/livewire-tables/actions.blade.php',

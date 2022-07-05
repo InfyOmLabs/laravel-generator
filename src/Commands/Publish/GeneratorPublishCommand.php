@@ -46,11 +46,11 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
         $fileContent = g_filesystem()->getFile($routeServiceProviderPath);
 
-        $search = "Route::middleware('api')".PHP_EOL.str(' ')->repeat(16)."->prefix('api')";
+        $search = "Route::middleware('api')".infy_nl().str(' ')->repeat(16)."->prefix('api')";
         $beforeContent = str($fileContent)->before($search);
         $afterContent = str($fileContent)->after($search);
 
-        $finalContent = $beforeContent.$search.PHP_EOL.str(' ')->repeat(16)."->as('api.')".$afterContent;
+        $finalContent = $beforeContent.$search.infy_nl().str(' ')->repeat(16)."->as('api.')".$afterContent;
         g_filesystem()->createFile($routeServiceProviderPath, $finalContent);
     }
 

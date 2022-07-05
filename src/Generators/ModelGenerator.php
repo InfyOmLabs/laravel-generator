@@ -33,7 +33,7 @@ class ModelGenerator extends BaseGenerator
 
         g_filesystem()->createFile($this->path.$this->fileName, $templateData);
 
-        $this->config->commandComment(PHP_EOL.'Model created: ');
+        $this->config->commandComment(infy_nl().'Model created: ');
         $this->config->commandInfo($this->fileName);
     }
 
@@ -137,7 +137,7 @@ class ModelGenerator extends BaseGenerator
                     $count++;
                 }
 
-                $fillables .= ' * @property '.$this->getPHPDocType($relation->type, $relation, $relationText).PHP_EOL;
+                $fillables .= ' * @property '.$this->getPHPDocType($relation->type, $relation, $relationText).infy_nl();
                 $fieldsArr[] = $field;
             }
         }
@@ -145,7 +145,7 @@ class ModelGenerator extends BaseGenerator
         if (isset($this->config->fields) && !empty($this->config->fields)) {
             foreach ($this->config->fields as $field) {
                 if ($field->isFillable) {
-                    $fillables .= ' * @property '.$this->getPHPDocType($field->fieldType).' $'.$field->name.PHP_EOL;
+                    $fillables .= ' * @property '.$this->getPHPDocType($field->fieldType).' $'.$field->name.infy_nl();
                 }
             }
         }

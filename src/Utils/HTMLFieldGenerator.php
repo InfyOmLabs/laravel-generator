@@ -42,7 +42,7 @@ class HTMLFieldGenerator
                 }
 
                 return view($templateType.'.fields.radio_group', array_merge(
-                    ['radioButtons' => implode(PHP_EOL, $radioButtons)],
+                    ['radioButtons' => implode(infy_nl(), $radioButtons)],
                     $field->variables()
                 ))->render();
         }

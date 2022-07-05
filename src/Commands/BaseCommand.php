@@ -157,7 +157,7 @@ class BaseCommand extends Command
                 $requestFromConsole = (php_sapi_name() == 'cli');
                 if ($this->option('jsonFromGUI') && $requestFromConsole) {
                     $this->runMigration();
-                } elseif ($requestFromConsole && $this->confirm(PHP_EOL.'Do you want to migrate database? [y|N]', false)) {
+                } elseif ($requestFromConsole && $this->confirm(infy_nl().'Do you want to migrate database? [y|N]', false)) {
                     $this->runMigration();
                 }
             }
@@ -253,7 +253,7 @@ class BaseCommand extends Command
         if (file_exists($path.$fileName) && !$this->confirmOverwrite($fileName)) {
             return;
         }
-        $content = "<?php\n\nreturn ".var_export($locales, true).';'.PHP_EOL;
+        $content = "<?php\n\nreturn ".var_export($locales, true).';'.infy_nl();
         g_filesystem()->createFile($path.$fileName, $content);
         $this->comment("\nModel Locale File saved: ");
         $this->info($fileName);
