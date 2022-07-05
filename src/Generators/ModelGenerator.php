@@ -3,7 +3,6 @@
 namespace InfyOm\Generator\Generators;
 
 use Illuminate\Support\Str;
-use InfyOm\Generator\Common\GeneratorFieldRelation;
 use InfyOm\Generator\Utils\TableFieldsGenerator;
 
 class ModelGenerator extends BaseGenerator
@@ -133,7 +132,8 @@ class ModelGenerator extends BaseGenerator
         $properties = [];
         foreach ($fieldTypes as $fieldType) {
             $properties[] = view(
-                'swagger-generator::model.property', $fieldType
+                'swagger-generator::model.property',
+                $fieldType
             )->render();
         }
 
@@ -141,7 +141,7 @@ class ModelGenerator extends BaseGenerator
 
         return view('swagger-generator::model.model', [
             'requiredFields' => $requiredFields,
-            'properties' => implode(",".infy_nl().' ', $properties),
+            'properties'     => implode(','.infy_nl().' ', $properties),
         ]);
     }
 
