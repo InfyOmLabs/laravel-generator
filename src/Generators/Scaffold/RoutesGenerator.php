@@ -18,7 +18,7 @@ class RoutesGenerator extends BaseGenerator
     {
         $routeContents = g_filesystem()->getFile($this->path);
 
-        $routes = view('laravel-generator::templates.scaffold.routes')->render();
+        $routes = view('laravel-generator::scaffold.routes')->render();
 
         if (Str::contains($routeContents, $routes)) {
             $this->config->commandInfo(infy_nl().'Route '.$this->config->modelNames->dashedPlural.' already exists, Skipping Adjustment.');

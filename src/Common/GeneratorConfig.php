@@ -297,11 +297,6 @@ class GeneratorConfig
         return $this->command->option($option);
     }
 
-    public function isLocalizedTemplates()
-    {
-        return $this->options->localized;
-    }
-
     public function addDynamicVariable($name, $val)
     {
         $this->dynamicVars[$name] = $val;

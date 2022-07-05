@@ -19,7 +19,7 @@ class APIControllerGenerator extends BaseGenerator
 
     public function variables(): array
     {
-        return array_merge([], $this->fillDocs());
+        return array_merge([], $this->docsVariables());
     }
 
     public function getViewName(): string
@@ -49,7 +49,7 @@ class APIControllerGenerator extends BaseGenerator
         $this->config->commandInfo($this->fileName);
     }
 
-    private function fillDocs(): array
+    private function docsVariables(): array
     {
         $methods = ['controller', 'index', 'store', 'show', 'update', 'destroy'];
 
