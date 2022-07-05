@@ -16,21 +16,20 @@ class APIResourceGenerator extends BaseGenerator
         $this->fileName = $this->config->modelNames->name.'Resource.php';
     }
 
+    public function variables(): array
+    {
+        return [
+            'fields' => implode(','.infy_nl_tab(1, 3), $this->generateResourceFields()),
+        ];
+    }
+
     public function generate()
     {
-        $templateData = get_template('api.resource.api_resource', 'laravel-generator');
-
-        $templateData = fill_template($this->config->dynamicVars, $templateData);
-
-        $templateData = str_replace(
-            '$RESOURCE_FIELDS$',
-            implode(','.infy_nl_tab(1, 3), $this->generateResourceFields()),
-            $templateData
-        );
+        $templateData = view('laravel-generator::api.resource.resource', $this->variables())->render();
 
         g_filesystem()->createFile($this->path.$this->fileName, $templateData);
 
-        $this->config->commandComment(PHP_EOL.'API Resource created: ');
+        $this->config->commandComment(infy_nl().'API Resource created: ');
         $this->config->commandInfo($this->fileName);
     }
 

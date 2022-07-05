@@ -16,13 +16,11 @@ class SeederGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = get_template('seeds.model_seeder', 'laravel-generator');
-
-        $templateData = fill_template($this->config->dynamicVars, $templateData);
+        $templateData = view('laravel-generator::model.seeder', $this->variables())->render();
 
         g_filesystem()->createFile($this->path.$this->fileName, $templateData);
 
-        $this->config->commandComment(PHP_EOL.'Seeder created: ');
+        $this->config->commandComment(infy_nl().'Seeder created: ');
         $this->config->commandInfo($this->fileName);
     }
 

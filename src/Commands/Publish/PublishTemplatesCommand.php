@@ -35,7 +35,7 @@ class PublishTemplatesCommand extends PublishBaseCommand
 
     public function publishGeneratorTemplates(): bool
     {
-        $templatesPath = __DIR__.'/../../../templates';
+        $templatesPath = __DIR__.'/../../../views';
 
         return $this->publishDirectory($templatesPath, $this->templatesDir, 'infyom-generator-templates');
     }

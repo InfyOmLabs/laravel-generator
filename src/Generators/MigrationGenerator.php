@@ -17,20 +17,21 @@ class MigrationGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = get_template('migration', 'laravel-generator');
+        $templateData = view('laravel-generator::migration', $this->variables())->render();
 
-        $templateData = fill_template($this->config->dynamicVars, $templateData);
-
-        $templateData = str_replace('$FIELDS$', $this->generateFields(), $templateData);
-
-        $tableName = $this->config->tableName;
-
-        $fileName = date('Y_m_d_His').'_'.'create_'.strtolower($tableName).'_table.php';
+        $fileName = date('Y_m_d_His').'_'.'create_'.strtolower($this->config->tableName).'_table.php';
 
         g_filesystem()->createFile($this->path.$fileName, $templateData);
 
-        $this->config->commandComment(PHP_EOL.'Migration created: ');
+        $this->config->commandComment(infy_nl().'Migration created: ');
         $this->config->commandInfo($fileName);
+    }
+
+    public function variables(): array
+    {
+        return [
+            'fields' => $this->generateFields(),
+        ];
     }
 
     private function generateFields(): string
@@ -59,7 +60,7 @@ class MigrationGenerator extends BaseGenerator
             }
         }
 
-        if ($createdAtField and $updatedAtField) {
+        if ($createdAtField->name === 'created_at' and $updatedAtField->name === 'updated_at') {
             $fields[] = '$table->timestamps();';
         } else {
             if ($createdAtField) {
@@ -71,7 +72,12 @@ class MigrationGenerator extends BaseGenerator
         }
 
         if ($this->config->options->softDelete) {
-            $fields[] = '$table->softDeletes();';
+            $softDeleteFieldName = config('laravel_generator.timestamps.deleted_at', 'deleted_at');
+            if ($softDeleteFieldName === 'deleted_at') {
+                $fields[] = '$table->softDeletes();';
+            } else {
+                $fields[] = '$table->softDeletes(\''.$softDeleteFieldName.'\');';
+            }
         }
 
         return implode(infy_nl_tab(1, 3), array_merge($fields, $foreignKeys));

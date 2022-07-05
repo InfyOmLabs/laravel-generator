@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Generators\API;
 
+use Illuminate\Support\Str;
 use InfyOm\Generator\Generators\BaseGenerator;
 
 class APIControllerGenerator extends BaseGenerator
@@ -16,7 +17,12 @@ class APIControllerGenerator extends BaseGenerator
         $this->fileName = $this->config->modelNames->name.'APIController.php';
     }
 
-    public function generate()
+    public function variables(): array
+    {
+        return array_merge([], $this->docsVariables());
+    }
+
+    public function getViewName(): string
     {
         if ($this->config->options->repositoryPattern) {
             $templateName = 'repository.controller';
@@ -24,30 +30,30 @@ class APIControllerGenerator extends BaseGenerator
             $templateName = 'model.controller';
         }
 
-        if ($this->config->isLocalizedTemplates()) {
-            $templateName .= '_locale';
-        }
-
         if ($this->config->options->resources) {
             $templateName .= '_resource';
         }
 
-        $templateData = get_template("api.controller.$templateName", 'laravel-generator');
+        return $templateName;
+    }
 
-        $templateData = fill_template($this->config->dynamicVars, $templateData);
-        $templateData = $this->fillDocs($templateData);
+    public function generate()
+    {
+        $viewName = $this->getViewName();
+
+        $templateData = view('laravel-generator::api.controller.'.$viewName, $this->variables())->render();
 
         g_filesystem()->createFile($this->path.$this->fileName, $templateData);
 
-        $this->config->commandComment(PHP_EOL.'API Controller created: ');
+        $this->config->commandComment(infy_nl().'API Controller created: ');
         $this->config->commandInfo($this->fileName);
     }
 
-    private function fillDocs(string $templateData): string
+    private function docsVariables(): array
     {
         $methods = ['controller', 'index', 'store', 'show', 'update', 'destroy'];
 
-        if ($this->config->addons->swagger) {
+        if ($this->config->options->swagger) {
             $templatePrefix = 'controller_docs';
             $templateType = 'swagger-generator';
         } else {
@@ -55,14 +61,13 @@ class APIControllerGenerator extends BaseGenerator
             $templateType = 'laravel-generator';
         }
 
+        $variables = [];
         foreach ($methods as $method) {
-            $key = '$DOC_'.strtoupper($method).'$';
-            $docTemplate = get_template($templatePrefix.'.'.$method, $templateType);
-            $docTemplate = fill_template($this->config->dynamicVars, $docTemplate);
-            $templateData = str_replace($key, $docTemplate, $templateData);
+            $variable = 'doc'.Str::title($method);
+            $variables[$variable] = view($templateType.'::'.$templatePrefix.'.'.$method)->render();
         }
 
-        return $templateData;
+        return $variables;
     }
 
     public function rollback()

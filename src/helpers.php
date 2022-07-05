@@ -59,13 +59,13 @@ if (!function_exists('get_template_file_path')) {
             resource_path('infyom/infyom-generator-templates/')
         );
 
-        $path = $templatesPath.$templateName.'.stub';
+        $path = $templatesPath.$templateName.'.blade.php';
 
         if (file_exists($path)) {
             return $path;
         }
 
-        return get_templates_package_path($templateType).'/templates/'.$templateName.'.stub';
+        return get_templates_package_path($templateType).'/templates/'.$templateName.'.blade.php';
     }
 }
 

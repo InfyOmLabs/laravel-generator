@@ -4,7 +4,7 @@ namespace InfyOm\Generator\Generators;
 
 use InfyOm\Generator\Common\GeneratorConfig;
 
-class BaseGenerator
+abstract class BaseGenerator
 {
     public GeneratorConfig $config;
 
@@ -22,5 +22,10 @@ class BaseGenerator
         }
 
         return false;
+    }
+
+    public function variables(): array
+    {
+        return [];
     }
 }

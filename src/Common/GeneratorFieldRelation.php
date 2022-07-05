@@ -79,14 +79,7 @@ class GeneratorFieldRelation
     private function generateRelation($functionName, $relation, $relationClass)
     {
         $inputs = $this->inputs;
-        $modelName = array_shift($inputs);
-
-        $template = get_template('model.relationship', 'laravel-generator');
-
-        $template = str_replace('$RELATIONSHIP_CLASS$', $relationClass, $template);
-        $template = str_replace('$FUNCTION_NAME$', $functionName, $template);
-        $template = str_replace('$RELATION$', $relation, $template);
-        $template = str_replace('$RELATION_MODEL_NAME$', $modelName, $template);
+        $relatedModelName = array_shift($inputs);
 
         if (count($inputs) > 0) {
             $inputFields = implode("', '", $inputs);
@@ -95,6 +88,12 @@ class GeneratorFieldRelation
             $inputFields = '';
         }
 
-        return str_replace('$INPUT_FIELDS$', $inputFields, $template);
+        return view('laravel-generator::model.relationship', [
+            'relationClass' => $relationClass,
+            'functionName'  => $functionName,
+            'relation'      => $relation,
+            'relatedModel'  => $relatedModelName,
+            'fields'        => $inputFields,
+        ])->render();
     }
 }

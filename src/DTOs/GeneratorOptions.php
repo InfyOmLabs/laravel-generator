@@ -11,5 +11,7 @@ class GeneratorOptions
     public bool $resources;
     public bool $factory;
     public bool $seeder;
+    public bool $swagger;
+    public bool $tests;
     public array $excludedFields;
 }

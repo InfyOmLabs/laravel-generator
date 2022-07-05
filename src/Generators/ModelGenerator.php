@@ -29,114 +29,99 @@ class ModelGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = get_template('model.model', 'laravel-generator');
-
-        $templateData = $this->fillTemplate($templateData);
+        $templateData = view('laravel-generator::model.model', $this->variables())->render();
 
         g_filesystem()->createFile($this->path.$this->fileName, $templateData);
 
-        $this->config->commandComment(PHP_EOL.'Model created: ');
+        $this->config->commandComment(infy_nl().'Model created: ');
         $this->config->commandInfo($this->fileName);
     }
 
-    private function fillTemplate(string $templateData): string
+    public function variables(): array
     {
-        $rules = $this->generateRules();
-        $templateData = fill_template($this->config->dynamicVars, $templateData);
+        return [
+            'fillables'        => implode(','.infy_nl_tab(1, 2), $this->generateFillables()),
+            'casts'            => implode(','.infy_nl_tab(1, 2), $this->generateCasts()),
+            'rules'            => implode(','.infy_nl_tab(1, 2), $this->generateRules()),
+            'docs'             => $this->fillDocs(),
+            'customPrimaryKey' => $this->customPrimaryKey(),
+            'customCreatedAt'  => $this->customCreatedAt(),
+            'customUpdatedAt'  => $this->customUpdatedAt(),
+            'customSoftDelete' => $this->customSoftDelete(),
+            'relations'        => $this->generateRelations(),
+            'timestamps'       => config('laravel_generator.timestamps.enabled', true),
+        ];
+    }
 
-        $templateData = $this->fillSoftDeletes($templateData);
+    protected function customPrimaryKey()
+    {
+        $primary = $this->config->getOption('primary');
 
-        $templateData = $this->fillHasFactory($templateData);
+        if (!$primary) {
+            return null;
+        }
 
+        if ($primary === 'id') {
+            return null;
+        }
+
+        return $primary;
+    }
+
+    protected function customSoftDelete()
+    {
+        $deletedAt = config('laravel_generator.timestamps.deleted_at', 'deleted_at');
+
+        if ($deletedAt === 'deleted_at') {
+            return null;
+        }
+
+        return $deletedAt;
+    }
+
+    protected function customCreatedAt()
+    {
+        $createdAt = config('laravel_generator.timestamps.created_at', 'created_at');
+
+        if ($createdAt === 'created_at') {
+            return null;
+        }
+
+        return $createdAt;
+    }
+
+    protected function customUpdatedAt()
+    {
+        $updatedAt = config('laravel_generator.timestamps.updated_at', 'updated_at');
+
+        if ($updatedAt === 'updated_at') {
+            return null;
+        }
+
+        return $updatedAt;
+    }
+
+    protected function generateFillables(): array
+    {
         $fillables = [];
-        $primaryKey = 'id';
         if (isset($this->config->fields) && !empty($this->config->fields)) {
             foreach ($this->config->fields as $field) {
                 if ($field->isFillable) {
                     $fillables[] = "'".$field->name."'";
                 }
-                if ($field->isPrimary) {
-                    $primaryKey = $field->name;
-                }
             }
         }
 
-        $templateData = $this->fillDocs($templateData);
-
-        $templateData = $this->fillTimestamps($templateData);
-
-        if ($this->config->getOption('primary')) {
-            $primary = infy_tab()."protected \$primaryKey = '".$this->config->getOption('primary')."';\n";
-        } else {
-            $primary = '';
-            if ($this->config->getOption('fieldsFile') && $primaryKey != 'id') {
-                $primary = infy_tab()."protected \$primaryKey = '".$primaryKey."';\n";
-            }
-        }
-
-        $templateData = str_replace('$PRIMARY$', $primary, $templateData);
-
-        $templateData = str_replace('$FIELDS$', implode(','.infy_nl_tab(1, 2), $fillables), $templateData);
-
-        $templateData = str_replace('$RULES$', implode(','.infy_nl_tab(1, 2), $rules), $templateData);
-
-        $templateData = str_replace('$CAST$', implode(','.infy_nl_tab(1, 2), $this->generateCasts()), $templateData);
-
-        $templateData = str_replace(
-            '$RELATIONS$',
-            fill_template($this->config->dynamicVars, implode(PHP_EOL.infy_nl_tab(), $this->generateRelations())),
-            $templateData
-        );
-
-        return str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $templateData);
+        return $fillables;
     }
 
-    private function fillSoftDeletes($templateData): string
+    private function fillDocs(): string
     {
-        if (!$this->config->options->softDelete) {
-            $templateData = str_replace('$SOFT_DELETE_IMPORT$', '', $templateData);
-            $templateData = str_replace('$SOFT_DELETE$', '', $templateData);
-
-            return str_replace('$SOFT_DELETE_DATES$', '', $templateData);
+        if (!$this->config->options->swagger) {
+            return '';
         }
 
-        $templateData = str_replace(
-            '$SOFT_DELETE_IMPORT$',
-            'use Illuminate\Database\Eloquent\SoftDeletes;',
-            $templateData
-        );
-        $templateData = str_replace('$SOFT_DELETE$', infy_tab()."use SoftDeletes;\n", $templateData);
-        $deletedAtTimestamp = config('laravel_generator.timestamps.deleted_at', 'deleted_at');
-
-        return str_replace(
-            '$SOFT_DELETE_DATES$',
-            infy_nl_tab()."protected \$dates = ['".$deletedAtTimestamp."'];\n",
-            $templateData
-        );
-    }
-
-    private function fillHasFactory($templateData): string
-    {
-        if (!$this->config->addons->tests) {
-            $templateData = str_replace('$HAS_FACTORY_IMPORT$', '', $templateData);
-
-            return str_replace('$HAS_FACTORY$', '', $templateData);
-        }
-
-        $templateData = str_replace(
-            '$HAS_FACTORY_IMPORT$',
-            'use Illuminate\Database\Eloquent\Factories\HasFactory;',
-            $templateData
-        );
-
-        return str_replace('$HAS_FACTORY$', infy_tab()."use HasFactory;\n", $templateData);
-    }
-
-    private function fillDocs($templateData)
-    {
-        if ($this->config->addons->swagger) {
-            $templateData = $this->generateSwagger($templateData);
-        }
+        $templateData = $this->generateSwagger('');
 
         $docsTemplate = get_template('docs.model', 'laravel-generator');
         $docsTemplate = fill_template($this->config->dynamicVars, $docsTemplate);
@@ -152,7 +137,7 @@ class ModelGenerator extends BaseGenerator
                     $count++;
                 }
 
-                $fillables .= ' * @property '.$this->getPHPDocType($relation->type, $relation, $relationText).PHP_EOL;
+                $fillables .= ' * @property '.$this->getPHPDocType($relation->type, $relation, $relationText).infy_nl();
                 $fieldsArr[] = $field;
             }
         }
@@ -160,7 +145,7 @@ class ModelGenerator extends BaseGenerator
         if (isset($this->config->fields) && !empty($this->config->fields)) {
             foreach ($this->config->fields as $field) {
                 if ($field->isFillable) {
-                    $fillables .= ' * @property '.$this->getPHPDocType($field->fieldType).' $'.$field->name.PHP_EOL;
+                    $fillables .= ' * @property '.$this->getPHPDocType($field->fieldType).' $'.$field->name.infy_nl();
                 }
             }
         }
@@ -241,27 +226,6 @@ class ModelGenerator extends BaseGenerator
         }
 
         return $requiredFields;
-    }
-
-    private function fillTimestamps($templateData): string
-    {
-        $timestamps = TableFieldsGenerator::getTimestampFieldNames();
-
-        $replace = '';
-        if (empty($timestamps)) {
-            $replace = infy_nl_tab()."public \$timestamps = false;\n";
-        }
-
-        if ($this->config->getOption('fromTable') && !empty($timestamps)) {
-            list($created_at, $updated_at) = collect($timestamps)->map(function ($field) {
-                return !empty($field) ? "'$field'" : 'null';
-            });
-
-            $replace .= infy_nl_tab()."const CREATED_AT = $created_at;";
-            $replace .= infy_nl_tab()."const UPDATED_AT = $updated_at;\n";
-        }
-
-        return str_replace('$TIMESTAMPS$', $replace, $templateData);
     }
 
     private function generateRules(): array
@@ -411,7 +375,7 @@ class ModelGenerator extends BaseGenerator
         return $casts;
     }
 
-    private function generateRelations(): array
+    private function generateRelations(): string
     {
         $relations = [];
 
@@ -435,7 +399,7 @@ class ModelGenerator extends BaseGenerator
             }
         }
 
-        return $relations;
+        return implode(infy_nl_tab(), $relations);
     }
 
     public function rollback()

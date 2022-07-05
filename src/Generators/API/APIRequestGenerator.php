@@ -28,29 +28,26 @@ class APIRequestGenerator extends BaseGenerator
 
     private function generateCreateRequest()
     {
-        $templateData = get_template('api.request.create_request', 'laravel-generator');
-
-        $templateData = fill_template($this->config->dynamicVars, $templateData);
+        $templateData = view('laravel-generator::api.request.create', $this->variables())->render();
 
         g_filesystem()->createFile($this->path.$this->createFileName, $templateData);
 
-        $this->config->commandComment(PHP_EOL.'Create Request created: ');
+        $this->config->commandComment(infy_nl().'Create Request created: ');
         $this->config->commandInfo($this->createFileName);
     }
 
     private function generateUpdateRequest()
     {
-        $modelGenerator = new ModelGenerator();
+        $modelGenerator = app(ModelGenerator::class);
         $rules = $modelGenerator->generateUniqueRules();
-        $this->config->addDynamicVariable('$UNIQUE_RULES$', $rules);
 
-        $templateData = get_template('api.request.update_request', 'laravel-generator');
-
-        $templateData = fill_template($this->config->dynamicVars, $templateData);
+        $templateData = view('laravel-generator::api.request.update', [
+            'uniqueRules' => $rules,
+        ])->render();
 
         g_filesystem()->createFile($this->path.$this->updateFileName, $templateData);
 
-        $this->config->commandComment(PHP_EOL.'Update Request created: ');
+        $this->config->commandComment(infy_nl().'Update Request created: ');
         $this->config->commandInfo($this->updateFileName);
     }
 

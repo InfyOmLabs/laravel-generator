@@ -34,17 +34,6 @@ class GeneratorPublishCommand extends PublishBaseCommand
         }
     }
 
-    private function fillTemplate(string $templateData): string
-    {
-        $apiPrefix = config('laravel_generator.api_prefix', 'api');
-
-        $templateData = str_replace('$API_PREFIX$', $apiPrefix, $templateData);
-        $appNamespace = $this->getLaravel()->getNamespace();
-        $appNamespace = substr($appNamespace, 0, strlen($appNamespace) - 1);
-
-        return str_replace('$NAMESPACE_APP$', $appNamespace, $templateData);
-    }
-
     private function updateRouteServiceProvider()
     {
         $routeServiceProviderPath = app_path('Providers'.DIRECTORY_SEPARATOR.'RouteServiceProvider.php');
@@ -57,11 +46,11 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
         $fileContent = g_filesystem()->getFile($routeServiceProviderPath);
 
-        $search = "Route::middleware('api')".PHP_EOL.str(' ')->repeat(16)."->prefix('api')";
+        $search = "Route::middleware('api')".infy_nl().str(' ')->repeat(16)."->prefix('api')";
         $beforeContent = str($fileContent)->before($search);
         $afterContent = str($fileContent)->after($search);
 
-        $finalContent = $beforeContent.$search.PHP_EOL.str(' ')->repeat(16)."->as('api.')".$afterContent;
+        $finalContent = $beforeContent.$search.infy_nl().str(' ')->repeat(16)."->as('api.')".$afterContent;
         g_filesystem()->createFile($routeServiceProviderPath, $finalContent);
     }
 
@@ -72,10 +61,10 @@ class GeneratorPublishCommand extends PublishBaseCommand
         $createdAtField = config('laravel_generator.timestamps.created_at', 'created_at');
         $updatedAtField = config('laravel_generator.timestamps.updated_at', 'updated_at');
 
-        $templateData = get_template('test.api_test_trait', 'laravel-generator');
-
-        $templateData = str_replace('$NAMESPACE_TESTS$', $testsNameSpace, $templateData);
-        $templateData = str_replace('$TIMESTAMPS$', "['$createdAtField', '$updatedAtField']", $templateData);
+        $templateData = view('laravel-generator::api.test.api_test_trait', [
+            'timestamps'      => "['$createdAtField', '$updatedAtField']",
+            'namespacesTests' => $testsNameSpace,
+        ])->render();
 
         $fileName = 'ApiTestTrait.php';
 
@@ -101,17 +90,17 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
     private function publishBaseController()
     {
-        $templateData = get_template('app_base_controller', 'laravel-generator');
-
-        $templateData = $this->fillTemplate($templateData);
-
         $controllerPath = app_path('Http/Controllers/');
-
         $fileName = 'AppBaseController.php';
 
         if (file_exists($controllerPath.$fileName) && !$this->confirmOverwrite($fileName)) {
             return;
         }
+
+        $templateData = view('laravel-generator::stubs.app_base_controller', [
+            'namespaceApp' => $this->getLaravel()->getNamespace(),
+            'apiPrefix'    => config('laravel_generator.api_prefix'),
+        ])->render();
 
         g_filesystem()->createFile($controllerPath.$fileName, $templateData);
 
@@ -120,19 +109,19 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
     private function publishBaseRepository()
     {
-        $templateData = get_template('base_repository', 'laravel-generator');
-
-        $templateData = $this->fillTemplate($templateData);
-
         $repositoryPath = app_path('Repositories/');
-
-        g_filesystem()->createDirectoryIfNotExist($repositoryPath);
 
         $fileName = 'BaseRepository.php';
 
         if (file_exists($repositoryPath.$fileName) && !$this->confirmOverwrite($fileName)) {
             return;
         }
+
+        g_filesystem()->createDirectoryIfNotExist($repositoryPath);
+
+        $templateData = view('laravel-generator::stubs.base_repository', [
+            'namespaceApp' => $this->getLaravel()->getNamespace(),
+        ])->render();
 
         g_filesystem()->createFile($repositoryPath.$fileName, $templateData);
 
