@@ -73,8 +73,8 @@ class GeneratorPublishCommand extends PublishBaseCommand
         $updatedAtField = config('laravel_generator.timestamps.updated_at', 'updated_at');
 
         $templateData = view('laravel-generator::api.tet.api_test_trait', [
-            'timestamps' => "['$createdAtField', '$updatedAtField']",
-            'namespacesTests' => $testsNameSpace
+            'timestamps'      => "['$createdAtField', '$updatedAtField']",
+            'namespacesTests' => $testsNameSpace,
         ])->render();
 
         $fileName = 'ApiTestTrait.php';
