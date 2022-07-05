@@ -108,7 +108,7 @@ class ControllerGenerator extends BaseGenerator
             }
 
             $dataTableColumns[] = trim(view(
-                $this->templateType.'::templates.scaffold.table.datatable.column',
+                $this->templateType.'::stubs.scaffold.table.datatable.column',
                 $field->variables()
             )->render());
         }

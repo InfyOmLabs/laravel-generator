@@ -1,6 +1,8 @@
-<?php
+@php
+    echo "<?php".PHP_EOL;
+@endphp
 
-namespace $NAMESPACE_APP$\Repositories;
+namespace {{ $namespaceApp }}\Repositories;
 
 use Illuminate\Container\Container as Application;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;

@@ -1,11 +1,13 @@
-<?php
+@php
+    echo "<?php".PHP_EOL;
+@endphp
 
-namespace $NAMESPACE_APP$\Http\Controllers;
+namespace {{ $namespaceApp }}\Http\Controllers;
 
 use InfyOm\Generator\Utils\ResponseUtil;
 
 /**
- * @OA\Server(url="/$API_PREFIX$")
+ * @OA\Server(url="/{{ $apiPrefix }}")
  * @OA\Info(
  *   title="InfyOm Laravel Generator APIs",
  *   version="1.0.0"

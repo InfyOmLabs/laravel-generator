@@ -1,3 +1,0 @@
-Route::group(['prefix' => '$RAW_ROUTE_PREFIX$'], function () {
-    Route::resource('$MODEL_NAME_PLURAL_DASHED$', $NAMESPACE_API_CONTROLLER$\$MODEL_NAME$APIController::class);
-});

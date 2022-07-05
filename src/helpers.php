@@ -56,7 +56,7 @@ if (!function_exists('get_template_file_path')) {
 
         $templatesPath = config(
             'laravel_generator.path.templates_dir',
-            resource_path('infyom/infyom-generator-templates/')
+            resource_path('infyom/infyom-generator-stubs/')
         );
 
         $path = $templatesPath.$templateName.'.stub';
@@ -65,7 +65,7 @@ if (!function_exists('get_template_file_path')) {
             return $path;
         }
 
-        return get_templates_package_path($templateType).'/templates/'.$templateName.'.stub';
+        return get_templates_package_path($templateType).'/stubs/'.$templateName.'.stub';
     }
 }
 

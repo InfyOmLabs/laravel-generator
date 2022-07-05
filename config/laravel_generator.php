@@ -37,7 +37,7 @@ return [
 
         'schema_files'      => resource_path('model_schemas/'),
 
-        'templates_dir'     => resource_path('infyom/infyom-generator-templates/'),
+        'templates_dir'     => resource_path('infyom/infyom-generator-stubs/'),
 
         'seeder'            => database_path('seeders/'),
 
@@ -103,7 +103,7 @@ return [
     |
     */
 
-    'templates'         => 'adminlte-templates',
+    'stubs'         => 'adminlte-stubs',
 
     /*
     |--------------------------------------------------------------------------
@@ -140,7 +140,7 @@ return [
 
         'repository_pattern' => true,
 
-        'resources' => true,
+        'resources' => false,
 
         'factory' => false,
 

@@ -2,10 +2,10 @@
 
 namespace InfyOm\Generator\Commands\Publish;
 
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use InfyOm\Generator\Commands\BaseCommand;
 
-class PublishBaseCommand extends BaseCommand
+class PublishBaseCommand extends Command
 {
     public function handle()
     {
