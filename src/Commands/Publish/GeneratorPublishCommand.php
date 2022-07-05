@@ -99,7 +99,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
         $templateData = view('laravel-generator::stubs.app_base_controller', [
             'namespaceApp' => $this->getLaravel()->getNamespace(),
-            'apiPrefix' => config('laravel_generator.api_prefix'),
+            'apiPrefix'    => config('laravel_generator.api_prefix'),
         ])->render();
 
         g_filesystem()->createFile($controllerPath.$fileName, $templateData);
