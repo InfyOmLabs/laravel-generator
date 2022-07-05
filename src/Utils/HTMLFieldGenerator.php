@@ -2,7 +2,6 @@
 
 namespace InfyOm\Generator\Utils;
 
-use Illuminate\Support\Str;
 use InfyOm\Generator\Common\GeneratorField;
 
 class HTMLFieldGenerator
@@ -19,7 +18,7 @@ class HTMLFieldGenerator
                 $radioLabels = GeneratorFieldsInputUtil::prepareKeyValueArrFromLabelValueStr($field->htmlValues);
 
                 $variables = [
-                    'selectValues' => GeneratorFieldsInputUtil::prepareKeyValueArrayStr($radioLabels)
+                    'selectValues' => GeneratorFieldsInputUtil::prepareKeyValueArrayStr($radioLabels),
                 ];
                 break;
             case 'checkbox':
@@ -36,11 +35,12 @@ class HTMLFieldGenerator
                 $radioButtons = [];
                 foreach ($radioLabels as $label => $value) {
                     $radioButtons[] = view($templateType.'.fields.radio', [
-                        'label' => $label,
-                        'value' => $value,
+                        'label'     => $label,
+                        'value'     => $value,
                         'fieldName' => $field->name,
                     ]);
                 }
+
                 return view($templateType.'.fields.radio_group', array_merge(
                     ['radioButtons' => implode(PHP_EOL, $radioButtons)],
                     $field->variables()
@@ -48,7 +48,7 @@ class HTMLFieldGenerator
         }
 
         return view(
-            $templateType . '.fields.' . $viewName,
+            $templateType.'.fields.'.$viewName,
             array_merge(
                 $field->variables(),
                 $variables
