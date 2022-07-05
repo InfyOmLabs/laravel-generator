@@ -43,7 +43,7 @@ class ModelGenerator extends BaseGenerator
             'fillables'        => implode(','.infy_nl_tab(1, 2), $this->generateFillables()),
             'casts'            => implode(','.infy_nl_tab(1, 2), $this->generateCasts()),
             'rules'            => implode(','.infy_nl_tab(1, 2), $this->generateRules()),
-            'docs'             => $this->fillDocs(),
+            'swaggerDocs'      => $this->fillDocs(),
             'customPrimaryKey' => $this->customPrimaryKey(),
             'customCreatedAt'  => $this->customCreatedAt(),
             'customUpdatedAt'  => $this->customUpdatedAt(),
@@ -121,94 +121,28 @@ class ModelGenerator extends BaseGenerator
             return '';
         }
 
-        $templateData = $this->generateSwagger('');
-
-        $docsTemplate = get_template('docs.model', 'laravel-generator');
-        $docsTemplate = fill_template($this->config->dynamicVars, $docsTemplate);
-
-        $fillables = '';
-        $fieldsArr = [];
-        $count = 1;
-        if (isset($this->config->relations) && !empty($this->config->relations)) {
-            foreach ($this->config->relations as $relation) {
-                $field = $relationText = (isset($relation->inputs[0])) ? $relation->inputs[0] : null;
-                if (in_array($field, $fieldsArr)) {
-                    $relationText = $relationText.'_'.$count;
-                    $count++;
-                }
-
-                $fillables .= ' * @property '.$this->getPHPDocType($relation->type, $relation, $relationText).infy_nl();
-                $fieldsArr[] = $field;
-            }
-        }
-
-        if (isset($this->config->fields) && !empty($this->config->fields)) {
-            foreach ($this->config->fields as $field) {
-                if ($field->isFillable) {
-                    $fillables .= ' * @property '.$this->getPHPDocType($field->fieldType).' $'.$field->name.infy_nl();
-                }
-            }
-        }
-
-        $docsTemplate = str_replace('$GENERATE_DATE$', date('F j, Y, g:i a T'), $docsTemplate);
-        $docsTemplate = str_replace('$PHPDOC$', $fillables, $docsTemplate);
-
-        return str_replace('$DOCS$', $docsTemplate, $templateData);
+        return $this->generateSwagger();
     }
 
-    private function getPHPDocType(string $dbType, GeneratorFieldRelation $relation = null, string $relationText = null): string
+    public function generateSwagger(): string
     {
-        $relationText = (!empty($relationText)) ? $relationText : null;
-        $modelNamespace = $this->config->namespaces->model;
+        $requiredFields = $this->generateRequiredFields();
 
-        switch ($dbType) {
-            case 'datetime':
-                return 'string|\Carbon\Carbon';
-            case '1t1':
-                return '\\'.$modelNamespace.'\\'.$relation->inputs[0].' $'.Str::camel($relationText);
-            case 'mt1':
-                if (isset($relation->inputs[1])) {
-                    $relationName = str_replace('_id', '', strtolower($relation->inputs[1]));
-                } else {
-                    $relationName = $relationText;
-                }
-
-                return '\\'.$modelNamespace.'\\'.$relation->inputs[0].' $'.Str::camel($relationName);
-            case '1tm':
-            case 'mtm':
-            case 'hmt':
-                return '\Illuminate\Database\Eloquent\Collection $'.Str::camel(Str::plural($relationText));
-            default:
-                $fieldData = SwaggerGenerator::getFieldType($dbType);
-                if (!empty($fieldData['fieldType'])) {
-                    return $fieldData['fieldType'];
-                }
-
-                return $dbType;
-        }
-    }
-
-    public function generateSwagger($templateData): string
-    {
         $fieldTypes = SwaggerGenerator::generateTypes($this->config->fields);
 
-        $template = get_template('model_docs.model', 'swagger-generator');
+        $properties = [];
+        foreach ($fieldTypes as $fieldType) {
+            $properties[] = view(
+                'swagger-generator::model.property', $fieldType
+            )->render();
+        }
 
-        $template = fill_template($this->config->dynamicVars, $template);
+        $requiredFields = '{'.implode(',', $requiredFields).'}';
 
-        $template = str_replace(
-            '$REQUIRED_FIELDS$',
-            '"'.implode('"'.', '.'"', $this->generateRequiredFields()).'"',
-            $template
-        );
-
-        $propertyTemplate = get_template('model_docs.property', 'swagger-generator');
-
-        $properties = SwaggerGenerator::preparePropertyFields($propertyTemplate, $fieldTypes);
-
-        $template = str_replace('$PROPERTIES$', implode(",\n", $properties), $template);
-
-        return str_replace('$DOCS$', $template, $templateData);
+        return view('swagger-generator::model.model', [
+            'requiredFields' => $requiredFields,
+            'properties' => implode(",".infy_nl().' ', $properties),
+        ]);
     }
 
     private function generateRequiredFields(): array
@@ -219,7 +153,7 @@ class ModelGenerator extends BaseGenerator
             foreach ($this->config->fields as $field) {
                 if (!empty($field->validations)) {
                     if (Str::contains($field->validations, 'required')) {
-                        $requiredFields[] = $field->name;
+                        $requiredFields[] = '"'.$field->name.'"';
                     }
                 }
             }

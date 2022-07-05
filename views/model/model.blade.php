@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 @if($config->options->softDelete) {{ 'use Illuminate\Database\Eloquent\SoftDeletes;' }};@endif
 @if($config->options->tests) {{ 'use Illuminate\Database\Eloquent\Factories\HasFactory;' }};@endif
 
-@if(isset($swaggerDocs)){{ $swaggerDocs }}@endif
+@if(isset($swaggerDocs)){!! $swaggerDocs  !!}@endif
 class {{ $config->modelNames->name }} extends Model
 {
 @if($config->options->softDelete) {{ infy_tab().'use SoftDeletes;' }}@endif
