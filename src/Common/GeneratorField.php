@@ -172,12 +172,16 @@ class GeneratorField
         return $field;
     }
 
-    public function __get($key)
+    public function getTitle()
     {
-        if ($key == 'fieldTitle') {
-            return Str::title(str_replace('_', ' ', $this->name));
-        }
+        return Str::title(str_replace('_', ' ', $this->name));
+    }
 
-        return $this->$key;
+    public function variables()
+    {
+        return [
+            'fieldName' => $this->name,
+            'fieldTitle' => $this->getTitle(),
+        ];
     }
 }

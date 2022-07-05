@@ -22,50 +22,35 @@ class ControllerGenerator extends BaseGenerator
 
     public function generate()
     {
+        $variables = [];
+
         switch ($this->config->tableType) {
             case 'blade':
                 if ($this->config->options->repositoryPattern) {
-                    $templateName = 'repository.controller';
+                    $viewName = 'repository.controller';
                 } else {
-                    $templateName = 'model.controller';
-                }
-                if ($this->config->isLocalizedTemplates()) {
-                    $templateName .= '_locale';
+                    $viewName = 'model.controller';
                 }
 
-                $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
-
-                $templateData = str_replace('$RENDER_TYPE$', 'paginate(10)', $templateData);
+                $variables['renderType'] = 'paginate(10)';
                 break;
 
             case 'datatables':
                 if ($this->config->options->repositoryPattern) {
-                    $templateName = 'repository.datatable.controller';
+                    $viewName = 'repository.datatable.controller';
                 } else {
-                    $templateName = 'model.datatable.controller';
+                    $viewName = 'model.datatable.controller';
                 }
-
-                if ($this->config->isLocalizedTemplates()) {
-                    $templateName .= '_locale';
-                }
-
-                $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
 
                 $this->generateDataTable();
                 break;
 
             case 'livewire':
                 if ($this->config->options->repositoryPattern) {
-                    $templateName = 'repository.livewire.controller';
+                    $viewName = 'repository.livewire.controller';
                 } else {
-                    $templateName = 'model.livewire.controller';
+                    $viewName = 'model.livewire.controller';
                 }
-
-                if ($this->config->isLocalizedTemplates()) {
-                    $templateName .= '_locale';
-                }
-
-                $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
 
                 $this->generateLivewireTable();
                 break;
@@ -74,7 +59,7 @@ class ControllerGenerator extends BaseGenerator
                 throw new Exception('Invalid Table Type');
         }
 
-        $templateData = fill_template($this->config->dynamicVars, $templateData);
+        $templateData = view('laravel-generator::scaffold.controller.'.$viewName, $variables)->render();
 
         g_filesystem()->createFile($this->path.$this->fileName, $templateData);
 
@@ -84,20 +69,9 @@ class ControllerGenerator extends BaseGenerator
 
     private function generateDataTable()
     {
-        $templateName = 'table.datatable';
-        if ($this->config->isLocalizedTemplates()) {
-            $templateName .= '_locale';
-        }
-
-        $templateData = get_template('scaffold.'.$templateName, 'laravel-generator');
-
-        $templateData = fill_template($this->config->dynamicVars, $templateData);
-
-        $templateData = str_replace(
-            '$DATATABLE_COLUMNS$',
-            implode(','.infy_nl_tab(1, 3), $this->generateDataTableColumns()),
-            $templateData
-        );
+        $templateData = view('laravel-generator::scaffold.table.datatable', [
+            'columns' => implode(','.infy_nl_tab(1, 3), $this->generateDataTableColumns())
+        ])->render();
 
         $path = $this->config->paths->dataTables;
 
@@ -111,20 +85,9 @@ class ControllerGenerator extends BaseGenerator
 
     private function generateLivewireTable()
     {
-        $templateName = 'table.livewire';
-        if ($this->config->isLocalizedTemplates()) {
-            $templateName .= '_locale';
-        }
-
-        $templateData = get_template('scaffold.'.$templateName, 'laravel-generator');
-
-        $templateData = fill_template($this->config->dynamicVars, $templateData);
-
-        $templateData = str_replace(
-            '$LIVEWIRE_COLUMNS$',
-            implode(','.infy_nl_tab(1, 3), $this->generateLivewireTableColumns()),
-            $templateData
-        );
+        $templateData = view('laravel-generator::scaffold.table.livewire', [
+            'columns' => implode(','.infy_nl_tab(1, 3), $this->generateLivewireTableColumns())
+        ])->render();
 
         $path = $this->config->paths->livewireTables;
 
@@ -138,38 +101,16 @@ class ControllerGenerator extends BaseGenerator
 
     private function generateDataTableColumns(): array
     {
-        $templateName = 'table.datatable.column';
-        if ($this->config->isLocalizedTemplates()) {
-            $templateName .= '_locale';
-        }
-        $headerFieldTemplate = get_template('scaffold.views.'.$templateName, $this->templateType);
-
         $dataTableColumns = [];
         foreach ($this->config->fields as $field) {
             if (!$field->inIndex) {
                 continue;
             }
 
-            if ($this->config->isLocalizedTemplates() && !$field->isSearchable) {
-                $headerFieldTemplate = str_replace('$SEARCHABLE$', ",'searchable' => false", $headerFieldTemplate);
-            }
-
-            $fieldTemplate = fill_template_with_field_data(
-                $this->config->dynamicVars,
-                ['$FIELD_NAME_TITLE$' => 'fieldTitle', '$FIELD_NAME$' => 'name'],
-                $headerFieldTemplate,
-                $field
-            );
-
-            if ($field->isSearchable) {
-                $dataTableColumns[] = $fieldTemplate;
-            } else {
-                if ($this->config->isLocalizedTemplates()) {
-                    $dataTableColumns[] = $fieldTemplate;
-                } else {
-                    $dataTableColumns[] = "'".$field->name."' => ['searchable' => false]";
-                }
-            }
+            $dataTableColumns[] = trim(view(
+                $this->templateType.'::templates.scaffold.table.datatable.column',
+                $field->variables()
+            )->render());
         }
 
         return $dataTableColumns;
@@ -184,14 +125,8 @@ class ControllerGenerator extends BaseGenerator
                 continue;
             }
 
-            $fieldTemplate = 'Column::make("$FIELD_NAME_TITLE$", "$FIELD_NAME$")'.PHP_EOL.infy_tabs(4).'->sortable()';
-
-            $fieldTemplate = fill_template_with_field_data(
-                $this->config->dynamicVars,
-                ['$FIELD_NAME_TITLE$' => 'fieldTitle', '$FIELD_NAME$' => 'name'],
-                $fieldTemplate,
-                $field
-            );
+            $fieldTemplate = 'Column::make("'.$field->getTitle().'", "'.$field->name.'")'.PHP_EOL;
+            $fieldTemplate .= infy_tabs(4).'->sortable()';
 
             if ($field->isSearchable) {
                 $fieldTemplate .= PHP_EOL.infy_tabs(4).'->searchable()';

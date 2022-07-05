@@ -28,9 +28,7 @@ class RequestGenerator extends BaseGenerator
 
     private function generateCreateRequest()
     {
-        $templateData = get_template('scaffold.request.create_request', 'laravel-generator');
-
-        $templateData = fill_template($this->config->dynamicVars, $templateData);
+        $templateData = view('laravel-generator::scaffold.request.create', $this->variables())->render();
 
         g_filesystem()->createFile($this->path.$this->createFileName, $templateData);
 
@@ -42,11 +40,10 @@ class RequestGenerator extends BaseGenerator
     {
         $modelGenerator = new ModelGenerator();
         $rules = $modelGenerator->generateUniqueRules();
-        $this->config->addDynamicVariable('$UNIQUE_RULES$', $rules);
 
-        $templateData = get_template('scaffold.request.update_request', 'laravel-generator');
-
-        $templateData = fill_template($this->config->dynamicVars, $templateData);
+        $templateData = view('laravel-generator::scaffold.request.update', [
+            'uniqueRules' => $rules,
+        ])->render();
 
         g_filesystem()->createFile($this->path.$this->updateFileName, $templateData);
 

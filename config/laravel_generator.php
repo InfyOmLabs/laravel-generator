@@ -136,7 +136,7 @@ return [
 
         'save_schema_file' => true,
 
-        'localized' => true,
+        'localized' => false,
 
         'repository_pattern' => true,
 
