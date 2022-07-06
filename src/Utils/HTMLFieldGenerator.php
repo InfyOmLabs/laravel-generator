@@ -70,7 +70,6 @@ class HTMLFieldGenerator
         $validationRules = [];
 
         foreach ($validations as $validation) {
-
             if ($validation === 'required') {
                 $validationRules[] = "'required'";
                 continue;
