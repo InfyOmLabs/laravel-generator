@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Utils;
 
+use Illuminate\Support\Str;
 use InfyOm\Generator\Common\GeneratorField;
 
 class HTMLFieldGenerator
@@ -10,6 +11,10 @@ class HTMLFieldGenerator
     {
         $viewName = $field->htmlType;
         $variables = [];
+
+        if (!empty($validations = self::generateValidations($field))) {
+            $variables['options'] = ', '.implode(', ', $validations);
+        }
 
         switch ($field->htmlType) {
             case 'select':
@@ -43,7 +48,10 @@ class HTMLFieldGenerator
 
                 return view($templateType.'.fields.radio_group', array_merge(
                     ['radioButtons' => implode(infy_nl(), $radioButtons)],
-                    $field->variables()
+                    array_merge(
+                        $field->variables(),
+                        $variables
+                    )
                 ))->render();
         }
 
@@ -54,5 +62,36 @@ class HTMLFieldGenerator
                 $variables
             )
         )->render();
+    }
+
+    public static function generateValidations(GeneratorField $field)
+    {
+        $validations = explode('|', $field->validations);
+        $validationRules = [];
+
+        foreach ($validations as $validation) {
+
+            if ($validation === 'required') {
+                $validationRules[] = "'required'";
+                continue;
+            }
+
+            if (!Str::contains($validation, ['max:', 'min:'])) {
+                continue;
+            }
+
+            $validationText = substr($validation, 0, 3);
+            $sizeInNumber = substr($validation, 4);
+
+            $sizeText = ($validationText == 'min') ? 'minlength' : 'maxlength';
+            if ($field->htmlType == 'number') {
+                $sizeText = $validationText;
+            }
+
+            $size = "'$sizeText' => $sizeInNumber";
+            $validationRules[] = $size;
+        }
+
+        return $validationRules;
     }
 }

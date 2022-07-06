@@ -148,30 +148,10 @@ class ViewGenerator extends BaseGenerator
                 continue;
             }
 
-            if ($this->config->options->localized) {
-                /**
-                 * Replacing $FIELD_NAME$ before fill_template_with_field_data_locale() otherwise also
-                 * $FIELD_NAME$ get replaced with @lang('models/$modelName.fields.$value')
-                 * and so we don't have $FIELD_NAME$ in table_header_locale.stub
-                 * We could need 'raw' field name in header for example for sorting.
-                 * We still have $FIELD_NAME_TITLE$ replaced with @lang('models/$modelName.fields.$value').
-                 *
-                 * @see issue https://github.com/InfyOmLabs/laravel-generator/issues/887
-                 */
-                $preFilledHeaderFieldTemplate = str_replace('$FIELD_NAME$', $field->name, '');
-
-                $headerFields[] = fill_template_with_field_data_locale(
-                    $this->config->dynamicVars,
-                    ['$FIELD_NAME_TITLE$' => 'fieldTitle', '$FIELD_NAME$' => 'name'],
-                    $preFilledHeaderFieldTemplate,
-                    $field
-                );
-            } else {
-                $headerFields[] = view(
-                    $this->templateType.'::templates.scaffold.table.blade.header',
-                    $field->variables()
-                )->render();
-            }
+            $headerFields[] = view(
+                $this->templateType.'::templates.scaffold.table.blade.header',
+                $field->variables()
+            )->render();
         }
 
         return implode(infy_nl_tab(1, 4), $headerFields);
@@ -209,27 +189,6 @@ class ViewGenerator extends BaseGenerator
             if (!$field->inForm) {
                 continue;
             }
-
-            $validations = explode('|', $field->validations);
-            $minMaxRules = '';
-            foreach ($validations as $validation) {
-                if (!Str::contains($validation, ['max:', 'min:'])) {
-                    continue;
-                }
-
-                $validationText = substr($validation, 0, 3);
-                $sizeInNumber = substr($validation, 4);
-
-                $sizeText = ($validationText == 'min') ? 'minlength' : 'maxlength';
-                if ($field->htmlType == 'number') {
-                    $sizeText = $validationText;
-                }
-
-                $size = ",'$sizeText' => $sizeInNumber";
-                $minMaxRules .= $size;
-            }
-            // TODO:
-//            $this->config->addDynamicVariable('$SIZE$', $minMaxRules);
 
             $htmlFields[] = HTMLFieldGenerator::generateHTML(
                 $field,
