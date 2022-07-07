@@ -149,7 +149,8 @@ if (!function_exists('model_name_from_table_name')) {
     }
 }
 
-function createResourceRouteNames($name, $isScaffold = false) {
+function createResourceRouteNames($name, $isScaffold = false)
+{
     $result = [
         "'index' => '$name.index'",
         "'store' => '$name.store'",
