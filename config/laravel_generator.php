@@ -166,11 +166,7 @@ return [
 
         'namespace' => '',  // e.g. Admin or Admin\Shipping or Admin\Shipping\Logistics
 
-        'path' => '',   // e.g. admin or admin/shipping or admin/shipping/logistics
-
         'view' => '',  // e.g. admin or admin/shipping or admin/shipping/logistics
-
-        'public' => '', // e.g. admin or admin/shipping or admin/shipping/logistics
     ],
 
     /*

@@ -148,3 +148,20 @@ if (!function_exists('model_name_from_table_name')) {
         return Str::ucfirst(Str::camel(Str::singular($tableName)));
     }
 }
+
+function createResourceRouteNames($name, $isScaffold = false) {
+    $result = [
+        "'index' => '$name.index'",
+        "'store' => '$name.store'",
+        "'show' => '$name.show'",
+        "'update' => '$name.update'",
+        "'destroy' => '$name.destroy'",
+    ];
+
+    if ($isScaffold) {
+        $result[] = "'create' => '$name.create'";
+        $result[] = "'edit' => '$name.edit'";
+    }
+
+    return $result;
+}

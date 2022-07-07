@@ -7,10 +7,31 @@ use Illuminate\Support\Str;
 class GeneratorPrefixes
 {
     public string $route = '';
-    public string $path = '';
     public string $view = '';
-    public string $public = '';
     public string $namespace = '';
+
+    public function getRoutePrefixWith($append)
+    {
+        if ($this->route) {
+            return $this->route.$append;
+        }
+
+        return '';
+    }
+
+    public function getViewPrefixWith($append)
+    {
+        if ($this->view) {
+            return $this->view.$append;
+        }
+
+        return '';
+    }
+
+    public function getViewPrefixForInclude()
+    {
+        return Str::replace('/', '.', $this->view).'.';
+    }
 
     public function mergeRoutePrefix(array $prefixes)
     {
@@ -38,31 +59,16 @@ class GeneratorPrefixes
         $this->namespace = ltrim($this->namespace, '\\');
     }
 
-    private function mergeForwardSlashPrefix(string $initialString, array $prefixes): string
+    public function mergeViewPrefix(array $prefixes)
     {
         foreach ($prefixes as $prefix) {
             if (empty($prefix)) {
                 continue;
             }
 
-            $initialString .= '/'.Str::title($prefix);
+            $this->view .= '/'.Str::snake($prefix);
         }
 
-        return ltrim($initialString, '/');
-    }
-
-    public function mergePathPrefix(array $prefixes)
-    {
-        $this->path = $this->mergeForwardSlashPrefix($this->path, $prefixes);
-    }
-
-    public function mergeViewPrefix(array $prefixes)
-    {
-        $this->view = $this->mergeForwardSlashPrefix($this->view, $prefixes);
-    }
-
-    public function mergePublicPrefix(array $prefixes)
-    {
-        $this->public = $this->mergeForwardSlashPrefix($this->public, $prefixes);
+        $this->view = ltrim($this->view, '/');
     }
 }

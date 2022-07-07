@@ -79,18 +79,14 @@ class GeneratorConfig
 
         $prefixes->route = config('laravel_generator.prefixes.route', '');
         $prefixes->namespace = config('laravel_generator.prefixes.namespace', '');
-        $prefixes->path = config('laravel_generator.prefixes.path', '');
         $prefixes->view = config('laravel_generator.prefixes.view', '');
-        $prefixes->public = config('laravel_generator.prefixes.public', '');
 
         if ($this->getOption('prefix')) {
             $multiplePrefixes = explode('/', $this->getOption('prefix'));
 
             $prefixes->mergeRoutePrefix($multiplePrefixes);
             $prefixes->mergeNamespacePrefix($multiplePrefixes);
-            $prefixes->mergePathPrefix($multiplePrefixes);
             $prefixes->mergeViewPrefix($multiplePrefixes);
-            $prefixes->mergePublicPrefix($multiplePrefixes);
         }
 
         $this->prefixes = $prefixes;
@@ -100,20 +96,28 @@ class GeneratorConfig
     {
         $paths = new GeneratorPaths();
 
-        $pathPrefix = $this->prefixes->path;
+        $namespacePrefix = $this->prefixes->namespace;
         $viewPrefix = $this->prefixes->view;
+
+        if (!empty($namespacePrefix)) {
+            $namespacePrefix .= '/';
+        }
+
+        if (!empty($viewPrefix)) {
+            $viewPrefix .= '/';
+        }
 
         $paths->repository = config(
             'laravel_generator.path.repository',
             app_path('Repositories/')
-        ).$pathPrefix;
+        ).$namespacePrefix;
 
-        $paths->model = config('laravel_generator.path.model', app_path('Models/')).$pathPrefix;
+        $paths->model = config('laravel_generator.path.model', app_path('Models/')).$namespacePrefix;
 
         $paths->dataTables = config(
             'laravel_generator.path.datatables',
             app_path('DataTables/')
-        ).$pathPrefix;
+        ).$namespacePrefix;
 
         $paths->livewireTables = config(
             'laravel_generator.path.livewire_tables',
@@ -123,17 +127,17 @@ class GeneratorConfig
         $paths->apiController = config(
             'laravel_generator.path.api_controller',
             app_path('Http/Controllers/API/')
-        ).$pathPrefix;
+        ).$namespacePrefix;
 
         $paths->apiResource = config(
             'laravel_generator.path.api_resource',
             app_path('Http/Resources/')
-        ).$pathPrefix;
+        ).$namespacePrefix;
 
         $paths->apiRequest = config(
             'laravel_generator.path.api_request',
             app_path('Http/Requests/API/')
-        ).$pathPrefix;
+        ).$namespacePrefix;
 
         $paths->apiRoutes = config(
             'laravel_generator.path.api_routes',
@@ -145,9 +149,9 @@ class GeneratorConfig
         $paths->controller = config(
             'laravel_generator.path.controller',
             app_path('Http/Controllers/')
-        ).$pathPrefix;
+        ).$namespacePrefix;
 
-        $paths->request = config('laravel_generator.path.request', app_path('Http/Requests/')).$pathPrefix;
+        $paths->request = config('laravel_generator.path.request', app_path('Http/Requests/')).$namespacePrefix;
 
         $paths->routes = config('laravel_generator.path.routes', base_path('routes/web.php'));
         $paths->factory = config('laravel_generator.path.factory', database_path('factories/'));
@@ -157,21 +161,11 @@ class GeneratorConfig
             resource_path('views/')
         ).$viewPrefix.$this->modelNames->snakePlural.'/';
 
-        $paths->assets = config(
-            'laravel_generator.path.assets',
-            resource_path('assets/')
-        );
-
         $paths->seeder = config('laravel_generator.path.seeder', database_path('seeders/'));
         $paths->databaseSeeder = config('laravel_generator.path.database_seeder', database_path('seeders/DatabaseSeeder.php'));
         $paths->viewProvider = config(
             'laravel_generator.path.view_provider',
             app_path('Providers/ViewServiceProvider.php')
-        );
-
-        $paths->modelJsPath = config(
-            'laravel_generator.path.modelsJs',
-            resource_path('assets/js/models/')
         );
 
         $this->paths = $paths;
@@ -180,6 +174,10 @@ class GeneratorConfig
     public function loadNamespaces()
     {
         $prefix = $this->prefixes->namespace;
+
+        if (!empty($prefix)) {
+            $prefix = '\\'.$prefix;
+        }
 
         $namespaces = new GeneratorNamespaces();
 

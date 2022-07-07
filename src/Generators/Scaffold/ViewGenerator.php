@@ -162,7 +162,7 @@ class ViewGenerator extends BaseGenerator
         switch ($this->config->tableType) {
             case 'datatables':
             case 'blade':
-                $tableReplaceString = "@include('".$this->config->modelNames->snakePlural.".table')";
+                $tableReplaceString = "@include('".$this->config->prefixes->getViewPrefixForInclude().$this->config->modelNames->snakePlural.".table')";
                 break;
 
             case 'livewire':

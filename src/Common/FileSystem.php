@@ -18,7 +18,7 @@ class FileSystem
         $path = dirname($file);
 
         if (!empty($path) && !file_exists($path)) {
-            return mkdir($path, 0755, true);
+            mkdir($path, 0755, true);
         }
 
         return file_put_contents($file, $contents);

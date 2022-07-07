@@ -27,37 +27,35 @@ class ControllerGenerator extends BaseGenerator
         switch ($this->config->tableType) {
             case 'blade':
                 if ($this->config->options->repositoryPattern) {
-                    $viewName = 'repository.controller';
+                    $indexMethodView = 'index_method_repository';
                 } else {
-                    $viewName = 'model.controller';
+                    $indexMethodView = 'index_method';
                 }
-
                 $variables['renderType'] = 'paginate(10)';
                 break;
 
             case 'datatables':
-                if ($this->config->options->repositoryPattern) {
-                    $viewName = 'repository.datatable.controller';
-                } else {
-                    $viewName = 'model.datatable.controller';
-                }
-
+                $indexMethodView = 'index_method_datatable';
                 $this->generateDataTable();
                 break;
 
             case 'livewire':
-                if ($this->config->options->repositoryPattern) {
-                    $viewName = 'repository.livewire.controller';
-                } else {
-                    $viewName = 'model.livewire.controller';
-                }
-
+                $indexMethodView = 'index_method_livewire';
                 $this->generateLivewireTable();
                 break;
 
             default:
                 throw new Exception('Invalid Table Type');
         }
+
+        if ($this->config->options->repositoryPattern) {
+            $viewName = 'controller_repository';
+        } else {
+            $viewName = 'controller';
+        }
+
+        $variables['indexMethod'] = view('laravel-generator::scaffold.controller.'.$indexMethodView, $variables)
+            ->render();
 
         $templateData = view('laravel-generator::scaffold.controller.'.$viewName, $variables)->render();
 
