@@ -23,18 +23,14 @@ class GeneratorField
     public bool $inForm = true;
     public bool $inIndex = true;
     public bool $inView = true;
+    public bool $isNotNull = false;
 
     public string $migrationText = '';
     public string $foreignKeyText = '';
 
-    public bool $isNotNull = false;
-
     public int $numberDecimalPoints = 2;
 
-    /**
-     * @param $dbInput
-     */
-    public function parseDBType($dbInput)
+    public function parseDBType(string $dbInput)
     {
         if (!Str::contains($dbInput, ':')) {
             $this->dbType = $dbInput;
@@ -64,7 +60,7 @@ class GeneratorField
         $this->prepareMigrationText();
     }
 
-    public function parseHtmlInput($htmlInput)
+    public function parseHtmlInput(string $htmlInput)
     {
         if (empty($htmlInput)) {
             $this->htmlType = 'text';
@@ -83,7 +79,7 @@ class GeneratorField
         $this->htmlValues = explode(',', implode(':', $htmlInputArr));
     }
 
-    public function parseOptions($options)
+    public function parseOptions(string $options)
     {
         $options = strtolower($options);
         $optionsArr = explode(',', $options);
@@ -209,7 +205,7 @@ class GeneratorField
         return $field;
     }
 
-    public static function parseFieldFromFile($fieldInput): self
+    public static function parseFieldFromFile(array $fieldInput): self
     {
         $field = new self();
         $field->name = $fieldInput['name'];
@@ -230,12 +226,12 @@ class GeneratorField
         return $field;
     }
 
-    public function getTitle()
+    public function getTitle(): string
     {
         return Str::title(str_replace('_', ' ', $this->name));
     }
 
-    public function variables()
+    public function variables(): array
     {
         return [
             'fieldName'  => $this->name,
