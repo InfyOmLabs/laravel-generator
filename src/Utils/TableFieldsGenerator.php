@@ -211,13 +211,13 @@ class TableFieldsGenerator
         $field->htmlType = 'number';
 
         if ($column->getAutoincrement()) {
-            $field->dbInput .= ',true';
+            $field->dbType .= ',true';
         } else {
-            $field->dbInput .= ',false';
+            $field->dbType .= ',false';
         }
 
         if ($column->getUnsigned()) {
-            $field->dbInput .= ',true';
+            $field->dbType .= ',true';
         }
 
         return $this->checkForPrimary($field);
@@ -257,7 +257,7 @@ class TableFieldsGenerator
     {
         $field = new GeneratorField();
         $field->name = $column->getName();
-        $field->parseDBType($dbType, $column);
+        $field->parseDBType($dbType);//, $column); TODO: handle column param
         $field->parseHtmlInput($htmlType);
 
         return $this->checkForPrimary($field);

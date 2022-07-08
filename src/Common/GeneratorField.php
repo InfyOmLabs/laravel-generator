@@ -9,66 +9,76 @@ class GeneratorField
 {
     /** @var string */
     public string $name;
-    public string $dbInput;
-    public $htmlType;
-    public $fieldType;
+    public string $dbType;
+    public array $dbTypeParams = [];
+    public array $dbExtraFunctions = [];
+
+    public string $htmlType;
+    public array $htmlValues = [];
+
     public string $description;
-
-    public array $htmlValues;
-
-    public string $migrationText;
-    public string $foreignKeyText;
     public string $validations = '';
-
     public bool $isSearchable = true;
     public bool $isFillable = true;
     public bool $isPrimary = false;
     public bool $inForm = true;
     public bool $inIndex = true;
     public bool $inView = true;
+
+    public string $migrationText = '';
+    public string $foreignKeyText = '';
+
     public bool $isNotNull = false;
 
     public int $numberDecimalPoints = 2;
 
     /**
-     * @param Column $column
      * @param $dbInput
      */
-    public function parseDBType($dbInput, $column = null)
+    public function parseDBType($dbInput)
     {
-        $this->dbInput = $dbInput;
-        if (!is_null($column)) {
-            $this->dbInput = ($column->getLength() > 0) ? $this->dbInput.','.$column->getLength() : $this->dbInput;
-            $this->dbInput = (!$column->getNotnull()) ? $this->dbInput.':nullable' : $this->dbInput;
+        if (!Str::contains($dbInput, ':')) {
+            $this->dbType = $dbInput;
+            $this->prepareMigrationText();
+            return;
         }
+
+        $dbInputArr = explode(':', $dbInput);
+        $dbType = (string)array_shift($dbInputArr);
+
+        if (Str::contains($dbType, ',')) {
+            $dbTypeArr = explode(',', $dbType);
+            $this->dbType = (string)array_shift($dbTypeArr);
+            $this->dbTypeParams = $dbTypeArr;
+        } else {
+            $this->dbType = $dbType;
+        }
+
+        $this->dbExtraFunctions = $dbInputArr;
+
+//        if (!is_null($column)) {
+//            $this->dbType = ($column->getLength() > 0) ? $this->dbType.','.$column->getLength() : $this->dbType;
+//            $this->dbType = (!$column->getNotnull()) ? $this->dbType.':nullable' : $this->dbType;
+//        }
+
         $this->prepareMigrationText();
     }
 
     public function parseHtmlInput($htmlInput)
     {
-        $this->htmlValues = [];
-
         if (empty($htmlInput)) {
             $this->htmlType = 'text';
-
             return;
         }
 
-        if (Str::contains($htmlInput, 'selectTable')) {
-            $inputsArr = explode(':', $htmlInput);
-            $this->htmlType = array_shift($inputsArr);
-            $this->htmlValues = $inputsArr;
-
+        if (!Str::contains($htmlInput, ':')) {
+            $this->htmlType = $htmlInput;
             return;
         }
 
-        $inputsArr = explode(',', $htmlInput);
-
-        $this->htmlType = array_shift($inputsArr);
-
-        if (count($inputsArr) > 0) {
-            $this->htmlValues = $inputsArr;
-        }
+        $htmlInputArr = explode(':', $htmlInput);
+        $this->htmlType = (string)array_shift($htmlInputArr);
+        $this->htmlValues = explode(',', implode(':', $htmlInputArr));
     }
 
     public function parseOptions($options)
@@ -103,52 +113,96 @@ class GeneratorField
 
     private function prepareMigrationText()
     {
-        $inputsArr = explode(':', $this->dbInput);
         $this->migrationText = '$table->';
+        $this->migrationText .= $this->dbType . "('" . $this->name . "'";
 
-        $fieldTypeParams = explode(',', array_shift($inputsArr));
-        $this->fieldType = array_shift($fieldTypeParams);
-        $this->migrationText .= $this->fieldType."('".$this->name."'";
+        if (!count($this->dbTypeParams) and !count($this->dbExtraFunctions)) {
+            $this->migrationText .= ");";
+            return;
+        }
 
-        if ($this->fieldType == 'enum') {
-            $this->migrationText .= ', [';
-            foreach ($fieldTypeParams as $param) {
-                $this->migrationText .= "'".$param."',";
-            }
-            $this->migrationText = substr($this->migrationText, 0, strlen($this->migrationText) - 1);
-            $this->migrationText .= ']';
-        } else {
-            foreach ($fieldTypeParams as $param) {
-                $this->migrationText .= ', '.$param;
+        if (count($this->dbTypeParams)) {
+//        if ($this->dbType === 'enum') {
+//            $this->migrationText .= ', [';
+//            foreach ($fieldTypeParams as $param) {
+//                $this->migrationText .= "'".$param."',";
+//            }
+//            $this->migrationText = substr($this->migrationText, 0, strlen($this->migrationText) - 1);
+//            $this->migrationText .= ']';
+//        }
+            foreach ($this->dbTypeParams as $dbTypeParam) {
+                $this->migrationText .= ', ' . $dbTypeParam;
             }
         }
 
-        $this->migrationText .= ')';
-        $this->foreignKeyText = '';
+        $this->migrationText .= ")";
 
-        foreach ($inputsArr as $input) {
-            $inputParams = explode(',', $input);
-            $functionName = array_shift($inputParams);
-            if ($functionName == 'foreign') {
-                $foreignTable = array_shift($inputParams);
-                $foreignField = array_shift($inputParams);
-                $this->foreignKeyText .= "\$table->foreign('".$this->name."')->references('".$foreignField."')->on('".$foreignTable."')";
-                if (count($inputParams)) {
-                    $cascade = array_shift($inputParams);
-                    if ($cascade == 'cascade') {
+        if (!count($this->dbExtraFunctions)) {
+            $this->migrationText .= ";";
+            return;
+        }
+
+        $this->foreignKeyText = '';
+        foreach ($this->dbExtraFunctions as $dbExtraFunction) {
+            $dbExtraFunctionArr = explode(',', $dbExtraFunction);
+            $functionName = (string)array_shift($dbExtraFunctionArr);
+            if ($functionName === 'foreign') {
+                $foreignTable = array_shift($dbExtraFunctionArr);
+                $foreignField = array_shift($dbExtraFunctionArr);
+                $this->foreignKeyText .= "\$table->foreign('" . $this->name . "')->references('" . $foreignField . "')->on('" . $foreignTable . "')";
+                if (count($dbExtraFunctionArr)) {
+                    $cascade = array_shift($dbExtraFunctionArr);
+                    if ($cascade === 'cascade') {
                         $this->foreignKeyText .= "->onUpdate('cascade')->onDelete('cascade')";
                     }
                 }
                 $this->foreignKeyText .= ';';
             } else {
-                $this->migrationText .= '->'.$functionName;
+                $this->migrationText .= '->' . $functionName;
                 $this->migrationText .= '(';
-                $this->migrationText .= implode(', ', $inputParams);
+                $this->migrationText .= implode(', ', $dbExtraFunctionArr);
                 $this->migrationText .= ')';
             }
         }
 
         $this->migrationText .= ';';
+    }
+
+    public static function parseFieldFromConsoleInput(string $fieldInput, string $validations = ''): self
+    {
+        /*
+         * Field Input Format: field_name <space> db_type <space> html_type(optional) <space> options(optional)
+         * Options are to skip the field from certain criteria like searchable, fillable, not in form, not in index
+         * Searchable (s), Fillable (f), In Form (if), In Index (ii)
+         * Sample Field Inputs
+         *
+         * title string text
+         * body text textarea
+         * name string,20 text
+         * post_id integer:unsigned:nullable
+         * post_id unsignedinteger:nullable:foreign,posts,id
+         * password string text if,ii,s - options will skip field from being added in form, in index and searchable
+         */
+
+        $field = new self();
+        $fieldInputArr = explode(' ', $fieldInput);
+        $field->name = $fieldInputArr[0];
+
+        $field->parseDBType($fieldInputArr[1]);
+
+        $field->parseHtmlInput($fieldInputArr[2]);
+
+        if (count($fieldInputArr) > 3) {
+            $field->parseOptions($fieldInputArr[3]);
+        }
+
+        $field->validations = $validations;
+
+        if (str_contains($field->validations, 'required')) {
+            $field->isNotNull = true;
+        }
+
+        return $field;
     }
 
     public static function parseFieldFromFile($fieldInput): self
@@ -180,7 +234,7 @@ class GeneratorField
     public function variables()
     {
         return [
-            'fieldName'  => $this->name,
+            'fieldName' => $this->name,
             'fieldTitle' => $this->getTitle(),
         ];
     }

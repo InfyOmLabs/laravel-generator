@@ -20,10 +20,10 @@ class HTMLFieldGenerator
             case 'select':
             case 'enum':
                 $viewName = 'select';
-                $radioLabels = GeneratorFieldsInputUtil::prepareKeyValueArrFromLabelValueStr($field->htmlValues);
+                $keyValues = GeneratorFieldsInputUtil::prepareKeyValueArrFromLabelValueStr($field->htmlValues);
 
                 $variables = [
-                    'selectValues' => GeneratorFieldsInputUtil::prepareKeyValueArrayStr($radioLabels),
+                    'selectValues' => GeneratorFieldsInputUtil::prepareKeyValueArrayStr($keyValues),
                 ];
                 break;
             case 'checkbox':
@@ -35,10 +35,10 @@ class HTMLFieldGenerator
                 $variables['checkboxVal'] = $checkboxValue;
                 break;
             case 'radio':
-                $radioLabels = GeneratorFieldsInputUtil::prepareKeyValueArrFromLabelValueStr($field->htmlValues);
+                $keyValues = GeneratorFieldsInputUtil::prepareKeyValueArrFromLabelValueStr($field->htmlValues);
 
                 $radioButtons = [];
-                foreach ($radioLabels as $label => $value) {
+                foreach ($keyValues as $label => $value) {
                     $radioButtons[] = view($templateType.'.fields.radio', [
                         'label'     => $label,
                         'value'     => $value,

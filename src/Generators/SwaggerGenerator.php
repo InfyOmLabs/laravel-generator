@@ -12,7 +12,7 @@ class SwaggerGenerator
 
         /** @var GeneratorField $field */
         foreach ($inputFields as $field) {
-            $fieldData = self::getFieldType($field->fieldType);
+            $fieldData = self::getFieldType($field->dbType);
 
             if (empty($fieldData['fieldType'])) {
                 continue;

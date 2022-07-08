@@ -186,7 +186,7 @@ class ModelGenerator extends BaseGenerator
                         $rule[] = 'nullable';
                     }
 
-                    switch ($field->fieldType) {
+                    switch ($field->dbType) {
                         case 'integer':
                             $rule[] = 'integer';
                             break;
@@ -202,7 +202,7 @@ class ModelGenerator extends BaseGenerator
                             $rule[] = 'string';
 
                             // Enforce a maximum string length if possible.
-                            foreach (explode(':', $field->dbInput) as $key => $value) {
+                            foreach (explode(':', $field->dbType) as $key => $value) {
                                 if (preg_match('/string,(\d+)/', $value, $matches)) {
                                     $rule[] = 'max:'.$matches[1];
                                 }
@@ -263,7 +263,7 @@ class ModelGenerator extends BaseGenerator
 
             $rule = "'".$field->name."' => ";
 
-            switch (strtolower($field->fieldType)) {
+            switch (strtolower($field->dbType)) {
                 case 'integer':
                 case 'increments':
                 case 'smallinteger':

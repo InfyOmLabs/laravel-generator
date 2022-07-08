@@ -203,7 +203,7 @@ class BaseCommand extends Command
         foreach ($this->config->fields as $field) {
             $fileFields[] = [
                 'name'        => $field->name,
-                'dbType'      => $field->dbInput,
+                'dbType'      => $field->dbType,
                 'htmlType'    => $field->htmlType,
                 'validations' => $field->validations,
                 'searchable'  => $field->isSearchable,
@@ -358,7 +358,7 @@ class BaseCommand extends Command
                 $relation = '';
             }
 
-            $this->config->fields[] = GeneratorFieldsInputUtil::processFieldInput(
+            $this->config->fields[] = GeneratorField::parseFieldFromConsoleInput(
                 $fieldInputStr,
                 $validations
             );

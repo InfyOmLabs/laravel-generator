@@ -85,7 +85,7 @@ class FactoryGenerator extends BaseGenerator
                 $rule = $rules[$field->name];
             }
 
-            switch (strtolower($field->fieldType)) {
+            switch (strtolower($field->dbType)) {
                 case 'integer':
                 case 'unsignedinteger':
                 case 'smallinteger':

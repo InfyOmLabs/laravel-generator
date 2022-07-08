@@ -2,8 +2,6 @@
 
 namespace InfyOm\Generator\Utils;
 
-use InfyOm\Generator\Common\GeneratorField;
-
 class GeneratorFieldsInputUtil
 {
     public static function validateFieldInput($fieldInputStr): bool
@@ -15,45 +13,6 @@ class GeneratorFieldsInputUtil
         }
 
         return true;
-    }
-
-    public static function processFieldInput(string $fieldInput, string $validations): GeneratorField
-    {
-        /*
-         * Field Input Format: field_name <space> db_type <space> html_type(optional) <space> options(optional)
-         * Options are to skip the field from certain criteria like searchable, fillable, not in form, not in index
-         * Searchable (s), Fillable (f), In Form (if), In Index (ii)
-         * Sample Field Inputs
-         *
-         * title string text
-         * body text textarea
-         * name string,20 text
-         * post_id integer:unsigned:nullable
-         * post_id integer:unsigned:nullable:foreign,posts,id
-         * password string text if,ii,s - options will skip field from being added in form, in index and searchable
-         */
-
-        $fieldInputsArr = explode(' ', $fieldInput);
-
-        $field = new GeneratorField();
-        $field->name = $fieldInputsArr[0];
-        $field->parseDBType($fieldInputsArr[1]);
-
-        if (count($fieldInputsArr) > 2) {
-            $field->parseHtmlInput($fieldInputsArr[2]);
-        }
-
-        if (count($fieldInputsArr) > 3) {
-            $field->parseOptions($fieldInputsArr[3]);
-        }
-
-        $field->validations = $validations;
-
-        if (str_contains($field->validations, 'required')) {
-            $field->isNotNull = true;
-        }
-
-        return $field;
     }
 
     /**
