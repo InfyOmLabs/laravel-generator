@@ -12,7 +12,7 @@ class GeneratorField
     public array $dbTypeParams = [];
     public array $dbExtraFunctions = [];
 
-    public string $htmlType;
+    public string $htmlType = '';
     public array $htmlValues = [];
 
     public string $description;
