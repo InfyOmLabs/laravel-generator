@@ -2,7 +2,6 @@
 
 namespace InfyOm\Generator\Common;
 
-use Doctrine\DBAL\Schema\Column;
 use Illuminate\Support\Str;
 
 class GeneratorField
@@ -40,15 +39,16 @@ class GeneratorField
         if (!Str::contains($dbInput, ':')) {
             $this->dbType = $dbInput;
             $this->prepareMigrationText();
+
             return;
         }
 
         $dbInputArr = explode(':', $dbInput);
-        $dbType = (string)array_shift($dbInputArr);
+        $dbType = (string) array_shift($dbInputArr);
 
         if (Str::contains($dbType, ',')) {
             $dbTypeArr = explode(',', $dbType);
-            $this->dbType = (string)array_shift($dbTypeArr);
+            $this->dbType = (string) array_shift($dbTypeArr);
             $this->dbTypeParams = $dbTypeArr;
         } else {
             $this->dbType = $dbType;
@@ -68,16 +68,18 @@ class GeneratorField
     {
         if (empty($htmlInput)) {
             $this->htmlType = 'text';
+
             return;
         }
 
         if (!Str::contains($htmlInput, ':')) {
             $this->htmlType = $htmlInput;
+
             return;
         }
 
         $htmlInputArr = explode(':', $htmlInput);
-        $this->htmlType = (string)array_shift($htmlInputArr);
+        $this->htmlType = (string) array_shift($htmlInputArr);
         $this->htmlValues = explode(',', implode(':', $htmlInputArr));
     }
 
@@ -114,10 +116,11 @@ class GeneratorField
     private function prepareMigrationText()
     {
         $this->migrationText = '$table->';
-        $this->migrationText .= $this->dbType . "('" . $this->name . "'";
+        $this->migrationText .= $this->dbType."('".$this->name."'";
 
         if (!count($this->dbTypeParams) and !count($this->dbExtraFunctions)) {
-            $this->migrationText .= ");";
+            $this->migrationText .= ');';
+
             return;
         }
 
@@ -131,25 +134,26 @@ class GeneratorField
 //            $this->migrationText .= ']';
 //        }
             foreach ($this->dbTypeParams as $dbTypeParam) {
-                $this->migrationText .= ', ' . $dbTypeParam;
+                $this->migrationText .= ', '.$dbTypeParam;
             }
         }
 
-        $this->migrationText .= ")";
+        $this->migrationText .= ')';
 
         if (!count($this->dbExtraFunctions)) {
-            $this->migrationText .= ";";
+            $this->migrationText .= ';';
+
             return;
         }
 
         $this->foreignKeyText = '';
         foreach ($this->dbExtraFunctions as $dbExtraFunction) {
             $dbExtraFunctionArr = explode(',', $dbExtraFunction);
-            $functionName = (string)array_shift($dbExtraFunctionArr);
+            $functionName = (string) array_shift($dbExtraFunctionArr);
             if ($functionName === 'foreign') {
                 $foreignTable = array_shift($dbExtraFunctionArr);
                 $foreignField = array_shift($dbExtraFunctionArr);
-                $this->foreignKeyText .= "\$table->foreign('" . $this->name . "')->references('" . $foreignField . "')->on('" . $foreignTable . "')";
+                $this->foreignKeyText .= "\$table->foreign('".$this->name."')->references('".$foreignField."')->on('".$foreignTable."')";
                 if (count($dbExtraFunctionArr)) {
                     $cascade = array_shift($dbExtraFunctionArr);
                     if ($cascade === 'cascade') {
@@ -158,7 +162,7 @@ class GeneratorField
                 }
                 $this->foreignKeyText .= ';';
             } else {
-                $this->migrationText .= '->' . $functionName;
+                $this->migrationText .= '->'.$functionName;
                 $this->migrationText .= '(';
                 $this->migrationText .= implode(', ', $dbExtraFunctionArr);
                 $this->migrationText .= ')';
@@ -234,7 +238,7 @@ class GeneratorField
     public function variables()
     {
         return [
-            'fieldName' => $this->name,
+            'fieldName'  => $this->name,
             'fieldTitle' => $this->getTitle(),
         ];
     }
