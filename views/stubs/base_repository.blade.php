@@ -2,7 +2,7 @@
     echo "<?php".PHP_EOL;
 @endphp
 
-namespace {{ $namespaceApp }}\Repositories;
+namespace {{ $namespaceApp }}Repositories;
 
 use Illuminate\Container\Container as Application;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
