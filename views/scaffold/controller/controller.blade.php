@@ -5,7 +5,7 @@
 namespace {{ $config->namespaces->controller }};
 
 @if(config('laravel_generator.tables') == 'datatables')
-use {{ $config->namespaces->dataTables }}\{{ $config->modelNames->name }}DataTable
+use {{ $config->namespaces->dataTables }}\{{ $config->modelNames->name }}DataTable;
 @endif
 use {{ $config->namespaces->request }}\Create{{ $config->modelNames->name }}Request;
 use {{ $config->namespaces->request }}\Update{{ $config->modelNames->name }}Request;
