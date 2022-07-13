@@ -2,7 +2,7 @@
     echo "<?php".PHP_EOL;
 @endphp
 
-namespace {{ $namespaceApp }}\Http\Controllers;
+namespace {{ $namespaceApp }}Http\Controllers;
 
 use InfyOm\Generator\Utils\ResponseUtil;
 
