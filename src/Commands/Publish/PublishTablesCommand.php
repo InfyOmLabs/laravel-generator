@@ -66,7 +66,7 @@ class PublishTablesCommand extends PublishBaseCommand
         ];
 
         foreach ($files as $stub => $blade) {
-            $sourceFile = get_template_file_path('scaffold/'.$stub, 'laravel-generator');
+            $sourceFile = get_file_path('views/scaffold/'.$stub, 'laravel-generator');
             $destinationFile = $viewsPath.$blade;
             $this->publishFile($sourceFile, $destinationFile, $blade);
         }
