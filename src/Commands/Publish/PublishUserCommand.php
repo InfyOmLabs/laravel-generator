@@ -41,7 +41,7 @@ class PublishUserCommand extends PublishBaseCommand
         $files = $this->getViews();
 
         foreach ($files as $stub => $blade) {
-            $sourceFile = get_template_file_path('scaffold/'.$stub, $templateType);
+            $sourceFile = get_file_path('views/templates/'.$stub, $templateType);
             $destinationFile = $viewsPath.$blade;
             $this->publishFile($sourceFile, $destinationFile, $blade);
         }
