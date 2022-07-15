@@ -44,13 +44,14 @@ class PublishTablesCommand extends PublishBaseCommand
     {
         $viewsPath = config('laravel_generator.path.views', resource_path('views/'));
         $templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
-
         $files = [
-            'views/table/livewire/actions' => 'common/livewire-tables/actions.blade.php',
+            'views/templates/scaffold/table/livewire/actions.blade.php' => 'common/livewire-tables/actions.blade.php',
         ];
 
+        g_filesystem()->createDirectoryIfNotExist($viewsPath.'common/livewire-tables');
+
         foreach ($files as $stub => $blade) {
-            $sourceFile = get_template_file_path('scaffold/'.$stub, $templateType);
+            $sourceFile = get_templates_package_path($templateType).'/'.$stub;
             $destinationFile = $viewsPath.$blade;
             $this->publishFile($sourceFile, $destinationFile, $blade);
         }
