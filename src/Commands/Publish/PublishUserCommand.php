@@ -20,6 +20,7 @@ class PublishUserCommand extends PublishBaseCommand
 
     public function handle()
     {
+
         $this->copyViews();
         $this->updateRoutes();
         $this->updateMenu();
@@ -70,7 +71,8 @@ class PublishUserCommand extends PublishBaseCommand
         $path = config('laravel_generator.path.routes', base_path('routes/web.php'));
 
         $routeContents = g_filesystem()->getFile($path);
-        $routeContents .= "\n\n"."Route::resource('users', 'UserController')->middleware('auth');";
+        $controllerNamespace = config('laravel_generator.namespace.controller');
+        $routeContents .= "\n\n"."Route::resource('users', '$controllerNamespace\UserController')->middleware('auth');";
 
         g_filesystem()->createFile($path, $routeContents);
         $this->comment("\nUser route added");
@@ -91,33 +93,24 @@ class PublishUserCommand extends PublishBaseCommand
 
     private function publishUserController()
     {
-        $templateData = get_template('user/user_controller', 'laravel-generator');
-        if (!config('laravel_generator.options.repository_pattern')) {
-            $templateData = get_template('user/user_controller_without_repository', 'laravel-generator');
-            $templateData = $this->fillTemplate($templateData);
-        }
+        $name = 'user_controller';
 
-        $templateData = $this->fillTemplate($templateData);
+        if (!config('laravel_generator.options.repository_pattern')) {
+            $name = 'user_controller_without_repository';
+        }
 
         $controllerPath = config('laravel_generator.path.controller', app_path('Http/Controllers/'));
+        $controllerPath .= 'UserController.php';
 
-        $fileName = 'UserController.php';
+        $controllerContents = view('laravel-generator::scaffold.user.'.$name)->render();
 
-        if (file_exists($controllerPath.$fileName) && !$this->confirmOverwrite($fileName)) {
-            return;
-        }
-
-        g_filesystem()->createFile($controllerPath.$fileName, $templateData);
+        g_filesystem()->createFile($controllerPath, $controllerContents);
 
         $this->info('UserController created');
     }
 
     private function publishUserRepository()
     {
-        $templateData = get_template('user/user_repository', 'laravel-generator');
-
-        $templateData = $this->fillTemplate($templateData);
-
         $repositoryPath = config('laravel_generator.path.repository', app_path('Repositories/'));
 
         $fileName = 'UserRepository.php';
@@ -128,6 +121,7 @@ class PublishUserCommand extends PublishBaseCommand
             return;
         }
 
+        $templateData = view('laravel-generator::scaffold.user.user_repository')->render();
         g_filesystem()->createFile($repositoryPath.$fileName, $templateData);
 
         $this->info('UserRepository created');
@@ -135,10 +129,6 @@ class PublishUserCommand extends PublishBaseCommand
 
     private function publishCreateUserRequest()
     {
-        $templateData = get_template('user/create_user_request', 'laravel-generator');
-
-        $templateData = $this->fillTemplate($templateData);
-
         $requestPath = config('laravel_generator.path.request', app_path('Http/Requests/'));
 
         $fileName = 'CreateUserRequest.php';
@@ -149,6 +139,7 @@ class PublishUserCommand extends PublishBaseCommand
             return;
         }
 
+        $templateData = view('laravel-generator::scaffold.user.create_user_request')->render();
         g_filesystem()->createFile($requestPath.$fileName, $templateData);
 
         $this->info('CreateUserRequest created');
@@ -156,10 +147,6 @@ class PublishUserCommand extends PublishBaseCommand
 
     private function publishUpdateUserRequest()
     {
-        $templateData = get_template('user/update_user_request', 'laravel-generator');
-
-        $templateData = $this->fillTemplate($templateData);
-
         $requestPath = config('laravel_generator.path.request', app_path('Http/Requests/'));
 
         $fileName = 'UpdateUserRequest.php';
@@ -167,20 +154,10 @@ class PublishUserCommand extends PublishBaseCommand
             return;
         }
 
+        $templateData = view('laravel-generator::scaffold.user.update_user_request')->render();
         g_filesystem()->createFile($requestPath.$fileName, $templateData);
 
         $this->info('UpdateUserRequest created');
-    }
-
-    private function fillTemplate(string $templateData): string
-    {
-        $templateData = str_replace('$NAMESPACE_CONTROLLER$', config('laravel_generator.namespace.controller'), $templateData);
-
-        $templateData = str_replace('$NAMESPACE_REQUEST$', config('laravel_generator.namespace.request'), $templateData);
-
-        $templateData = str_replace('$NAMESPACE_REPOSITORY$', config('laravel_generator.namespace.repository'), $templateData);
-
-        return str_replace('$NAMESPACE_USER$', config('auth.providers.users.model'), $templateData);
     }
 
     /**
