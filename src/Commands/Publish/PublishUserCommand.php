@@ -20,7 +20,6 @@ class PublishUserCommand extends PublishBaseCommand
 
     public function handle()
     {
-
         $this->copyViews();
         $this->updateRoutes();
         $this->updateMenu();
