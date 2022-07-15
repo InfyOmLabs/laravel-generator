@@ -39,6 +39,15 @@ class PublishBaseCommand extends Command
         return true;
     }
 
+    protected function confirmOverwrite(string $fileName, string $prompt = ''): bool
+    {
+        $prompt = (empty($prompt))
+            ? $fileName.' already exists. Do you want to overwrite it? [y|N]'
+            : $prompt;
+
+        return $this->confirm($prompt, false);
+    }
+
     /**
      * Get the console command options.
      *

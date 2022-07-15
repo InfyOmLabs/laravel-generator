@@ -1,4 +1,6 @@
-<?php
+@php
+    echo "<?php".PHP_EOL;
+@endphp
 
 namespace {{ config('laravel_generator.namespace.repository') }};
 
