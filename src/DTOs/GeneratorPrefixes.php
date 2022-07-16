@@ -30,7 +30,11 @@ class GeneratorPrefixes
 
     public function getViewPrefixForInclude()
     {
-        return Str::replace('/', '.', $this->view).'.';
+        if ($this->view) {
+            return Str::replace('/', '.', $this->view).'.';
+        }
+
+        return '';
     }
 
     public function mergeRoutePrefix(array $prefixes)
