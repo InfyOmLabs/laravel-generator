@@ -51,7 +51,7 @@ function fakeGeneratorConfig()
     $fakeConfig->setCommand($command);
     $fakeConfig->init();
 
-    app()->singleton(GeneratorConfig::class, function () use($fakeConfig) {
+    app()->singleton(GeneratorConfig::class, function () use ($fakeConfig) {
         return $fakeConfig;
     });
 

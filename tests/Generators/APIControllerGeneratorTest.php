@@ -13,7 +13,6 @@ afterEach(function () {
 });
 
 test('uses repository controller template', function () {
-
     fakeGeneratorConfig();
 
     /** @var APIControllerGenerator $generator */
@@ -25,7 +24,6 @@ test('uses repository controller template', function () {
 });
 
 test('uses model controller template', function () {
-
     config()->set('laravel_generator.options.repository_pattern', false);
 
     fakeGeneratorConfig();
@@ -39,7 +37,6 @@ test('uses model controller template', function () {
 });
 
 test('used resource repository controller template', function () {
-
     config()->set('laravel_generator.options.resources', true);
 
     fakeGeneratorConfig();
