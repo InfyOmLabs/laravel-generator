@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Console\Command;
+use InfyOm\Generator\Common\GeneratorConfig;
 use Mockery as m;
 
 function mockShouldHaveCalledGenerateMethod(array $shouldHaveCalledGenerators): array
@@ -40,4 +42,34 @@ function mockShouldNotHaveCalledGenerateMethod(array $shouldNotHaveCalledGenerat
     }
 
     return $mockedObjects;
+}
+
+function fakeGeneratorConfig()
+{
+    $fakeConfig = new GeneratorConfig();
+    $command = fakeGeneratorCommand();
+    $fakeConfig->setCommand($command);
+    $fakeConfig->init();
+
+    app()->singleton(GeneratorConfig::class, function () use($fakeConfig) {
+        return $fakeConfig;
+    });
+
+    return $fakeConfig;
+}
+
+function fakeGeneratorCommand($options = [])
+{
+    $mock = m::mock(Command::class);
+
+    $mock->shouldReceive('argument')->withArgs(['model'])->andReturn('FakeModel');
+    if (empty($options)) {
+        $mock->shouldReceive('option')->withAnyArgs()->andReturn('');
+    } else {
+        foreach ($options as $option => $value) {
+            $mock->shouldReceive('option')->withArgs([$option])->andReturn($value);
+        }
+    }
+
+    return $mock;
 }

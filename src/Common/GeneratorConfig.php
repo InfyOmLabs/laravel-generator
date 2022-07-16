@@ -181,7 +181,7 @@ class GeneratorConfig
 
         $namespaces = new GeneratorNamespaces();
 
-        $namespaces->app = $this->command->getLaravel()->getNamespace();
+        $namespaces->app = app()->getNamespace();
         $namespaces->app = substr($namespaces->app, 0, strlen($namespaces->app) - 1);
         $namespaces->repository = config('laravel_generator.namespace.repository', 'App\Repositories').$prefix;
         $namespaces->model = config('laravel_generator.namespace.model', 'App\Models').$prefix;
