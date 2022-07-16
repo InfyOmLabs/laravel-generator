@@ -41,7 +41,7 @@ class PublishUserCommand extends PublishBaseCommand
         $files = $this->getViews();
 
         foreach ($files as $stub => $blade) {
-            $sourceFile = get_file_path('views/templates/'.$stub, $templateType);
+            $sourceFile = get_template_file_path('views/templates/'.$stub, $templateType);
             $destinationFile = $viewsPath.$blade;
             $this->publishFile($sourceFile, $destinationFile, $blade);
         }
@@ -71,7 +71,7 @@ class PublishUserCommand extends PublishBaseCommand
 
         $routeContents = g_filesystem()->getFile($path);
         $controllerNamespace = config('laravel_generator.namespace.controller');
-        $routeContents .= "\n\n"."Route::resource('users', '$controllerNamespace\UserController')->middleware('auth');";
+        $routeContents .= infy_nls(2)."Route::resource('users', '$controllerNamespace\UserController')->middleware('auth');";
 
         g_filesystem()->createFile($path, $routeContents);
         $this->comment("\nUser route added");
@@ -83,8 +83,8 @@ class PublishUserCommand extends PublishBaseCommand
         $templateType = config('laravel_generator.templates', 'adminlte-templates');
         $path = $viewsPath.'layouts/menu.blade.php';
         $menuContents = g_filesystem()->getFile($path);
-        $sourceFile = g_filesystem()->getFile(get_file_path('views/templates/users/menu', $templateType));
-        $menuContents .= "\n".$sourceFile;
+        $sourceFile = g_filesystem()->getFile(get_template_file_path('views/templates/users/menu', $templateType));
+        $menuContents .= infy_nl().$sourceFile;
 
         g_filesystem()->createFile($path, $menuContents);
         $this->comment("\nUser Menu added");
