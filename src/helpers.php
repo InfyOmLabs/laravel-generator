@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Str;
 use InfyOm\Generator\Common\FileSystem;
-use InfyOm\Generator\Common\GeneratorField;
 
 if (!function_exists('g_filesystem')) {
     /**
