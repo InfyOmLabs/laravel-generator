@@ -42,7 +42,7 @@ class MenuGenerator extends BaseGenerator
         $menu = view($this->templateType.'::templates.layouts.menu_template')->render();
 
         if (Str::contains($menuContents, $menu)) {
-            g_filesystem()->createFile($this->path, str_replace($menuContents, '', $menu));
+            g_filesystem()->createFile($this->path, str_replace($menu, '', $menuContents));
             $this->config->commandComment('menu deleted');
         }
     }
