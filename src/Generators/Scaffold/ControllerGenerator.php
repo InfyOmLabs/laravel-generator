@@ -150,5 +150,14 @@ class ControllerGenerator extends BaseGenerator
                 $this->config->commandComment('DataTable file deleted: '.$this->fileName);
             }
         }
+
+        if ($this->config->tableType === 'livewire') {
+            if ($this->rollbackFile(
+                $this->config->paths->livewireTables,
+                $this->config->modelNames->plural.'Table.php'
+            )) {
+                $this->config->commandComment('Livewire Table file deleted: '.$this->fileName);
+            }
+        }
     }
 }
