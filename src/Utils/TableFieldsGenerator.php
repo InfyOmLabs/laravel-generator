@@ -114,7 +114,7 @@ class TableFieldsGenerator
                     break;
                 case 'boolean':
                     $name = Str::title(str_replace('_', ' ', $column->getName()));
-                    $field = $this->generateField($column, 'boolean', 'checkbox,1');
+                    $field = $this->generateField($column, 'boolean', 'checkbox');
                     break;
                 case 'datetime':
                     $field = $this->generateField($column, 'datetime', 'date');
@@ -133,9 +133,6 @@ class TableFieldsGenerator
                     break;
                 case 'float':
                     $field = $this->generateNumberInput($column, 'float');
-                    break;
-                case 'string':
-                    $field = $this->generateField($column, 'string', 'text');
                     break;
                 case 'text':
                     $field = $this->generateField($column, 'text', 'textarea');
@@ -156,8 +153,8 @@ class TableFieldsGenerator
                 $field->inIndex = false;
                 $field->inView = false;
             }
-            $field->isNotNull = (bool) $column->getNotNull();
-            $field->description = $column->getComment(); // get comments from table
+            $field->isNotNull = $column->getNotNull();
+            $field->description = $column->getComment() ?? ''; // get comments from table
 
             $this->fields[] = $field;
         }
