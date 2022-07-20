@@ -333,7 +333,7 @@ class ModelGenerator extends BaseGenerator
             }
         }
 
-        return implode(infy_nl_tab(), $relations);
+        return implode(infy_nl_tab(2), $relations);
     }
 
     public function rollback()
