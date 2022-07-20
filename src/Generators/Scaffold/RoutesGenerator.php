@@ -36,10 +36,10 @@ class RoutesGenerator extends BaseGenerator
     {
         $routeContents = g_filesystem()->getFile($this->path);
 
-        $routes = view('laravel-generator::templates.scaffold.routes')->render();
+        $routes = view('laravel-generator::scaffold.routes')->render();
 
         if (Str::contains($routeContents, $routes)) {
-            $routeContents = str_replace($routeContents, '', $routes);
+            $routeContents = str_replace($routes, '', $routeContents);
             g_filesystem()->createFile($this->path, $routeContents);
             $this->config->commandComment('scaffold routes deleted');
         }
