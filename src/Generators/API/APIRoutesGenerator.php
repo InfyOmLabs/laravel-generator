@@ -40,7 +40,7 @@ class APIRoutesGenerator extends BaseGenerator
         $routes = view('laravel-generator::api.routes', $this->variables())->render();
 
         if (Str::contains($routeContents, $routes)) {
-            $routeContents = str_replace($routeContents, '', $routes);
+            $routeContents = str_replace($routes, '', $routeContents);
             g_filesystem()->createFile($this->path, $routeContents);
             $this->config->commandComment('api routes deleted');
         }
