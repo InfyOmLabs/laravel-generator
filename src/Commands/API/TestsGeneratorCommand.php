@@ -3,7 +3,6 @@
 namespace InfyOm\Generator\Commands\API;
 
 use InfyOm\Generator\Commands\BaseCommand;
-use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\API\APITestGenerator;
 use InfyOm\Generator\Generators\RepositoryTestGenerator;
 
@@ -23,29 +22,16 @@ class TestsGeneratorCommand extends BaseCommand
      */
     protected $description = 'Create tests command';
 
-    /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->commandData = new CommandData($this, CommandData::$COMMAND_TYPE_API);
-    }
-
-    /**
-     * Execute the command.
-     *
-     * @return void
-     */
     public function handle()
     {
         parent::handle();
 
-        $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);
+        /** @var RepositoryTestGenerator $repositoryTestGenerator */
+        $repositoryTestGenerator = app(RepositoryTestGenerator::class);
         $repositoryTestGenerator->generate();
 
-        $apiTestGenerator = new APITestGenerator($this->commandData);
+        /** @var APITestGenerator $apiTestGenerator */
+        $apiTestGenerator = app(APITestGenerator::class);
         $apiTestGenerator->generate();
 
         $this->performPostActions();

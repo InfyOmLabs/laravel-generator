@@ -2,9 +2,6 @@
 
 namespace InfyOm\Generator\Commands;
 
-use InfyOm\Generator\Common\CommandData;
-use InfyOm\Generator\Utils\FileUtil;
-
 class APIScaffoldGeneratorCommand extends BaseCommand
 {
     /**
@@ -22,16 +19,6 @@ class APIScaffoldGeneratorCommand extends BaseCommand
     protected $description = 'Create a full CRUD API and Scaffold for given model';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->commandData = new CommandData($this, CommandData::$COMMAND_TYPE_API_SCAFFOLD);
-    }
-
-    /**
      * Execute the command.
      *
      * @return void
@@ -39,7 +26,7 @@ class APIScaffoldGeneratorCommand extends BaseCommand
     public function handle()
     {
         parent::handle();
-        $this->commandData->fireEvent('api_scaffold', FileUtil::FILE_CREATING);
+        $this->fireFileCreatingEvent('api_scaffold');
 
         $this->generateCommonItems();
 
@@ -48,7 +35,7 @@ class APIScaffoldGeneratorCommand extends BaseCommand
         $this->generateScaffoldItems();
 
         $this->performPostActionsWithMigration();
-        $this->commandData->fireEvent('api_scaffold', FileUtil::FILE_CREATED);
+        $this->fireFileCreatedEvent('api_scaffold');
     }
 
     /**

@@ -2,55 +2,41 @@
 
 namespace InfyOm\Generator\Generators\API;
 
-use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
-use InfyOm\Generator\Utils\FileUtil;
 
 class APIResourceGenerator extends BaseGenerator
 {
-    /** @var CommandData */
-    private $commandData;
+    private string $fileName;
 
-    /** @var string */
-    private $path;
-
-    /** @var string */
-    private $fileName;
-
-    public function __construct(CommandData $commandData)
+    public function __construct()
     {
-        $this->commandData = $commandData;
-        $this->path = $commandData->config->pathApiResource;
-        $this->fileName = $this->commandData->modelName.'Resource.php';
+        parent::__construct();
+
+        $this->path = $this->config->paths->apiResource;
+        $this->fileName = $this->config->modelNames->name.'Resource.php';
     }
 
-    /**
-     * Generate API Resources.
-     *
-     * @return void
-     */
+    public function variables(): array
+    {
+        return [
+            'fields' => implode(','.infy_nl_tab(1, 3), $this->generateResourceFields()),
+        ];
+    }
+
     public function generate()
     {
-        $templateData = get_template('api.resource.api_resource', 'laravel-generator');
+        $templateData = view('laravel-generator::api.resource.resource', $this->variables())->render();
 
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        g_filesystem()->createFile($this->path.$this->fileName, $templateData);
 
-        $templateData = str_replace(
-            '$RESOURCE_FIELDS$',
-            implode(','.infy_nl_tab(1, 3), $this->generateResourceFields()),
-            $templateData
-        );
-
-        FileUtil::createFile($this->path, $this->fileName, $templateData);
-
-        $this->commandData->commandComment("\nAPI Resource created: ");
-        $this->commandData->commandInfo($this->fileName);
+        $this->config->commandComment(infy_nl().'API Resource created: ');
+        $this->config->commandInfo($this->fileName);
     }
 
-    private function generateResourceFields()
+    private function generateResourceFields(): array
     {
         $resourceFields = [];
-        foreach ($this->commandData->fields as $field) {
+        foreach ($this->config->fields as $field) {
             $resourceFields[] = "'".$field->name."' => \$this->".$field->name;
         }
 
@@ -60,7 +46,7 @@ class APIResourceGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('API Resource file deleted: '.$this->fileName);
+            $this->config->commandComment('API Resource file deleted: '.$this->fileName);
         }
     }
 }

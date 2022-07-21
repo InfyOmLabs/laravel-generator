@@ -3,70 +3,46 @@
 namespace InfyOm\Generator\Generators\API;
 
 use Illuminate\Support\Str;
-use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
 
 class APIRoutesGenerator extends BaseGenerator
 {
-    /** @var CommandData */
-    private $commandData;
-
-    /** @var string */
-    private $path;
-
-    /** @var string */
-    private $routeContents;
-
-    /** @var string */
-    private $routesTemplate;
-
-    public function __construct(CommandData $commandData)
+    public function __construct()
     {
-        $this->commandData = $commandData;
-        $this->path = $commandData->config->pathApiRoutes;
+        parent::__construct();
 
-        $this->routeContents = file_get_contents($this->path);
-
-        if (!empty($this->commandData->config->prefixes['route'])) {
-            $routesTemplate = get_template('api.routes.prefix_routes', 'laravel-generator');
-        } else {
-            $routesTemplate = get_template('api.routes.routes', 'laravel-generator');
-        }
-
-        $this->routesTemplate = fill_template($this->commandData->dynamicVars, $routesTemplate);
+        $this->path = $this->config->paths->apiRoutes;
     }
 
-    /**
-     * Generate API Routes.
-     *
-     * @return void
-     */
     public function generate()
     {
-        $this->routeContents .= "\n\n".$this->routesTemplate;
-        $existingRouteContents = file_get_contents($this->path);
-        if (Str::contains($existingRouteContents, "Route::resource('".$this->commandData->config->mDashedPlural."',")) {
-            $this->commandData->commandObj->info('Menu '.$this->commandData->config->mDashedPlural.'is already exists, Skipping Adjustment.');
+        $routeContents = g_filesystem()->getFile($this->path);
+
+        $routes = view('laravel-generator::api.routes', $this->variables())->render();
+
+        if (Str::contains($routeContents, $routes)) {
+            $this->config->commandInfo(infy_nl().'Menu '.$this->config->modelNames->dashedPlural.' already exists, Skipping Adjustment.');
 
             return;
         }
 
-        file_put_contents($this->path, $this->routeContents);
+        $routeContents .= infy_nls(2).$routes;
 
-        $this->commandData->commandComment("\n".$this->commandData->config->mCamelPlural.' api routes added.');
+        g_filesystem()->createFile($this->path, $routeContents);
+
+        $this->config->commandComment(infy_nl().$this->config->modelNames->dashedPlural.' api routes added.');
     }
 
-    /**
-     * Remove API Routes.
-     *
-     * @return void
-     */
     public function rollback()
     {
-        if (Str::contains($this->routeContents, $this->routesTemplate)) {
-            $this->routeContents = str_replace($this->routesTemplate, '', $this->routeContents);
-            file_put_contents($this->path, $this->routeContents);
-            $this->commandData->commandComment('api routes deleted');
+        $routeContents = g_filesystem()->getFile($this->path);
+
+        $routes = view('laravel-generator::api.routes', $this->variables())->render();
+
+        if (Str::contains($routeContents, $routes)) {
+            $routeContents = str_replace($routes, '', $routeContents);
+            g_filesystem()->createFile($this->path, $routeContents);
+            $this->config->commandComment('api routes deleted');
         }
     }
 }

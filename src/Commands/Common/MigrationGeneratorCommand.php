@@ -3,7 +3,6 @@
 namespace InfyOm\Generator\Commands\Common;
 
 use InfyOm\Generator\Commands\BaseCommand;
-use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\MigrationGenerator;
 
 class MigrationGeneratorCommand extends BaseCommand
@@ -22,32 +21,18 @@ class MigrationGeneratorCommand extends BaseCommand
      */
     protected $description = 'Create migration command';
 
-    /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->commandData = new CommandData($this, CommandData::$COMMAND_TYPE_API);
-    }
-
-    /**
-     * Execute the command.
-     *
-     * @return void
-     */
     public function handle()
     {
         parent::handle();
 
-        if ($this->commandData->getOption('fromTable')) {
+        if ($this->option('fromTable')) {
             $this->error('fromTable option is not allowed to use with migration generator');
 
             return;
         }
 
-        $migrationGenerator = new MigrationGenerator($this->commandData);
+        /** @var MigrationGenerator $migrationGenerator */
+        $migrationGenerator = app(MigrationGenerator::class);
         $migrationGenerator->generate();
 
         $this->performPostActionsWithMigration();

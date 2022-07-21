@@ -3,7 +3,6 @@
 namespace InfyOm\Generator\Commands\Scaffold;
 
 use InfyOm\Generator\Commands\BaseCommand;
-use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\Scaffold\ControllerGenerator;
 
 class ControllerGeneratorCommand extends BaseCommand
@@ -22,26 +21,12 @@ class ControllerGeneratorCommand extends BaseCommand
      */
     protected $description = 'Create controller command';
 
-    /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->commandData = new CommandData($this, CommandData::$COMMAND_TYPE_SCAFFOLD);
-    }
-
-    /**
-     * Execute the command.
-     *
-     * @return void
-     */
     public function handle()
     {
         parent::handle();
 
-        $controllerGenerator = new ControllerGenerator($this->commandData);
+        /** @var ControllerGenerator $controllerGenerator */
+        $controllerGenerator = app(ControllerGenerator::class);
         $controllerGenerator->generate();
 
         $this->performPostActions();

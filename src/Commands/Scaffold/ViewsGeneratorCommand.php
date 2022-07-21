@@ -3,7 +3,6 @@
 namespace InfyOm\Generator\Commands\Scaffold;
 
 use InfyOm\Generator\Commands\BaseCommand;
-use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
 
 class ViewsGeneratorCommand extends BaseCommand
@@ -22,26 +21,12 @@ class ViewsGeneratorCommand extends BaseCommand
      */
     protected $description = 'Create views file command';
 
-    /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->commandData = new CommandData($this, CommandData::$COMMAND_TYPE_SCAFFOLD);
-    }
-
-    /**
-     * Execute the command.
-     *
-     * @return void
-     */
     public function handle()
     {
         parent::handle();
 
-        $viewGenerator = new ViewGenerator($this->commandData);
+        /** @var ViewGenerator $viewGenerator */
+        $viewGenerator = app(ViewGenerator::class);
         $viewGenerator->generate();
 
         $this->performPostActions();

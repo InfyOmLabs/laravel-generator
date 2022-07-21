@@ -1,9 +1,0 @@
-/**
-     * Update the specified $MODEL_NAME$ in storage.
-     * PUT/PATCH /$MODEL_NAME_PLURAL_CAMEL$/{id}
-     *
-     * @param int $id
-     * @param Update$MODEL_NAME$APIRequest $request
-     *
-     * @return Response
-     */

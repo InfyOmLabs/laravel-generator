@@ -1,0 +1,75 @@
+[
+    {
+        "name": "id",
+        "dbType": "id",
+        "htmlType": null,
+        "validations": null,
+        "searchable": false,
+        "fillable": false,
+        "primary": true,
+        "inForm": false,
+        "inIndex": false,
+        "inView": false
+    },
+    {
+        "name": "user_id",
+        "dbType": "unsignedBigInteger:foreign,users,id",
+        "htmlType": "text",
+        "relation": "mt1,User,user_id,id",
+        "validations": "required",
+        "searchable": false,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "title",
+        "dbType": "string",
+        "htmlType": "text",
+        "validations": "required",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "body",
+        "dbType": "text",
+        "htmlType": "textarea",
+        "validations": "",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "created_at",
+        "dbType": "timestamp",
+        "htmlType": null,
+        "validations": null,
+        "searchable": false,
+        "fillable": false,
+        "primary": false,
+        "inForm": false,
+        "inIndex": false,
+        "inView": true
+    },
+    {
+        "name": "updated_at",
+        "dbType": "timestamp",
+        "htmlType": null,
+        "validations": null,
+        "searchable": false,
+        "fillable": false,
+        "primary": false,
+        "inForm": false,
+        "inIndex": false,
+        "inView": true
+    }
+]

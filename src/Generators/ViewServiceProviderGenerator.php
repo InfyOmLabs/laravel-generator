@@ -2,26 +2,10 @@
 
 namespace InfyOm\Generator\Generators;
 
-use File;
-use InfyOm\Generator\Common\CommandData;
+use Illuminate\Support\Facades\File;
 
-/**
- * Class ViewServiceProviderGenerator.
- */
 class ViewServiceProviderGenerator extends BaseGenerator
 {
-    private $commandData;
-
-    /**
-     * ViewServiceProvider constructor.
-     *
-     * @param CommandData $commandData
-     */
-    public function __construct(CommandData $commandData)
-    {
-        $this->commandData = $commandData;
-    }
-
     /**
      * Generate ViewServiceProvider.
      */
@@ -29,17 +13,17 @@ class ViewServiceProviderGenerator extends BaseGenerator
     {
         $templateData = get_template_file_path('view_service_provider', 'laravel-generator');
 
-        $destination = $this->commandData->config->pathViewProvider;
+        $destination = $this->config->paths->viewProvider;
 
-        $fileName = basename($this->commandData->config->pathViewProvider);
+        $fileName = basename($destination);
 
         if (File::exists($destination)) {
             return;
         }
         File::copy($templateData, $destination);
 
-        $this->commandData->commandComment($fileName.' published');
-        $this->commandData->commandInfo($fileName);
+        $this->config->commandComment($fileName.' published');
+        $this->config->commandInfo($fileName);
     }
 
     /**
@@ -57,9 +41,9 @@ class ViewServiceProviderGenerator extends BaseGenerator
             $model = model_name_from_table_name($tableName);
         }
 
-        $this->commandData->addDynamicVariable('$COMPOSER_VIEWS$', $views);
-        $this->commandData->addDynamicVariable('$COMPOSER_VIEW_VARIABLE$', $variableName);
-        $this->commandData->addDynamicVariable(
+        $this->config->addDynamicVariable('$COMPOSER_VIEWS$', $views);
+        $this->config->addDynamicVariable('$COMPOSER_VIEW_VARIABLE$', $variableName);
+        $this->config->addDynamicVariable(
             '$COMPOSER_VIEW_VARIABLE_VALUES$',
             $model."::pluck($columns)->toArray()"
         );
@@ -68,37 +52,36 @@ class ViewServiceProviderGenerator extends BaseGenerator
         $mainViewContent = $this->addNamespace($model, $mainViewContent);
         $this->addCustomProvider();
 
-        file_put_contents($this->commandData->config->pathViewProvider, $mainViewContent);
-        $this->commandData->commandComment('View service provider file updated.');
+        g_filesystem()->createFile($this->config->paths->viewProvider, $mainViewContent);
+        $this->config->commandComment('View service provider file updated.');
     }
 
-    public function addViewComposer()
+    public function addViewComposer(): string
     {
-        $mainViewContent = file_get_contents($this->commandData->config->pathViewProvider);
+        $mainViewContent = g_filesystem()->getFile($this->config->paths->viewProvider);
         $newViewStatement = get_template('scaffold.view_composer', 'laravel-generator');
-        $newViewStatement = fill_template($this->commandData->dynamicVars, $newViewStatement);
+        $newViewStatement = fill_template($this->config->dynamicVars, $newViewStatement);
 
-        $newViewStatement = infy_nl(1).$newViewStatement;
+        $newViewStatement = infy_nl().$newViewStatement;
         preg_match_all('/public function boot(.*)/', $mainViewContent, $matches);
 
         $totalMatches = count($matches[0]);
         $lastSeederStatement = $matches[0][$totalMatches - 1];
 
         $replacePosition = strpos($mainViewContent, $lastSeederStatement);
-        $mainViewContent = substr_replace(
+
+        return substr_replace(
             $mainViewContent,
             $newViewStatement,
             $replacePosition + strlen($lastSeederStatement) + 6,
             0
         );
-
-        return $mainViewContent;
     }
 
     public function addCustomProvider()
     {
         $configFile = base_path().'/config/app.php';
-        $file = file_get_contents($configFile);
+        $file = g_filesystem()->getFile($configFile);
         $searchFor = 'Illuminate\View\ViewServiceProvider::class,';
         $customProviders = strpos($file, $searchFor);
 
@@ -110,13 +93,13 @@ class ViewServiceProviderGenerator extends BaseGenerator
                 $customProviders + strlen($searchFor),
                 0
             );
-            file_put_contents($configFile, $newChanges);
+            g_filesystem()->createFile($configFile, $newChanges);
         }
     }
 
     public function addNamespace($model, $mainViewContent)
     {
-        $newModelStatement = 'use '.$this->commandData->config->nsModel.'\\'.$model.';';
+        $newModelStatement = 'use '.$this->config->namespaces->model.'\\'.$model.';';
         $isNameSpaceExist = strpos($mainViewContent, $newModelStatement);
         $newModelStatement = infy_nl().$newModelStatement;
         if (!$isNameSpaceExist) {

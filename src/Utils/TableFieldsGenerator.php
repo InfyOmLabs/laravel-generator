@@ -74,7 +74,7 @@ class TableFieldsGenerator
             'bit'  => 'boolean',
         ];
 
-        $mappings = config('infyom.laravel_generator.from_table.doctrine_mappings', []);
+        $mappings = config('laravel_generator.from_table.doctrine_mappings', []);
         $mappings = array_merge($mappings, $defaultMappings);
         foreach ($mappings as $dbType => $doctrineType) {
             $platform->registerDoctrineTypeMapping($dbType, $doctrineType);
@@ -91,7 +91,7 @@ class TableFieldsGenerator
 
         $this->primaryKey = $this->getPrimaryKeyOfTable($tableName);
         $this->timestamps = static::getTimestampFieldNames();
-        $this->defaultSearchable = config('infyom.laravel_generator.options.tables_searchable_default', false);
+        $this->defaultSearchable = config('laravel_generator.options.tables_searchable_default', false);
     }
 
     /**
@@ -114,7 +114,7 @@ class TableFieldsGenerator
                     break;
                 case 'boolean':
                     $name = Str::title(str_replace('_', ' ', $column->getName()));
-                    $field = $this->generateField($column, 'boolean', 'checkbox,1');
+                    $field = $this->generateField($column, 'boolean', 'checkbox');
                     break;
                 case 'datetime':
                     $field = $this->generateField($column, 'datetime', 'date');
@@ -133,9 +133,6 @@ class TableFieldsGenerator
                     break;
                 case 'float':
                     $field = $this->generateNumberInput($column, 'float');
-                    break;
-                case 'string':
-                    $field = $this->generateField($column, 'string', 'text');
                     break;
                 case 'text':
                     $field = $this->generateField($column, 'text', 'textarea');
@@ -156,8 +153,8 @@ class TableFieldsGenerator
                 $field->inIndex = false;
                 $field->inView = false;
             }
-            $field->isNotNull = (bool) $column->getNotNull();
-            $field->description = $column->getComment(); // get comments from table
+            $field->isNotNull = $column->getNotNull();
+            $field->description = $column->getComment() ?? ''; // get comments from table
 
             $this->fields[] = $field;
         }
@@ -184,13 +181,13 @@ class TableFieldsGenerator
      */
     public static function getTimestampFieldNames()
     {
-        if (!config('infyom.laravel_generator.timestamps.enabled', true)) {
+        if (!config('laravel_generator.timestamps.enabled', true)) {
             return [];
         }
 
-        $createdAtName = config('infyom.laravel_generator.timestamps.created_at', 'created_at');
-        $updatedAtName = config('infyom.laravel_generator.timestamps.updated_at', 'updated_at');
-        $deletedAtName = config('infyom.laravel_generator.timestamps.deleted_at', 'deleted_at');
+        $createdAtName = config('laravel_generator.timestamps.created_at', 'created_at');
+        $updatedAtName = config('laravel_generator.timestamps.updated_at', 'updated_at');
+        $deletedAtName = config('laravel_generator.timestamps.deleted_at', 'deleted_at');
 
         return [$createdAtName, $updatedAtName, $deletedAtName];
     }
@@ -211,13 +208,13 @@ class TableFieldsGenerator
         $field->htmlType = 'number';
 
         if ($column->getAutoincrement()) {
-            $field->dbInput .= ',true';
+            $field->dbType .= ',true';
         } else {
-            $field->dbInput .= ',false';
+            $field->dbType .= ',false';
         }
 
         if ($column->getUnsigned()) {
-            $field->dbInput .= ',true';
+            $field->dbType .= ',true';
         }
 
         return $this->checkForPrimary($field);
@@ -257,7 +254,7 @@ class TableFieldsGenerator
     {
         $field = new GeneratorField();
         $field->name = $column->getName();
-        $field->parseDBType($dbType, $column);
+        $field->parseDBType($dbType); //, $column); TODO: handle column param
         $field->parseHtmlInput($htmlType);
 
         return $this->checkForPrimary($field);

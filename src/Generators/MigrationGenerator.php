@@ -2,53 +2,47 @@
 
 namespace InfyOm\Generator\Generators;
 
-use File;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use InfyOm\Generator\Common\CommandData;
-use InfyOm\Generator\Utils\FileUtil;
 use SplFileInfo;
 
 class MigrationGenerator extends BaseGenerator
 {
-    /** @var CommandData */
-    private $commandData;
-
-    /** @var string */
-    private $path;
-
-    public function __construct($commandData)
+    public function __construct()
     {
-        $this->commandData = $commandData;
-        $this->path = config('infyom.laravel_generator.path.migration', database_path('migrations/'));
+        parent::__construct();
+
+        $this->path = config('laravel_generator.path.migration', database_path('migrations/'));
     }
 
     public function generate()
     {
-        $templateData = get_template('migration', 'laravel-generator');
+        $templateData = view('laravel-generator::migration', $this->variables())->render();
 
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $fileName = date('Y_m_d_His').'_'.'create_'.strtolower($this->config->tableName).'_table.php';
 
-        $templateData = str_replace('$FIELDS$', $this->generateFields(), $templateData);
+        g_filesystem()->createFile($this->path.$fileName, $templateData);
 
-        $tableName = $this->commandData->dynamicVars['$TABLE_NAME$'];
-
-        $fileName = date('Y_m_d_His').'_'.'create_'.strtolower($tableName).'_table.php';
-
-        FileUtil::createFile($this->path, $fileName, $templateData);
-
-        $this->commandData->commandComment("\nMigration created: ");
-        $this->commandData->commandInfo($fileName);
+        $this->config->commandComment(infy_nl().'Migration created: ');
+        $this->config->commandInfo($fileName);
     }
 
-    private function generateFields()
+    public function variables(): array
+    {
+        return [
+            'fields' => $this->generateFields(),
+        ];
+    }
+
+    private function generateFields(): string
     {
         $fields = [];
         $foreignKeys = [];
         $createdAtField = null;
         $updatedAtField = null;
 
-        if (isset($this->commandData->fields) && !empty($this->commandData->fields)) {
-            foreach ($this->commandData->fields as $field) {
+        if (isset($this->config->fields) && !empty($this->config->fields)) {
+            foreach ($this->config->fields as $field) {
                 if ($field->name == 'created_at') {
                     $createdAtField = $field;
                     continue;
@@ -66,7 +60,7 @@ class MigrationGenerator extends BaseGenerator
             }
         }
 
-        if ($createdAtField and $updatedAtField) {
+        if ($createdAtField->name === 'created_at' and $updatedAtField->name === 'updated_at') {
             $fields[] = '$table->timestamps();';
         } else {
             if ($createdAtField) {
@@ -77,8 +71,13 @@ class MigrationGenerator extends BaseGenerator
             }
         }
 
-        if ($this->commandData->getOption('softDelete')) {
-            $fields[] = '$table->softDeletes();';
+        if ($this->config->options->softDelete) {
+            $softDeleteFieldName = config('laravel_generator.timestamps.deleted_at', 'deleted_at');
+            if ($softDeleteFieldName === 'deleted_at') {
+                $fields[] = '$table->softDeletes();';
+            } else {
+                $fields[] = '$table->softDeletes(\''.$softDeleteFieldName.'\');';
+            }
         }
 
         return implode(infy_nl_tab(1, 3), array_merge($fields, $foreignKeys));
@@ -86,7 +85,7 @@ class MigrationGenerator extends BaseGenerator
 
     public function rollback()
     {
-        $fileName = 'create_'.$this->commandData->config->tableName.'_table.php';
+        $fileName = 'create_'.$this->config->tableName.'_table.php';
 
         /** @var SplFileInfo $allFiles */
         $allFiles = File::allFiles($this->path);
@@ -103,7 +102,7 @@ class MigrationGenerator extends BaseGenerator
             foreach ($files as $file) {
                 if (Str::contains($file, $fileName)) {
                     if ($this->rollbackFile($this->path, $file)) {
-                        $this->commandData->commandComment('Migration file deleted: '.$file);
+                        $this->config->commandComment('Migration file deleted: '.$file);
                     }
                     break;
                 }

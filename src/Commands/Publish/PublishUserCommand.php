@@ -2,8 +2,6 @@
 
 namespace InfyOm\Generator\Commands\Publish;
 
-use InfyOm\Generator\Utils\FileUtil;
-
 class PublishUserCommand extends PublishBaseCommand
 {
     /**
@@ -20,18 +18,13 @@ class PublishUserCommand extends PublishBaseCommand
      */
     protected $description = 'Publishes Users CRUD file';
 
-    /**
-     * Execute the command.
-     *
-     * @return void
-     */
     public function handle()
     {
         $this->copyViews();
         $this->updateRoutes();
         $this->updateMenu();
         $this->publishUserController();
-        if (config('infyom.laravel_generator.options.repository_pattern')) {
+        if (config('laravel_generator.options.repository_pattern')) {
             $this->publishUserRepository();
         }
         $this->publishCreateUserRequest();
@@ -40,15 +33,15 @@ class PublishUserCommand extends PublishBaseCommand
 
     private function copyViews()
     {
-        $viewsPath = config('infyom.laravel_generator.path.views', resource_path('views/'));
-        $templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
+        $viewsPath = config('laravel_generator.path.views', resource_path('views/'));
+        $templateType = config('laravel_generator.templates', 'adminlte-templates');
 
         $this->createDirectories($viewsPath.'users');
 
         $files = $this->getViews();
 
         foreach ($files as $stub => $blade) {
-            $sourceFile = get_template_file_path('scaffold/'.$stub, $templateType);
+            $sourceFile = get_template_file_path('views/templates/'.$stub, $templateType);
             $destinationFile = $viewsPath.$blade;
             $this->publishFile($sourceFile, $destinationFile, $blade);
         }
@@ -56,10 +49,10 @@ class PublishUserCommand extends PublishBaseCommand
 
     private function createDirectories($dir)
     {
-        FileUtil::createDirectoryIfNotExist($dir);
+        g_filesystem()->createDirectoryIfNotExist($dir);
     }
 
-    private function getViews()
+    private function getViews(): array
     {
         return [
             'users/create'      => 'users/create.blade.php',
@@ -74,132 +67,96 @@ class PublishUserCommand extends PublishBaseCommand
 
     private function updateRoutes()
     {
-        $path = config('infyom.laravel_generator.path.routes', base_path('routes/web.php'));
+        $path = config('laravel_generator.path.routes', base_path('routes/web.php'));
 
-        $routeContents = file_get_contents($path);
+        $routeContents = g_filesystem()->getFile($path);
+        $controllerNamespace = config('laravel_generator.namespace.controller');
+        $routeContents .= infy_nls(2)."Route::resource('users', '$controllerNamespace\UserController')->middleware('auth');";
 
-        $routesTemplate = get_template('routes.user', 'laravel-generator');
-        $routesTemplate = $this->fillTemplate($routesTemplate);
-
-        $routeContents .= "\n\n".$routesTemplate;
-
-        file_put_contents($path, $routeContents);
+        g_filesystem()->createFile($path, $routeContents);
         $this->comment("\nUser route added");
     }
 
     private function updateMenu()
     {
-        $viewsPath = config('infyom.laravel_generator.path.views', resource_path('views/'));
-        $templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
+        $viewsPath = config('laravel_generator.path.views', resource_path('views/'));
+        $templateType = config('laravel_generator.templates', 'adminlte-templates');
         $path = $viewsPath.'layouts/menu.blade.php';
-        $menuContents = file_get_contents($path);
-        $sourceFile = file_get_contents(get_template_file_path('scaffold/users/menu', $templateType));
-        $menuContents .= "\n".$sourceFile;
+        $menuContents = g_filesystem()->getFile($path);
+        $sourceFile = g_filesystem()->getFile(get_template_file_path('views/templates/users/menu', $templateType));
+        $menuContents .= infy_nl().$sourceFile;
 
-        file_put_contents($path, $menuContents);
+        g_filesystem()->createFile($path, $menuContents);
         $this->comment("\nUser Menu added");
     }
 
     private function publishUserController()
     {
-        $templateData = get_template('user/user_controller', 'laravel-generator');
-        if (!config('infyom.laravel_generator.options.repository_pattern')) {
-            $templateData = get_template('user/user_controller_without_repository', 'laravel-generator');
-            $templateData = $this->fillTemplate($templateData);
+        $name = 'user_controller';
+
+        if (!config('laravel_generator.options.repository_pattern')) {
+            $name = 'user_controller_without_repository';
         }
 
-        $templateData = $this->fillTemplate($templateData);
+        $controllerPath = config('laravel_generator.path.controller', app_path('Http/Controllers/'));
+        $controllerPath .= 'UserController.php';
 
-        $controllerPath = config('infyom.laravel_generator.path.controller', app_path('Http/Controllers/'));
+        $controllerContents = view('laravel-generator::scaffold.user.'.$name)->render();
 
-        $fileName = 'UserController.php';
-
-        if (file_exists($controllerPath.$fileName) && !$this->confirmOverwrite($fileName)) {
-            return;
-        }
-
-        FileUtil::createFile($controllerPath, $fileName, $templateData);
+        g_filesystem()->createFile($controllerPath, $controllerContents);
 
         $this->info('UserController created');
     }
 
     private function publishUserRepository()
     {
-        $templateData = get_template('user/user_repository', 'laravel-generator');
-
-        $templateData = $this->fillTemplate($templateData);
-
-        $repositoryPath = config('infyom.laravel_generator.path.repository', app_path('Repositories/'));
+        $repositoryPath = config('laravel_generator.path.repository', app_path('Repositories/'));
 
         $fileName = 'UserRepository.php';
 
-        FileUtil::createDirectoryIfNotExist($repositoryPath);
+        g_filesystem()->createDirectoryIfNotExist($repositoryPath);
 
         if (file_exists($repositoryPath.$fileName) && !$this->confirmOverwrite($fileName)) {
             return;
         }
 
-        FileUtil::createFile($repositoryPath, $fileName, $templateData);
+        $templateData = view('laravel-generator::scaffold.user.user_repository')->render();
+        g_filesystem()->createFile($repositoryPath.$fileName, $templateData);
 
         $this->info('UserRepository created');
     }
 
     private function publishCreateUserRequest()
     {
-        $templateData = get_template('user/create_user_request', 'laravel-generator');
-
-        $templateData = $this->fillTemplate($templateData);
-
-        $requestPath = config('infyom.laravel_generator.path.request', app_path('Http/Requests/'));
+        $requestPath = config('laravel_generator.path.request', app_path('Http/Requests/'));
 
         $fileName = 'CreateUserRequest.php';
 
-        FileUtil::createDirectoryIfNotExist($requestPath);
+        g_filesystem()->createDirectoryIfNotExist($requestPath);
 
         if (file_exists($requestPath.$fileName) && !$this->confirmOverwrite($fileName)) {
             return;
         }
 
-        FileUtil::createFile($requestPath, $fileName, $templateData);
+        $templateData = view('laravel-generator::scaffold.user.create_user_request')->render();
+        g_filesystem()->createFile($requestPath.$fileName, $templateData);
 
         $this->info('CreateUserRequest created');
     }
 
     private function publishUpdateUserRequest()
     {
-        $templateData = get_template('user/update_user_request', 'laravel-generator');
-
-        $templateData = $this->fillTemplate($templateData);
-
-        $requestPath = config('infyom.laravel_generator.path.request', app_path('Http/Requests/'));
+        $requestPath = config('laravel_generator.path.request', app_path('Http/Requests/'));
 
         $fileName = 'UpdateUserRequest.php';
         if (file_exists($requestPath.$fileName) && !$this->confirmOverwrite($fileName)) {
             return;
         }
 
-        FileUtil::createFile($requestPath, $fileName, $templateData);
+        $templateData = view('laravel-generator::scaffold.user.update_user_request')->render();
+        g_filesystem()->createFile($requestPath.$fileName, $templateData);
 
         $this->info('UpdateUserRequest created');
-    }
-
-    /**
-     * Replaces dynamic variables of template.
-     *
-     * @param string $templateData
-     *
-     * @return string
-     */
-    private function fillTemplate($templateData)
-    {
-        $templateData = str_replace('$NAMESPACE_CONTROLLER$', config('infyom.laravel_generator.namespace.controller'), $templateData);
-
-        $templateData = str_replace('$NAMESPACE_REQUEST$', config('infyom.laravel_generator.namespace.request'), $templateData);
-
-        $templateData = str_replace('$NAMESPACE_REPOSITORY$', config('infyom.laravel_generator.namespace.repository'), $templateData);
-        $templateData = str_replace('$NAMESPACE_USER$', config('auth.providers.users.model'), $templateData);
-
-        return $templateData;
     }
 
     /**

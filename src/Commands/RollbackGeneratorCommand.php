@@ -2,8 +2,7 @@
 
 namespace InfyOm\Generator\Commands;
 
-use Illuminate\Console\Command;
-use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Common\GeneratorConfig;
 use InfyOm\Generator\Generators\API\APIControllerGenerator;
 use InfyOm\Generator\Generators\API\APIRequestGenerator;
 use InfyOm\Generator\Generators\API\APIRoutesGenerator;
@@ -18,150 +17,107 @@ use InfyOm\Generator\Generators\Scaffold\MenuGenerator;
 use InfyOm\Generator\Generators\Scaffold\RequestGenerator;
 use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
 use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
-use InfyOm\Generator\Utils\FileUtil;
+use InfyOm\Generator\Generators\SeederGenerator;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 
-class RollbackGeneratorCommand extends Command
+class RollbackGeneratorCommand extends BaseCommand
 {
-    /**
-     * The command Data.
-     *
-     * @var CommandData
-     */
-    public $commandData;
-    /**
-     * The console command name.
-     *
-     * @var string
-     */
+    public GeneratorConfig $config;
+
     protected $name = 'infyom:rollback';
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
+
     protected $description = 'Rollback a full CRUD API and Scaffold for given model';
 
-    /**
-     * @var Composer
-     */
-    public $composer;
-
-    /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->composer = app()['composer'];
-    }
-
-    /**
-     * Execute the command.
-     *
-     * @return int
-     */
     public function handle()
     {
+        $this->config = app(GeneratorConfig::class);
+        $this->config->setCommand($this);
+        $this->config->init();
+
         $type = $this->argument('type');
-        if (!in_array($type, [
-            CommandData::$COMMAND_TYPE_API,
-            CommandData::$COMMAND_TYPE_SCAFFOLD,
-            CommandData::$COMMAND_TYPE_API_SCAFFOLD,
-        ])) {
-            $this->error('invalid rollback type');
+        if (!in_array($type, ['api', 'scaffold', 'api_scaffold'])) {
+            $this->error('Invalid rollback type');
 
             return 1;
         }
 
-        $this->commandData = new CommandData($this, $this->argument('type'));
-        $this->commandData->fireEvent($type, FileUtil::FILE_DELETING);
-        $this->commandData->config->mName = $this->commandData->modelName = $this->argument('model');
-
-        $this->commandData->config->init($this->commandData, ['tableName', 'prefix', 'plural', 'views']);
-
-        $views = $this->commandData->getOption('views');
+        $this->fireFileDeletingEvent($type);
+        $views = $this->option('views');
         if (!empty($views)) {
             $views = explode(',', $views);
-            $viewGenerator = new ViewGenerator($this->commandData);
+            $viewGenerator = new ViewGenerator();
             $viewGenerator->rollback($views);
 
             $this->info('Generating autoload files');
             $this->composer->dumpOptimized();
-            $this->commandData->fireEvent($type, FileUtil::FILE_DELETED);
+            $this->fireFileDeletedEvent($type);
 
             return 0;
         }
 
-        $migrationGenerator = new MigrationGenerator($this->commandData);
+        $migrationGenerator = app(MigrationGenerator::class);
         $migrationGenerator->rollback();
 
-        $modelGenerator = new ModelGenerator($this->commandData);
+        $modelGenerator = app(ModelGenerator::class);
         $modelGenerator->rollback();
 
-        $repositoryGenerator = new RepositoryGenerator($this->commandData);
-        $repositoryGenerator->rollback();
+        if ($this->config->options->repositoryPattern) {
+            $repositoryGenerator = app(RepositoryGenerator::class);
+            $repositoryGenerator->rollback();
+        }
 
-        $requestGenerator = new APIRequestGenerator($this->commandData);
-        $requestGenerator->rollback();
+        if (in_array($type, ['api', 'api_scaffold'])) {
+            $requestGenerator = app(APIRequestGenerator::class);
+            $requestGenerator->rollback();
 
-        $controllerGenerator = new APIControllerGenerator($this->commandData);
-        $controllerGenerator->rollback();
+            $controllerGenerator = app(APIControllerGenerator::class);
+            $controllerGenerator->rollback();
 
-        $routesGenerator = new APIRoutesGenerator($this->commandData);
-        $routesGenerator->rollback();
+            $routesGenerator = app(APIRoutesGenerator::class);
+            $routesGenerator->rollback();
+        }
 
-        $requestGenerator = new RequestGenerator($this->commandData);
-        $requestGenerator->rollback();
+        if (in_array($type, ['scaffold', 'api_scaffold'])) {
+            $requestGenerator = app(RequestGenerator::class);
+            $requestGenerator->rollback();
 
-        $controllerGenerator = new ControllerGenerator($this->commandData);
-        $controllerGenerator->rollback();
+            $controllerGenerator = app(ControllerGenerator::class);
+            $controllerGenerator->rollback();
 
-        $viewGenerator = new ViewGenerator($this->commandData);
-        $viewGenerator->rollback();
+            $viewGenerator = app(ViewGenerator::class);
+            $viewGenerator->rollback();
 
-        $routeGenerator = new RoutesGenerator($this->commandData);
-        $routeGenerator->rollback();
+            $routeGenerator = app(RoutesGenerator::class);
+            $routeGenerator->rollback();
 
-        if ($this->commandData->getAddOn('tests')) {
-            $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);
+            $menuGenerator = app(MenuGenerator::class);
+            $menuGenerator->rollback();
+        }
+
+        if ($this->config->options->tests) {
+            $repositoryTestGenerator = app(RepositoryTestGenerator::class);
             $repositoryTestGenerator->rollback();
 
-            $apiTestGenerator = new APITestGenerator($this->commandData);
+            $apiTestGenerator = app(APITestGenerator::class);
             $apiTestGenerator->rollback();
         }
 
-        $factoryGenerator = new FactoryGenerator($this->commandData);
-        $factoryGenerator->rollback();
+        if ($this->config->options->factory or $this->config->options->tests) {
+            $factoryGenerator = app(FactoryGenerator::class);
+            $factoryGenerator->rollback();
+        }
 
-        if ($this->commandData->config->getAddOn('menu.enabled')) {
-            $menuGenerator = new MenuGenerator($this->commandData);
-            $menuGenerator->rollback();
+        if ($this->config->options->seeder) {
+            $seederGenerator = app(SeederGenerator::class);
+            $seederGenerator->rollback();
         }
 
         $this->info('Generating autoload files');
         $this->composer->dumpOptimized();
 
-        $this->commandData->fireEvent($type, FileUtil::FILE_DELETED);
+        $this->fireFileDeletedEvent($type);
 
         return 0;
-    }
-
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    public function getOptions()
-    {
-        return [
-            ['tableName', null, InputOption::VALUE_REQUIRED, 'Table Name'],
-            ['prefix', null, InputOption::VALUE_REQUIRED, 'Prefix for all files'],
-            ['plural', null, InputOption::VALUE_REQUIRED, 'Plural Model name'],
-            ['views', null, InputOption::VALUE_REQUIRED, 'Views to rollback'],
-        ];
     }
 
     /**

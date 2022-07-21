@@ -2,64 +2,95 @@
 
 namespace InfyOm\Generator\Utils;
 
+use Illuminate\Support\Str;
 use InfyOm\Generator\Common\GeneratorField;
 
 class HTMLFieldGenerator
 {
-    public static function generateHTML(GeneratorField $field, $templateType, $localized = false)
+    public static function generateHTML(GeneratorField $field, $templateType): string
     {
-        $fieldTemplate = '';
+        $viewName = $field->htmlType;
+        $variables = [];
 
-        $localized = ($localized) ? '_locale' : '';
+        if (!empty($validations = self::generateValidations($field))) {
+            $variables['options'] = ', '.implode(', ', $validations);
+        }
+
         switch ($field->htmlType) {
-            case 'text':
-            case 'textarea':
-            case 'date':
-            case 'file':
-            case 'email':
-            case 'password':
-            case 'number':
-                $fieldTemplate = get_template('scaffold.fields.'.$field->htmlType.$localized, $templateType);
-                break;
             case 'select':
             case 'enum':
-                $fieldTemplate = get_template('scaffold.fields.select'.$localized, $templateType);
-                $radioLabels = GeneratorFieldsInputUtil::prepareKeyValueArrFromLabelValueStr($field->htmlValues);
+                $viewName = 'select';
+                $keyValues = GeneratorFieldsInputUtil::prepareKeyValueArrFromLabelValueStr($field->htmlValues);
 
-                $fieldTemplate = str_replace(
-                    '$INPUT_ARR$',
-                    GeneratorFieldsInputUtil::prepareKeyValueArrayStr($radioLabels),
-                    $fieldTemplate
-                );
+                $variables = [
+                    'selectValues' => GeneratorFieldsInputUtil::prepareKeyValueArrayStr($keyValues),
+                ];
                 break;
             case 'checkbox':
-                $fieldTemplate = get_template('scaffold.fields.checkbox'.$localized, $templateType);
                 if (count($field->htmlValues) > 0) {
                     $checkboxValue = $field->htmlValues[0];
                 } else {
                     $checkboxValue = 1;
                 }
-                $fieldTemplate = str_replace('$CHECKBOX_VALUE$', $checkboxValue, $fieldTemplate);
+                $variables['checkboxVal'] = $checkboxValue;
                 break;
             case 'radio':
-                $fieldTemplate = get_template('scaffold.fields.radio_group'.$localized, $templateType);
-                $radioTemplate = get_template('scaffold.fields.radio'.$localized, $templateType);
-
-                $radioLabels = GeneratorFieldsInputUtil::prepareKeyValueArrFromLabelValueStr($field->htmlValues);
+                $keyValues = GeneratorFieldsInputUtil::prepareKeyValueArrFromLabelValueStr($field->htmlValues);
 
                 $radioButtons = [];
-                foreach ($radioLabels as $label => $value) {
-                    $radioButtonTemplate = str_replace('$LABEL$', $label, $radioTemplate);
-                    $radioButtonTemplate = str_replace('$VALUE$', $value, $radioButtonTemplate);
-                    $radioButtons[] = $radioButtonTemplate;
+                foreach ($keyValues as $label => $value) {
+                    $radioButtons[] = view($templateType.'.fields.radio', [
+                        'label'     => $label,
+                        'value'     => $value,
+                        'fieldName' => $field->name,
+                    ]);
                 }
-                $fieldTemplate = str_replace('$RADIO_BUTTONS$', implode("\n", $radioButtons), $fieldTemplate);
-                break;
-            case 'toggle-switch':
-                $fieldTemplate = get_template('scaffold.fields.toggle-switch'.$localized, $templateType);
-                break;
+
+                return view($templateType.'.fields.radio_group', array_merge(
+                    ['radioButtons' => implode(infy_nl(), $radioButtons)],
+                    array_merge(
+                        $field->variables(),
+                        $variables
+                    )
+                ))->render();
         }
 
-        return $fieldTemplate;
+        return view(
+            $templateType.'.fields.'.$viewName,
+            array_merge(
+                $field->variables(),
+                $variables
+            )
+        )->render();
+    }
+
+    public static function generateValidations(GeneratorField $field)
+    {
+        $validations = explode('|', $field->validations);
+        $validationRules = [];
+
+        foreach ($validations as $validation) {
+            if ($validation === 'required') {
+                $validationRules[] = "'required'";
+                continue;
+            }
+
+            if (!Str::contains($validation, ['max:', 'min:'])) {
+                continue;
+            }
+
+            $validationText = substr($validation, 0, 3);
+            $sizeInNumber = substr($validation, 4);
+
+            $sizeText = ($validationText == 'min') ? 'minlength' : 'maxlength';
+            if ($field->htmlType == 'number') {
+                $sizeText = $validationText;
+            }
+
+            $size = "'$sizeText' => $sizeInNumber";
+            $validationRules[] = $size;
+        }
+
+        return $validationRules;
     }
 }

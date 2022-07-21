@@ -3,55 +3,45 @@
 namespace InfyOm\Generator\Generators\Scaffold;
 
 use Illuminate\Support\Str;
-use InfyOm\Generator\Common\CommandData;
+use InfyOm\Generator\Generators\BaseGenerator;
 
-class RoutesGenerator
+class RoutesGenerator extends BaseGenerator
 {
-    /** @var CommandData */
-    private $commandData;
-
-    /** @var string */
-    private $path;
-
-    /** @var string */
-    private $routeContents;
-
-    /** @var string */
-    private $routesTemplate;
-
-    public function __construct(CommandData $commandData)
+    public function __construct()
     {
-        $this->commandData = $commandData;
-        $this->path = $commandData->config->pathRoutes;
-        $this->routeContents = file_get_contents($this->path);
-        if (!empty($this->commandData->config->prefixes['route'])) {
-            $this->routesTemplate = get_template('scaffold.routes.prefix_routes', 'laravel-generator');
-        } else {
-            $this->routesTemplate = get_template('scaffold.routes.routes', 'laravel-generator');
-        }
-        $this->routesTemplate = fill_template($this->commandData->dynamicVars, $this->routesTemplate);
+        parent::__construct();
+
+        $this->path = $this->config->paths->routes;
     }
 
     public function generate()
     {
-        $this->routeContents .= "\n\n".$this->routesTemplate;
-        $existingRouteContents = file_get_contents($this->path);
-        if (Str::contains($existingRouteContents, "Route::resource('".$this->commandData->config->mDashedPlural."',")) {
-            $this->commandData->commandObj->info('Route '.$this->commandData->config->mDashedPlural.' is already exists, Skipping Adjustment.');
+        $routeContents = g_filesystem()->getFile($this->path);
+
+        $routes = view('laravel-generator::scaffold.routes')->render();
+
+        if (Str::contains($routeContents, $routes)) {
+            $this->config->commandInfo(infy_nl().'Route '.$this->config->modelNames->dashedPlural.' already exists, Skipping Adjustment.');
 
             return;
         }
 
-        file_put_contents($this->path, $this->routeContents);
-        $this->commandData->commandComment("\n".$this->commandData->config->mCamelPlural.' routes added.');
+        $routeContents .= infy_nl().$routes;
+
+        g_filesystem()->createFile($this->path, $routeContents);
+        $this->config->commandComment(infy_nl().$this->config->modelNames->dashedPlural.' routes added.');
     }
 
     public function rollback()
     {
-        if (Str::contains($this->routeContents, $this->routesTemplate)) {
-            $this->routeContents = str_replace($this->routesTemplate, '', $this->routeContents);
-            file_put_contents($this->path, $this->routeContents);
-            $this->commandData->commandComment('scaffold routes deleted');
+        $routeContents = g_filesystem()->getFile($this->path);
+
+        $routes = view('laravel-generator::scaffold.routes')->render();
+
+        if (Str::contains($routeContents, $routes)) {
+            $routeContents = str_replace($routes, '', $routeContents);
+            g_filesystem()->createFile($this->path, $routeContents);
+            $this->config->commandComment('scaffold routes deleted');
         }
     }
 }

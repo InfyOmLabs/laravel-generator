@@ -2,16 +2,30 @@
 
 namespace InfyOm\Generator\Generators;
 
-use InfyOm\Generator\Utils\FileUtil;
+use InfyOm\Generator\Common\GeneratorConfig;
 
-class BaseGenerator
+abstract class BaseGenerator
 {
-    public function rollbackFile($path, $fileName)
+    public GeneratorConfig $config;
+
+    public string $path;
+
+    public function __construct()
+    {
+        $this->config = app(GeneratorConfig::class);
+    }
+
+    public function rollbackFile($path, $fileName): bool
     {
         if (file_exists($path.$fileName)) {
-            return FileUtil::deleteFile($path, $fileName);
+            return g_filesystem()->deleteFile($path, $fileName);
         }
 
         return false;
+    }
+
+    public function variables(): array
+    {
+        return [];
     }
 }

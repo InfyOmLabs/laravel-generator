@@ -3,8 +3,6 @@
 namespace InfyOm\Generator\Commands\Scaffold;
 
 use InfyOm\Generator\Commands\BaseCommand;
-use InfyOm\Generator\Common\CommandData;
-use InfyOm\Generator\Utils\FileUtil;
 
 class ScaffoldGeneratorCommand extends BaseCommand
 {
@@ -22,35 +20,20 @@ class ScaffoldGeneratorCommand extends BaseCommand
      */
     protected $description = 'Create a full CRUD views for given model';
 
-    /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->commandData = new CommandData($this, CommandData::$COMMAND_TYPE_SCAFFOLD);
-    }
-
-    /**
-     * Execute the command.
-     *
-     * @return void
-     */
     public function handle()
     {
         parent::handle();
 
         if ($this->checkIsThereAnyDataToGenerate()) {
-            $this->commandData->fireEvent('scaffold', FileUtil::FILE_CREATING);
+            $this->fireFileCreatingEvent('scaffold');
             $this->generateCommonItems();
 
             $this->generateScaffoldItems();
 
             $this->performPostActionsWithMigration();
-            $this->commandData->fireEvent('scaffold', FileUtil::FILE_CREATED);
+            $this->fireFileCreatedEvent('scaffold');
         } else {
-            $this->commandData->commandInfo('There are not enough input fields for scaffold generation.');
+            $this->config->commandInfo('There are not enough input fields for scaffold generation.');
         }
     }
 
@@ -74,15 +57,12 @@ class ScaffoldGeneratorCommand extends BaseCommand
         return array_merge(parent::getArguments(), []);
     }
 
-    /**
-     * Check if there is anything to generate.
-     *
-     * @return bool
-     */
-    protected function checkIsThereAnyDataToGenerate()
+    protected function checkIsThereAnyDataToGenerate(): bool
     {
-        if (count($this->commandData->fields) > 1) {
+        if (count($this->config->fields) > 1) {
             return true;
         }
+
+        return false;
     }
 }

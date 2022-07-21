@@ -6,12 +6,11 @@ use Illuminate\Support\Str;
 
 class GeneratorFieldRelation
 {
-    /** @var string */
     public $type;
-    public $inputs;
-    public $relationName;
+    public array $inputs;
+    public string $relationName;
 
-    public static function parseRelation($relationInput)
+    public static function parseRelation($relationInput): self
     {
         $inputs = explode(',', $relationInput);
 
@@ -27,7 +26,7 @@ class GeneratorFieldRelation
         return $relation;
     }
 
-    public function getRelationFunctionText($relationText = null)
+    public function getRelationFunctionText(string $relationText = null): string
     {
         $singularRelation = (!empty($this->relationName)) ? $this->relationName : Str::camel($relationText);
         $pluralRelation = (!empty($this->relationName)) ? $this->relationName : Str::camel(Str::plural($relationText));
@@ -80,14 +79,7 @@ class GeneratorFieldRelation
     private function generateRelation($functionName, $relation, $relationClass)
     {
         $inputs = $this->inputs;
-        $modelName = array_shift($inputs);
-
-        $template = get_template('model.relationship', 'laravel-generator');
-
-        $template = str_replace('$RELATIONSHIP_CLASS$', $relationClass, $template);
-        $template = str_replace('$FUNCTION_NAME$', $functionName, $template);
-        $template = str_replace('$RELATION$', $relation, $template);
-        $template = str_replace('$RELATION_MODEL_NAME$', $modelName, $template);
+        $relatedModelName = array_shift($inputs);
 
         if (count($inputs) > 0) {
             $inputFields = implode("', '", $inputs);
@@ -96,8 +88,12 @@ class GeneratorFieldRelation
             $inputFields = '';
         }
 
-        $template = str_replace('$INPUT_FIELDS$', $inputFields, $template);
-
-        return $template;
+        return view('laravel-generator::model.relationship', [
+            'relationClass' => $relationClass,
+            'functionName'  => $functionName,
+            'relation'      => $relation,
+            'relatedModel'  => $relatedModelName,
+            'fields'        => $inputFields,
+        ])->render();
     }
 }

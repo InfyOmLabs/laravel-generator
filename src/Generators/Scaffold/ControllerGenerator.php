@@ -2,160 +2,161 @@
 
 namespace InfyOm\Generator\Generators\Scaffold;
 
-use InfyOm\Generator\Common\CommandData;
+use Exception;
 use InfyOm\Generator\Generators\BaseGenerator;
-use InfyOm\Generator\Utils\FileUtil;
 
 class ControllerGenerator extends BaseGenerator
 {
-    /** @var CommandData */
-    private $commandData;
+    private string $templateType;
 
-    /** @var string */
-    private $path;
+    private string $fileName;
 
-    /** @var string */
-    private $templateType;
-
-    /** @var string */
-    private $fileName;
-
-    public function __construct(CommandData $commandData)
+    public function __construct()
     {
-        $this->commandData = $commandData;
-        $this->path = $commandData->config->pathController;
-        $this->templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
-        $this->fileName = $this->commandData->modelName.'Controller.php';
+        parent::__construct();
+
+        $this->path = $this->config->paths->controller;
+        $this->templateType = config('laravel_generator.templates', 'adminlte-templates');
+        $this->fileName = $this->config->modelNames->name.'Controller.php';
     }
 
     public function generate()
     {
-        if ($this->commandData->getAddOn('datatables')) {
-            if ($this->commandData->getOption('repositoryPattern')) {
-                $templateName = 'datatable_controller';
-            } else {
-                $templateName = 'model_datatable_controller';
-            }
+        $variables = [];
 
-            if ($this->commandData->isLocalizedTemplates()) {
-                $templateName .= '_locale';
-            }
+        switch ($this->config->tableType) {
+            case 'blade':
+                if ($this->config->options->repositoryPattern) {
+                    $indexMethodView = 'index_method_repository';
+                } else {
+                    $indexMethodView = 'index_method';
+                }
+                $variables['renderType'] = 'paginate(10)';
+                break;
 
-            $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
+            case 'datatables':
+                $indexMethodView = 'index_method_datatable';
+                $this->generateDataTable();
+                break;
 
-            $this->generateDataTable();
-        } elseif ($this->commandData->jqueryDT()) {
-            $templateName = 'jquery_datatable_controller';
-            $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
+            case 'livewire':
+                $indexMethodView = 'index_method_livewire';
+                $this->generateLivewireTable();
+                break;
 
-            $this->generateDataTable();
-        } else {
-            if ($this->commandData->getOption('repositoryPattern')) {
-                $templateName = 'controller';
-            } else {
-                $templateName = 'model_controller';
-            }
-            if ($this->commandData->isLocalizedTemplates()) {
-                $templateName .= '_locale';
-            }
-
-            $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
-
-            $paginate = $this->commandData->getOption('paginate');
-
-            if ($paginate) {
-                $templateData = str_replace('$RENDER_TYPE$', 'paginate('.$paginate.')', $templateData);
-            } else {
-                $templateData = str_replace('$RENDER_TYPE$', 'all()', $templateData);
-            }
+            default:
+                throw new Exception('Invalid Table Type');
         }
 
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        if ($this->config->options->repositoryPattern) {
+            $viewName = 'controller_repository';
+        } else {
+            $viewName = 'controller';
+        }
 
-        FileUtil::createFile($this->path, $this->fileName, $templateData);
+        $variables['indexMethod'] = view('laravel-generator::scaffold.controller.'.$indexMethodView, $variables)
+            ->render();
 
-        $this->commandData->commandComment("\nController created: ");
-        $this->commandData->commandInfo($this->fileName);
+        $templateData = view('laravel-generator::scaffold.controller.'.$viewName, $variables)->render();
+
+        g_filesystem()->createFile($this->path.$this->fileName, $templateData);
+
+        $this->config->commandComment(infy_nl().'Controller created: ');
+        $this->config->commandInfo($this->fileName);
     }
 
     private function generateDataTable()
     {
-        $templateName = ($this->commandData->jqueryDT()) ? 'jquery_datatable' : 'datatable';
-        if ($this->commandData->isLocalizedTemplates()) {
-            $templateName .= '_locale';
-        }
+        $templateData = view('laravel-generator::scaffold.table.datatable', [
+            'columns' => implode(','.infy_nl_tab(1, 3), $this->generateDataTableColumns()),
+        ])->render();
 
-        $templateData = get_template('scaffold.'.$templateName, 'laravel-generator');
+        $path = $this->config->paths->dataTables;
 
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        $fileName = $this->config->modelNames->name.'DataTable.php';
 
-        $templateData = str_replace(
-            '$DATATABLE_COLUMNS$',
-            implode(','.infy_nl_tab(1, 3), $this->generateDataTableColumns()),
-            $templateData
-        );
+        g_filesystem()->createFile($path.$fileName, $templateData);
 
-        $path = $this->commandData->config->pathDataTables;
-
-        $fileName = $this->commandData->modelName.'DataTable.php';
-
-        FileUtil::createFile($path, $fileName, $templateData);
-
-        $this->commandData->commandComment("\nDataTable created: ");
-        $this->commandData->commandInfo($fileName);
+        $this->config->commandComment(infy_nl().'DataTable created: ');
+        $this->config->commandInfo($fileName);
     }
 
-    private function generateDataTableColumns()
+    private function generateLivewireTable()
     {
-        $templateName = 'datatable_column';
-        if ($this->commandData->isLocalizedTemplates()) {
-            $templateName .= '_locale';
-        }
-        $headerFieldTemplate = get_template('scaffold.views.'.$templateName, $this->templateType);
+        $templateData = view('laravel-generator::scaffold.table.livewire', [
+            'columns' => implode(','.infy_nl_tab(1, 3), $this->generateLivewireTableColumns()),
+        ])->render();
 
+        $path = $this->config->paths->livewireTables;
+
+        $fileName = $this->config->modelNames->plural.'Table.php';
+
+        g_filesystem()->createFile($path.$fileName, $templateData);
+
+        $this->config->commandComment(infy_nl().'LivewireTable created: ');
+        $this->config->commandInfo($fileName);
+    }
+
+    private function generateDataTableColumns(): array
+    {
         $dataTableColumns = [];
-        foreach ($this->commandData->fields as $field) {
+        foreach ($this->config->fields as $field) {
             if (!$field->inIndex) {
                 continue;
             }
 
-            if ($this->commandData->isLocalizedTemplates() && !$field->isSearchable) {
-                $headerFieldTemplate = str_replace('$SEARCHABLE$', ",'searchable' => false", $headerFieldTemplate);
-            }
-
-            $fieldTemplate = fill_template_with_field_data(
-                $this->commandData->dynamicVars,
-                $this->commandData->fieldNamesMapping,
-                $headerFieldTemplate,
-                $field
-            );
-
-            if ($field->isSearchable) {
-                $dataTableColumns[] = $fieldTemplate;
-            } else {
-                if ($this->commandData->isLocalizedTemplates()) {
-                    $dataTableColumns[] = $fieldTemplate;
-                } else {
-                    $dataTableColumns[] = "'".$field->name."' => ['searchable' => false]";
-                }
-            }
+            $dataTableColumns[] = trim(view(
+                $this->templateType.'::templates.scaffold.table.datatable.column',
+                $field->variables()
+            )->render());
         }
 
         return $dataTableColumns;
     }
 
+    private function generateLivewireTableColumns(): array
+    {
+        $livewireTableColumns = [];
+
+        foreach ($this->config->fields as $field) {
+            if (!$field->inIndex) {
+                continue;
+            }
+
+            $fieldTemplate = 'Column::make("'.$field->getTitle().'", "'.$field->name.'")'.infy_nl();
+            $fieldTemplate .= infy_tabs(4).'->sortable()';
+
+            if ($field->isSearchable) {
+                $fieldTemplate .= infy_nl().infy_tabs(4).'->searchable()';
+            }
+
+            $livewireTableColumns[] = $fieldTemplate;
+        }
+
+        return $livewireTableColumns;
+    }
+
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('Controller file deleted: '.$this->fileName);
+            $this->config->commandComment('Controller file deleted: '.$this->fileName);
         }
 
-        if ($this->commandData->getAddOn('datatables')) {
+        if ($this->config->tableType === 'datatables') {
             if ($this->rollbackFile(
-                $this->commandData->config->pathDataTables,
-                $this->commandData->modelName.'DataTable.php'
+                $this->config->paths->dataTables,
+                $this->config->modelNames->name.'DataTable.php'
             )) {
-                $this->commandData->commandComment('DataTable file deleted: '.$this->fileName);
+                $this->config->commandComment('DataTable file deleted: '.$this->fileName);
+            }
+        }
+
+        if ($this->config->tableType === 'livewire') {
+            if ($this->rollbackFile(
+                $this->config->paths->livewireTables,
+                $this->config->modelNames->plural.'Table.php'
+            )) {
+                $this->config->commandComment('Livewire Table file deleted: '.$this->fileName);
             }
         }
     }

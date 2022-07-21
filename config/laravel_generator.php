@@ -17,6 +17,8 @@ return [
 
         'datatables'        => app_path('DataTables/'),
 
+        'livewire_tables'   => app_path('Http/Livewire/'),
+
         'repository'        => app_path('Repositories/'),
 
         'routes'            => base_path('routes/web.php'),
@@ -33,14 +35,6 @@ return [
 
         'api_resource'      => app_path('Http/Resources/'),
 
-        'repository_test'   => base_path('tests/Repositories/'),
-
-        'api_test'          => base_path('tests/APIs/'),
-
-        'tests'             => base_path('tests/'),
-
-        'views'             => resource_path('views/'),
-
         'schema_files'      => resource_path('model_schemas/'),
 
         'templates_dir'     => resource_path('infyom/infyom-generator-templates/'),
@@ -52,6 +46,16 @@ return [
         'factory'           => database_path('factories/'),
 
         'view_provider'     => app_path('Providers/ViewServiceProvider.php'),
+
+        'tests'             => base_path('tests/'),
+
+        'repository_test'   => base_path('tests/Repositories/'),
+
+        'api_test'          => base_path('tests/APIs/'),
+
+        'views'             => resource_path('views/'),
+
+        'menu_file'         => resource_path('views/layouts/menu.blade.php'),
     ],
 
     /*
@@ -66,6 +70,8 @@ return [
         'model'             => 'App\Models',
 
         'datatables'        => 'App\DataTables',
+
+        'livewire_tables'   => 'App\Http\Livewire',
 
         'repository'        => 'App\Repositories',
 
@@ -83,11 +89,11 @@ return [
 
         'factory'           => 'Database\Factories',
 
+        'tests'             => 'Tests',
+
         'repository_test'   => 'Tests\Repositories',
 
         'api_test'          => 'Tests\APIs',
-
-        'tests'             => 'Tests',
     ],
 
     /*
@@ -97,7 +103,7 @@ return [
     |
     */
 
-    'templates'         => 'adminlte-templates',
+    'templates' => 'adminlte-templates',
 
     /*
     |--------------------------------------------------------------------------
@@ -106,7 +112,7 @@ return [
     |
     */
 
-    'model_extend_class' => 'Eloquent',
+    'model_extend_class' => 'Illuminate\Database\Eloquent\Model',
 
     /*
     |--------------------------------------------------------------------------
@@ -126,17 +132,23 @@ return [
 
     'options' => [
 
-        'softDelete' => true,
+        'soft_delete' => false,
 
         'save_schema_file' => true,
 
         'localized' => false,
 
-        'tables_searchable_default' => false,
-
         'repository_pattern' => true,
 
         'resources' => false,
+
+        'factory' => false,
+
+        'seeder' => false,
+
+        'swagger' => false, // generate swagger for your APIs
+
+        'tests' => false, // generate test cases for your APIs
 
         'excluded_fields' => ['id'], // Array of columns that doesn't required while creating module
     ],
@@ -150,37 +162,23 @@ return [
 
     'prefixes' => [
 
-        'route' => '',  // using admin will create route('admin.?.index') type routes
+        'route' => '',  // e.g. admin or admin.shipping or admin.shipping.logistics
 
-        'path' => '',
+        'namespace' => '',  // e.g. Admin or Admin\Shipping or Admin\Shipping\Logistics
 
-        'view' => '',  // using backend will create return view('backend.?.index') type the backend views directory
-
-        'public' => '',
+        'view' => '',  // e.g. admin or admin/shipping or admin/shipping/logistics
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Add-Ons
+    | Table Types
+    |
+    | Possible Options: blade, datatables, livewire
     |--------------------------------------------------------------------------
     |
     */
 
-    'add_on' => [
-
-        'swagger'       => false,
-
-        'tests'         => true,
-
-        'datatables'    => false,
-
-        'menu'          => [
-
-            'enabled'       => true,
-
-            'menu_file'     => 'layouts/menu.blade.php',
-        ],
-    ],
+    'tables' => 'blade',
 
     /*
     |--------------------------------------------------------------------------
@@ -202,18 +200,11 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Save model files to `App/Models` when use `--prefix`. see #208
-    |--------------------------------------------------------------------------
-    |
-    */
-    'ignore_model_prefix' => false,
-
-    /*
-    |--------------------------------------------------------------------------
     | Specify custom doctrine mappings as per your need
     |--------------------------------------------------------------------------
     |
     */
+
     'from_table' => [
 
         'doctrine_mappings' => [],
