@@ -10,7 +10,6 @@ use {{ config('laravel_generator.namespace.repository') }}\UserRepository;
 use {{ config('laravel_generator.namespace.controller') }}\AppBaseController;
 use Illuminate\Http\Request;
 use Flash;
-use Response;
 use Hash;
 
 class UserController extends AppBaseController
@@ -27,8 +26,6 @@ class UserController extends AppBaseController
      * Display a listing of the User.
      *
      * @param Request $request
-     *
-     * @return Response
      */
     public function index(Request $request)
     {
@@ -39,8 +36,6 @@ class UserController extends AppBaseController
 
     /**
      * Show the form for creating a new User.
-     *
-     * @return Response
      */
     public function create()
     {
@@ -51,8 +46,6 @@ class UserController extends AppBaseController
      * Store a newly created User in storage.
      *
      * @param CreateUserRequest $request
-     *
-     * @return Response
      */
     public function store(CreateUserRequest $request)
     {
@@ -69,8 +62,6 @@ class UserController extends AppBaseController
      * Display the specified User.
      *
      * @param int $id
-     *
-     * @return Response
      */
     public function show($id)
     {
@@ -89,8 +80,6 @@ class UserController extends AppBaseController
      * Show the form for editing the specified User.
      *
      * @param int $id
-     *
-     * @return Response
      */
     public function edit($id)
     {
@@ -110,8 +99,6 @@ class UserController extends AppBaseController
      *
      * @param int $id
      * @param UpdateUserRequest $request
-     *
-     * @return Response
      */
     public function update($id, UpdateUserRequest $request)
     {
@@ -141,8 +128,6 @@ class UserController extends AppBaseController
      * @param int $id
      *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {
