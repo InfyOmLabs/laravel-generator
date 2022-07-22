@@ -35,7 +35,8 @@
         "mockery/mockery": "^1.4.4",
         "orchestra/testbench": "^7.5",
         "pestphp/pest": "^1.21",
-        "pestphp/pest-plugin-laravel": "^1.2"
+        "pestphp/pest-plugin-laravel": "^1.2",
+        "symfony/var-exporter": "^6.0"
     },
     "autoload": {
         "psr-4": {

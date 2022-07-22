@@ -32,6 +32,7 @@ use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
 use InfyOm\Generator\Utils\TableFieldsGenerator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\VarExporter\VarExporter;
 
 class BaseCommand extends Command
 {
@@ -246,14 +247,17 @@ class BaseCommand extends Command
             $locales['fields'][$field->name] = Str::title(str_replace('_', ' ', $field->name));
         }
 
-        $path = lang_path('en/models');
+        $path = lang_path('en/models/');
 
-        $fileName = $this->config->modelNames->plural.'.php';
+        $fileName = $this->config->modelNames->snakePlural.'.php';
 
         if (file_exists($path.$fileName) && !$this->confirmOverwrite($fileName)) {
             return;
         }
-        $content = "<?php\n\nreturn ".var_export($locales, true).';'.infy_nl();
+
+        $locales = VarExporter::export($locales);
+        $end = ';'.infy_nl();
+        $content = "<?php\n\nreturn ".$locales.$end;
         g_filesystem()->createFile($path.$fileName, $content);
         $this->comment("\nModel Locale File saved.");
         $this->info($fileName);
