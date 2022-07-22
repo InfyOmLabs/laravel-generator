@@ -255,7 +255,7 @@ class BaseCommand extends Command
         }
         $content = "<?php\n\nreturn ".var_export($locales, true).';'.infy_nl();
         g_filesystem()->createFile($path.$fileName, $content);
-        $this->comment("\nModel Locale File saved: ");
+        $this->comment("\nModel Locale File saved.");
         $this->info($fileName);
     }
 
