@@ -246,7 +246,7 @@ class BaseCommand extends Command
             $locales['fields'][$field->name] = Str::title(str_replace('_', ' ', $field->name));
         }
 
-        $path = config('laravel_generator.path.models_locale_files', base_path('resources/lang/en/models/'));
+        $path = lang_path('en/models');
 
         $fileName = $this->config->modelNames->plural.'.php';
 
