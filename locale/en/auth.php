@@ -28,7 +28,6 @@ return [
     'login' => [
         'title'               => 'Sign in to start your session',
         'forgot_password'     => 'I forgot my password',
-        'register_membership' => 'Register a new membership',
     ],
 
     'registration' => [
@@ -39,12 +38,12 @@ return [
     ],
 
     'forgot_password' => [
-        'title'          => 'Enter Email to reset password',
+        'title'          => 'You forgot your password? Here you can easily retrieve a new password.',
         'send_pwd_reset' => 'Send Password Reset Link',
     ],
 
     'reset_password' => [
-        'title'         => 'Reset your password',
+        'title'         => 'You are only one step a way from your new password, recover your password now.',
         'reset_pwd_btn' => 'Reset Password',
     ],
 
@@ -64,20 +63,5 @@ return [
         'password' => [
             'reset_link' => 'Click here to reset your password',
         ],
-    ],
-
-    'app' => [
-        'member_since' => 'Member since',
-        'messages'     => 'Messages',
-        'settings'     => 'Settings',
-        'lock_account' => 'Lock Account',
-        'profile'      => 'Profile',
-        'online'       => 'Online',
-        'search'       => 'Search',
-        'create'       => 'Create',
-        'export'       => 'Export',
-        'print'        => 'Print',
-        'reset'        => 'Reset',
-        'reload'       => 'Reload',
     ],
 ];

@@ -65,19 +65,4 @@ return [
             'reset_link' => 'Haga clic aquí para restablecer su contraseña',
         ],
     ],
-
-    'app' => [
-        'member_since' => 'Miembro desde',
-        'messages'     => 'Mensajes',
-        'settings'     => 'Ajustes',
-        'lock_account' => 'Bloquear cuenta',
-        'profile'      => 'Perfil',
-        'online'       => 'En Linea',
-        'search'       => 'Buscar',
-        'create'       => 'Crear',
-        'export'       => 'Exportar',
-        'print'        => 'Imprimir',
-        'reset'        => 'Reiniciar',
-        'reload'       => 'Recargar',
-    ],
 ];

@@ -132,7 +132,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
     {
         $localesDir = __DIR__.'/../../../locale/';
 
-        $this->publishDirectory($localesDir, resource_path('lang'), 'lang', true);
+        $this->publishDirectory($localesDir, lang_path(), 'lang', true);
 
         $this->comment('Locale files published');
     }

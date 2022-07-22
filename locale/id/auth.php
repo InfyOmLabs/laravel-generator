@@ -65,19 +65,4 @@ return [
             'reset_link' => 'Klik di sini untuk mengatur ulang kata sandi Anda',
         ],
     ],
-
-    'app' => [
-        'member_since' => 'Anggota Sejak',
-        'messages'     => 'Pesan',
-        'settings'     => 'Pengaturan',
-        'lock_account' => 'Kunci Akun',
-        'profile'      => 'Profil',
-        'online'       => 'On line',
-        'search'       => 'Mencari',
-        'create'       => 'Membuat',
-        'export'       => 'Ekspor',
-        'print'        => 'Mencetak',
-        'reset'        => 'Mengatur ulang',
-        'reload'       => 'Muat ulang',
-    ],
 ];
