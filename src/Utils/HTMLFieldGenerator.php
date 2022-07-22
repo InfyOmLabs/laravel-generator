@@ -47,7 +47,7 @@ class HTMLFieldGenerator
                 }
 
                 return view($templateType.'.fields.radio_group', array_merge(
-                    ['radioButtons' => implode(infy_nl(), $radioButtons)],
+                    ['radioButtons' => implode(infy_nl_tab(), $radioButtons)],
                     array_merge(
                         $field->variables(),
                         $variables
