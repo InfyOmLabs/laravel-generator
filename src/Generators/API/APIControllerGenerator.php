@@ -49,7 +49,7 @@ class APIControllerGenerator extends BaseGenerator
         $this->config->commandInfo($this->fileName);
     }
 
-    private function docsVariables(): array
+    protected function docsVariables(): array
     {
         $methods = ['controller', 'index', 'store', 'show', 'update', 'destroy'];
 

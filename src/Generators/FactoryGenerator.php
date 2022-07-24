@@ -62,7 +62,7 @@ class FactoryGenerator extends BaseGenerator
         $this->config->commandInfo($this->fileName);
     }
 
-    private function generateFields(): string
+    protected function generateFields(): string
     {
         $fields = [];
 

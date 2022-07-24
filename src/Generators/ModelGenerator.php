@@ -114,7 +114,7 @@ class ModelGenerator extends BaseGenerator
         return $fillables;
     }
 
-    private function fillDocs(): string
+    protected function fillDocs(): string
     {
         if (!$this->config->options->swagger) {
             return '';
@@ -145,7 +145,7 @@ class ModelGenerator extends BaseGenerator
         ]);
     }
 
-    private function generateRequiredFields(): array
+    protected function generateRequiredFields(): array
     {
         $requiredFields = [];
 
@@ -162,7 +162,7 @@ class ModelGenerator extends BaseGenerator
         return $requiredFields;
     }
 
-    private function generateRules(): array
+    protected function generateRules(): array
     {
         $dont_require_fields = config('laravel_generator.options.hidden_fields', [])
                 + config('laravel_generator.options.excluded_fields', $this->excluded_fields);
@@ -309,7 +309,7 @@ class ModelGenerator extends BaseGenerator
         return $casts;
     }
 
-    private function generateRelations(): string
+    protected function generateRelations(): string
     {
         $relations = [];
 

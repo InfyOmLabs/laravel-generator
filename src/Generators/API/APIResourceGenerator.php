@@ -33,7 +33,7 @@ class APIResourceGenerator extends BaseGenerator
         $this->config->commandInfo($this->fileName);
     }
 
-    private function generateResourceFields(): array
+    protected function generateResourceFields(): array
     {
         $resourceFields = [];
         foreach ($this->config->fields as $field) {

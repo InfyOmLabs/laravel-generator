@@ -26,7 +26,7 @@ class APIRequestGenerator extends BaseGenerator
         $this->generateUpdateRequest();
     }
 
-    private function generateCreateRequest()
+    protected function generateCreateRequest()
     {
         $templateData = view('laravel-generator::api.request.create', $this->variables())->render();
 
@@ -36,7 +36,7 @@ class APIRequestGenerator extends BaseGenerator
         $this->config->commandInfo($this->createFileName);
     }
 
-    private function generateUpdateRequest()
+    protected function generateUpdateRequest()
     {
         $modelGenerator = app(ModelGenerator::class);
         $rules = $modelGenerator->generateUniqueRules();

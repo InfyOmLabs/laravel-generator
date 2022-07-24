@@ -76,7 +76,7 @@ class GeneratorFieldRelation
         return '';
     }
 
-    private function generateRelation($functionName, $relation, $relationClass)
+    protected function generateRelation($functionName, $relation, $relationClass)
     {
         $inputs = $this->inputs;
         $relatedModelName = array_shift($inputs);

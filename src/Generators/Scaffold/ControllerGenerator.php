@@ -65,7 +65,7 @@ class ControllerGenerator extends BaseGenerator
         $this->config->commandInfo($this->fileName);
     }
 
-    private function generateDataTable()
+    protected function generateDataTable()
     {
         $templateData = view('laravel-generator::scaffold.table.datatable', [
             'columns' => implode(','.infy_nl_tab(1, 3), $this->generateDataTableColumns()),
@@ -81,7 +81,7 @@ class ControllerGenerator extends BaseGenerator
         $this->config->commandInfo($fileName);
     }
 
-    private function generateLivewireTable()
+    protected function generateLivewireTable()
     {
         $templateData = view('laravel-generator::scaffold.table.livewire', [
             'columns' => implode(','.infy_nl_tab(1, 3), $this->generateLivewireTableColumns()),
@@ -97,7 +97,7 @@ class ControllerGenerator extends BaseGenerator
         $this->config->commandInfo($fileName);
     }
 
-    private function generateDataTableColumns(): array
+    protected function generateDataTableColumns(): array
     {
         $dataTableColumns = [];
         foreach ($this->config->fields as $field) {
@@ -114,7 +114,7 @@ class ControllerGenerator extends BaseGenerator
         return $dataTableColumns;
     }
 
-    private function generateLivewireTableColumns(): array
+    protected function generateLivewireTableColumns(): array
     {
         $livewireTableColumns = [];
 

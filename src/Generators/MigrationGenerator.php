@@ -34,7 +34,7 @@ class MigrationGenerator extends BaseGenerator
         ];
     }
 
-    private function generateFields(): string
+    protected function generateFields(): string
     {
         $fields = [];
         $foreignKeys = [];

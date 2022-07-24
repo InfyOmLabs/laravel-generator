@@ -197,7 +197,7 @@ class BaseCommand extends Command
         $this->performPostActions(true);
     }
 
-    private function saveSchemaFile()
+    protected function saveSchemaFile()
     {
         $fileFields = [];
 
@@ -235,7 +235,7 @@ class BaseCommand extends Command
         $this->info($fileName);
     }
 
-    private function saveLocaleFile()
+    protected function saveLocaleFile()
     {
         $locales = [
             'singular' => $this->config->modelNames->name,
@@ -333,7 +333,7 @@ class BaseCommand extends Command
         $this->getFieldsFromConsole();
     }
 
-    private function getFieldsFromConsole()
+    protected function getFieldsFromConsole()
     {
         $this->info('Specify fields for the model (skip id & timestamp fields, we will add it automatically)');
         $this->info('Read docs carefully to specify field inputs)');
@@ -406,7 +406,7 @@ class BaseCommand extends Command
         $this->config->fields[] = $updatedAt;
     }
 
-    private function parseFieldsFromJsonFile()
+    protected function parseFieldsFromJsonFile()
     {
         $fieldsFileValue = $this->option('fieldsFile');
         if (file_exists($fieldsFileValue)) {
@@ -438,7 +438,7 @@ class BaseCommand extends Command
         }
     }
 
-    private function parseFieldsFromGUI()
+    protected function parseFieldsFromGUI()
     {
         $fileContents = $this->option('jsonFromGUI');
         $jsonData = json_decode($fileContents, true);
@@ -471,7 +471,7 @@ class BaseCommand extends Command
         }
     }
 
-    private function parseFieldsFromTable()
+    protected function parseFieldsFromTable()
     {
         $tableName = $this->config->tableName;
 

@@ -109,7 +109,7 @@ class GeneratorField
         }
     }
 
-    private function prepareMigrationText()
+    protected function prepareMigrationText()
     {
         $this->migrationText = '$table->';
         $this->migrationText .= $this->dbType."('".$this->name."'";

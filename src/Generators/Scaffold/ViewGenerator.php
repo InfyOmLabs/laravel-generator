@@ -74,7 +74,7 @@ class ViewGenerator extends BaseGenerator
         $this->config->commandComment('Views created: ');
     }
 
-    private function generateTable()
+    protected function generateTable()
     {
         if ($this->config->tableType === 'livewire') {
             return;
@@ -99,12 +99,12 @@ class ViewGenerator extends BaseGenerator
         $this->config->commandInfo('table.blade.php created');
     }
 
-    private function generateDataTableBody(): string
+    protected function generateDataTableBody(): string
     {
         return view($this->templateViewPath.'.scaffold.table.datatable.body')->render();
     }
 
-    private function generateDataTableActions()
+    protected function generateDataTableActions()
     {
         $templateData = view($this->templateViewPath.'.scaffold.table.datatable.actions')->render();
 
@@ -113,7 +113,7 @@ class ViewGenerator extends BaseGenerator
         $this->config->commandInfo('datatables_actions.blade.php created');
     }
 
-    private function generateBladeTableBody(): string
+    protected function generateBladeTableBody(): string
     {
         $tableBodyFields = [];
 
@@ -139,7 +139,7 @@ class ViewGenerator extends BaseGenerator
         ])->render();
     }
 
-    private function generateTableHeaderFields(): string
+    protected function generateTableHeaderFields(): string
     {
         $headerFields = [];
 
@@ -157,7 +157,7 @@ class ViewGenerator extends BaseGenerator
         return implode(infy_nl_tab(1, 4), $headerFields);
     }
 
-    private function generateIndex()
+    protected function generateIndex()
     {
         switch ($this->config->tableType) {
             case 'datatables':
@@ -181,7 +181,7 @@ class ViewGenerator extends BaseGenerator
         $this->config->commandInfo('index.blade.php created');
     }
 
-    private function generateFields()
+    protected function generateFields()
     {
         $htmlFields = [];
 
@@ -246,7 +246,7 @@ class ViewGenerator extends BaseGenerator
         );
     }
 
-    private function generateCreate()
+    protected function generateCreate()
     {
         $templateData = view($this->templateViewPath.'.scaffold.create')->render();
 
@@ -254,7 +254,7 @@ class ViewGenerator extends BaseGenerator
         $this->config->commandInfo('create.blade.php created');
     }
 
-    private function generateUpdate()
+    protected function generateUpdate()
     {
         $templateData = view($this->templateViewPath.'.scaffold.edit')->render();
 
@@ -262,7 +262,7 @@ class ViewGenerator extends BaseGenerator
         $this->config->commandInfo('edit.blade.php created');
     }
 
-    private function generateShowFields()
+    protected function generateShowFields()
     {
         $fieldsStr = '';
 
@@ -279,7 +279,7 @@ class ViewGenerator extends BaseGenerator
         $this->config->commandInfo('show_fields.blade.php created');
     }
 
-    private function generateShow()
+    protected function generateShow()
     {
         $templateData = view($this->templateViewPath.'.scaffold.show')->render();
 
