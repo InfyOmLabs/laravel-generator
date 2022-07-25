@@ -40,10 +40,10 @@ class PublishUserCommand extends PublishBaseCommand
 
         $files = $this->getViews();
 
-        foreach ($files as $stub => $blade) {
-            $sourceFile = get_template_file_path('views/templates/'.$stub, $templateType);
-            $destinationFile = $viewsPath.$blade;
-            $this->publishFile($sourceFile, $destinationFile, $blade);
+        foreach ($files as $templateView => $destinationView) {
+            $content = view($templateType.'::'.$templateView);
+            $destinationFile = $viewsPath.$destinationView;
+            g_filesystem()->createFile($destinationFile, $content);
         }
     }
 
@@ -55,13 +55,13 @@ class PublishUserCommand extends PublishBaseCommand
     private function getViews(): array
     {
         return [
-            'users/create'      => 'users/create.blade.php',
-            'users/edit'        => 'users/edit.blade.php',
-            'users/fields'      => 'users/fields.blade.php',
-            'users/index'       => 'users/index.blade.php',
-            'users/show'        => 'users/show.blade.php',
-            'users/show_fields' => 'users/show_fields.blade.php',
-            'users/table'       => 'users/table.blade.php',
+            'users.create'      => 'users/create.blade.php',
+            'users.edit'        => 'users/edit.blade.php',
+            'users.fields'      => 'users/fields.blade.php',
+            'users.index'       => 'users/index.blade.php',
+            'users.show'        => 'users/show.blade.php',
+            'users.show_fields' => 'users/show_fields.blade.php',
+            'users.table'       => 'users/table.blade.php',
         ];
     }
 
@@ -83,8 +83,8 @@ class PublishUserCommand extends PublishBaseCommand
         $templateType = config('laravel_generator.templates', 'adminlte-templates');
         $path = $viewsPath.'layouts/menu.blade.php';
         $menuContents = g_filesystem()->getFile($path);
-        $sourceFile = g_filesystem()->getFile(get_template_file_path('views/templates/users/menu', $templateType));
-        $menuContents .= infy_nl().$sourceFile;
+        $usersMenuContent = view($templateType.'::templates.users.menu')->render();
+        $menuContents .= infy_nl().$usersMenuContent;
 
         g_filesystem()->createFile($path, $menuContents);
         $this->comment("\nUser Menu added");

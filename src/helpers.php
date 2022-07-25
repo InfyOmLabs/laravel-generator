@@ -48,37 +48,6 @@ if (!function_exists('infy_nl_tab')) {
     }
 }
 
-if (!function_exists('get_template_file_path')) {
-    function get_template_file_path(string $templateName, string $templateType): string
-    {
-        $templateName = str_replace('.', '/', $templateName);
-
-        $templatesPath = config(
-            'laravel_generator.path.templates_dir',
-            resource_path('infyom/infyom-generator-templates/')
-        );
-
-        $path = $templatesPath.$templateName.'.blade.php';
-
-        if (file_exists($path)) {
-            return $path;
-        }
-
-        return get_templates_package_path($templateType).'/'.$templateName.'.blade.php';
-    }
-}
-
-if (!function_exists('get_templates_package_path')) {
-    function get_templates_package_path(string $templateType): string
-    {
-        if (!str_contains($templateType, '/')) {
-            $templateType = base_path('vendor/infyomlabs/').$templateType;
-        }
-
-        return $templateType;
-    }
-}
-
 if (!function_exists('model_name_from_table_name')) {
     function model_name_from_table_name(string $tableName): string
     {
