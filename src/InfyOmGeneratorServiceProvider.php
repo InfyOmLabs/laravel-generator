@@ -55,7 +55,7 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
             ], 'laravel-generator-config');
 
             $this->publishes([
-                __DIR__.'/../views' => resource_path('vendor/laravel-generator'),
+                __DIR__.'/../views' => resource_path('views/vendor/laravel-generator'),
             ], 'laravel-generator-templates');
         }
 
