@@ -22,6 +22,8 @@ class GeneratorConfig
     /** @var GeneratorField[] */
     public array $fields = [];
 
+    private static $dynamicVarrs = [];
+
     /** @var GeneratorFieldRelation[] */
     public array $relations = [];
 
@@ -43,6 +45,23 @@ class GeneratorConfig
         $this->loadNamespaces();
         $this->prepareTable();
         $this->prepareOptions();
+    }
+
+    public static function addDynamicVar(string $name, $value)
+    {
+        self::$dynamicVarrs[$name] = $value;
+    }
+
+    public static function addDynamicVars(array $vars)
+    {
+        foreach ($vars as $key => $value) {
+            self::$dynamicVarrs[$key] = $value;
+        }
+    }
+
+    public function getDynamicVar(string $name)
+    {
+        return self::$dynamicVarrs[$name];
     }
 
     public function setCommand(Command &$command)
