@@ -22,12 +22,10 @@ class GeneratorConfig
     /** @var GeneratorField[] */
     public array $fields = [];
 
-    private static $dynamicVarrs = [];
-
     /** @var GeneratorFieldRelation[] */
     public array $relations = [];
 
-    public array $dynamicVars = [];
+    protected static $dynamicVars = [];
 
     public $tableName;
     public string $tableType;
@@ -47,21 +45,21 @@ class GeneratorConfig
         $this->prepareOptions();
     }
 
-    public static function addDynamicVar(string $name, $value)
+    public static function addDynamicVariable(string $name, $value)
     {
-        self::$dynamicVarrs[$name] = $value;
+        self::$dynamicVars[$name] = $value;
     }
 
-    public static function addDynamicVars(array $vars)
+    public static function addDynamicVariables(array $vars)
     {
         foreach ($vars as $key => $value) {
-            self::$dynamicVarrs[$key] = $value;
+            self::addDynamicVariable($key, $value);
         }
     }
 
-    public function getDynamicVar(string $name)
+    public function getDynamicVariable(string $name)
     {
-        return self::$dynamicVarrs[$name];
+        return self::$dynamicVars[$name];
     }
 
     public function setCommand(Command &$command)
@@ -312,11 +310,6 @@ class GeneratorConfig
     public function getOption($option)
     {
         return $this->command->option($option);
-    }
-
-    public function addDynamicVariable($name, $val)
-    {
-        $this->dynamicVars[$name] = $val;
     }
 
     public function commandError($error)
