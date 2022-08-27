@@ -3,6 +3,7 @@
 namespace InfyOm\Generator\Commands\Publish;
 
 use Exception;
+use Illuminate\View\Factory;
 use Symfony\Component\Console\Input\InputArgument;
 
 class PublishTablesCommand extends PublishBaseCommand
@@ -45,13 +46,16 @@ class PublishTablesCommand extends PublishBaseCommand
         $viewsPath = config('laravel_generator.path.views', resource_path('views/'));
         $templateType = config('infyom.laravel_generator.templates', 'adminlte-templates');
         $files = [
-            'scaffold.table.livewire.actions' => 'common/livewire-tables/actions.blade.php',
+            'templates.scaffold.table.livewire.actions' => 'common/livewire-tables/actions.blade.php',
         ];
 
         g_filesystem()->createDirectoryIfNotExist($viewsPath.'common/livewire-tables');
 
+        /** @var Factory $viewFactory */
+        $viewFactory = view();
         foreach ($files as $templateView => $destinationView) {
-            $content = view($templateType.'::'.$templateView);
+            $templateViewPath = $viewFactory->getFinder()->find($templateType.'::'.$templateView);
+            $content = g_filesystem()->getFile($templateViewPath);
             $destinationFile = $viewsPath.$destinationView;
             g_filesystem()->createFile($destinationFile, $content);
         }
