@@ -7,6 +7,7 @@ return [
     'create'       => '创建',
     'edit'         => '编辑',
     'save'         => '保存',
+    'delete'       => '删除',
     'detail'       => '详情',
     'back'         => '返回',
     'search'       => '搜索',
