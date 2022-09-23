@@ -32,13 +32,6 @@ class GeneratorField
 
     public function parseDBType(string $dbInput)
     {
-        if (!Str::contains($dbInput, ':')) {
-            $this->dbType = $dbInput;
-            $this->prepareMigrationText();
-
-            return;
-        }
-
         $dbInputArr = explode(':', $dbInput);
         $dbType = (string) array_shift($dbInputArr);
 
