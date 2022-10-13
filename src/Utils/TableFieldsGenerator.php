@@ -56,6 +56,9 @@ class TableFieldsGenerator
     /** @var array */
     public $ignoredFields;
 
+    /** @var \Doctrine\DBAL\Schema\Table */
+    public $tableDetails;
+
     public function __construct($tableName, $ignoredFields, $connection = '')
     {
         $this->tableName = $tableName;
@@ -73,6 +76,8 @@ class TableFieldsGenerator
             'json' => 'text',
             'bit'  => 'boolean',
         ];
+
+        $this->tableDetails = $this->schemaManager->listTableDetails($this->tableName);
 
         $mappings = config('laravel_generator.from_table.doctrine_mappings', []);
         $mappings = array_merge($mappings, $defaultMappings);
@@ -254,6 +259,7 @@ class TableFieldsGenerator
     {
         $field = new GeneratorField();
         $field->name = $column->getName();
+        $field->fieldDetails = $this->tableDetails->getColumn($field->name);
         $field->parseDBType($dbType); //, $column); TODO: handle column param
         $field->parseHtmlInput($htmlType);
 
