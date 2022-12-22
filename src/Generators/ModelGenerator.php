@@ -199,17 +199,13 @@ class ModelGenerator extends BaseGenerator
                             $rule[] = 'numeric';
                             break;
                         case 'string':
+                        case 'text':
                             $rule[] = 'string';
 
                             // Enforce a maximum string length if possible.
-                            foreach (explode(':', $field->dbType) as $key => $value) {
-                                if (preg_match('/string,(\d+)/', $value, $matches)) {
-                                    $rule[] = 'max:'.$matches[1];
-                                }
+                            if ((int) $field->fieldDetails->getLength() > 0) {
+                                $rule[] = 'max:'.$field->fieldDetails->getLength();
                             }
-                            break;
-                        case 'text':
-                            $rule[] = 'string';
                             break;
                     }
 

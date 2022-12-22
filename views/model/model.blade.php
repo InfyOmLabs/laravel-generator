@@ -29,7 +29,7 @@ class {{ $config->modelNames->name }} extends Model
         {!! $casts !!}
     ];
 
-    public static $rules = [
+    public static array $rules = [
         {!! $rules !!}
     ];
 

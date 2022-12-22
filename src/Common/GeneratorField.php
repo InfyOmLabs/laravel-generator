@@ -29,6 +29,8 @@ class GeneratorField
     public string $foreignKeyText = '';
 
     public int $numberDecimalPoints = 2;
+    /** @var \Doctrine\DBAL\Schema\Column */
+    public $fieldDetails = null;
 
     public function parseDBType(string $dbInput)
     {
