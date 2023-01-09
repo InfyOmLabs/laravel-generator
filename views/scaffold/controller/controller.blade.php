@@ -47,11 +47,8 @@ class {{ $config->modelNames->name }}Controller extends AppBaseController
     /**
      * Display the specified {{ $config->modelNames->name }}.
      */
-    public function show($id)
+    public function show({{ $config->modelNames->name }} ${{ $config->modelNames->camel }})
     {
-        /** @var {{ $config->modelNames->name }} ${{ $config->modelNames->camel }} */
-        ${{ $config->modelNames->camel }} = {{ $config->modelNames->name }}::find($id);
-
         @include('laravel-generator::scaffold.controller.messages.not_found')
 
         return view('{{ $config->prefixes->getViewPrefixForInclude() }}{{ $config->modelNames->snakePlural }}.show')->with('{{ $config->modelNames->camel }}', ${{ $config->modelNames->camel }});
@@ -60,11 +57,8 @@ class {{ $config->modelNames->name }}Controller extends AppBaseController
     /**
      * Show the form for editing the specified {{ $config->modelNames->name }}.
      */
-    public function edit($id)
+    public function edit({{ $config->modelNames->name }} ${{ $config->modelNames->camel }})
     {
-        /** @var {{ $config->modelNames->name }} ${{ $config->modelNames->camel }} */
-        ${{ $config->modelNames->camel }} = {{ $config->modelNames->name }}::find($id);
-
         @include('laravel-generator::scaffold.controller.messages.not_found')
 
         return view('{{ $config->prefixes->getViewPrefixForInclude() }}{{ $config->modelNames->snakePlural }}.edit')->with('{{ $config->modelNames->camel }}', ${{ $config->modelNames->camel }});
@@ -73,11 +67,8 @@ class {{ $config->modelNames->name }}Controller extends AppBaseController
     /**
      * Update the specified {{ $config->modelNames->name }} in storage.
      */
-    public function update($id, Update{{ $config->modelNames->name }}Request $request)
+    public function update({{ $config->modelNames->name }} ${{ $config->modelNames->camel }}, Update{{ $config->modelNames->name }}Request $request)
     {
-        /** @var {{ $config->modelNames->name }} ${{ $config->modelNames->camel }} */
-        ${{ $config->modelNames->camel }} = {{ $config->modelNames->name }}::find($id);
-
         @include('laravel-generator::scaffold.controller.messages.not_found')
 
         ${{ $config->modelNames->camel }}->fill($request->all());
@@ -93,11 +84,8 @@ class {{ $config->modelNames->name }}Controller extends AppBaseController
      *
      * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy({{ $config->modelNames->name }} ${{ $config->modelNames->camel }})
     {
-        /** @var {{ $config->modelNames->name }} ${{ $config->modelNames->camel }} */
-        ${{ $config->modelNames->camel }} = {{ $config->modelNames->name }}::find($id);
-
         @include('laravel-generator::scaffold.controller.messages.not_found')
 
         ${{ $config->modelNames->camel }}->delete();
