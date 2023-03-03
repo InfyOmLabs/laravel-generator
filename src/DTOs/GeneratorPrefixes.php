@@ -44,7 +44,7 @@ class GeneratorPrefixes
                 continue;
             }
 
-            $this->route .= '.'.Str::camel($prefix);
+            $this->route .= '.'.Str::kebab($prefix);
         }
 
         $this->route = ltrim($this->route, '.');
@@ -57,7 +57,7 @@ class GeneratorPrefixes
                 continue;
             }
 
-            $this->namespace .= '\\'.Str::title($prefix);
+            $this->namespace .= '\\'.Str::studly($prefix);
         }
 
         $this->namespace = ltrim($this->namespace, '\\');
@@ -70,7 +70,7 @@ class GeneratorPrefixes
                 continue;
             }
 
-            $this->view .= '/'.Str::snake($prefix);
+            $this->view .= '/'.Str::kebab($prefix);
         }
 
         $this->view = ltrim($this->view, '/');
