@@ -171,14 +171,14 @@ class GeneratorConfig
         $paths->request = config('laravel_generator.path.request', app_path('Http/Requests/')).$namespacePrefix;
 
         $paths->routes = config('laravel_generator.path.routes', base_path('routes/web.php'));
-        $paths->factory = config('laravel_generator.path.factory', database_path('factories/'));
+        $paths->factory = config('laravel_generator.path.factory', database_path('factories/')).$namespacePrefix;
 
         $paths->views = config(
             'laravel_generator.path.views',
             resource_path('views/')
         ).$viewPrefix.$this->modelNames->snakePlural.'/';
 
-        $paths->seeder = config('laravel_generator.path.seeder', database_path('seeders/'));
+        $paths->seeder = config('laravel_generator.path.seeder', database_path('seeders/')).$namespacePrefix;
         $paths->databaseSeeder = config('laravel_generator.path.database_seeder', database_path('seeders/DatabaseSeeder.php'));
         $paths->viewProvider = config(
             'laravel_generator.path.view_provider',
