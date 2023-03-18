@@ -1,6 +1,7 @@
 <?php
 
 use InfyOm\Generator\Commands\Publish\PublishTablesCommand;
+
 use function Pest\Laravel\artisan;
 
 it('thrown exceptions with invalid type passed', function () {
