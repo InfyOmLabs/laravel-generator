@@ -134,7 +134,7 @@ class GeneratorConfig
         $paths->dataTables = config(
             'laravel_generator.path.datatables',
             app_path('DataTables/')
-        ).$namespacePrefix;
+        ).$viewPrefix.$this->modelNames->dashedPlural.'/';
 
         $paths->livewireTables = config(
             'laravel_generator.path.livewire_tables',
@@ -176,7 +176,7 @@ class GeneratorConfig
         $paths->views = config(
             'laravel_generator.path.views',
             resource_path('views/')
-        ).$viewPrefix.$this->modelNames->snakePlural.'/';
+        ).$viewPrefix.$this->modelNames->dashedPlural.'/';
 
         $paths->seeder = config('laravel_generator.path.seeder', database_path('seeders/'));
         $paths->databaseSeeder = config('laravel_generator.path.database_seeder', database_path('seeders/DatabaseSeeder.php'));
