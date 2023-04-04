@@ -18,6 +18,7 @@ use InfyOm\Generator\Generators\Scaffold\RoutesGenerator;
 use InfyOm\Generator\Generators\Scaffold\ViewGenerator;
 use InfyOm\Generator\Generators\SeederGenerator;
 use Mockery as m;
+
 use function Pest\Laravel\artisan;
 
 afterEach(function () {
