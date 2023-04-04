@@ -430,11 +430,13 @@ class BaseCommand extends Command
         $jsonData = json_decode($fileContents, true);
         $this->config->fields = [];
         foreach ($jsonData as $field) {
-            $this->config->fields[] = GeneratorField::parseFieldFromFile($field);
-
             if (isset($field['relation'])) {
                 $this->config->relations[] = GeneratorFieldRelation::parseRelation($field['relation']);
+                continue;
             }
+
+            $this->config->fields[] = GeneratorField::parseFieldFromFile($field);
+
         }
     }
 
