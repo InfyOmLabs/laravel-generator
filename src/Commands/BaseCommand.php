@@ -436,7 +436,6 @@ class BaseCommand extends Command
             }
 
             $this->config->fields[] = GeneratorField::parseFieldFromFile($field);
-
         }
     }
 
