@@ -186,7 +186,7 @@ class BaseCommand extends Command
     public function isSkip($skip): bool
     {
         if ($this->option('skip')) {
-            return in_array($skip, (array) $this->option('skip'));
+            return in_array($skip, explode(',', $this->option('skip') ?? ''));
         }
 
         return false;
