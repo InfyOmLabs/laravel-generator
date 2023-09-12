@@ -77,13 +77,18 @@ class TableFieldsGenerator
             'bit'  => 'boolean',
         ];
 
-        $this->tableDetails = $this->schemaManager->listTableDetails($this->tableName);
-
         $mappings = config('laravel_generator.from_table.doctrine_mappings', []);
         $mappings = array_merge($mappings, $defaultMappings);
         foreach ($mappings as $dbType => $doctrineType) {
             $platform->registerDoctrineTypeMapping($dbType, $doctrineType);
         }
+        /**
+         * For Avoiding
+         * Doctrine\DBAL\Exception
+         *
+         * Unknown database type enum requested, Doctrine\DBAL\Platforms\MySQL80Platform may not support it.
+         */
+        $this->tableDetails = $this->schemaManager->listTableDetails($this->tableName);
 
         $columns = $this->schemaManager->listTableColumns($tableName);
 
