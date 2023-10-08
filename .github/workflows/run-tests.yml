@@ -8,6 +8,10 @@ jobs:
 
     name: Run Package Tests
 
+    strategy:
+      matrix:
+        php: ['8.1', '8.2', '8.3']
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -21,7 +25,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.1
+          php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
           coverage: none
 
