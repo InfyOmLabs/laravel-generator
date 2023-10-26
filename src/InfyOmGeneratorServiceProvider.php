@@ -62,7 +62,7 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
         $this->registerCommands();
         $this->loadViewsFrom(__DIR__.'/../views', 'laravel-generator');
 
-        View::composer('*', function ($view) {
+        View::composer('laravel-generator::*', function ($view) {
             $view->with(['config' => app(GeneratorConfig::class)]);
         });
 
