@@ -20,7 +20,7 @@ class LimitOffsetCriteria implements CriteriaInterface
     /**
      * Apply criteria in query repository.
      *
-     * @param $model
+     * @param                                                   $model
      * @param \Prettus\Repository\Contracts\RepositoryInterface $repository
      *
      * @return mixed

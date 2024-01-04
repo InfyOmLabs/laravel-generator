@@ -86,7 +86,7 @@ class TableFieldsGenerator
         }
         // Added
         $this->tableDetails = $this->schemaManager->listTableDetails($this->tableName);
-        
+
         $columns = $this->schemaManager->listTableColumns($tableName);
 
         $this->columns = [];
@@ -252,8 +252,8 @@ class TableFieldsGenerator
      * Generates field.
      *
      * @param Column $column
-     * @param $dbType
-     * @param $htmlType
+     * @param        $dbType
+     * @param        $htmlType
      *
      * @return GeneratorField
      */
