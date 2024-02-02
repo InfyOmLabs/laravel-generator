@@ -22,7 +22,7 @@ You can support us by either sponsoring us or buying one of our paid products. O
 
 ### Buy our Paid Products
 
-[![InfyGPT](https://assets.infyom.com/open-source/infygpt-inline.png)](https://infyom.com/products/gpt-site-builder)
+[![InfyGPT](https://assets.infyom.com/open-source/infygpt-inline.png)](https://bit.ly/infy-gpt)
 
 You can also check out our other paid products on [CodeCanyon](https://1.envato.market/BXAnR1).
 
