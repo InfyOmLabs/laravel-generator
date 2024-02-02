@@ -31,10 +31,11 @@ class SwaggerGenerator
         return $fieldTypes;
     }
 
-    public static function getFieldType($type): array
+    public static function getFieldType($data): array
     {
         $fieldType = null;
         $fieldFormat = null;
+        $type = explode(",",$data)[0];
         switch (strtolower($type)) {
             case 'increments':
             case 'integer':
