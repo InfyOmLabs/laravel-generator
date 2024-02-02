@@ -57,11 +57,8 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
     }
 
     {!! $docShow !!}
-    public function show($id): JsonResponse
+    public function show({{ $config->modelNames->name }} ${{ $config->modelNames->camel }}): JsonResponse
     {
-        /** @var {{ $config->modelNames->name }} ${{ $config->modelNames->camel }} */
-        ${{ $config->modelNames->camel }} = {{ $config->modelNames->name }}::find($id);
-
         if (empty(${{ $config->modelNames->camel }})) {
 @if($config->options->localized)
             return $this->sendError(
@@ -83,11 +80,8 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
     }
 
     {!! $docUpdate !!}
-    public function update($id, Update{{ $config->modelNames->name }}APIRequest $request): JsonResponse
+    public function update({{ $config->modelNames->name }} ${{ $config->modelNames->camel }}, Update{{ $config->modelNames->name }}APIRequest $request): JsonResponse
     {
-        /** @var {{ $config->modelNames->name }} ${{ $config->modelNames->camel }} */
-        ${{ $config->modelNames->camel }} = {{ $config->modelNames->name }}::find($id);
-
         if (empty(${{ $config->modelNames->camel }})) {
 @if($config->options->localized)
             return $this->sendError(
@@ -112,11 +106,8 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
     }
 
     {!! $docDestroy !!}
-    public function destroy($id): JsonResponse
+    public function destroy({{ $config->modelNames->name }} ${{ $config->modelNames->camel }}): JsonResponse
     {
-        /** @var {{ $config->modelNames->name }} ${{ $config->modelNames->camel }} */
-        ${{ $config->modelNames->camel }} = {{ $config->modelNames->name }}::find($id);
-
         if (empty(${{ $config->modelNames->camel }})) {
 @if($config->options->localized)
             return $this->sendError(
@@ -131,7 +122,7 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
 
 @if($config->options->localized)
         return $this->sendResponse(
-            $id,
+            ${{ $config->modelNames->camel }}->id,
             __('messages.deleted', ['model' => __('models/{{ $config->modelNames->camelPlural }}.singular')])
         );
 @else
