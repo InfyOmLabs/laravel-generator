@@ -62,9 +62,11 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
         $this->registerCommands();
         $this->loadViewsFrom(__DIR__.'/../views', 'laravel-generator');
 
-        View::composer('*', function ($view) {
-            $view->with(['config' => app(GeneratorConfig::class)]);
-        });
+        foreach (['laravel-generator', 'adminlte-templates'] as $packageName) {
+            View::composer($packageName.'::*', function ($view) {
+                $view->with(['config' => app(GeneratorConfig::class)]);
+            });
+        }
 
         Blade::directive('tab', function () {
             return '<?php echo infy_tab() ?>';
